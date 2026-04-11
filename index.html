@@ -860,7 +860,14 @@
 <nav id="nav">
   <div class="nav-logo">Aspira<span>.</span></div>
   <span class="nav-tagline">Clarity · Presence · Growth</span>
-  <a href="https://wa.me/+917550270450" class="nav-cta">Start with Clarity</a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <!-- NEW FEATURE: Dark Mode Toggle -->
+    <button id="aspira-dark-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span id="aspira-toggle-icon">🌙</span>
+    </button>
+    <!-- END NEW FEATURE: Dark Mode Toggle -->
+    <a href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" class="nav-cta">Start with Clarity</a>
+  </div>
 </nav>
 
 <!-- ─── HERO ─── -->
@@ -872,7 +879,7 @@
         <h1>Find <em>Clarity.</em><br>Build Presence.<br>Get Ahead.</h1>
         <p class="hero-sub">People don't fail because they lack ability. They struggle because they lack clarity in how they present themselves and move forward.</p>
         <div class="hero-ctas">
-          <a href="https://wa.me/+917550270450" class="btn-primary">Start with Clarity</a>
+          <a href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" class="btn-primary">Start with Clarity</a>
           <a href="#flow" class="btn-ghost">
             See how it works
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1114,7 +1121,7 @@
       <h2>If you're ready to understand <em>where you stand,</em> start with Clarity.</h2>
       <p>No pressure. No commitment. Just an honest look at where you are and what would genuinely help you move forward.</p>
       <div class="cta-button-wrap">
-        <a href="https://wa.me/+917550270450" class="btn-whatsapp">
+        <a href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
             <path d="M11 2C6.03 2 2 6.03 2 11c0 1.63.44 3.15 1.2 4.46L2 20l4.69-1.18A9 9 0 1011 2z" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.2)"/>
             <path d="M8.5 7.5c.3 0 .6.2.8.5l.7 1.5c.1.3 0 .6-.2.8l-.5.5c.3.6.8 1.1 1.5 1.5l.5-.5c.2-.2.5-.3.8-.2l1.5.7c.3.2.5.5.5.8v1.2c0 .5-.4 1-1 1C8.5 15.3 6.7 13.5 6.7 9c0-.6.4-1 1-1h.8z" fill="white"/>
@@ -1135,10 +1142,320 @@
         <div class="footer-logo">Aspira<span>.</span></div>
         <div class="footer-tagline">Find Clarity. Build Presence. Get Ahead.</div>
       </div>
-      <div class="footer-copy">© 2026 Aspira. Built with intention.</div>
+      <div class="footer-copy">© 2025 Aspira. Built with intention.</div>
     </div>
+
+    <!-- NEW FEATURE: Social Media Footer -->
+    <div class="aspira-social-bar">
+      <span class="aspira-social-label">Follow Us On</span>
+      <div class="aspira-social-icons">
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="aspira-social-link" aria-label="Instagram">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="aspira-social-link" aria-label="LinkedIn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="aspira-social-link" aria-label="Facebook">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+          </svg>
+        </a>
+
+        <!-- WhatsApp Channel -->
+        <a href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" class="aspira-social-link aspira-social-wa" aria-label="WhatsApp">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+    <!-- END NEW FEATURE: Social Media Footer -->
+
   </div>
 </footer>
+
+<!-- NEW FEATURE: Floating WhatsApp Button -->
+<a id="aspira-float-wa" href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="aspira-float-tooltip">Chat on WhatsApp</span>
+</a>
+<!-- END NEW FEATURE: Floating WhatsApp Button -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Dark Mode + Floating WA + Social Footer     -->
+<!-- ============================================================ -->
+<style>
+  /* ── Dark Mode Toggle Button ── */
+  #aspira-dark-toggle {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 100px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  #aspira-dark-toggle:hover {
+    background: rgba(107,143,113,0.1);
+    border-color: var(--sage-light);
+    transform: scale(1.08);
+  }
+
+  /* ── Floating WhatsApp Button ── */
+  #aspira-float-wa {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    width: 58px;
+    height: 58px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45), 0 2px 8px rgba(0,0,0,0.12);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+    animation: aspiraWaPop 0.6s cubic-bezier(0.23,1,0.32,1) 1.5s both;
+  }
+  @keyframes aspiraWaPop {
+    from { opacity: 0; transform: scale(0.5) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  #aspira-float-wa:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 12px 36px rgba(37,211,102,0.5), 0 4px 12px rgba(0,0,0,0.14);
+  }
+  #aspira-float-wa:hover .aspira-float-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .aspira-float-tooltip {
+    position: absolute;
+    right: 68px;
+    background: #1a1a18;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    padding: 6px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(8px);
+    pointer-events: none;
+    transition: all 0.25s ease;
+  }
+  @media (max-width: 600px) {
+    #aspira-float-wa { bottom: 20px; right: 20px; width: 52px; height: 52px; }
+    .aspira-float-tooltip { display: none; }
+  }
+
+  /* ── Social Media Footer Bar ── */
+  .aspira-social-bar {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .aspira-social-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .aspira-social-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .aspira-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.07);
+    color: var(--charcoal-soft);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+  .aspira-social-link:hover {
+    background: var(--sage-pale);
+    border-color: var(--sage-light);
+    color: var(--sage);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(107,143,113,0.18);
+  }
+  .aspira-social-link.aspira-social-wa:hover {
+    background: rgba(37,211,102,0.1);
+    border-color: rgba(37,211,102,0.4);
+    color: #20a855;
+    box-shadow: 0 8px 20px rgba(37,211,102,0.2);
+  }
+  @media (max-width: 600px) {
+    .aspira-social-bar { flex-direction: column; align-items: flex-start; gap: 14px; }
+  }
+
+  /* ════════════════════════════════════════
+     DARK MODE — all scoped under .dark-mode
+  ════════════════════════════════════════ */
+  .dark-mode {
+    --cream: #16161a;
+    --warm-white: #1e1e24;
+    --charcoal: #eaeae6;
+    --charcoal-soft: #c0c0bb;
+    --muted: #7a7a76;
+    --text-light: #4a4a46;
+    --glass-bg: rgba(30, 30, 36, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --sage-pale: rgba(107,143,113,0.15);
+    --sand: rgba(255,255,255,0.07);
+    --warm-white: #1e1e24;
+  }
+  .dark-mode body {
+    background-color: #16161a;
+    color: #eaeae6;
+  }
+  .dark-mode nav {
+    background: rgba(22, 22, 26, 0.85);
+    border-bottom-color: rgba(255,255,255,0.06);
+  }
+  .dark-mode .step-card {
+    background: #1e1e24;
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .step-card:hover {
+    border-color: var(--sage-light);
+  }
+  .dark-mode .service-card,
+  .dark-mode .quote-card,
+  .dark-mode .transparency-visual {
+    background: rgba(30,30,36,0.8);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .quote-card.active {
+    background: rgba(107,143,113,0.1);
+    border-color: rgba(107,143,113,0.35);
+  }
+  .dark-mode .hero-card {
+    background: rgba(30,30,36,0.85);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .stat-pill {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.06);
+  }
+  .dark-mode .bar-track { background: rgba(255,255,255,0.08); }
+  .dark-mode .nav-cta {
+    background: var(--sage);
+    color: #fff;
+  }
+  .dark-mode .nav-cta:hover { background: #5a7a60; }
+  .dark-mode #aspira-dark-toggle {
+    border-color: rgba(255,255,255,0.15);
+  }
+  .dark-mode #aspira-dark-toggle:hover {
+    background: rgba(107,143,113,0.15);
+  }
+  .dark-mode .aspira-social-link {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    color: #c0c0bb;
+  }
+  .dark-mode .aspira-social-link:hover {
+    background: rgba(107,143,113,0.15);
+    border-color: rgba(107,143,113,0.4);
+    color: var(--sage-light);
+  }
+  .dark-mode .aspira-social-bar {
+    border-top-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode footer {
+    border-top-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .point:hover { background: rgba(107,143,113,0.07); }
+  .dark-mode .check-dot {
+    background: rgba(107,143,113,0.15);
+    border-color: rgba(107,143,113,0.4);
+  }
+  .dark-mode .transparency-note { color: var(--muted); }
+  .dark-mode .bg-blobs span:nth-child(1) { background: radial-gradient(circle, rgba(107,143,113,0.25), transparent); }
+  .dark-mode .bg-blobs span:nth-child(2) { background: radial-gradient(circle, rgba(80,60,40,0.2), transparent); }
+  .dark-mode .bg-blobs span:nth-child(3) { background: radial-gradient(circle, rgba(100,140,105,0.2), transparent); }
+</style>
+<!-- END NEW FEATURE CSS -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Dark Mode Toggle + localStorage persistence  -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    // ── Dark Mode ──
+    const ASPIRA_DM_KEY = 'aspira_dark_mode';
+    const toggle = document.getElementById('aspira-dark-toggle');
+    const icon   = document.getElementById('aspira-toggle-icon');
+    const html   = document.documentElement;
+
+    function applyDark(on) {
+      if (on) {
+        html.classList.add('dark-mode');
+        document.body.classList.add('dark-mode');
+        icon.textContent = '☀️';
+        toggle.title = 'Switch to light mode';
+      } else {
+        html.classList.remove('dark-mode');
+        document.body.classList.remove('dark-mode');
+        icon.textContent = '🌙';
+        toggle.title = 'Switch to dark mode';
+      }
+    }
+
+    // Restore preference
+    const saved = localStorage.getItem(ASPIRA_DM_KEY);
+    applyDark(saved === 'true');
+
+    toggle.addEventListener('click', function() {
+      const isDark = document.body.classList.contains('dark-mode');
+      applyDark(!isDark);
+      localStorage.setItem(ASPIRA_DM_KEY, String(!isDark));
+    });
+  })();
+</script>
+<!-- END NEW FEATURE JS -->
+
 
 <script>
   // ─── Scroll reveal
