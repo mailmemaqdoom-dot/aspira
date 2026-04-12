@@ -1501,5 +1501,141 @@
     quotes[active].classList.add('active');
   }, 3200);
 </script>
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Sticky CTA Button — "Start with Clarity"        -->
+<!-- Scroll target anchor injected here (zero visual impact)      -->
+<!-- ============================================================ -->
+<div id="aspira-start" style="position:relative;z-index:1;"></div>
+
+<!-- Floating Sticky CTA Button -->
+<button
+  id="aspira-sticky-cta"
+  aria-label="Start with Clarity"
+  onclick="(function(){var t=document.getElementById('aspira-start');if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}})();"
+>
+  <svg id="aspira-scta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M8 2a6 6 0 100 12A6 6 0 008 2zM7 5h2v4H7V5zm0 5h2v2H7v-2z" fill="white" opacity="0.9"/>
+  </svg>
+  <span>Start with Clarity</span>
+</button>
+<!-- END NEW FEATURE: Sticky CTA Button -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Sticky CTA — fully scoped, no global impact -->
+<!-- ============================================================ -->
+<style>
+  /* ── Floating Sticky CTA ── */
+  #aspira-sticky-cta {
+    /* Positioning — offset upward from WA button (58px btn + 12px gap + 28px base = 98px) */
+    position: fixed;
+    bottom: 98px;
+    right: 24px;
+    z-index: 9998; /* one below WA float at 9999, no overlap */
+
+    /* Appearance */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #6b8f71;
+    color: #ffffff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 6px 24px rgba(107,143,113,0.38), 0 2px 8px rgba(0,0,0,0.10);
+
+    /* Animation */
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+    transition:
+      transform 0.35s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.35s cubic-bezier(0.23,1,0.32,1),
+      opacity 0.35s ease,
+      background 0.25s ease;
+  }
+
+  /* Visible state (added by JS on scroll) */
+  #aspira-sticky-cta.aspira-scta-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  #aspira-sticky-cta:hover {
+    background: #5a7a60;
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: 0 12px 32px rgba(107,143,113,0.46), 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  #aspira-sticky-cta:active {
+    transform: scale(0.97) translateY(0);
+    box-shadow: 0 4px 14px rgba(107,143,113,0.3);
+  }
+
+  /* Dark mode scoped adaptation */
+  .dark-mode #aspira-sticky-cta {
+    background: #5a7a60;
+    box-shadow: 0 6px 24px rgba(107,143,113,0.25), 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .dark-mode #aspira-sticky-cta:hover {
+    background: #4e6e54;
+  }
+
+  /* Mobile: shrink to icon-only pill below 480px */
+  @media (max-width: 480px) {
+    #aspira-sticky-cta {
+      bottom: 90px;
+      right: 20px;
+      padding: 13px 16px;
+    }
+    #aspira-sticky-cta span {
+      display: none;
+    }
+    #aspira-scta-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Sticky CTA -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Sticky CTA — show after scroll, smooth jump  -->
+<!-- Fully isolated IIFE — no conflict with existing scripts      -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+    var ASPIRA_SCTA_BTN = document.getElementById('aspira-sticky-cta');
+    var ASPIRA_SCTA_SHOWN = false;
+    var ASPIRA_SCTA_THRESHOLD = 320; // px scrolled before button appears
+
+    if (!ASPIRA_SCTA_BTN) return;
+
+    function aspiraSctaOnScroll() {
+      if (window.scrollY > ASPIRA_SCTA_THRESHOLD) {
+        if (!ASPIRA_SCTA_SHOWN) {
+          ASPIRA_SCTA_BTN.classList.add('aspira-scta-visible');
+          ASPIRA_SCTA_SHOWN = true;
+        }
+      } else {
+        if (ASPIRA_SCTA_SHOWN) {
+          ASPIRA_SCTA_BTN.classList.remove('aspira-scta-visible');
+          ASPIRA_SCTA_SHOWN = false;
+        }
+      }
+    }
+
+    window.addEventListener('scroll', aspiraSctaOnScroll, { passive: true });
+    aspiraSctaOnScroll(); // run once on load in case page is already scrolled
+  })();
+</script>
+<!-- END NEW FEATURE JS: Sticky CTA -->
+
 </body>
 </html>
