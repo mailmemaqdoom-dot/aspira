@@ -1506,7 +1506,105 @@
 <!-- NEW FEATURE: Sticky CTA Button — "Start with Clarity"        -->
 <!-- Scroll target anchor injected here (zero visual impact)      -->
 <!-- ============================================================ -->
-<div id="aspira-start" style="position:relative;z-index:1;"></div>
+<!-- ============================================================ -->
+<!-- NEW FEATURE: "Where are you right now?" — Situation Selector -->
+<!-- ============================================================ -->
+<section id="aspira-start" class="aspira-qs-section" aria-label="Where are you right now?">
+  <div class="aspira-qs-container">
+
+    <div class="aspira-qs-header">
+      <span class="aspira-qs-eyebrow">Your starting point</span>
+      <h2 class="aspira-qs-title">Where are you right now?</h2>
+      <p class="aspira-qs-sub">Choose what best describes your current situation.</p>
+    </div>
+
+    <div class="aspira-qs-cards" role="radiogroup" aria-label="Current situation">
+
+      <button
+        class="aspira-qs-card"
+        data-aspira-option="hired"
+        aria-pressed="false"
+        type="button"
+      >
+        <span class="aspira-qs-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="8" width="20" height="14" rx="3"/>
+            <path d="M10 8V6a4 4 0 018 0v2"/>
+            <path d="M14 14v2"/>
+          </svg>
+        </span>
+        <span class="aspira-qs-card-text">I'm trying to get hired</span>
+        <span class="aspira-qs-card-check" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+
+      <button
+        class="aspira-qs-card"
+        data-aspira-option="freelance"
+        aria-pressed="false"
+        type="button"
+      >
+        <span class="aspira-qs-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="14" cy="14" r="10"/>
+            <path d="M14 4v4M14 20v4M4 14h4M20 14h4"/>
+            <circle cx="14" cy="14" r="3"/>
+          </svg>
+        </span>
+        <span class="aspira-qs-card-text">I want more clients / freelance work</span>
+        <span class="aspira-qs-card-check" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+
+      <button
+        class="aspira-qs-card"
+        data-aspira-option="business"
+        aria-pressed="false"
+        type="button"
+      >
+        <span class="aspira-qs-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 22V12l10-8 10 8v10"/>
+            <rect x="10" y="15" width="8" height="7" rx="1"/>
+          </svg>
+        </span>
+        <span class="aspira-qs-card-text">I want to build or grow my business</span>
+        <span class="aspira-qs-card-check" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+
+    </div><!-- /.aspira-qs-cards -->
+
+    <div class="aspira-qs-footer" id="aspira-qs-footer" aria-hidden="true">
+      <p class="aspira-qs-selection-label" id="aspira-qs-label"></p>
+      <a
+        id="aspira-qs-continue"
+        class="aspira-qs-continue-btn"
+        href="https://wa.me/917550270450"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="button"
+        tabindex="0"
+      >
+        Continue on WhatsApp
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+<!-- END NEW FEATURE: Situation Selector -->
 
 <!-- Floating Sticky CTA Button -->
 <button
@@ -1636,6 +1734,345 @@
   })();
 </script>
 <!-- END NEW FEATURE JS: Sticky CTA -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Situation Selector — fully scoped           -->
+<!-- ============================================================ -->
+<style>
+  /* ── Section wrapper ── */
+  .aspira-qs-section {
+    position: relative;
+    z-index: 1;
+    padding: 120px 0 140px;
+    background: linear-gradient(180deg, transparent 0%, rgba(168,197,172,0.12) 40%, rgba(232,240,233,0.18) 100%);
+  }
+
+  .aspira-qs-container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Header ── */
+  .aspira-qs-header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .aspira-qs-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .aspira-qs-title {
+    /* Isolated — does not affect existing h1/h2 */
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.025em !important;
+    color: #2c2c2a !important;
+    margin-bottom: 16px !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .aspira-qs-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ── Cards ── */
+  .aspira-qs-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .aspira-qs-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    background: rgba(255,255,255,0.72);
+    border: 1.5px solid rgba(0,0,0,0.07);
+    border-radius: 18px;
+    padding: 24px 28px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #4a4a47;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      border-color 0.28s ease,
+      background 0.28s ease,
+      box-shadow 0.28s ease,
+      transform 0.28s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+    /* Reset any inherited button styles */
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+
+  .aspira-qs-card:hover {
+    border-color: #a8c5ac;
+    background: rgba(232,240,233,0.6);
+    transform: translateX(6px);
+    box-shadow: 0 8px 28px rgba(107,143,113,0.13);
+  }
+
+  .aspira-qs-card:focus-visible {
+    outline: 2px solid #6b8f71;
+    outline-offset: 3px;
+  }
+
+  /* Selected state */
+  .aspira-qs-card.aspira-qs-selected {
+    border-color: #6b8f71;
+    background: rgba(107,143,113,0.09);
+    box-shadow: 0 8px 32px rgba(107,143,113,0.18);
+    transform: translateX(6px);
+    color: #2c2c2a;
+  }
+
+  /* Card icon */
+  .aspira-qs-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 14px;
+    background: rgba(232,240,233,0.8);
+    color: #6b8f71;
+    transition: background 0.28s ease, color 0.28s ease;
+  }
+
+  .aspira-qs-card.aspira-qs-selected .aspira-qs-card-icon {
+    background: rgba(107,143,113,0.18);
+    color: #4a7050;
+  }
+
+  /* Card text */
+  .aspira-qs-card-text {
+    flex: 1;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  /* Checkmark badge */
+  .aspira-qs-card-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #d0d0cb;
+    color: transparent;
+    transition: all 0.28s cubic-bezier(0.23,1,0.32,1);
+    background: transparent;
+  }
+
+  .aspira-qs-card.aspira-qs-selected .aspira-qs-card-check {
+    border-color: #6b8f71;
+    background: #6b8f71;
+    color: white;
+    box-shadow: 0 3px 10px rgba(107,143,113,0.35);
+  }
+
+  /* ── Footer / Continue ── */
+  .aspira-qs-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-qs-footer.aspira-qs-footer-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    aria-hidden: false;
+  }
+
+  .aspira-qs-selection-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #8a8a85;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .aspira-qs-continue-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #6b8f71;
+    color: #ffffff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(107,143,113,0.32);
+    transition:
+      background 0.3s ease,
+      transform 0.3s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.3s ease;
+  }
+
+  .aspira-qs-continue-btn:hover {
+    background: #5a7a60;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 40px rgba(107,143,113,0.42);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .aspira-qs-continue-btn svg {
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+  .aspira-qs-continue-btn:hover svg {
+    transform: translateX(5px);
+  }
+
+  /* ── Dark mode adaptations ── */
+  .dark-mode .aspira-qs-section {
+    background: linear-gradient(180deg, transparent, rgba(107,143,113,0.06), transparent);
+  }
+  .dark-mode .aspira-qs-title {
+    color: #eaeae6 !important;
+  }
+  .dark-mode .aspira-qs-card {
+    background: rgba(30,30,36,0.75);
+    border-color: rgba(255,255,255,0.07);
+    color: #c0c0bb;
+  }
+  .dark-mode .aspira-qs-card:hover {
+    background: rgba(107,143,113,0.1);
+    border-color: rgba(107,143,113,0.4);
+  }
+  .dark-mode .aspira-qs-card.aspira-qs-selected {
+    background: rgba(107,143,113,0.13);
+    border-color: #6b8f71;
+    color: #eaeae6;
+  }
+  .dark-mode .aspira-qs-card-icon {
+    background: rgba(107,143,113,0.12);
+  }
+  .dark-mode .aspira-qs-card.aspira-qs-selected .aspira-qs-card-icon {
+    background: rgba(107,143,113,0.22);
+  }
+  .dark-mode .aspira-qs-continue-btn {
+    background: #5a7a60;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+  }
+  .dark-mode .aspira-qs-continue-btn:hover {
+    background: #4e6e54;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .aspira-qs-section { padding: 80px 0 100px; }
+    .aspira-qs-container { padding: 0 20px; }
+    .aspira-qs-card { padding: 18px 20px; gap: 14px; }
+    .aspira-qs-card-icon { width: 44px; height: 44px; min-width: 44px; }
+    .aspira-qs-continue-btn { padding: 15px 32px; font-size: 0.9rem; }
+    .aspira-qs-card:hover { transform: translateX(0) translateY(-2px); }
+    .aspira-qs-card.aspira-qs-selected { transform: translateX(0) translateY(-2px); }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Situation Selector -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Situation Selector — isolated IIFE           -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+
+    var ASPIRA_QS_WA_BASE = 'https://wa.me/917550270450';
+
+    var ASPIRA_QS_MESSAGES = {
+      'hired':     'Hi! I\'m looking to get hired and would like to start with a Clarity Check.',
+      'freelance': 'Hi! I\'m looking to get more clients / freelance work and would like to start with a Clarity Check.',
+      'business':  'Hi! I want to build or grow my business and would like to start with a Clarity Check.'
+    };
+
+    var ASPIRA_QS_LABELS = {
+      'hired':     'You\'re focused on getting hired — great starting point.',
+      'freelance': 'You\'re focused on growing your freelance presence.',
+      'business':  'You\'re focused on building or growing your business.'
+    };
+
+    var aspiraQsSelected = null;
+    var aspiraQsCards    = document.querySelectorAll('.aspira-qs-card');
+    var aspiraQsFooter   = document.getElementById('aspira-qs-footer');
+    var aspiraQsLabel    = document.getElementById('aspira-qs-label');
+    var aspiraQsBtn      = document.getElementById('aspira-qs-continue');
+
+    if (!aspiraQsCards.length || !aspiraQsFooter || !aspiraQsBtn) return;
+
+    aspiraQsCards.forEach(function(card) {
+      card.addEventListener('click', function() {
+        var option = card.getAttribute('data-aspira-option');
+
+        // Deselect all
+        aspiraQsCards.forEach(function(c) {
+          c.classList.remove('aspira-qs-selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+
+        // Select clicked
+        card.classList.add('aspira-qs-selected');
+        card.setAttribute('aria-pressed', 'true');
+        aspiraQsSelected = option;
+
+        // Update label
+        if (aspiraQsLabel) {
+          aspiraQsLabel.textContent = ASPIRA_QS_LABELS[option] || '';
+        }
+
+        // Build WhatsApp URL with pre-filled message
+        var msg = ASPIRA_QS_MESSAGES[option] || '';
+        var url = ASPIRA_QS_WA_BASE + '?text=' + encodeURIComponent(msg);
+        aspiraQsBtn.setAttribute('href', url);
+
+        // Reveal footer
+        aspiraQsFooter.classList.add('aspira-qs-footer-visible');
+        aspiraQsFooter.removeAttribute('aria-hidden');
+      });
+    });
+
+  })();
+</script>
+<!-- END NEW FEATURE JS: Situation Selector -->
 
 </body>
 </html>
