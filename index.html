@@ -4351,5 +4351,273 @@
 </style>
 <!-- END NEW FEATURE CSS: Hero Ambient + Emotional Line -->
 
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Floating Button Enhancement — aspira-fab-*     -->
+<!-- Visual overlay over existing #aspira-float-wa               -->
+<!-- Does NOT modify any existing element                         -->
+<!-- ============================================================ -->
+
+<!-- Pulse ring (sits behind the button at same position) -->
+<div id="aspira-fab-pulse-ring" aria-hidden="true"></div>
+
+<!-- Enhancement cap: replaces visual appearance, passes clicks through -->
+<div id="aspira-fab-cap" aria-hidden="true">
+  <!-- Chat / assistant SVG icon -->
+  <svg
+    id="aspira-fab-icon"
+    width="26" height="26"
+    viewBox="0 0 26 26"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <!-- Chat bubble body -->
+    <path
+      d="M13 3C7.477 3 3 7.03 3 12c0 1.74.49 3.37 1.34 4.76L3 22l5.45-1.32A10.02 10.02 0 0013 21c5.523 0 10-4.03 10-9S18.523 3 13 3z"
+      fill="white"
+      opacity="0.92"
+    />
+    <!-- Three dots inside bubble -->
+    <circle cx="9.5"  cy="12" r="1.3" fill="#6b8f71"/>
+    <circle cx="13"   cy="12" r="1.3" fill="#6b8f71"/>
+    <circle cx="16.5" cy="12" r="1.3" fill="#6b8f71"/>
+  </svg>
+  <!-- Tooltip -->
+  <span id="aspira-fab-tooltip" role="tooltip">Start with Clarity</span>
+</div>
+<!-- END NEW FEATURE: Floating Button Enhancement -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: FAB Enhancement — fully scoped aspira-fab-* -->
+<!-- ============================================================ -->
+<style>
+  /* ── Shared position constants (match existing #aspira-float-wa) ──
+     Existing: bottom:28px right:28px width:58px height:58px
+     Mobile:   bottom:20px right:20px width:52px height:52px         */
+
+  /* ── Pulse ring — sits behind the button ── */
+  #aspira-fab-pulse-ring {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    z-index: 9998; /* just below #aspira-float-wa at 9999 */
+    pointer-events: none;
+  }
+
+  #aspira-fab-pulse-ring::before,
+  #aspira-fab-pulse-ring::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(107,143,113,0.35);
+    animation: aspiraFabPulse 2.8s ease-out infinite;
+  }
+
+  #aspira-fab-pulse-ring::after {
+    inset: -12px;
+    border-color: rgba(107,143,113,0.18);
+    animation-delay: 0.9s;
+  }
+
+  @keyframes aspiraFabPulse {
+    0%   { transform: scale(1);    opacity: 1;   }
+    60%  { transform: scale(1.18); opacity: 0.4; }
+    100% { transform: scale(1.28); opacity: 0;   }
+  }
+
+  /* ── Enhancement cap: covers the existing button visually ── */
+  #aspira-fab-cap {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    z-index: 10000;        /* sits above original button */
+    pointer-events: none;  /* clicks pass through to #aspira-float-wa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* New calm sage-green palette — replaces bright WhatsApp green visually */
+    background: linear-gradient(145deg, #7aa87f 0%, #5a7a60 100%);
+    box-shadow:
+      0 6px 24px rgba(107,143,113,0.38),
+      0 2px 8px rgba(0,0,0,0.1);
+
+    /* Entry pop — mirrors existing aspiraWaPop timing */
+    animation: aspiraFabCapIn 0.6s cubic-bezier(0.23,1,0.32,1) 1.5s both;
+
+    /* Smooth hover lift via JS class */
+    transition:
+      transform 0.32s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.32s ease,
+      background 0.28s ease;
+  }
+
+  @keyframes aspiraFabCapIn {
+    from { opacity: 0; transform: scale(0.5) translateY(20px); }
+    to   { opacity: 1; transform: scale(1)   translateY(0);    }
+  }
+
+  #aspira-fab-cap.aspira-fab-hovered {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow:
+      0 14px 36px rgba(107,143,113,0.45),
+      0 4px 12px rgba(0,0,0,0.13);
+    background: linear-gradient(145deg, #6b8f71 0%, #4e6e54 100%);
+  }
+
+  /* ── Icon ── */
+  #aspira-fab-icon {
+    display: block;
+    transition: transform 0.32s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  #aspira-fab-cap.aspira-fab-hovered #aspira-fab-icon {
+    transform: scale(1.08) rotate(-4deg);
+  }
+
+  /* ── Tooltip ── */
+  #aspira-fab-tooltip {
+    position: absolute;
+    right: 68px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    white-space: nowrap;
+
+    background: #2c2c2a;
+    color: #faf9f6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 100px;
+    letter-spacing: 0.01em;
+    pointer-events: none;
+
+    /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.23,1,0.32,1);
+
+    /* Tooltip arrow */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+
+  #aspira-fab-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right: none;
+    border-left-color: #2c2c2a;
+  }
+
+  #aspira-fab-cap.aspira-fab-hovered #aspira-fab-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode #aspira-fab-cap {
+    background: linear-gradient(145deg, #5a7a60 0%, #3e5a44 100%);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .dark-mode #aspira-fab-cap.aspira-fab-hovered {
+    background: linear-gradient(145deg, #4e6e54 0%, #354d3a 100%);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .dark-mode #aspira-fab-tooltip {
+    background: #eaeae6;
+    color: #2c2c2a;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  }
+  .dark-mode #aspira-fab-tooltip::after {
+    border-left-color: #eaeae6;
+  }
+  .dark-mode #aspira-fab-pulse-ring::before {
+    border-color: rgba(107,143,113,0.22);
+  }
+  .dark-mode #aspira-fab-pulse-ring::after {
+    border-color: rgba(107,143,113,0.1);
+  }
+
+  /* ── Mobile adjustments (match existing breakpoint: 600px) ── */
+  @media (max-width: 600px) {
+    #aspira-fab-cap,
+    #aspira-fab-pulse-ring {
+      bottom: 20px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+    }
+    #aspira-fab-tooltip {
+      display: none; /* match existing tooltip hide on mobile */
+    }
+  }
+</style>
+<!-- END NEW FEATURE CSS: FAB Enhancement -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: FAB Enhancement — isolated IIFE              -->
+<!-- Tracks hover on original #aspira-float-wa, applies class     -->
+<!-- to enhancement cap. Zero modifications to existing element.  -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+
+    var aspiraFabOriginal = document.getElementById('aspira-float-wa');
+    var aspiraFabCap      = document.getElementById('aspira-fab-cap');
+    var aspiraFabRing     = document.getElementById('aspira-fab-pulse-ring');
+
+    if (!aspiraFabOriginal || !aspiraFabCap) return;
+
+    /* Make the original invisible but keep it clickable —
+       we overlay the cap on top with pointer-events: none   */
+    aspiraFabOriginal.style.opacity  = '0';
+    aspiraFabOriginal.style.zIndex   = '9999';  /* unchanged — still receives clicks */
+
+    /* Mirror hover state from original to cap */
+    aspiraFabOriginal.addEventListener('mouseenter', function() {
+      aspiraFabCap.classList.add('aspira-fab-hovered');
+    });
+    aspiraFabOriginal.addEventListener('mouseleave', function() {
+      aspiraFabCap.classList.remove('aspira-fab-hovered');
+    });
+
+    /* Touch devices — toggle on touchstart */
+    aspiraFabOriginal.addEventListener('touchstart', function() {
+      aspiraFabCap.classList.add('aspira-fab-hovered');
+    }, { passive: true });
+    aspiraFabOriginal.addEventListener('touchend', function() {
+      setTimeout(function() {
+        aspiraFabCap.classList.remove('aspira-fab-hovered');
+      }, 400);
+    }, { passive: true });
+
+    /* Focus state for keyboard accessibility */
+    aspiraFabOriginal.addEventListener('focus', function() {
+      aspiraFabCap.classList.add('aspira-fab-hovered');
+      if (aspiraFabCap) {
+        aspiraFabCap.style.outline = '2px solid #6b8f71';
+        aspiraFabCap.style.outlineOffset = '4px';
+      }
+    });
+    aspiraFabOriginal.addEventListener('blur', function() {
+      aspiraFabCap.classList.remove('aspira-fab-hovered');
+      aspiraFabCap.style.outline = '';
+    });
+
+  })();
+</script>
+<!-- END NEW FEATURE JS: FAB Enhancement -->
+
 </body>
 </html>
