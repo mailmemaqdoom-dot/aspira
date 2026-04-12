@@ -872,13 +872,26 @@
 
 <!-- ─── HERO ─── -->
 <section id="hero">
+  <!-- NEW FEATURE: Hero ambient layer — animated gradient + blur shapes -->
+  <div class="aspira-hero-ambient" aria-hidden="true">
+    <div class="aspira-hero-grad"></div>
+    <span class="aspira-hero-blob aspira-hero-blob-1"></span>
+    <span class="aspira-hero-blob aspira-hero-blob-2"></span>
+    <span class="aspira-hero-blob aspira-hero-blob-3"></span>
+  </div>
+  <!-- END NEW FEATURE: Hero ambient layer -->
   <div class="container">
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-badge">Your clarity system — not a service platform</div>
         <h1>Find <em>Clarity.</em><br>Build Presence.<br>Get Ahead.</h1>
         <p class="hero-sub">People don't fail because they lack ability. They struggle because they lack clarity in how they present themselves and move forward.</p>
-        <div class="hero-ctas">
+        <!-- NEW FEATURE: Emotional line below subtext -->
+        <p class="aspira-hero-emotional" id="aspira-hero-emotional">
+          You've tried. You've applied. You've waited.<br>
+          <em>If it still isn't working, let's understand why.</em>
+        </p>
+        <!-- END NEW FEATURE: Emotional line -->
           <a href="https://wa.me/917550270450" target="_blank" rel="noopener noreferrer" class="btn-primary">Start with Clarity</a>
           <a href="#flow" class="btn-ghost">
             See how it works
@@ -4169,6 +4182,174 @@
   })();
 </script>
 <!-- END NEW FEATURE JS: Action Buttons -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Hero Ambient Gradient + Blur Shapes        -->
+<!-- + Emotional line — fully scoped, aspira-hero-* prefix       -->
+<!-- ============================================================ -->
+<style>
+  /* ── Ambient wrapper: sits inside #hero, behind all content ── */
+  .aspira-hero-ambient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;          /* behind .container which has z-index: auto */
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Ensure hero content stays above the ambient layer */
+  #hero > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Animated gradient mesh ── */
+  .aspira-hero-grad {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 15% 30%, rgba(168,197,172,0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 50% at 85% 70%, rgba(230,221,208,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 50% 10%, rgba(200,220,202,0.14) 0%, transparent 65%);
+    animation: aspiraHeroGradShift 14s ease-in-out infinite alternate;
+    will-change: opacity;
+  }
+
+  @keyframes aspiraHeroGradShift {
+    0%   { opacity: 0.7; }
+    33%  { opacity: 1;   }
+    66%  { opacity: 0.8; }
+    100% { opacity: 1;   }
+  }
+
+  /* ── Floating blur blobs ── */
+  .aspira-hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(52px);
+    will-change: transform, opacity;
+  }
+
+  .aspira-hero-blob-1 {
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(168,197,172,0.28), transparent 70%);
+    top: -60px;
+    left: -80px;
+    animation: aspiraHeroFloat1 18s ease-in-out infinite;
+  }
+
+  .aspira-hero-blob-2 {
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(196,180,154,0.18), transparent 70%);
+    top: 40%;
+    right: 5%;
+    animation: aspiraHeroFloat2 22s ease-in-out infinite;
+  }
+
+  .aspira-hero-blob-3 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(140,190,148,0.16), transparent 70%);
+    bottom: 10%;
+    left: 38%;
+    animation: aspiraHeroFloat3 16s ease-in-out infinite;
+  }
+
+  @keyframes aspiraHeroFloat1 {
+    0%   { transform: translate(0px, 0px)   scale(1);    opacity: 0.8; }
+    30%  { transform: translate(30px, 20px) scale(1.06); opacity: 1;   }
+    60%  { transform: translate(-15px, 35px) scale(0.97); opacity: 0.85; }
+    100% { transform: translate(0px, 0px)   scale(1);    opacity: 0.8; }
+  }
+
+  @keyframes aspiraHeroFloat2 {
+    0%   { transform: translate(0px, 0px)    scale(1);    opacity: 0.7; }
+    40%  { transform: translate(-25px, -20px) scale(1.08); opacity: 1;   }
+    75%  { transform: translate(18px, 28px)  scale(0.95); opacity: 0.8; }
+    100% { transform: translate(0px, 0px)    scale(1);    opacity: 0.7; }
+  }
+
+  @keyframes aspiraHeroFloat3 {
+    0%   { transform: translate(0px, 0px)   scale(1);    opacity: 0.6; }
+    50%  { transform: translate(20px, -18px) scale(1.1);  opacity: 0.9; }
+    100% { transform: translate(0px, 0px)   scale(1);    opacity: 0.6; }
+  }
+
+  /* ── Emotional line ── */
+  .aspira-hero-emotional {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #6a6a65;
+    line-height: 1.8;
+    max-width: 440px;
+    margin-top: 20px;
+    margin-bottom: 36px;
+    padding: 16px 20px;
+    border-left: 2px solid rgba(107,143,113,0.4);
+    background: rgba(232,240,233,0.35);
+    border-radius: 0 10px 10px 0;
+    /* Entry animation — mirrors existing hero animation pattern */
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.85s cubic-bezier(0.23,1,0.32,1) 0.75s forwards;
+  }
+
+  .aspira-hero-emotional em {
+    font-style: italic;
+    color: #4a7050;
+    font-weight: 400;
+  }
+
+  /* Dark mode */
+  .dark-mode .aspira-hero-grad {
+    background:
+      radial-gradient(ellipse 70% 60% at 15% 30%, rgba(107,143,113,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 50% at 85% 70%, rgba(80,60,40,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 50% 10%, rgba(100,140,105,0.1) 0%, transparent 65%);
+  }
+
+  .dark-mode .aspira-hero-blob-1 {
+    background: radial-gradient(circle, rgba(107,143,113,0.14), transparent 70%);
+  }
+  .dark-mode .aspira-hero-blob-2 {
+    background: radial-gradient(circle, rgba(80,60,40,0.1), transparent 70%);
+  }
+  .dark-mode .aspira-hero-blob-3 {
+    background: radial-gradient(circle, rgba(100,140,105,0.1), transparent 70%);
+  }
+
+  .dark-mode .aspira-hero-emotional {
+    color: #9a9a95;
+    background: rgba(107,143,113,0.07);
+    border-left-color: rgba(107,143,113,0.3);
+  }
+  .dark-mode .aspira-hero-emotional em { color: #8cb890; }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .aspira-hero-blob-2 { display: none; } /* reduce clutter on small screens */
+    .aspira-hero-blob-3 { display: none; }
+    .aspira-hero-emotional { max-width: 100%; font-size: 0.9rem; }
+    .aspira-hero-blob-1 {
+      width: 240px;
+      height: 240px;
+      top: -20px;
+      left: -40px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .aspira-hero-emotional {
+      font-size: 0.85rem;
+      padding: 13px 16px;
+      margin-bottom: 28px;
+    }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Hero Ambient + Emotional Line -->
 
 </body>
 </html>
