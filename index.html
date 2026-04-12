@@ -4619,5 +4619,1648 @@
 </script>
 <!-- END NEW FEATURE JS: FAB Enhancement -->
 
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Assistant Chat Modal — #aspira-assistant        -->
+<!-- Triggered by floating button click; 4-step chat flow        -->
+<!-- ============================================================ -->
+<div
+  id="aspira-assistant"
+  class="aspira-ast-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Aspira Assistant"
+  aria-hidden="true"
+>
+  <!-- Backdrop -->
+  <div class="aspira-ast-backdrop" id="aspira-ast-backdrop"></div>
+
+  <!-- Chat window -->
+  <div class="aspira-ast-window" id="aspira-ast-window">
+
+    <!-- Header -->
+    <div class="aspira-ast-header">
+      <div class="aspira-ast-header-left">
+        <div class="aspira-ast-avatar" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 26 26" fill="none">
+            <path d="M13 3C7.477 3 3 7.03 3 12c0 1.74.49 3.37 1.34 4.76L3 22l5.45-1.32A10.02 10.02 0 0013 21c5.523 0 10-4.03 10-9S18.523 3 13 3z" fill="white" opacity="0.9"/>
+            <circle cx="9.5"  cy="12" r="1.2" fill="#6b8f71"/>
+            <circle cx="13"   cy="12" r="1.2" fill="#6b8f71"/>
+            <circle cx="16.5" cy="12" r="1.2" fill="#6b8f71"/>
+          </svg>
+        </div>
+        <div class="aspira-ast-header-text">
+          <span class="aspira-ast-name">Aspira</span>
+          <span class="aspira-ast-status">
+            <span class="aspira-ast-status-dot" aria-hidden="true"></span>
+            Clarity assistant
+          </span>
+        </div>
+      </div>
+      <button
+        class="aspira-ast-close"
+        id="aspira-ast-close"
+        aria-label="Close assistant"
+        type="button"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Chat messages area -->
+    <div class="aspira-ast-messages" id="aspira-ast-messages" aria-live="polite">
+      <!-- Messages injected by JS -->
+    </div>
+
+    <!-- Input area (shown per step) -->
+    <div class="aspira-ast-input-area" id="aspira-ast-input-area">
+      <!-- Content injected by JS -->
+    </div>
+
+  </div><!-- /.aspira-ast-window -->
+</div>
+<!-- END NEW FEATURE: Assistant Modal -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Assistant Modal — fully scoped aspira-ast-* -->
+<!-- ============================================================ -->
+<style>
+  /* ── Overlay ── */
+  .aspira-ast-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0 24px 104px 24px; /* sits above FAB (58px + 28px + gap) */
+  }
+
+  .aspira-ast-overlay.aspira-ast-open {
+    pointer-events: auto;
+  }
+
+  /* ── Backdrop ── */
+  .aspira-ast-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(22,22,20,0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    cursor: pointer;
+  }
+
+  .aspira-ast-overlay.aspira-ast-open .aspira-ast-backdrop {
+    opacity: 1;
+  }
+
+  /* ── Window ── */
+  .aspira-ast-window {
+    position: relative;
+    z-index: 1;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    max-height: 520px;
+    background: rgba(250,249,246,0.98);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 24px;
+    box-shadow:
+      0 32px 80px rgba(0,0,0,0.18),
+      0 8px 24px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    /* Entry animation */
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transition:
+      opacity 0.4s cubic-bezier(0.23,1,0.32,1),
+      transform 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-ast-overlay.aspira-ast-open .aspira-ast-window {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* ── Header ── */
+  .aspira-ast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #6b8f71 0%, #5a7a60 100%);
+    flex-shrink: 0;
+  }
+
+  .aspira-ast-header-left {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .aspira-ast-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .aspira-ast-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .aspira-ast-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+
+  .aspira-ast-status {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .aspira-ast-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #a8f0b8;
+    animation: aspiraAstStatusPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes aspiraAstStatusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .aspira-ast-close {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255,255,255,0.85);
+    transition: background 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .aspira-ast-close:hover {
+    background: rgba(255,255,255,0.28);
+    color: #fff;
+  }
+
+  /* ── Messages area ── */
+  .aspira-ast-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 18px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+  }
+
+  .aspira-ast-messages::-webkit-scrollbar { width: 4px; }
+  .aspira-ast-messages::-webkit-scrollbar-track { background: transparent; }
+  .aspira-ast-messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+
+  /* Bubble base */
+  .aspira-ast-bubble {
+    max-width: 82%;
+    padding: 11px 15px;
+    border-radius: 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    font-weight: 300;
+
+    /* Entry */
+    opacity: 0;
+    transform: translateY(10px);
+    animation: aspiraAstBubbleIn 0.4s cubic-bezier(0.23,1,0.32,1) forwards;
+  }
+
+  @keyframes aspiraAstBubbleIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Bot bubble — left */
+  .aspira-ast-bubble-bot {
+    align-self: flex-start;
+    background: rgba(232,240,233,0.9);
+    color: #2c2c2a;
+    border-bottom-left-radius: 5px;
+  }
+
+  /* User bubble — right */
+  .aspira-ast-bubble-user {
+    align-self: flex-end;
+    background: #6b8f71;
+    color: #fff;
+    border-bottom-right-radius: 5px;
+    font-weight: 400;
+  }
+
+  /* Typing indicator */
+  .aspira-ast-typing {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    background: rgba(232,240,233,0.9);
+    border-radius: 18px;
+    border-bottom-left-radius: 5px;
+    opacity: 0;
+    animation: aspiraAstBubbleIn 0.3s ease forwards;
+  }
+
+  .aspira-ast-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8a8a85;
+    animation: aspiraAstTypingDot 1.2s ease-in-out infinite;
+  }
+
+  .aspira-ast-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .aspira-ast-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes aspiraAstTypingDot {
+    0%, 100% { transform: translateY(0);    opacity: 0.4; }
+    50%       { transform: translateY(-4px); opacity: 1;   }
+  }
+
+  /* Option buttons (step 1) */
+  .aspira-ast-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: flex-start;
+    width: 100%;
+    opacity: 0;
+    animation: aspiraAstBubbleIn 0.4s cubic-bezier(0.23,1,0.32,1) 0.2s forwards;
+  }
+
+  .aspira-ast-option-btn {
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(107,143,113,0.3);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 400;
+    color: #2c2c2a;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-ast-option-btn:hover {
+    background: rgba(232,240,233,0.9);
+    border-color: #6b8f71;
+    color: #2c2c2a;
+    transform: translateX(4px);
+  }
+
+  .aspira-ast-option-btn .aspira-ast-opt-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(107,143,113,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: #6b8f71;
+    flex-shrink: 0;
+  }
+
+  /* ── Input area ── */
+  .aspira-ast-input-area {
+    padding: 12px 16px 16px;
+    flex-shrink: 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .aspira-ast-textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 300;
+    color: #2c2c2a;
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid rgba(0,0,0,0.09);
+    border-radius: 14px;
+    padding: 12px 14px;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-ast-textarea::placeholder { color: #b5b5af; }
+  .aspira-ast-textarea:focus {
+    border-color: #6b8f71;
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.12);
+  }
+
+  .aspira-ast-send-btn {
+    align-self: flex-end;
+    background: #6b8f71;
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(0.23,1,0.32,1);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-ast-send-btn:hover {
+    background: #5a7a60;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(107,143,113,0.32);
+  }
+
+  .aspira-ast-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* CTA button (step 4) */
+  .aspira-ast-cta-btn {
+    width: 100%;
+    background: #6b8f71;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    box-shadow: 0 6px 20px rgba(107,143,113,0.28);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-ast-cta-btn:hover {
+    background: #5a7a60;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(107,143,113,0.38);
+  }
+
+  /* ── Insight card (step 3) ── */
+  .aspira-ast-insight {
+    background: rgba(232,240,233,0.7);
+    border: 1px solid rgba(107,143,113,0.2);
+    border-radius: 14px;
+    padding: 13px 15px;
+    align-self: flex-start;
+    max-width: 88%;
+    opacity: 0;
+    animation: aspiraAstBubbleIn 0.45s cubic-bezier(0.23,1,0.32,1) 0.1s forwards;
+  }
+
+  .aspira-ast-insight-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #6b8f71;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .aspira-ast-insight ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .aspira-ast-insight ul li {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    color: #2c2c2a;
+    font-weight: 300;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .aspira-ast-insight ul li::before {
+    content: '→';
+    color: #6b8f71;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-ast-window {
+    background: rgba(22,22,26,0.98);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .aspira-ast-bubble-bot { background: rgba(107,143,113,0.12); color: #eaeae6; }
+  .dark-mode .aspira-ast-typing     { background: rgba(107,143,113,0.1); }
+  .dark-mode .aspira-ast-typing span { background: #6a6a65; }
+  .dark-mode .aspira-ast-option-btn {
+    background: rgba(30,30,36,0.9);
+    border-color: rgba(107,143,113,0.25);
+    color: #c0c0bb;
+  }
+  .dark-mode .aspira-ast-option-btn:hover {
+    background: rgba(107,143,113,0.12);
+    border-color: #6b8f71;
+    color: #eaeae6;
+  }
+  .dark-mode .aspira-ast-input-area { border-top-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-ast-textarea {
+    background: rgba(30,30,36,0.85);
+    border-color: rgba(255,255,255,0.09);
+    color: #eaeae6;
+  }
+  .dark-mode .aspira-ast-textarea::placeholder { color: #5a5a56; }
+  .dark-mode .aspira-ast-insight {
+    background: rgba(107,143,113,0.1);
+    border-color: rgba(107,143,113,0.2);
+  }
+  .dark-mode .aspira-ast-insight ul li { color: #c0c0bb; }
+  .dark-mode .aspira-ast-backdrop { background: rgba(0,0,0,0.65); }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .aspira-ast-overlay {
+      padding: 0 0 96px 0;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .aspira-ast-window {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 24px 24px 0 0;
+      max-height: 75vh;
+    }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Assistant Modal -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Assistant Chat Modal — isolated IIFE         -->
+<!-- Intercepts FAB click, runs 4-step chat flow                  -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+
+    /* ── Refs ── */
+    var aspiraAstOverlay   = document.getElementById('aspira-assistant');
+    var aspiraAstWindow    = document.getElementById('aspira-ast-window');
+    var aspiraAstMessages  = document.getElementById('aspira-ast-messages');
+    var aspiraAstInputArea = document.getElementById('aspira-ast-input-area');
+    var aspiraAstCloseBtn  = document.getElementById('aspira-ast-close');
+    var aspiraAstBackdrop  = document.getElementById('aspira-ast-backdrop');
+    var aspiraFabBtn       = document.getElementById('aspira-float-wa');
+
+    if (!aspiraAstOverlay || !aspiraFabBtn) return;
+
+    var aspiraAstSelectedPath = null;
+    var aspiraAstUserText     = '';
+    var aspiraAstStep         = 0;
+    var aspiraAstTypingTimer  = null;
+
+    /* ── Insight map per path ── */
+    var ASPIRA_AST_INSIGHTS = {
+      job: [
+        'Your resume likely lacks a clear positioning headline',
+        'Achievements are probably listed as tasks — not outcomes',
+        'Your LinkedIn may not be aligned with your resume'
+      ],
+      freelance: [
+        'Your online presence may not clearly show who you help',
+        'Potential clients can\'t tell what makes you different',
+        'A case study or portfolio page would change this fast'
+      ],
+      business: [
+        'Your digital presence may not reflect your real quality',
+        'Visitors can\'t tell what you do within 5 seconds',
+        'A clearer positioning statement would attract more enquiries'
+      ]
+    };
+
+    var ASPIRA_AST_PLACEHOLDERS = {
+      job:       'Tell me about the roles you\'re applying to and what\'s been happening…',
+      freelance: 'What kind of clients are you trying to attract? What\'s been the challenge?',
+      business:  'Tell me about your business and what you\'re trying to grow…'
+    };
+
+    /* ── Helpers ── */
+    function aspiraAstScrollBottom() {
+      if (aspiraAstMessages) {
+        aspiraAstMessages.scrollTop = aspiraAstMessages.scrollHeight;
+      }
+    }
+
+    function aspiraAstAddBubble(text, type, delay) {
+      delay = delay || 0;
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          var bubble = document.createElement('div');
+          bubble.className = 'aspira-ast-bubble aspira-ast-bubble-' + type;
+          bubble.textContent = text;
+          aspiraAstMessages.appendChild(bubble);
+          aspiraAstScrollBottom();
+          resolve();
+        }, delay);
+      });
+    }
+
+    function aspiraAstShowTyping() {
+      var typing = document.createElement('div');
+      typing.className = 'aspira-ast-typing';
+      typing.id = 'aspira-ast-typing-indicator';
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      aspiraAstMessages.appendChild(typing);
+      aspiraAstScrollBottom();
+      return typing;
+    }
+
+    function aspiraAstRemoveTyping() {
+      var t = document.getElementById('aspira-ast-typing-indicator');
+      if (t) t.parentNode.removeChild(t);
+    }
+
+    function aspiraAstClearInput() {
+      aspiraAstInputArea.innerHTML = '';
+    }
+
+    /* ── Step 1: Path selection ── */
+    function aspiraAstStep1() {
+      aspiraAstStep = 1;
+      aspiraAstClearInput();
+
+      aspiraAstAddBubble('Hi there 👋 I\'m here to help you get clarity fast.', 'bot', 0).then(function() {
+        var typing = aspiraAstShowTyping();
+        setTimeout(function() {
+          aspiraAstRemoveTyping();
+          aspiraAstAddBubble('Where are you right now?', 'bot', 0).then(function() {
+
+            var opts = document.createElement('div');
+            opts.className = 'aspira-ast-options';
+
+            var options = [
+              { key: 'job',       label: 'I\'m trying to get hired',
+                icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="4" width="10" height="8" rx="1.5"/><path d="M5 4V3a2 2 0 014 0v1"/></svg>' },
+              { key: 'freelance', label: 'I want more freelance clients',
+                icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M7 2v2M7 10v2M2 7h2M10 7h2"/></svg>' },
+              { key: 'business',  label: 'I\'m building or growing a business',
+                icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 12V6l5-4 5 4v6"/><rect x="5" y="8" width="4" height="4" rx="0.5"/></svg>' }
+            ];
+
+            options.forEach(function(opt) {
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'aspira-ast-option-btn';
+              btn.innerHTML =
+                '<span class="aspira-ast-opt-icon">' + opt.icon + '</span>' + opt.label;
+              btn.addEventListener('click', function() {
+                aspiraAstSelectedPath = opt.key;
+                aspiraAstAddBubble(opt.label, 'user', 0);
+                opts.style.display = 'none';
+                setTimeout(function() { aspiraAstStep2(); }, 300);
+              });
+              opts.appendChild(btn);
+            });
+
+            aspiraAstMessages.appendChild(opts);
+            aspiraAstScrollBottom();
+          });
+        }, 900);
+      });
+    }
+
+    /* ── Step 2: Textarea input ── */
+    function aspiraAstStep2() {
+      aspiraAstStep = 2;
+
+      var typing = aspiraAstShowTyping();
+      setTimeout(function() {
+        aspiraAstRemoveTyping();
+        var placeholder = ASPIRA_AST_PLACEHOLDERS[aspiraAstSelectedPath] || 'Tell me a bit more…';
+        aspiraAstAddBubble('Got it. Tell me a bit more about your situation.', 'bot').then(function() {
+
+          /* Build textarea + send button in input area */
+          aspiraAstClearInput();
+
+          var ta = document.createElement('textarea');
+          ta.className = 'aspira-ast-textarea';
+          ta.rows = 3;
+          ta.placeholder = placeholder;
+          ta.setAttribute('aria-label', 'Your situation');
+
+          var sendBtn = document.createElement('button');
+          sendBtn.type = 'button';
+          sendBtn.className = 'aspira-ast-send-btn';
+          sendBtn.disabled = true;
+          sendBtn.innerHTML =
+            'Analyse this' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">' +
+            '<path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>';
+
+          ta.addEventListener('input', function() {
+            sendBtn.disabled = ta.value.trim().length < 6;
+          });
+
+          sendBtn.addEventListener('click', function() {
+            aspiraAstUserText = ta.value.trim();
+            aspiraAstAddBubble(aspiraAstUserText, 'user');
+            aspiraAstClearInput();
+            setTimeout(function() { aspiraAstStep3(); }, 400);
+          });
+
+          aspiraAstInputArea.appendChild(ta);
+          aspiraAstInputArea.appendChild(sendBtn);
+          ta.focus();
+        });
+      }, 900);
+    }
+
+    /* ── Step 3: Insight message ── */
+    function aspiraAstStep3() {
+      aspiraAstStep = 3;
+
+      var typing = aspiraAstShowTyping();
+      setTimeout(function() {
+        aspiraAstRemoveTyping();
+        aspiraAstAddBubble('Based on this, here\'s what you should focus on…', 'bot').then(function() {
+
+          /* Insight card */
+          setTimeout(function() {
+            var insights = ASPIRA_AST_INSIGHTS[aspiraAstSelectedPath] || [];
+            var card = document.createElement('div');
+            card.className = 'aspira-ast-insight';
+
+            var title = document.createElement('div');
+            title.className = 'aspira-ast-insight-title';
+            title.textContent = 'Your focus areas';
+            card.appendChild(title);
+
+            var ul = document.createElement('ul');
+            insights.forEach(function(item) {
+              var li = document.createElement('li');
+              li.textContent = item;
+              ul.appendChild(li);
+            });
+            card.appendChild(ul);
+
+            aspiraAstMessages.appendChild(card);
+            aspiraAstScrollBottom();
+
+            setTimeout(function() { aspiraAstStep4(); }, 600);
+          }, 300);
+        });
+      }, 1200);
+    }
+
+    /* ── Step 4: CTA ── */
+    function aspiraAstStep4() {
+      aspiraAstStep = 4;
+
+      var typing = aspiraAstShowTyping();
+      setTimeout(function() {
+        aspiraAstRemoveTyping();
+        aspiraAstAddBubble('Ready to go deeper? Your full Clarity Check is one step away.', 'bot').then(function() {
+
+          aspiraAstClearInput();
+
+          var ctaBtn = document.createElement('button');
+          ctaBtn.type = 'button';
+          ctaBtn.className = 'aspira-ast-cta-btn';
+          ctaBtn.innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+            '<path d="M8 2a6 6 0 100 12A6 6 0 008 2z" fill="currentColor" opacity="0.2"/>' +
+            '<path d="M5 8l2.5 2.5L11 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>' +
+            'Continue to Full Clarity';
+
+          ctaBtn.addEventListener('click', function() {
+            aspiraAstClose();
+            setTimeout(function() {
+              var target = document.getElementById('aspira-input') ||
+                           document.getElementById('aspira-start');
+              if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+              /* If the path matches an existing card, auto-select it */
+              var pathMap = { job: 'hired', freelance: 'freelance', business: 'business' };
+              var mappedPath = pathMap[aspiraAstSelectedPath];
+              if (mappedPath && typeof aspiraInputShow === 'function') {
+                setTimeout(function() { aspiraInputShow(mappedPath, ''); }, 500);
+              }
+            }, 350);
+          });
+
+          aspiraAstInputArea.appendChild(ctaBtn);
+          aspiraAstScrollBottom();
+        });
+      }, 900);
+    }
+
+    /* ── Open / Close ── */
+    function aspiraAstOpen() {
+      aspiraAstOverlay.classList.add('aspira-ast-open');
+      aspiraAstOverlay.removeAttribute('aria-hidden');
+      document.body.style.overflow = 'hidden';
+
+      /* Reset state */
+      aspiraAstSelectedPath = null;
+      aspiraAstUserText     = '';
+      aspiraAstStep         = 0;
+      aspiraAstMessages.innerHTML  = '';
+      aspiraAstInputArea.innerHTML = '';
+
+      /* Start flow after window animates in */
+      setTimeout(aspiraAstStep1, 200);
+    }
+
+    function aspiraAstClose() {
+      aspiraAstOverlay.classList.remove('aspira-ast-open');
+      aspiraAstOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    /* ── Intercept FAB click ── */
+    aspiraFabBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      aspiraAstOpen();
+    });
+
+    /* ── Close triggers ── */
+    if (aspiraAstCloseBtn) {
+      aspiraAstCloseBtn.addEventListener('click', aspiraAstClose);
+    }
+    if (aspiraAstBackdrop) {
+      aspiraAstBackdrop.addEventListener('click', aspiraAstClose);
+    }
+
+    /* Escape key */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && aspiraAstOverlay.classList.contains('aspira-ast-open')) {
+        aspiraAstClose();
+      }
+    });
+
+  })();
+</script>
+<!-- END NEW FEATURE JS: Assistant Modal -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Input Section Enhancement — aspira-inh-*       -->
+<!-- Adds: helper text, upload/text toggle, JD field, validation  -->
+<!-- Zero modifications to existing #aspira-input HTML            -->
+<!-- ============================================================ -->
+
+<!-- Enhancement nodes injected into existing section via JS below -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Input Enhancement — fully scoped aspira-inh-* -->
+<!-- ============================================================ -->
+<style>
+
+  /* ── Helper text badge ── */
+  .aspira-inh-timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(107,143,113,0.1);
+    border: 1px solid rgba(107,143,113,0.22);
+    color: #5a7a60;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  .aspira-inh-timer-badge svg {
+    flex-shrink: 0;
+  }
+
+  .dark-mode .aspira-inh-timer-badge {
+    background: rgba(107,143,113,0.08);
+    border-color: rgba(107,143,113,0.18);
+    color: #8cb890;
+  }
+
+  /* ── Tab switcher (upload / text) ── */
+  .aspira-inh-tab-bar {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .aspira-inh-tab {
+    flex: 1;
+    padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 400;
+    color: #8a8a85;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-inh-tab:not(:last-child) {
+    border-right: 1.5px solid rgba(0,0,0,0.08);
+  }
+
+  .aspira-inh-tab.aspira-inh-tab-active {
+    background: #6b8f71;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .aspira-inh-tab:not(.aspira-inh-tab-active):hover {
+    background: rgba(107,143,113,0.07);
+    color: #4a7050;
+  }
+
+  .dark-mode .aspira-inh-tab-bar {
+    background: rgba(30,30,36,0.6);
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .dark-mode .aspira-inh-tab {
+    color: #7a7a76;
+  }
+
+  .dark-mode .aspira-inh-tab:not(:last-child) {
+    border-right-color: rgba(255,255,255,0.07);
+  }
+
+  .dark-mode .aspira-inh-tab:not(.aspira-inh-tab-active):hover {
+    background: rgba(107,143,113,0.08);
+    color: #a8c5ac;
+  }
+
+  /* ── Toggle panels (upload vs text) ── */
+  .aspira-inh-panel {
+    transition: opacity 0.3s ease, max-height 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-inh-panel-hidden {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .aspira-inh-panel-visible {
+    opacity: 1;
+    max-height: 800px;
+    overflow: visible;
+    pointer-events: auto;
+  }
+
+  /* ── Text input alternative (type resume) ── */
+  .aspira-inh-text-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aspira-inh-text-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #2c2c2a;
+  }
+
+  .dark-mode .aspira-inh-text-label { color: #c0c0bb; }
+
+  .aspira-inh-resume-text {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 300;
+    color: #2c2c2a;
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid rgba(0,0,0,0.09);
+    border-radius: 14px;
+    padding: 14px 16px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.65;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 120px;
+  }
+
+  .aspira-inh-resume-text::placeholder { color: #b5b5af; }
+
+  .aspira-inh-resume-text:focus {
+    border-color: #6b8f71;
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.12);
+    background: rgba(255,255,255,0.98);
+  }
+
+  .dark-mode .aspira-inh-resume-text {
+    background: rgba(30,30,36,0.8);
+    border-color: rgba(255,255,255,0.09);
+    color: #eaeae6;
+  }
+
+  .dark-mode .aspira-inh-resume-text::placeholder { color: #5a5a56; }
+
+  .dark-mode .aspira-inh-resume-text:focus {
+    background: rgba(30,30,36,0.98);
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.14);
+  }
+
+  /* ── Character counter ── */
+  .aspira-inh-char-count {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: #b5b5af;
+    font-weight: 300;
+    text-align: right;
+    margin-top: -4px;
+    transition: color 0.25s ease;
+  }
+
+  .aspira-inh-char-count.aspira-inh-count-good { color: #6b8f71; }
+  .aspira-inh-char-count.aspira-inh-count-warn { color: #c89a3a; }
+
+  /* ── Job Description collapsible (freelance + business) ── */
+  .aspira-inh-jd-toggle-wrap {
+    margin-top: 4px;
+  }
+
+  .aspira-inh-jd-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: #6b8f71;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-inh-jd-toggle-btn:hover { color: #4a7050; }
+
+  .aspira-inh-jd-toggle-btn svg {
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-inh-jd-toggle-btn.aspira-inh-jd-open svg {
+    transform: rotate(180deg);
+  }
+
+  .aspira-inh-jd-field {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.4s cubic-bezier(0.23,1,0.32,1),
+      opacity 0.3s ease,
+      margin 0.3s ease;
+    margin-top: 0;
+  }
+
+  .aspira-inh-jd-field.aspira-inh-jd-expanded {
+    max-height: 320px;
+    opacity: 1;
+    margin-top: 12px;
+  }
+
+  .aspira-inh-jd-textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 300;
+    color: #2c2c2a;
+    background: rgba(255,255,255,0.75);
+    border: 1.5px solid rgba(0,0,0,0.09);
+    border-radius: 14px;
+    padding: 13px 16px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.65;
+    min-height: 100px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .aspira-inh-jd-textarea::placeholder { color: #b5b5af; }
+
+  .aspira-inh-jd-textarea:focus {
+    border-color: #6b8f71;
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.1);
+    background: rgba(255,255,255,0.98);
+  }
+
+  .dark-mode .aspira-inh-jd-textarea {
+    background: rgba(30,30,36,0.7);
+    border-color: rgba(255,255,255,0.09);
+    color: #eaeae6;
+  }
+
+  .dark-mode .aspira-inh-jd-textarea::placeholder { color: #5a5a56; }
+
+  .dark-mode .aspira-inh-jd-textarea:focus {
+    background: rgba(30,30,36,0.95);
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.12);
+  }
+
+  .dark-mode .aspira-inh-jd-toggle-btn { color: #8cb890; }
+  .dark-mode .aspira-inh-jd-toggle-btn:hover { color: #a8c5ac; }
+
+  /* ── Validation feedback line ── */
+  .aspira-inh-validation {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    margin-top: 6px;
+    min-height: 18px;
+    transition: color 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  .aspira-inh-validation.aspira-inh-val-ok {
+    color: #6b8f71;
+    opacity: 1;
+  }
+
+  .aspira-inh-validation.aspira-inh-val-error {
+    color: #b85a3a;
+    opacity: 1;
+  }
+
+  /* ── Progress steps bar ── */
+  .aspira-inh-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 36px;
+  }
+
+  .aspira-inh-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    position: relative;
+  }
+
+  .aspira-inh-progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: calc(50% + 14px);
+    right: calc(-50% + 14px);
+    height: 1.5px;
+    background: rgba(0,0,0,0.1);
+    z-index: 0;
+  }
+
+  .aspira-inh-step-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #8a8a85;
+    z-index: 1;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .aspira-inh-progress-step.aspira-inh-step-done .aspira-inh-step-dot {
+    background: #6b8f71;
+    border-color: #6b8f71;
+    color: #fff;
+  }
+
+  .aspira-inh-progress-step.aspira-inh-step-active .aspira-inh-step-dot {
+    border-color: #6b8f71;
+    color: #6b8f71;
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.15);
+  }
+
+  .aspira-inh-step-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    color: #b5b5af;
+    font-weight: 300;
+    white-space: nowrap;
+  }
+
+  .aspira-inh-progress-step.aspira-inh-step-active .aspira-inh-step-label {
+    color: #6b8f71;
+    font-weight: 500;
+  }
+
+  .aspira-inh-progress-step.aspira-inh-step-done .aspira-inh-step-label {
+    color: #8a8a85;
+  }
+
+  .dark-mode .aspira-inh-step-dot {
+    background: rgba(30,30,36,0.8);
+    border-color: rgba(255,255,255,0.12);
+    color: #6a6a65;
+  }
+
+  .dark-mode .aspira-inh-progress-step.aspira-inh-step-active .aspira-inh-step-dot {
+    border-color: #6b8f71;
+    color: #6b8f71;
+    background: rgba(107,143,113,0.1);
+  }
+
+  .dark-mode .aspira-inh-progress-step.aspira-inh-step-done .aspira-inh-step-dot {
+    background: #5a7a60;
+    border-color: #5a7a60;
+  }
+
+  .dark-mode .aspira-inh-progress-step:not(:last-child)::after {
+    background: rgba(255,255,255,0.07);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .aspira-inh-tab { font-size: 0.78rem; padding: 9px 8px; gap: 5px; }
+    .aspira-inh-step-label { display: none; }
+    .aspira-inh-progress { gap: 4px; }
+  }
+
+</style>
+<!-- END NEW FEATURE CSS: Input Enhancement -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Input Enhancement — isolated IIFE            -->
+<!-- Reads existing DOM, injects enhancements additively          -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+
+    /* ── Wait for DOM + existing aspiraInputShow to be ready ── */
+    function aspiraInhInit() {
+
+      var aspiraInhSection   = document.getElementById('aspira-input');
+      var aspiraInhHeader    = aspiraInhSection && aspiraInhSection.querySelector('.aspira-inp-header');
+      var aspiraInhSubEl     = document.getElementById('aspira-inp-sub');
+      var aspiraInhPanelHired = document.getElementById('aspira-inp-panel-hired');
+      var aspiraInhPanelFree  = document.getElementById('aspira-inp-panel-freelance');
+      var aspiraInhPanelBiz   = document.getElementById('aspira-inp-panel-business');
+      var aspiraInhDropzone   = document.getElementById('aspira-inp-dropzone');
+      var aspiraInhDropField  = aspiraInhDropzone && aspiraInhDropzone.parentNode; /* .aspira-inp-field */
+      var aspiraInhJdField    = document.getElementById('aspira-inp-jd');
+      var aspiraInhJdFieldWrap = aspiraInhJdField && aspiraInhJdField.closest('.aspira-inp-field');
+      var aspiraInhFreeTa    = document.getElementById('aspira-inp-freelance-desc');
+      var aspiraInhBizTa     = document.getElementById('aspira-inp-biz-desc');
+      var aspiraInhSubmitBtn = document.getElementById('aspira-inp-submit');
+
+      if (!aspiraInhSection) return;
+
+      /* ══ 1. HELPER TEXT BADGE ══════════════════════════════════ */
+      if (aspiraInhSubEl) {
+        var badge = document.createElement('span');
+        badge.className = 'aspira-inh-timer-badge';
+        badge.innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 3.5v3l2 1.5"/></svg>' +
+          'This takes less than 60 seconds';
+        aspiraInhSubEl.parentNode.insertBefore(badge, aspiraInhSubEl.nextSibling);
+      }
+
+      /* ══ 2. PROGRESS STEPS (injected above panels) ════════════ */
+      var aspiraInhContainer = aspiraInhSection.querySelector('.aspira-inp-container');
+      if (aspiraInhContainer) {
+        var progressBar = document.createElement('div');
+        progressBar.className = 'aspira-inh-progress';
+        progressBar.id = 'aspira-inh-progress';
+        progressBar.setAttribute('aria-label', 'Progress steps');
+
+        var steps = [
+          { label: 'Choose path', id: 'inh-step-1' },
+          { label: 'Your details', id: 'inh-step-2' },
+          { label: 'Start check', id: 'inh-step-3' }
+        ];
+
+        steps.forEach(function(s, i) {
+          var stepEl = document.createElement('div');
+          stepEl.className = 'aspira-inh-progress-step' + (i === 1 ? ' aspira-inh-step-active' : i === 0 ? ' aspira-inh-step-done' : '');
+          stepEl.id = s.id;
+          stepEl.innerHTML =
+            '<div class="aspira-inh-step-dot">' + (i === 0 ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l3 3 4-4"/></svg>' : (i + 1)) + '</div>' +
+            '<span class="aspira-inh-step-label">' + s.label + '</span>';
+          progressBar.appendChild(stepEl);
+        });
+
+        /* Insert before the first panel */
+        var firstPanel = aspiraInhSection.querySelector('.aspira-inp-panel');
+        if (firstPanel && aspiraInhContainer.contains(firstPanel)) {
+          aspiraInhContainer.insertBefore(progressBar, firstPanel);
+        }
+      }
+
+      /* ══ 3. HIRED PANEL: Upload / Text tab switcher ══════════ */
+      if (aspiraInhPanelHired && aspiraInhDropField) {
+
+        /* Build tab bar */
+        var tabBar = document.createElement('div');
+        tabBar.className = 'aspira-inh-tab-bar';
+        tabBar.setAttribute('role', 'tablist');
+        tabBar.setAttribute('aria-label', 'Resume input method');
+
+        var tabUpload = document.createElement('button');
+        tabUpload.type = 'button';
+        tabUpload.className = 'aspira-inh-tab aspira-inh-tab-active';
+        tabUpload.setAttribute('role', 'tab');
+        tabUpload.setAttribute('aria-selected', 'true');
+        tabUpload.id = 'aspira-inh-tab-upload';
+        tabUpload.innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<path d="M6.5 9V4M4 6.5l2.5-2.5L9 6.5"/><rect x="1.5" y="1.5" width="10" height="10" rx="2"/></svg>' +
+          'Upload File';
+
+        var tabText = document.createElement('button');
+        tabText.type = 'button';
+        tabText.className = 'aspira-inh-tab';
+        tabText.setAttribute('role', 'tab');
+        tabText.setAttribute('aria-selected', 'false');
+        tabText.id = 'aspira-inh-tab-text';
+        tabText.innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<path d="M2 3.5h9M2 6.5h7M2 9.5h5"/></svg>' +
+          'Type Instead';
+
+        tabBar.appendChild(tabUpload);
+        tabBar.appendChild(tabText);
+
+        /* Insert tab bar above the dropzone field */
+        aspiraInhPanelHired.insertBefore(tabBar, aspiraInhDropField);
+
+        /* Wrap dropzone field in a panel div */
+        var uploadPanelWrap = document.createElement('div');
+        uploadPanelWrap.className = 'aspira-inh-panel aspira-inh-panel-visible';
+        uploadPanelWrap.id = 'aspira-inh-upload-wrap';
+        aspiraInhDropField.parentNode.insertBefore(uploadPanelWrap, aspiraInhDropField);
+        uploadPanelWrap.appendChild(aspiraInhDropField);
+
+        /* Create text-resume input panel */
+        var textPanelWrap = document.createElement('div');
+        textPanelWrap.className = 'aspira-inh-panel aspira-inh-panel-hidden';
+        textPanelWrap.id = 'aspira-inh-text-wrap';
+
+        var textPanelInner = document.createElement('div');
+        textPanelInner.className = 'aspira-inh-text-panel';
+
+        var textLabel = document.createElement('label');
+        textLabel.className = 'aspira-inh-text-label';
+        textLabel.setAttribute('for', 'aspira-inh-resume-text');
+        textLabel.textContent = 'Paste your resume text or describe your experience:';
+
+        var resumeTa = document.createElement('textarea');
+        resumeTa.className = 'aspira-inh-resume-text';
+        resumeTa.id = 'aspira-inh-resume-text';
+        resumeTa.rows = 5;
+        resumeTa.placeholder = 'E.g. I have 4 years in marketing, worked at a mid-sized tech firm, led social campaigns…';
+        resumeTa.setAttribute('aria-label', 'Resume text input');
+
+        var charCount = document.createElement('span');
+        charCount.className = 'aspira-inh-char-count';
+        charCount.id = 'aspira-inh-resume-charcount';
+        charCount.textContent = '0 / 1000';
+
+        var validMsg = document.createElement('div');
+        validMsg.className = 'aspira-inh-validation';
+        validMsg.id = 'aspira-inh-resume-valid';
+
+        resumeTa.addEventListener('input', function() {
+          var len = resumeTa.value.length;
+          charCount.textContent = len + ' / 1000';
+          if (len === 0) {
+            charCount.className = 'aspira-inh-char-count';
+            validMsg.className = 'aspira-inh-validation';
+            validMsg.textContent = '';
+          } else if (len < 40) {
+            charCount.className = 'aspira-inh-char-count aspira-inh-count-warn';
+            validMsg.className = 'aspira-inh-validation aspira-inh-val-error';
+            validMsg.textContent = 'Add a bit more detail for a better clarity check.';
+          } else {
+            charCount.className = 'aspira-inh-char-count aspira-inh-count-good';
+            validMsg.className = 'aspira-inh-validation aspira-inh-val-ok';
+            validMsg.textContent = '✓ Good — enough context for your check.';
+          }
+        });
+
+        textPanelInner.appendChild(textLabel);
+        textPanelInner.appendChild(resumeTa);
+        textPanelInner.appendChild(charCount);
+        textPanelInner.appendChild(validMsg);
+        textPanelWrap.appendChild(textPanelInner);
+
+        /* Insert after upload panel */
+        uploadPanelWrap.parentNode.insertBefore(textPanelWrap, uploadPanelWrap.nextSibling);
+
+        /* Tab switching logic */
+        tabUpload.addEventListener('click', function() {
+          tabUpload.classList.add('aspira-inh-tab-active');
+          tabUpload.setAttribute('aria-selected', 'true');
+          tabText.classList.remove('aspira-inh-tab-active');
+          tabText.setAttribute('aria-selected', 'false');
+          uploadPanelWrap.className = 'aspira-inh-panel aspira-inh-panel-visible';
+          textPanelWrap.className   = 'aspira-inh-panel aspira-inh-panel-hidden';
+        });
+
+        tabText.addEventListener('click', function() {
+          tabText.classList.add('aspira-inh-tab-active');
+          tabText.setAttribute('aria-selected', 'true');
+          tabUpload.classList.remove('aspira-inh-tab-active');
+          tabUpload.setAttribute('aria-selected', 'false');
+          textPanelWrap.className   = 'aspira-inh-panel aspira-inh-panel-visible';
+          uploadPanelWrap.className = 'aspira-inh-panel aspira-inh-panel-hidden';
+          setTimeout(function() { resumeTa.focus(); }, 50);
+        });
+      }
+
+      /* ══ 4. JOB DESCRIPTION COLLAPSIBLE (all panels) ════════ */
+      function aspiraInhAddJdToggle(panel, textareaId) {
+        if (!panel) return;
+
+        var toggleWrap = document.createElement('div');
+        toggleWrap.className = 'aspira-inh-jd-toggle-wrap';
+
+        var toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'aspira-inh-jd-toggle-btn';
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<path d="M2 5l4.5 4.5L11 5"/></svg>' +
+          '+ Add job / role description <em style="font-style:normal;color:#b5b5af;font-size:0.72rem;">(optional — helps a lot)</em>';
+
+        var jdFieldDiv = document.createElement('div');
+        jdFieldDiv.className = 'aspira-inh-jd-field';
+        jdFieldDiv.id = 'aspira-inh-jd-' + textareaId;
+
+        var jdTa = document.createElement('textarea');
+        jdTa.className = 'aspira-inh-jd-textarea';
+        jdTa.id = 'aspira-inh-jdta-' + textareaId;
+        jdTa.rows = 4;
+        jdTa.placeholder = 'Paste a job title, role description, or the kind of client / project you\'re aiming for…';
+        jdTa.setAttribute('aria-label', 'Job or role description');
+
+        jdFieldDiv.appendChild(jdTa);
+        toggleWrap.appendChild(toggleBtn);
+        toggleWrap.appendChild(jdFieldDiv);
+
+        toggleBtn.addEventListener('click', function() {
+          var isOpen = jdFieldDiv.classList.contains('aspira-inh-jd-expanded');
+          if (isOpen) {
+            jdFieldDiv.classList.remove('aspira-inh-jd-expanded');
+            toggleBtn.classList.remove('aspira-inh-jd-open');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+          } else {
+            jdFieldDiv.classList.add('aspira-inh-jd-expanded');
+            toggleBtn.classList.add('aspira-inh-jd-open');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            setTimeout(function() { jdTa.focus(); }, 80);
+          }
+        });
+
+        panel.appendChild(toggleWrap);
+
+        /* Return the textarea so submit handler can read it */
+        return jdTa;
+      }
+
+      /* Add JD toggle to freelance and business panels */
+      var aspiraInhFreeJdTa = aspiraInhAddJdToggle(aspiraInhPanelFree, 'freelance');
+      var aspiraInhBizJdTa  = aspiraInhAddJdToggle(aspiraInhPanelBiz,  'business');
+
+      /* ══ 5. CHAR COUNTS for existing freelance + business textareas ═ */
+      function aspiraInhAddCharCount(ta) {
+        if (!ta) return;
+        var cc = document.createElement('span');
+        cc.className = 'aspira-inh-char-count';
+        var vm = document.createElement('div');
+        vm.className = 'aspira-inh-validation';
+        ta.parentNode.insertBefore(cc, ta.nextSibling);
+        ta.parentNode.insertBefore(vm, cc.nextSibling);
+
+        function update() {
+          var len = ta.value.length;
+          cc.textContent = len + ' / 1500';
+          if (len === 0) {
+            cc.className = 'aspira-inh-char-count';
+            vm.className = 'aspira-inh-validation';
+            vm.textContent = '';
+          } else if (len < 50) {
+            cc.className = 'aspira-inh-char-count aspira-inh-count-warn';
+            vm.className = 'aspira-inh-validation aspira-inh-val-error';
+            vm.textContent = 'A bit more detail will improve your clarity check.';
+          } else {
+            cc.className = 'aspira-inh-char-count aspira-inh-count-good';
+            vm.className = 'aspira-inh-validation aspira-inh-val-ok';
+            vm.textContent = '✓ Great — this gives us enough to work with.';
+          }
+        }
+
+        ta.addEventListener('input', update);
+      }
+
+      aspiraInhAddCharCount(aspiraInhFreeTa);
+      aspiraInhAddCharCount(aspiraInhBizTa);
+
+      /* ══ 6. FORM VALIDATION on submit ════════════════════════ */
+      if (aspiraInhSubmitBtn) {
+        aspiraInhSubmitBtn.addEventListener('click', function(e) {
+
+          /* Determine active panel */
+          var activePanel = aspiraInhSection.querySelector('.aspira-inp-panel.aspira-inp-panel-active');
+          if (!activePanel) return;
+
+          var panelId = activePanel.id;
+          var isValid = false;
+          var errMsg  = '';
+
+          if (panelId === 'aspira-inp-panel-hired') {
+            /* Check if upload tab active or text tab active */
+            var uploadTab = document.getElementById('aspira-inh-tab-upload');
+            var textTab   = document.getElementById('aspira-inh-tab-text');
+            var isTextMode = textTab && textTab.classList.contains('aspira-inh-tab-active');
+
+            if (isTextMode) {
+              var rtVal = document.getElementById('aspira-inh-resume-text');
+              if (rtVal && rtVal.value.trim().length >= 40) {
+                isValid = true;
+              } else {
+                errMsg = 'Please add a bit more about your experience before continuing.';
+              }
+            } else {
+              /* Upload mode — file optional, always valid */
+              isValid = true;
+            }
+          } else if (panelId === 'aspira-inp-panel-freelance') {
+            var ftVal = document.getElementById('aspira-inp-freelance-desc');
+            isValid = ftVal && ftVal.value.trim().length >= 20;
+            if (!isValid) errMsg = 'Please describe your situation a little more.';
+          } else if (panelId === 'aspira-inp-panel-business') {
+            var btVal = document.getElementById('aspira-inp-biz-desc');
+            isValid = btVal && btVal.value.trim().length >= 20;
+            if (!isValid) errMsg = 'Please tell us a bit about your business first.';
+          } else {
+            isValid = true;
+          }
+
+          if (!isValid) {
+            e.stopImmediatePropagation(); /* prevent existing handler */
+
+            /* Show inline error near submit button */
+            var existingErr = document.getElementById('aspira-inh-submit-error');
+            if (!existingErr) {
+              var errEl = document.createElement('div');
+              errEl.id = 'aspira-inh-submit-error';
+              errEl.className = 'aspira-inh-validation aspira-inh-val-error';
+              errEl.style.textAlign = 'center';
+              errEl.style.marginTop = '8px';
+              aspiraInhSubmitBtn.parentNode.insertBefore(errEl, aspiraInhSubmitBtn.nextSibling);
+            }
+            document.getElementById('aspira-inh-submit-error').textContent = errMsg;
+            document.getElementById('aspira-inh-submit-error').className = 'aspira-inh-validation aspira-inh-val-error';
+
+            /* Shake button */
+            aspiraInhSubmitBtn.style.animation = 'none';
+            setTimeout(function() {
+              aspiraInhSubmitBtn.style.animation = 'aspiraInhShake 0.4s ease';
+            }, 10);
+
+            return;
+          }
+
+          /* Clear error on success */
+          var errEl2 = document.getElementById('aspira-inh-submit-error');
+          if (errEl2) {
+            errEl2.className = 'aspira-inh-validation aspira-inh-val-ok';
+            errEl2.textContent = '✓ All good — opening your check…';
+          }
+
+          /* Mark progress step 3 active */
+          var step2 = document.getElementById('inh-step-2');
+          var step3 = document.getElementById('inh-step-3');
+          if (step2) { step2.className = 'aspira-inh-progress-step aspira-inh-step-done'; step2.querySelector('.aspira-inh-step-dot').innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l3 3 4-4"/></svg>'; }
+          if (step3) { step3.className = 'aspira-inh-progress-step aspira-inh-step-active'; }
+
+        }, true /* capture = runs before existing handler */);
+      }
+
+    } /* end aspiraInhInit */
+
+    /* ── Keyframe for shake ── */
+    var aspiraInhStyleEl = document.createElement('style');
+    aspiraInhStyleEl.textContent =
+      '@keyframes aspiraInhShake {' +
+      '0%,100%{transform:translateX(0)}' +
+      '20%{transform:translateX(-6px)}' +
+      '40%{transform:translateX(6px)}' +
+      '60%{transform:translateX(-4px)}' +
+      '80%{transform:translateX(4px)}' +
+      '}';
+    document.head.appendChild(aspiraInhStyleEl);
+
+    /* ── Run after DOM ready ── */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aspiraInhInit);
+    } else {
+      aspiraInhInit();
+    }
+
+  })();
+</script>
+<!-- END NEW FEATURE JS: Input Enhancement -->
+
 </body>
 </html>
