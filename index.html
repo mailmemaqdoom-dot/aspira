@@ -3101,5 +3101,671 @@
 </script>
 <!-- END NEW FEATURE JS: Processing Modal -->
 
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Rich Clarity Result Section — #aspira-result-full -->
+<!-- Revealed after processing modal dismisses                    -->
+<!-- ============================================================ -->
+<section
+  id="aspira-result-full"
+  class="aspira-rf-section"
+  aria-label="Your clarity results"
+  aria-hidden="true"
+>
+  <div class="aspira-rf-container">
+
+    <!-- ── Score Header ── -->
+    <div class="aspira-rf-score-wrap">
+      <div class="aspira-rf-score-ring-wrap" aria-label="62 percent readiness score">
+        <svg class="aspira-rf-ring-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+          <!-- Track -->
+          <circle cx="60" cy="60" r="50" stroke="rgba(168,197,172,0.2)" stroke-width="7"/>
+          <!-- Fill — circumference = 2π×50 ≈ 314.16 -->
+          <!-- 62% of 314.16 ≈ 194.78 → dashoffset = 314 - 195 = 119 -->
+          <circle
+            class="aspira-rf-ring-fill"
+            cx="60" cy="60" r="50"
+            stroke="#6b8f71"
+            stroke-width="7"
+            stroke-linecap="round"
+            stroke-dasharray="314"
+            stroke-dashoffset="314"
+            transform="rotate(-90 60 60)"
+          />
+        </svg>
+        <div class="aspira-rf-score-inner">
+          <span class="aspira-rf-score-num" id="aspira-rf-score-num">0%</span>
+          <span class="aspira-rf-score-lbl">readiness</span>
+        </div>
+      </div>
+
+      <div class="aspira-rf-score-text">
+        <span class="aspira-rf-eyebrow">Your Clarity Check</span>
+        <h2 class="aspira-rf-title">Here's where you stand.</h2>
+        <p class="aspira-rf-sub">
+          Based on what you've shared, we've mapped out what's working, what's missing, and what to do next.
+        </p>
+        <div class="aspira-rf-score-bar-wrap">
+          <div class="aspira-rf-score-bar-track">
+            <div class="aspira-rf-score-bar-fill" id="aspira-rf-bar-fill"></div>
+          </div>
+          <span class="aspira-rf-score-bar-label">62% overall readiness</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Three Content Cards ── -->
+    <div class="aspira-rf-cards">
+
+      <!-- Card 1: What's Working -->
+      <div class="aspira-rf-card aspira-rf-card-working">
+        <div class="aspira-rf-card-header">
+          <span class="aspira-rf-card-icon aspira-rf-icon-green" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10l5 5 7-7"/>
+            </svg>
+          </span>
+          <div>
+            <span class="aspira-rf-card-tag aspira-rf-tag-green">Strengths</span>
+            <h3 class="aspira-rf-card-title">What's Working</h3>
+          </div>
+        </div>
+        <ul class="aspira-rf-list">
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-green"></span>
+            Your experience is relevant and clearly stated
+          </li>
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-green"></span>
+            Your core skills are visible and easy to find
+          </li>
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-green"></span>
+            Your professional timeline is coherent
+          </li>
+        </ul>
+      </div>
+
+      <!-- Card 2: What's Missing -->
+      <div class="aspira-rf-card aspira-rf-card-missing">
+        <div class="aspira-rf-card-header">
+          <span class="aspira-rf-card-icon aspira-rf-icon-amber" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="8"/>
+              <path d="M10 6v4M10 13v1"/>
+            </svg>
+          </span>
+          <div>
+            <span class="aspira-rf-card-tag aspira-rf-tag-amber">Gaps Found</span>
+            <h3 class="aspira-rf-card-title">What's Missing</h3>
+          </div>
+        </div>
+        <ul class="aspira-rf-list">
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-amber"></span>
+            No clear positioning statement or personal headline
+          </li>
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-amber"></span>
+            Achievements are listed as tasks, not results
+          </li>
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-amber"></span>
+            LinkedIn presence is not aligned with your resume
+          </li>
+          <li class="aspira-rf-list-item">
+            <span class="aspira-rf-dot aspira-rf-dot-amber"></span>
+            No online presence beyond a basic profile
+          </li>
+        </ul>
+      </div>
+
+      <!-- Card 3: What To Do Next -->
+      <div class="aspira-rf-card aspira-rf-card-next aspira-rf-card-full">
+        <div class="aspira-rf-card-header">
+          <span class="aspira-rf-card-icon aspira-rf-icon-sage" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 10h10M12 6l4 4-4 4"/>
+            </svg>
+          </span>
+          <div>
+            <span class="aspira-rf-card-tag aspira-rf-tag-sage">Action Plan</span>
+            <h3 class="aspira-rf-card-title">What To Do Next</h3>
+          </div>
+        </div>
+        <div class="aspira-rf-steps-grid">
+          <div class="aspira-rf-step-item">
+            <span class="aspira-rf-step-num">01</span>
+            <div class="aspira-rf-step-body">
+              <strong>Rewrite your headline</strong>
+              <p>Add a positioning statement that clearly says who you are, what you do, and who you help.</p>
+            </div>
+          </div>
+          <div class="aspira-rf-step-item">
+            <span class="aspira-rf-step-num">02</span>
+            <div class="aspira-rf-step-body">
+              <strong>Convert tasks into impact</strong>
+              <p>Reframe each bullet point to show what changed because of your work, not just what you did.</p>
+            </div>
+          </div>
+          <div class="aspira-rf-step-item">
+            <span class="aspira-rf-step-num">03</span>
+            <div class="aspira-rf-step-body">
+              <strong>Align your LinkedIn</strong>
+              <p>Your LinkedIn should mirror your resume — same positioning, same narrative, stronger profile photo.</p>
+            </div>
+          </div>
+          <div class="aspira-rf-step-item">
+            <span class="aspira-rf-step-num">04</span>
+            <div class="aspira-rf-step-body">
+              <strong>Build a simple online presence</strong>
+              <p>Even a single-page portfolio or a well-written LinkedIn article increases visibility significantly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.aspira-rf-cards -->
+
+    <!-- ── Bottom CTA ── -->
+    <div class="aspira-rf-bottom-cta">
+      <p class="aspira-rf-bottom-note">Ready to close these gaps? We'll build this with you — step by step.</p>
+      <a
+        href="https://wa.me/917550270450"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="aspira-rf-cta-btn"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Get Your Full Report on WhatsApp
+      </a>
+    </div>
+
+  </div>
+</section>
+<!-- END NEW FEATURE: Rich Clarity Result Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Rich Result Section — fully scoped          -->
+<!-- ============================================================ -->
+<style>
+  /* ── Section wrapper — hidden by default ── */
+  .aspira-rf-section {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      max-height 0.8s cubic-bezier(0.23,1,0.32,1),
+      opacity 0.6s ease,
+      padding 0.6s ease;
+  }
+
+  .aspira-rf-section.aspira-rf-visible {
+    max-height: 3000px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 80px 0 140px;
+  }
+
+  .aspira-rf-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Score header ── */
+  .aspira-rf-score-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+
+  .aspira-rf-ring-svg {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  .aspira-rf-score-ring-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  .aspira-rf-score-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .aspira-rf-score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    line-height: 1;
+  }
+
+  .aspira-rf-score-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    color: #8a8a85;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+
+  .aspira-rf-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .aspira-rf-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(1.6rem, 3vw, 2.2rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    color: #2c2c2a !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 12px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .aspira-rf-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  /* Score bar */
+  .aspira-rf-score-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aspira-rf-score-bar-track {
+    height: 7px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+    max-width: 320px;
+  }
+
+  .aspira-rf-score-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #a8c5ac, #6b8f71);
+    border-radius: 100px;
+    transition: width 1.4s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-rf-score-bar-fill.aspira-rf-bar-animate {
+    width: 62%;
+  }
+
+  .aspira-rf-score-bar-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: #8a8a85;
+    font-weight: 400;
+  }
+
+  /* ── Cards grid ── */
+  .aspira-rf-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .aspira-rf-card {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(0,0,0,0.06);
+    border-radius: 20px;
+    padding: 32px 28px;
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+  }
+
+  .aspira-rf-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+  }
+
+  /* Full-width card */
+  .aspira-rf-card-full {
+    grid-column: 1 / -1;
+  }
+
+  /* Card header */
+  .aspira-rf-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .aspira-rf-card-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .aspira-rf-icon-green { background: rgba(107,143,113,0.12); color: #6b8f71; }
+  .aspira-rf-icon-amber { background: rgba(200,160,80,0.1);  color: #b8882a; }
+  .aspira-rf-icon-sage  { background: rgba(107,143,113,0.1); color: #5a7a60; }
+
+  .aspira-rf-card-tag {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 5px;
+  }
+
+  .aspira-rf-tag-green { background: rgba(107,143,113,0.12); color: #5a7a60; }
+  .aspira-rf-tag-amber { background: rgba(200,160,80,0.12);  color: #996a10; }
+  .aspira-rf-tag-sage  { background: rgba(107,143,113,0.1);  color: #4e6e54; }
+
+  .aspira-rf-card-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    color: #2c2c2a !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  /* List items */
+  .aspira-rf-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .aspira-rf-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: #4a4a47;
+    font-weight: 300;
+    line-height: 1.55;
+  }
+
+  .aspira-rf-dot {
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+  }
+
+  .aspira-rf-dot-green { background: #6b8f71; }
+  .aspira-rf-dot-amber { background: #c89a3a; }
+
+  /* Steps grid (card 3) */
+  .aspira-rf-steps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 32px;
+  }
+
+  .aspira-rf-step-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .aspira-rf-step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #a8c5ac;
+    line-height: 1.2;
+    min-width: 28px;
+    margin-top: 1px;
+  }
+
+  .aspira-rf-step-body strong {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    margin-bottom: 5px;
+  }
+
+  .aspira-rf-step-body p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Bottom CTA ── */
+  .aspira-rf-bottom-cta {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .aspira-rf-bottom-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .aspira-rf-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #25D366;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 8px 28px rgba(37,211,102,0.32);
+    transition:
+      background 0.3s ease,
+      transform 0.3s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.3s ease;
+  }
+
+  .aspira-rf-cta-btn:hover {
+    background: #20b857;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 40px rgba(37,211,102,0.42);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ── Card entry animations ── */
+  @keyframes aspiraRfCardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .aspira-rf-section.aspira-rf-visible .aspira-rf-card {
+    animation: aspiraRfCardIn 0.55s cubic-bezier(0.23,1,0.32,1) both;
+  }
+  .aspira-rf-section.aspira-rf-visible .aspira-rf-card:nth-child(1) { animation-delay: 0.05s; }
+  .aspira-rf-section.aspira-rf-visible .aspira-rf-card:nth-child(2) { animation-delay: 0.15s; }
+  .aspira-rf-section.aspira-rf-visible .aspira-rf-card:nth-child(3) { animation-delay: 0.25s; }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-rf-title     { color: #eaeae6 !important; }
+  .dark-mode .aspira-rf-card-title { color: #eaeae6 !important; }
+  .dark-mode .aspira-rf-score-num { color: #eaeae6; }
+  .dark-mode .aspira-rf-card {
+    background: rgba(30,30,36,0.82);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .aspira-rf-list-item { color: #c0c0bb; }
+  .dark-mode .aspira-rf-step-body strong { color: #eaeae6; }
+  .dark-mode .aspira-rf-score-bar-track { background: rgba(255,255,255,0.07); }
+
+  /* ── Mobile ── */
+  @media (max-width: 720px) {
+    .aspira-rf-score-wrap { grid-template-columns: 1fr; gap: 28px; justify-items: center; text-align: center; }
+    .aspira-rf-score-bar-track { max-width: 100%; }
+    .aspira-rf-cards { grid-template-columns: 1fr; }
+    .aspira-rf-card-full { grid-column: auto; }
+    .aspira-rf-steps-grid { grid-template-columns: 1fr; }
+    .aspira-rf-container { padding: 0 20px; }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Rich Result Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Rich Result Reveal + Score Animation         -->
+<!-- Hooks into existing aspiraProcDismiss via event              -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+    'use strict';
+
+    var ASPIRA_RF_TARGET_SCORE = 62;
+    var aspiraRfSection  = document.getElementById('aspira-result-full');
+    var aspiraRfScoreNum = document.getElementById('aspira-rf-score-num');
+    var aspiraRfBarFill  = document.getElementById('aspira-rf-bar-fill');
+    var aspiraRfRingFill = document.querySelector('.aspira-rf-ring-fill');
+    var aspiraRfAnimated = false;
+
+    /* ── Animate score counter ── */
+    function aspiraRfAnimateScore() {
+      if (aspiraRfAnimated) return;
+      aspiraRfAnimated = true;
+
+      /* Bar fill */
+      if (aspiraRfBarFill) {
+        setTimeout(function() {
+          aspiraRfBarFill.classList.add('aspira-rf-bar-animate');
+        }, 100);
+      }
+
+      /* Ring fill: circumference = 314.16, 62% → offset = 314 - (314 * 0.62) = 119.3 */
+      if (aspiraRfRingFill) {
+        setTimeout(function() {
+          aspiraRfRingFill.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.23,1,0.32,1)';
+          aspiraRfRingFill.style.strokeDashoffset = '119';
+        }, 150);
+      }
+
+      /* Counting number */
+      if (aspiraRfScoreNum) {
+        var start     = 0;
+        var duration  = 1400;
+        var startTime = null;
+
+        function aspiraRfCountStep(ts) {
+          if (!startTime) startTime = ts;
+          var elapsed  = ts - startTime;
+          var progress = Math.min(elapsed / duration, 1);
+          /* Ease-out cubic */
+          var eased    = 1 - Math.pow(1 - progress, 3);
+          var current  = Math.round(eased * ASPIRA_RF_TARGET_SCORE);
+          aspiraRfScoreNum.textContent = current + '%';
+          if (progress < 1) {
+            requestAnimationFrame(aspiraRfCountStep);
+          } else {
+            aspiraRfScoreNum.textContent = ASPIRA_RF_TARGET_SCORE + '%';
+          }
+        }
+
+        setTimeout(function() {
+          requestAnimationFrame(aspiraRfCountStep);
+        }, 150);
+      }
+    }
+
+    /* ── Reveal function — called by processing modal dismiss patch ── */
+    function aspiraRfReveal() {
+      if (!aspiraRfSection) return;
+      aspiraRfSection.classList.add('aspira-rf-visible');
+      aspiraRfSection.removeAttribute('aria-hidden');
+
+      setTimeout(function() {
+        aspiraRfSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        aspiraRfAnimateScore();
+      }, 120);
+    }
+
+    /* ── Patch: extend aspiraProcDismiss to also reveal this section ──
+       We wrap the existing dismiss logic by listening to the moment
+       aspira-result becomes visible (MutationObserver — no code edits). */
+    var aspiraRfResultAnchor = document.getElementById('aspira-result');
+    if (aspiraRfResultAnchor) {
+      var aspiraRfObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          if (
+            m.type === 'attributes' &&
+            m.attributeName === 'class' &&
+            aspiraRfResultAnchor.classList.contains('aspira-result-visible')
+          ) {
+            /* Delay slightly after the existing result card reveals */
+            setTimeout(aspiraRfReveal, 600);
+            aspiraRfObserver.disconnect();
+          }
+        });
+      });
+      aspiraRfObserver.observe(aspiraRfResultAnchor, { attributes: true });
+    }
+
+    /* ── Fallback: also expose globally so it can be called directly ── */
+    window.aspiraRfReveal = aspiraRfReveal;
+
+  })();
+</script>
+<!-- END NEW FEATURE JS: Rich Result Section -->
+
 </body>
 </html>
