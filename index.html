@@ -1595,9 +1595,9 @@
         role="button"
         tabindex="0"
       >
-        Continue on WhatsApp
+        Continue
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
     </div>
@@ -2062,17 +2062,596 @@
         // Build WhatsApp URL with pre-filled message
         var msg = ASPIRA_QS_MESSAGES[option] || '';
         var url = ASPIRA_QS_WA_BASE + '?text=' + encodeURIComponent(msg);
-        aspiraQsBtn.setAttribute('href', url);
+        aspiraQsBtn.setAttribute('href', '#aspira-input');
+        aspiraQsBtn.setAttribute('data-aspira-wa-url', url);
 
         // Reveal footer
         aspiraQsFooter.classList.add('aspira-qs-footer-visible');
         aspiraQsFooter.removeAttribute('aria-hidden');
+
+        // Trigger input section show (if loaded)
+        if (typeof aspiraInputShow === 'function') {
+          aspiraInputShow(option, url);
+        }
       });
     });
+
+    // Handle continue button click — scroll to input section
+    if (aspiraQsBtn) {
+      aspiraQsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById('aspira-input');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
 
   })();
 </script>
 <!-- END NEW FEATURE JS: Situation Selector -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Input Section — #aspira-input                   -->
+<!-- Shown dynamically after path selection; hidden by default    -->
+<!-- ============================================================ -->
+<section
+  id="aspira-input"
+  class="aspira-inp-section"
+  aria-label="Tell us more"
+  aria-hidden="true"
+>
+  <div class="aspira-inp-container">
+
+    <!-- Heading (updated dynamically by JS) -->
+    <div class="aspira-inp-header">
+      <span class="aspira-inp-eyebrow" id="aspira-inp-eyebrow">Step 2</span>
+      <h2 class="aspira-inp-title" id="aspira-inp-title">Tell us a little more</h2>
+      <p class="aspira-inp-sub" id="aspira-inp-sub">This helps us give you a clarity check that's actually relevant to where you are.</p>
+    </div>
+
+    <!-- ── Panel: Job Seeker ── -->
+    <div class="aspira-inp-panel" id="aspira-inp-panel-hired" aria-hidden="true">
+      <div class="aspira-inp-field">
+        <label class="aspira-inp-label" for="aspira-inp-resume">
+          Upload your resume
+          <span class="aspira-inp-optional">optional</span>
+        </label>
+        <div class="aspira-inp-dropzone" id="aspira-inp-dropzone">
+          <input
+            type="file"
+            id="aspira-inp-resume"
+            class="aspira-inp-file-native"
+            accept=".pdf,.doc,.docx"
+            aria-label="Upload resume"
+          />
+          <div class="aspira-inp-drop-inner">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#6b8f71" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21V11M11 16l5-5 5 5"/>
+              <rect x="4" y="4" width="24" height="24" rx="5"/>
+            </svg>
+            <span class="aspira-inp-drop-text" id="aspira-inp-drop-text">
+              Drop your PDF or Word file here, or <span class="aspira-inp-drop-link">browse</span>
+            </span>
+            <span class="aspira-inp-drop-hint">PDF, DOC, DOCX · max 5 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="aspira-inp-field">
+        <label class="aspira-inp-label" for="aspira-inp-jd">
+          Paste the job description you're targeting
+          <span class="aspira-inp-optional">optional but helpful</span>
+        </label>
+        <textarea
+          id="aspira-inp-jd"
+          class="aspira-inp-textarea"
+          rows="5"
+          placeholder="Paste the job title, company, or full job description here…"
+          aria-label="Job description"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- ── Panel: Freelancer ── -->
+    <div class="aspira-inp-panel" id="aspira-inp-panel-freelance" aria-hidden="true">
+      <div class="aspira-inp-field">
+        <label class="aspira-inp-label" for="aspira-inp-freelance-desc">
+          What kind of work do you do, and who do you want to attract?
+        </label>
+        <textarea
+          id="aspira-inp-freelance-desc"
+          class="aspira-inp-textarea"
+          rows="6"
+          placeholder="E.g. I'm a graphic designer who wants to work with startups. I currently get work via referrals but want to build an online presence…"
+          aria-label="Freelance description"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- ── Panel: Business ── -->
+    <div class="aspira-inp-panel" id="aspira-inp-panel-business" aria-hidden="true">
+      <div class="aspira-inp-field">
+        <label class="aspira-inp-label" for="aspira-inp-biz-desc">
+          Tell us about your business and what you're trying to achieve
+        </label>
+        <textarea
+          id="aspira-inp-biz-desc"
+          class="aspira-inp-textarea"
+          rows="6"
+          placeholder="E.g. I run a home catering business and want to get more visibility online. I have no website and rely mostly on word of mouth…"
+          aria-label="Business description"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- ── CTA ── -->
+    <div class="aspira-inp-cta-wrap">
+      <button
+        id="aspira-inp-submit"
+        class="aspira-inp-submit-btn"
+        type="button"
+        aria-label="Start Clarity Check"
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M9 2a7 7 0 100 14A7 7 0 009 2zm-.5 4h1v4h-1V6zm0 5h1v1.5h-1V11z" fill="white" opacity="0.9"/>
+        </svg>
+        Start Clarity Check
+      </button>
+      <p class="aspira-inp-cta-note">Opens WhatsApp with your details pre-filled. No account needed.</p>
+    </div>
+
+  </div>
+</section>
+<!-- END NEW FEATURE: Input Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Input Section — fully scoped                -->
+<!-- ============================================================ -->
+<style>
+  /* ── Section wrapper — hidden by default ── */
+  .aspira-inp-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 0 140px;
+    /* Hidden state */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      max-height 0.7s cubic-bezier(0.23,1,0.32,1),
+      opacity 0.5s ease,
+      padding 0.5s ease;
+  }
+
+  .aspira-inp-section.aspira-inp-visible {
+    max-height: 1200px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 80px 0 140px;
+  }
+
+  .aspira-inp-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Header ── */
+  .aspira-inp-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .aspira-inp-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .aspira-inp-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em !important;
+    color: #2c2c2a !important;
+    margin-bottom: 14px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .aspira-inp-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── Panels ── */
+  .aspira-inp-panel {
+    display: none;
+    flex-direction: column;
+    gap: 28px;
+    animation: aspiraInpPanelIn 0.45s cubic-bezier(0.23,1,0.32,1) both;
+  }
+
+  .aspira-inp-panel.aspira-inp-panel-active {
+    display: flex;
+  }
+
+  @keyframes aspiraInpPanelIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Fields ── */
+  .aspira-inp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .aspira-inp-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .aspira-inp-optional {
+    font-size: 0.73rem;
+    font-weight: 400;
+    color: #a8c5ac;
+    background: rgba(168,197,172,0.15);
+    padding: 2px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Textarea ── */
+  .aspira-inp-textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #2c2c2a;
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(0,0,0,0.09);
+    border-radius: 16px;
+    padding: 16px 20px;
+    resize: vertical;
+    outline: none;
+    width: 100%;
+    line-height: 1.65;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    /* Reset any inherited styles */
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+  }
+
+  .aspira-inp-textarea::placeholder {
+    color: #b5b5af;
+    font-weight: 300;
+  }
+
+  .aspira-inp-textarea:focus {
+    border-color: #6b8f71;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.12);
+  }
+
+  /* ── File Dropzone ── */
+  .aspira-inp-dropzone {
+    position: relative;
+    border: 1.5px dashed rgba(168,197,172,0.7);
+    border-radius: 16px;
+    background: rgba(232,240,233,0.3);
+    padding: 36px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .aspira-inp-dropzone:hover,
+  .aspira-inp-dropzone.aspira-inp-drag-over {
+    border-color: #6b8f71;
+    background: rgba(107,143,113,0.07);
+  }
+
+  .aspira-inp-dropzone.aspira-inp-file-set {
+    border-style: solid;
+    border-color: #6b8f71;
+    background: rgba(107,143,113,0.06);
+  }
+
+  .aspira-inp-file-native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .aspira-inp-drop-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+  }
+
+  .aspira-inp-drop-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: #4a4a47;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .aspira-inp-drop-link {
+    color: #6b8f71;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .aspira-inp-drop-hint {
+    font-size: 0.75rem;
+    color: #b5b5af;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  /* ── Submit CTA ── */
+  .aspira-inp-cta-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 40px;
+  }
+
+  .aspira-inp-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #6b8f71;
+    color: #ffffff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 17px 48px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(107,143,113,0.32);
+    transition:
+      background 0.3s ease,
+      transform 0.3s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    white-space: nowrap;
+  }
+
+  .aspira-inp-submit-btn:hover {
+    background: #5a7a60;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 40px rgba(107,143,113,0.42);
+  }
+
+  .aspira-inp-submit-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 16px rgba(107,143,113,0.25);
+  }
+
+  .aspira-inp-submit-btn:focus-visible {
+    outline: 2px solid #6b8f71;
+    outline-offset: 4px;
+  }
+
+  .aspira-inp-cta-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: #b5b5af;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-inp-title { color: #eaeae6 !important; }
+  .dark-mode .aspira-inp-label { color: #c0c0bb; }
+  .dark-mode .aspira-inp-textarea {
+    background: rgba(30,30,36,0.8);
+    border-color: rgba(255,255,255,0.09);
+    color: #eaeae6;
+  }
+  .dark-mode .aspira-inp-textarea:focus {
+    background: rgba(30,30,36,0.95);
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.18);
+  }
+  .dark-mode .aspira-inp-textarea::placeholder { color: #5a5a56; }
+  .dark-mode .aspira-inp-dropzone {
+    background: rgba(30,30,36,0.5);
+    border-color: rgba(168,197,172,0.25);
+  }
+  .dark-mode .aspira-inp-dropzone:hover {
+    background: rgba(107,143,113,0.1);
+    border-color: rgba(107,143,113,0.45);
+  }
+  .dark-mode .aspira-inp-drop-text { color: #c0c0bb; }
+  .dark-mode .aspira-inp-submit-btn {
+    background: #5a7a60;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+  }
+  .dark-mode .aspira-inp-submit-btn:hover { background: #4e6e54; }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .aspira-inp-container { padding: 0 20px; }
+    .aspira-inp-submit-btn { padding: 15px 36px; font-size: 0.92rem; }
+    .aspira-inp-dropzone { padding: 28px 16px; }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Input Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Input Section — isolated IIFE                -->
+<!-- ============================================================ -->
+<script>
+  /* global aspiraInputShow */
+  var aspiraInputShow = (function() {
+    'use strict';
+
+    var ASPIRA_INP_WA_BASE = 'https://wa.me/917550270450';
+
+    // Config per path
+    var ASPIRA_INP_CONFIG = {
+      'hired': {
+        eyebrow: 'Step 2 of 2',
+        title:   'Let\'s look at your profile',
+        sub:     'Upload your resume and paste the job description you\'re targeting — the more context, the better your Clarity Check.',
+        panel:   'aspira-inp-panel-hired',
+        waPrefix: 'Hi! I\'m trying to get hired. Here\'s some context:\n\n'
+      },
+      'freelance': {
+        eyebrow: 'Step 2 of 2',
+        title:   'Tell us about your work',
+        sub:     'Describe what you do and who you want to attract. This helps us understand your positioning clearly.',
+        panel:   'aspira-inp-panel-freelance',
+        waPrefix: 'Hi! I\'m looking to grow my freelance work. Here\'s some context:\n\n'
+      },
+      'business': {
+        eyebrow: 'Step 2 of 2',
+        title:   'Tell us about your business',
+        sub:     'A few lines about where your business is and what you\'re trying to achieve.',
+        panel:   'aspira-inp-panel-business',
+        waPrefix: 'Hi! I\'m looking to build or grow my business. Here\'s some context:\n\n'
+      }
+    };
+
+    var aspiraInpCurrentPath   = null;
+    var aspiraInpCurrentWaBase = '';
+    var aspiraInpSection       = document.getElementById('aspira-input');
+    var aspiraInpEyebrow       = document.getElementById('aspira-inp-eyebrow');
+    var aspiraInpTitle         = document.getElementById('aspira-inp-title');
+    var aspiraInpSub           = document.getElementById('aspira-inp-sub');
+    var aspiraInpSubmitBtn     = document.getElementById('aspira-inp-submit');
+    var aspiraInpDropzone      = document.getElementById('aspira-inp-dropzone');
+    var aspiraInpDropText      = document.getElementById('aspira-inp-drop-text');
+    var aspiraInpFileInput     = document.getElementById('aspira-inp-resume');
+    var aspiraInpAllPanels     = document.querySelectorAll('.aspira-inp-panel');
+
+    // ── File upload feedback ──
+    if (aspiraInpFileInput && aspiraInpDropzone) {
+      aspiraInpFileInput.addEventListener('change', function() {
+        if (aspiraInpFileInput.files && aspiraInpFileInput.files[0]) {
+          var fname = aspiraInpFileInput.files[0].name;
+          aspiraInpDropText.innerHTML = '✓ <strong>' + fname + '</strong> selected';
+          aspiraInpDropzone.classList.add('aspira-inp-file-set');
+        }
+      });
+
+      // Drag over visual
+      aspiraInpDropzone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        aspiraInpDropzone.classList.add('aspira-inp-drag-over');
+      });
+      aspiraInpDropzone.addEventListener('dragleave', function() {
+        aspiraInpDropzone.classList.remove('aspira-inp-drag-over');
+      });
+      aspiraInpDropzone.addEventListener('drop', function() {
+        aspiraInpDropzone.classList.remove('aspira-inp-drag-over');
+      });
+    }
+
+    // ── Submit: build WhatsApp message ──
+    if (aspiraInpSubmitBtn) {
+      aspiraInpSubmitBtn.addEventListener('click', function() {
+        var cfg = ASPIRA_INP_CONFIG[aspiraInpCurrentPath];
+        if (!cfg) return;
+
+        var userText = '';
+
+        if (aspiraInpCurrentPath === 'hired') {
+          var jd = document.getElementById('aspira-inp-jd');
+          var fileName = (aspiraInpFileInput && aspiraInpFileInput.files && aspiraInpFileInput.files[0])
+            ? '[Resume attached: ' + aspiraInpFileInput.files[0].name + '] '
+            : '';
+          userText = fileName + (jd ? jd.value.trim() : '');
+        } else if (aspiraInpCurrentPath === 'freelance') {
+          var fl = document.getElementById('aspira-inp-freelance-desc');
+          userText = fl ? fl.value.trim() : '';
+        } else if (aspiraInpCurrentPath === 'business') {
+          var biz = document.getElementById('aspira-inp-biz-desc');
+          userText = biz ? biz.value.trim() : '';
+        }
+
+        var fullMsg = cfg.waPrefix + (userText || '(No additional details added)');
+        var waUrl = ASPIRA_INP_WA_BASE + '?text=' + encodeURIComponent(fullMsg);
+
+        // Brief button feedback then open
+        aspiraInpSubmitBtn.textContent = 'Opening WhatsApp…';
+        aspiraInpSubmitBtn.disabled = true;
+
+        setTimeout(function() {
+          window.open(waUrl, '_blank', 'noopener,noreferrer');
+          aspiraInpSubmitBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm-.5 4h1v4h-1V6zm0 5h1v1.5h-1V11z" fill="white" opacity="0.9"/></svg> Start Clarity Check';
+          aspiraInpSubmitBtn.disabled = false;
+        }, 800);
+      });
+    }
+
+    // ── Public: called by card selection JS ──
+    function show(path, waUrl) {
+      var cfg = ASPIRA_INP_CONFIG[path];
+      if (!cfg || !aspiraInpSection) return;
+
+      aspiraInpCurrentPath   = path;
+      aspiraInpCurrentWaBase = waUrl || ASPIRA_INP_WA_BASE;
+
+      // Update header text
+      if (aspiraInpEyebrow) aspiraInpEyebrow.textContent = cfg.eyebrow;
+      if (aspiraInpTitle)   aspiraInpTitle.textContent   = cfg.title;
+      if (aspiraInpSub)     aspiraInpSub.textContent     = cfg.sub;
+
+      // Hide all panels, show correct one
+      aspiraInpAllPanels.forEach(function(p) {
+        p.classList.remove('aspira-inp-panel-active');
+        p.setAttribute('aria-hidden', 'true');
+      });
+      var activePanel = document.getElementById(cfg.panel);
+      if (activePanel) {
+        activePanel.classList.add('aspira-inp-panel-active');
+        activePanel.removeAttribute('aria-hidden');
+      }
+
+      // Reveal section
+      aspiraInpSection.classList.add('aspira-inp-visible');
+      aspiraInpSection.removeAttribute('aria-hidden');
+    }
+
+    return show;
+  })();
+</script>
+<!-- END NEW FEATURE JS: Input Section -->
 
 </body>
 </html>
