@@ -6262,5 +6262,508 @@
 </script>
 <!-- END NEW FEATURE JS: Input Enhancement -->
 
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Scoring Engine UI additions                 -->
+<!-- aspira-scr-* prefix — fully isolated                         -->
+<!-- ============================================================ -->
+<style>
+  /* ── Transparency note ── */
+  .aspira-scr-note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    color: #b5b5af;
+    font-weight: 300;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    font-style: italic;
+  }
+
+  .aspira-scr-note svg { flex-shrink: 0; color: #a8c5ac; }
+
+  .dark-mode .aspira-scr-note {
+    color: #5a5a56;
+    border-top-color: rgba(255,255,255,0.06);
+  }
+
+  /* ── Score tier label ── */
+  .aspira-scr-tier {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 12px;
+    border-radius: 100px;
+    margin-bottom: 8px;
+  }
+
+  .aspira-scr-tier-low    { background: rgba(184,90,58,0.1);  color: #b85a3a; }
+  .aspira-scr-tier-mid    { background: rgba(200,154,58,0.12); color: #996a10; }
+  .aspira-scr-tier-good   { background: rgba(107,143,113,0.12); color: #4a7050; }
+  .aspira-scr-tier-strong { background: rgba(107,143,113,0.18); color: #3a5e40; }
+
+  /* ── Bar label updated dynamically ── */
+  .aspira-rf-score-bar-label { transition: color 0.4s ease; }
+
+  /* ── List item fade-in for dynamic content ── */
+  @keyframes aspiraScrItemIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .aspira-scr-list-item-anim {
+    animation: aspiraScrItemIn 0.4s cubic-bezier(0.23,1,0.32,1) both;
+  }
+
+  .aspira-scr-empty {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #b5b5af;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .dark-mode .aspira-scr-empty { color: #5a5a56; }
+</style>
+<!-- END NEW FEATURE CSS: Scoring Engine -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Real Scoring Engine — isolated IIFE          -->
+<!-- aspira-scr-* namespace; no global pollution                  -->
+<!-- Reads inputs → scores → patches result DOM → hooks reveal   -->
+<!-- ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION A — SCORING ALGORITHM
+  ══════════════════════════════════════════════════════════════ */
+
+  function aspiraScrScore(resumeText, jdText) {
+    var text  = (resumeText || '').toLowerCase();
+    var jd    = (jdText    || '').toLowerCase();
+    var raw   = resumeText || '';
+
+    var working = [];
+    var missing = [];
+    var next    = [];
+    var score   = 0;
+
+    /* ── Profile Strength (40 pts max) ──────────────────────── */
+
+    /* Word count > 300 */
+    var words = text.trim().split(/\s+/).filter(function(w){ return w.length > 0; });
+    if (words.length > 300) {
+      score += 10;
+      working.push('Your profile has good depth — enough content to review.');
+    } else if (words.length > 100) {
+      score += 5;
+      missing.push('Your profile text is on the shorter side — more detail helps.');
+      next.push({ title: 'Expand your profile', body: 'Add more context about each role: what you did, what changed, what you achieved.' });
+    } else {
+      missing.push('Very little content to analyse — the more you share, the better.');
+      next.push({ title: 'Write more about yourself', body: 'Even 3–4 sentences per role gives us (and recruiters / clients) much more to work with.' });
+    }
+
+    /* Contains key section words */
+    var sectionHits = 0;
+    var sectionWords = ['experience', 'education', 'skills', 'qualification', 'work history', 'background'];
+    sectionWords.forEach(function(w) { if (text.indexOf(w) !== -1) sectionHits++; });
+
+    if (sectionHits >= 2) {
+      score += 10;
+      working.push('Your profile includes recognisable structure — experience and skills are present.');
+    } else {
+      missing.push('Key sections like "Experience", "Education" or "Skills" aren\'t clearly signalled.');
+      next.push({ title: 'Add clear section headings', body: 'Label your resume sections explicitly: Experience, Skills, Education. Scanners and readers rely on these.' });
+    }
+
+    /* Contains numbers / metrics */
+    var hasNumbers = /\d/.test(raw);
+    if (hasNumbers) {
+      score += 10;
+      working.push('You\'ve included numbers — this is a strong signal of measurable impact.');
+    } else {
+      missing.push('No numbers or metrics found — this is one of the biggest differentiators in a profile.');
+      next.push({ title: 'Add at least 3 numbers', body: 'Quantities, percentages, team sizes, revenue figures, years — any number adds credibility and specificity.' });
+    }
+
+    /* Contains bullet-like patterns */
+    var hasBullets = /•|–|-\s|\*\s|\d+\.\s/.test(raw);
+    if (hasBullets) {
+      score += 10;
+      working.push('You\'ve used a structured format — bullet points make your profile scannable.');
+    } else {
+      missing.push('No bullet points detected — wall-of-text profiles lose reader attention quickly.');
+      next.push({ title: 'Restructure as bullet points', body: 'Break each role into 3–5 concise bullet points focused on actions and outcomes.' });
+    }
+
+    /* ── Visibility (30 pts max) ──────────────────────────────── */
+
+    /* Email */
+    var hasEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(raw);
+    if (hasEmail) {
+      score += 10;
+      working.push('Your email address is present and visible.');
+    } else {
+      missing.push('No email address found — a must-have for any professional profile.');
+      next.push({ title: 'Add your contact email', body: 'Place your email at the top of your resume or profile. Without it, opportunities can\'t reach you.' });
+    }
+
+    /* Phone */
+    var hasPhone = /(\+?\d[\s\-.]?){8,14}/.test(raw);
+    if (hasPhone) {
+      score += 10;
+      working.push('A contact number is present — easy for opportunities to reach you.');
+    } else {
+      missing.push('No phone number detected. Recruiters often prefer to call first.');
+      next.push({ title: 'Add your phone number', body: 'Include a phone number near your email. Format it consistently: +91 XXXXX XXXXX.' });
+    }
+
+    /* LinkedIn or URL */
+    var hasLink = /linkedin\.com|github\.com|portfolio|behance|dribbble|http|www\./i.test(raw);
+    if (hasLink) {
+      score += 10;
+      working.push('You\'ve linked an online profile or portfolio — great for credibility.');
+    } else {
+      missing.push('No LinkedIn URL or online presence linked in your profile.');
+      next.push({ title: 'Link your LinkedIn or portfolio', body: 'Even a basic LinkedIn URL under your name significantly increases trust and discoverability.' });
+    }
+
+    /* ── Positioning (30 pts max) ──────────────────────────────── */
+
+    /* Keyword match with JD */
+    var jdScore = 0;
+    if (jd.length > 20) {
+      var jdWords = jd.match(/\b[a-z]{4,}\b/g) || [];
+      var uniqueJd = {};
+      jdWords.forEach(function(w) {
+        if (['with','that','this','from','have','your','will','been','they','their','when','into','what','more','also','each','some','were','than','then','just','over','such','like'].indexOf(w) === -1) {
+          uniqueJd[w] = true;
+        }
+      });
+
+      var matched = [];
+      Object.keys(uniqueJd).forEach(function(w) {
+        if (text.indexOf(w) !== -1) matched.push(w);
+      });
+
+      var matchRatio = matched.length / Math.max(Object.keys(uniqueJd).length, 1);
+
+      if (matchRatio >= 0.35) {
+        jdScore = 15;
+        working.push('Strong keyword alignment with the job description — your profile speaks the right language.');
+      } else if (matchRatio >= 0.15) {
+        jdScore = 8;
+        missing.push('Partial keyword match with the role — some important terms from the job description are absent.');
+        next.push({ title: 'Mirror the job description language', body: 'Identify 5–8 keywords from the job description and naturally weave them into your profile.' });
+      } else {
+        jdScore = 0;
+        missing.push('Low keyword alignment — your profile doesn\'t yet speak to this specific role.');
+        next.push({ title: 'Rewrite for this specific role', body: 'Read the job description carefully and restructure your top 3 bullet points to directly address what they\'re asking for.' });
+      }
+    } else {
+      /* No JD — give partial credit, note opportunity */
+      jdScore = 7;
+      missing.push('No job description provided — we couldn\'t check keyword alignment.');
+      next.push({ title: 'Add a target role or JD next time', body: 'Paste the job description when running your check — it enables precise keyword alignment analysis.' });
+    }
+    score += jdScore;
+
+    /* Role clarity */
+    var clarityWords = ['manager','developer','designer','analyst','engineer','consultant','specialist','coordinator','director','lead','senior','junior','officer','executive','founder','freelance','architect','strategist','advisor'];
+    var clarityFound = [];
+    clarityWords.forEach(function(w) { if (text.indexOf(w) !== -1) clarityFound.push(w); });
+
+    if (clarityFound.length >= 2) {
+      score += 15;
+      working.push('Your professional identity is clear — your role and level are easy to understand.');
+    } else if (clarityFound.length === 1) {
+      score += 8;
+      missing.push('Role clarity is partial — your profile hints at your position but doesn\'t state it confidently.');
+      next.push({ title: 'Strengthen your positioning headline', body: 'Start with a one-line statement: "Senior Marketing Manager with 6 years in B2B SaaS." Clear, immediate, memorable.' });
+    } else {
+      score += 0;
+      missing.push('No clear role or title found — readers can\'t immediately understand who you are professionally.');
+      next.push({ title: 'Add a professional headline', body: 'The first thing on your profile should be your title + specialisation. Don\'t make anyone guess.' });
+    }
+
+    /* ── Cap and return ─────────────────────────────────────── */
+    score = Math.min(Math.max(score, 0), 100);
+
+    /* Remove duplicate next steps */
+    var seenNextTitles = {};
+    next = next.filter(function(n) {
+      if (seenNextTitles[n.title]) return false;
+      seenNextTitles[n.title] = true;
+      return true;
+    });
+
+    /* Ensure at least one item in each list */
+    if (working.length === 0) working.push('You\'ve made a start — that\'s the first step.');
+    if (missing.length === 0) missing.push('Nothing critical missing — focus on refinement.');
+    if (next.length === 0)    next.push({ title: 'Polish and refine', body: 'Your profile is in good shape. Focus on tightening language and making every word earn its place.' });
+
+    return { score: score, working: working, missing: missing, next: next };
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION B — COLLECT USER INPUT
+  ══════════════════════════════════════════════════════════════ */
+
+  function aspiraScrCollectInput() {
+    var resumeText = '';
+    var jdText     = '';
+
+    /* Resume text — check active tab mode */
+    var textTab = document.getElementById('aspira-inh-tab-text');
+    var isTextMode = textTab && textTab.classList.contains('aspira-inh-tab-active');
+
+    if (isTextMode) {
+      var rtEl = document.getElementById('aspira-inh-resume-text');
+      resumeText = rtEl ? rtEl.value.trim() : '';
+    }
+
+    /* Also pull from existing text fields in all panels */
+    var panelTextareas = [
+      document.getElementById('aspira-inp-freelance-desc'),
+      document.getElementById('aspira-inp-biz-desc')
+    ];
+    panelTextareas.forEach(function(ta) {
+      if (ta && ta.value.trim().length > 0) {
+        resumeText = (resumeText + ' ' + ta.value.trim()).trim();
+      }
+    });
+
+    /* Job description — from existing JD field (hired panel) */
+    var jdEl = document.getElementById('aspira-inp-jd');
+    if (jdEl && jdEl.value.trim()) jdText = jdEl.value.trim();
+
+    /* Also check enhancement JD fields */
+    ['aspira-inh-jdta-freelance', 'aspira-inh-jdta-business'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.value.trim() && !jdText) jdText = el.value.trim();
+    });
+
+    return { resumeText: resumeText, jdText: jdText };
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION C — UPDATE RESULT DOM
+  ══════════════════════════════════════════════════════════════ */
+
+  /* Stored result — set on submit, applied when result section reveals */
+  var aspiraScrResult = null;
+
+  function aspiraScrApplyToDOM(result) {
+    var score   = result.score;
+    var working = result.working;
+    var missing = result.missing;
+    var next    = result.next;
+
+    /* ── Score ring + number ── */
+    var scoreNumEl   = document.getElementById('aspira-rf-score-num');
+    var barFillEl    = document.getElementById('aspira-rf-bar-fill');
+    var ringFillEl   = document.querySelector('.aspira-rf-ring-fill');
+    var barLabelEl   = document.querySelector('.aspira-rf-score-bar-label');
+    var ringWrapEl   = document.querySelector('.aspira-rf-score-ring-wrap');
+
+    /* Update aria-label */
+    if (ringWrapEl) {
+      ringWrapEl.setAttribute('aria-label', score + ' percent readiness score');
+    }
+
+    /* Animate number counter */
+    if (scoreNumEl) {
+      var startTime = null;
+      var duration  = 1400;
+      function aspiraScrCount(ts) {
+        if (!startTime) startTime = ts;
+        var elapsed  = ts - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased    = 1 - Math.pow(1 - progress, 3);
+        scoreNumEl.textContent = Math.round(eased * score) + '%';
+        if (progress < 1) requestAnimationFrame(aspiraScrCount);
+        else scoreNumEl.textContent = score + '%';
+      }
+      setTimeout(function() { requestAnimationFrame(aspiraScrCount); }, 150);
+    }
+
+    /* Animate ring fill */
+    if (ringFillEl) {
+      var circumference = 314.16;
+      var offset = circumference - (circumference * score / 100);
+      setTimeout(function() {
+        ringFillEl.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.23,1,0.32,1)';
+        ringFillEl.style.strokeDashoffset = String(Math.round(offset));
+      }, 150);
+    }
+
+    /* Animate bar */
+    if (barFillEl) {
+      setTimeout(function() {
+        barFillEl.style.transition = 'width 1.4s cubic-bezier(0.23,1,0.32,1)';
+        barFillEl.style.width = score + '%';
+      }, 100);
+    }
+
+    /* Update bar label */
+    if (barLabelEl) {
+      barLabelEl.textContent = score + '% overall readiness';
+    }
+
+    /* Tier label — inject near score eyebrow */
+    var eyebrowEl = document.querySelector('.aspira-rf-score-text .aspira-rf-eyebrow');
+    if (eyebrowEl && !document.getElementById('aspira-scr-tier-el')) {
+      var tier = document.createElement('span');
+      tier.id = 'aspira-scr-tier-el';
+      tier.className = 'aspira-scr-tier ' + (
+        score >= 80 ? 'aspira-scr-tier-strong' :
+        score >= 60 ? 'aspira-scr-tier-good'   :
+        score >= 40 ? 'aspira-scr-tier-mid'     :
+                      'aspira-scr-tier-low'
+      );
+      tier.textContent = (
+        score >= 80 ? 'Strong Profile' :
+        score >= 60 ? 'Good Foundation' :
+        score >= 40 ? 'Needs Work' :
+                      'Getting Started'
+      );
+      eyebrowEl.parentNode.insertBefore(tier, eyebrowEl);
+    }
+
+    /* ── "What's Working" list ── */
+    var workingList = document.querySelector('.aspira-rf-card-working .aspira-rf-list');
+    if (workingList) {
+      workingList.innerHTML = '';
+      if (working.length === 0) {
+        var emptyLi = document.createElement('li');
+        emptyLi.className = 'aspira-scr-empty';
+        emptyLi.textContent = 'Add more detail to your profile to unlock insights.';
+        workingList.appendChild(emptyLi);
+      } else {
+        working.forEach(function(item, idx) {
+          var li = document.createElement('li');
+          li.className = 'aspira-rf-list-item aspira-scr-list-item-anim';
+          li.style.animationDelay = (idx * 80) + 'ms';
+          li.innerHTML = '<span class="aspira-rf-dot aspira-rf-dot-green"></span>' + aspiraScrEscape(item);
+          workingList.appendChild(li);
+        });
+      }
+    }
+
+    /* ── "What's Missing" list ── */
+    var missingList = document.querySelector('.aspira-rf-card-missing .aspira-rf-list');
+    if (missingList) {
+      missingList.innerHTML = '';
+      if (missing.length === 0) {
+        var emptyLi2 = document.createElement('li');
+        emptyLi2.className = 'aspira-scr-empty';
+        emptyLi2.textContent = 'Nothing critical missing — great work.';
+        missingList.appendChild(emptyLi2);
+      } else {
+        missing.forEach(function(item, idx) {
+          var li = document.createElement('li');
+          li.className = 'aspira-rf-list-item aspira-scr-list-item-anim';
+          li.style.animationDelay = (idx * 80) + 'ms';
+          li.innerHTML = '<span class="aspira-rf-dot aspira-rf-dot-amber"></span>' + aspiraScrEscape(item);
+          missingList.appendChild(li);
+        });
+      }
+    }
+
+    /* ── "What To Do Next" steps grid ── */
+    var stepsGrid = document.querySelector('.aspira-rf-card-next .aspira-rf-steps-grid');
+    if (stepsGrid) {
+      stepsGrid.innerHTML = '';
+      next.forEach(function(step, idx) {
+        var item = document.createElement('div');
+        item.className = 'aspira-rf-step-item aspira-scr-list-item-anim';
+        item.style.animationDelay = (idx * 90) + 'ms';
+        item.innerHTML =
+          '<span class="aspira-rf-step-num">0' + (idx + 1) + '</span>' +
+          '<div class="aspira-rf-step-body">' +
+            '<strong>' + aspiraScrEscape(step.title) + '</strong>' +
+            '<p>' + aspiraScrEscape(step.body) + '</p>' +
+          '</div>';
+        stepsGrid.appendChild(item);
+      });
+    }
+
+    /* ── Transparency note ── */
+    var rfContainer = document.querySelector('#aspira-result-full .aspira-rf-container');
+    if (rfContainer && !document.getElementById('aspira-scr-trans-note')) {
+      var note = document.createElement('p');
+      note.id = 'aspira-scr-trans-note';
+      note.className = 'aspira-scr-note';
+      note.innerHTML =
+        '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">' +
+        '<circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 4.5v3M6.5 9v.5"/></svg>' +
+        'This score is based on structure, clarity, and alignment — not a guarantee of any outcome.';
+      rfContainer.appendChild(note);
+    }
+  }
+
+  /* ── XSS-safe escape ── */
+  function aspiraScrEscape(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION D — HOOK INTO SUBMIT + REVEAL
+  ══════════════════════════════════════════════════════════════ */
+
+  /* Intercept submit in capture phase — runs before existing handlers */
+  var aspiraScrSubmitBtn = document.getElementById('aspira-inp-submit');
+  if (aspiraScrSubmitBtn) {
+    aspiraScrSubmitBtn.addEventListener('click', function() {
+      /* Collect + score immediately on click */
+      var input = aspiraScrCollectInput();
+      aspiraScrResult = aspiraScrScore(input.resumeText, input.jdText);
+    }, true /* capture */);
+  }
+
+  /* Watch for result-full section becoming visible, then apply */
+  var aspiraScrResultFull = document.getElementById('aspira-result-full');
+  if (aspiraScrResultFull) {
+    var aspiraScrObserver = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (
+          m.type === 'attributes' &&
+          m.attributeName === 'class' &&
+          aspiraScrResultFull.classList.contains('aspira-rf-visible')
+        ) {
+          var dataToApply = aspiraScrResult || aspiraScrScore('', '');
+          /* Slight delay so CSS transition completes */
+          setTimeout(function() {
+            aspiraScrApplyToDOM(dataToApply);
+          }, 300);
+          aspiraScrObserver.disconnect();
+        }
+      });
+    });
+    aspiraScrObserver.observe(aspiraScrResultFull, { attributes: true });
+  }
+
+  /* ── Expose globally for direct calls if needed ── */
+  window.aspiraScrRun = function(resumeText, jdText) {
+    aspiraScrResult = aspiraScrScore(resumeText || '', jdText || '');
+    return aspiraScrResult;
+  };
+
+})();
+</script>
+<!-- END NEW FEATURE JS: Real Scoring Engine -->
+
 </body>
 </html>
