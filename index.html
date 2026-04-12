@@ -2607,15 +2607,12 @@
         var fullMsg = cfg.waPrefix + (userText || '(No additional details added)');
         var waUrl = ASPIRA_INP_WA_BASE + '?text=' + encodeURIComponent(fullMsg);
 
-        // Brief button feedback then open
-        aspiraInpSubmitBtn.textContent = 'Opening WhatsApp…';
-        aspiraInpSubmitBtn.disabled = true;
-
-        setTimeout(function() {
+        // ── Hand off to processing modal (if loaded), else fall back ──
+        if (typeof aspiraProcessingShow === 'function') {
+          aspiraProcessingShow(waUrl);
+        } else {
           window.open(waUrl, '_blank', 'noopener,noreferrer');
-          aspiraInpSubmitBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm-.5 4h1v4h-1V6zm0 5h1v1.5h-1V11z" fill="white" opacity="0.9"/></svg> Start Clarity Check';
-          aspiraInpSubmitBtn.disabled = false;
-        }, 800);
+        }
       });
     }
 
@@ -2652,6 +2649,457 @@
   })();
 </script>
 <!-- END NEW FEATURE JS: Input Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Processing Modal Overlay — #aspira-processing   -->
+<!-- ============================================================ -->
+<div
+  id="aspira-processing"
+  class="aspira-proc-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Processing your clarity check"
+  aria-hidden="true"
+>
+  <div class="aspira-proc-card">
+
+    <!-- Animated ring spinner -->
+    <div class="aspira-proc-spinner" aria-hidden="true">
+      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="22" stroke="rgba(168,197,172,0.25)" stroke-width="3"/>
+        <circle
+          class="aspira-proc-ring"
+          cx="28" cy="28" r="22"
+          stroke="#6b8f71"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-dasharray="138"
+          stroke-dashoffset="104"
+        />
+      </svg>
+      <!-- Centre dot pulse -->
+      <span class="aspira-proc-dot" aria-hidden="true"></span>
+    </div>
+
+    <!-- Animated message text -->
+    <p class="aspira-proc-message" id="aspira-proc-message" aria-live="polite">
+      Reviewing your input…
+    </p>
+
+    <!-- Step dots -->
+    <div class="aspira-proc-steps" aria-hidden="true">
+      <span class="aspira-proc-step aspira-proc-step-active" data-aspira-step="0"></span>
+      <span class="aspira-proc-step" data-aspira-step="1"></span>
+      <span class="aspira-proc-step" data-aspira-step="2"></span>
+    </div>
+
+  </div>
+</div>
+<!-- END NEW FEATURE: Processing Modal -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE: Result Anchor — #aspira-result                  -->
+<!-- Scroll target after processing; placeholder for future card  -->
+<!-- ============================================================ -->
+<section id="aspira-result" class="aspira-result-section" aria-hidden="true">
+  <div class="aspira-result-container">
+    <div class="aspira-result-card" id="aspira-result-card">
+      <span class="aspira-result-eyebrow">Your clarity check is ready</span>
+      <h2 class="aspira-result-title">We've opened WhatsApp for you.</h2>
+      <p class="aspira-result-body">
+        Your details have been pre-filled. Just hit send — and we'll get back to you with a personalised clarity report.
+      </p>
+      <div class="aspira-result-meta">
+        <span class="aspira-result-badge">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7l4 4 6-6" stroke="#6b8f71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Input received
+        </span>
+        <span class="aspira-result-badge">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7l4 4 6-6" stroke="#6b8f71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          WhatsApp ready
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END NEW FEATURE: Result Anchor -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Processing Modal + Result — fully scoped    -->
+<!-- ============================================================ -->
+<style>
+  /* ══ PROCESSING OVERLAY ══════════════════════════════════════ */
+
+  .aspira-proc-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(22, 22, 20, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Hidden state */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .aspira-proc-overlay.aspira-proc-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Card ── */
+  .aspira-proc-card {
+    background: rgba(250, 249, 246, 0.97);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 28px;
+    padding: 52px 48px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    box-shadow:
+      0 40px 100px rgba(0,0,0,0.22),
+      0 8px 24px rgba(0,0,0,0.1);
+    max-width: 380px;
+    width: calc(100% - 48px);
+
+    /* Entry animation */
+    transform: scale(0.92) translateY(20px);
+    transition: transform 0.45s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-proc-overlay.aspira-proc-visible .aspira-proc-card {
+    transform: scale(1) translateY(0);
+  }
+
+  /* ── Spinner ── */
+  .aspira-proc-spinner {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .aspira-proc-spinner svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: aspiraProcSpin 1.8s linear infinite;
+  }
+
+  @keyframes aspiraProcSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .aspira-proc-ring {
+    transform-origin: center;
+    animation: aspiraProcDash 1.8s ease-in-out infinite;
+  }
+
+  @keyframes aspiraProcDash {
+    0%   { stroke-dashoffset: 120; opacity: 0.6; }
+    50%  { stroke-dashoffset: 30;  opacity: 1; }
+    100% { stroke-dashoffset: 120; opacity: 0.6; }
+  }
+
+  .aspira-proc-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #6b8f71;
+    position: relative;
+    z-index: 1;
+    animation: aspiraProcPulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes aspiraProcPulse {
+    0%, 100% { transform: scale(1);    opacity: 1; }
+    50%       { transform: scale(0.65); opacity: 0.5; }
+  }
+
+  /* ── Message text ── */
+  .aspira-proc-message {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #2c2c2a;
+    text-align: center;
+    line-height: 1.45;
+    min-height: 2em;
+    /* Crossfade handled by JS class toggle */
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-proc-message.aspira-proc-msg-fade {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  /* ── Step dots ── */
+  .aspira-proc-steps {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .aspira-proc-step {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e6ddd0;
+    transition: background 0.35s ease, transform 0.35s ease;
+  }
+
+  .aspira-proc-step.aspira-proc-step-active {
+    background: #6b8f71;
+    transform: scale(1.35);
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-proc-card {
+    background: rgba(22, 22, 26, 0.97);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dark-mode .aspira-proc-message { color: #eaeae6; }
+  .dark-mode .aspira-proc-step { background: rgba(255,255,255,0.1); }
+  .dark-mode .aspira-proc-step.aspira-proc-step-active { background: #6b8f71; }
+
+  /* ══ RESULT SECTION ══════════════════════════════════════════ */
+
+  .aspira-result-section {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      max-height 0.7s cubic-bezier(0.23,1,0.32,1),
+      opacity 0.5s ease,
+      padding 0.5s ease;
+  }
+
+  .aspira-result-section.aspira-result-visible {
+    max-height: 600px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0 0 120px;
+  }
+
+  .aspira-result-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .aspira-result-card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(107,143,113,0.25);
+    border-radius: 24px;
+    padding: 44px 48px;
+    box-shadow: 0 16px 56px rgba(107,143,113,0.12), 0 4px 16px rgba(0,0,0,0.06);
+    animation: aspiraResultIn 0.6s cubic-bezier(0.23,1,0.32,1) both;
+  }
+
+  @keyframes aspiraResultIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .aspira-result-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .aspira-result-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(1.5rem, 3vw, 2rem) !important;
+    font-weight: 500 !important;
+    color: #2c2c2a !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 14px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .aspira-result-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #8a8a85;
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  .aspira-result-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .aspira-result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #6b8f71;
+    background: rgba(107,143,113,0.1);
+    border: 1px solid rgba(107,143,113,0.2);
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-result-card {
+    background: rgba(30,30,36,0.85);
+    border-color: rgba(107,143,113,0.2);
+  }
+  .dark-mode .aspira-result-title { color: #eaeae6 !important; }
+  .dark-mode .aspira-result-body  { color: #7a7a76; }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .aspira-proc-card { padding: 40px 28px 36px; }
+    .aspira-result-container { padding: 0 20px; }
+    .aspira-result-card { padding: 32px 28px; }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Processing + Result -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Processing Modal — isolated IIFE             -->
+<!-- Exposes: aspiraProcessingShow(waUrl)                         -->
+<!-- ============================================================ -->
+<script>
+  var aspiraProcessingShow = (function() {
+    'use strict';
+
+    var ASPIRA_PROC_MESSAGES = [
+      'Reviewing your input…',
+      'Identifying gaps…',
+      'Mapping opportunities…'
+    ];
+
+    /* Timing (ms) */
+    var ASPIRA_PROC_STEP_DURATION = 1000; /* each message shows for 1s */
+    var ASPIRA_PROC_FADE_DURATION = 300;  /* crossfade time */
+    var ASPIRA_PROC_TOTAL         = 3200; /* total before dismiss */
+
+    var aspiraProc          = document.getElementById('aspira-processing');
+    var aspiraProcMsg       = document.getElementById('aspira-proc-message');
+    var aspiraProcDots      = document.querySelectorAll('.aspira-proc-step');
+    var aspiraResultSection = document.getElementById('aspira-result');
+
+    var aspiraProcTimer  = null;
+    var aspiraProcActive = false;
+
+    /* ── Internal: cycle to a message index ── */
+    function aspiraProcSetStep(idx) {
+      if (!aspiraProcMsg) return;
+
+      /* Fade out */
+      aspiraProcMsg.classList.add('aspira-proc-msg-fade');
+
+      setTimeout(function() {
+        aspiraProcMsg.textContent = ASPIRA_PROC_MESSAGES[idx] || '';
+        aspiraProcMsg.classList.remove('aspira-proc-msg-fade');
+      }, ASPIRA_PROC_FADE_DURATION);
+
+      /* Step dots */
+      aspiraProcDots.forEach(function(dot, i) {
+        if (i === idx) {
+          dot.classList.add('aspira-proc-step-active');
+        } else {
+          dot.classList.remove('aspira-proc-step-active');
+        }
+      });
+    }
+
+    /* ── Internal: hide overlay + reveal result ── */
+    function aspiraProcDismiss(waUrl) {
+      if (!aspiraProc) return;
+
+      aspiraProc.classList.remove('aspira-proc-visible');
+      aspiraProc.setAttribute('aria-hidden', 'true');
+      aspiraProcActive = false;
+
+      /* Restore body scroll */
+      document.body.style.overflow = '';
+
+      /* Reveal result section */
+      if (aspiraResultSection) {
+        aspiraResultSection.classList.add('aspira-result-visible');
+        aspiraResultSection.removeAttribute('aria-hidden');
+
+        /* Small delay so the section expands before scroll */
+        setTimeout(function() {
+          aspiraResultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+      }
+
+      /* Open WhatsApp */
+      if (waUrl) {
+        setTimeout(function() {
+          window.open(waUrl, '_blank', 'noopener,noreferrer');
+        }, 400);
+      }
+    }
+
+    /* ── Public: called by submit button ── */
+    function show(waUrl) {
+      if (!aspiraProc || aspiraProcActive) return;
+      aspiraProcActive = true;
+
+      /* Prevent body scroll while modal is open */
+      document.body.style.overflow = 'hidden';
+
+      /* Reset to step 0 */
+      aspiraProcSetStep(0);
+
+      /* Show overlay */
+      aspiraProc.removeAttribute('aria-hidden');
+      aspiraProc.classList.add('aspira-proc-visible');
+
+      /* Cycle through messages */
+      setTimeout(function() { aspiraProcSetStep(1); }, ASPIRA_PROC_STEP_DURATION);
+      setTimeout(function() { aspiraProcSetStep(2); }, ASPIRA_PROC_STEP_DURATION * 2);
+
+      /* Dismiss after total duration */
+      aspiraProcTimer = setTimeout(function() {
+        aspiraProcDismiss(waUrl);
+      }, ASPIRA_PROC_TOTAL);
+    }
+
+    return show;
+  })();
+</script>
+<!-- END NEW FEATURE JS: Processing Modal -->
 
 </body>
 </html>
