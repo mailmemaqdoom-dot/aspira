@@ -6765,5 +6765,457 @@
 </script>
 <!-- END NEW FEATURE JS: Real Scoring Engine -->
 
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Sub-Score Bars — aspira-ssb-* prefix        -->
+<!-- Animated on reveal, CSS-only animation, no libraries          -->
+<!-- ============================================================ -->
+<style>
+  /* ── Container injected below the ring/score wrap ── */
+  #aspira-ssb-wrap {
+    margin-top: 36px;
+    padding: 28px 32px;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    /* Entry — fades in when class applied */
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  #aspira-ssb-wrap.aspira-ssb-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Section heading ── */
+  .aspira-ssb-heading {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8a8a85;
+    margin-bottom: 4px;
+  }
+
+  /* ── Each bar row ── */
+  .aspira-ssb-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .aspira-ssb-row-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .aspira-ssb-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .aspira-ssb-label-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .aspira-ssb-icon-profile  { background: rgba(107,143,113,0.12); color: #6b8f71; }
+  .aspira-ssb-icon-visibility { background: rgba(90,122,180,0.1); color: #5a7ab4; }
+  .aspira-ssb-icon-position { background: rgba(180,140,90,0.1);  color: #b48c5a; }
+
+  .aspira-ssb-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    min-width: 36px;
+    text-align: right;
+    transition: color 0.4s ease;
+  }
+
+  /* ── Track + fill ── */
+  .aspira-ssb-track {
+    height: 8px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .aspira-ssb-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0%;                    /* starts at 0 — animated to target by JS */
+    transition: width 1.2s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+  }
+
+  /* Shimmer sweep on the fill */
+  .aspira-ssb-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: -60%;
+    width: 50%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: aspiraSsbShimmer 2s ease-in-out infinite;
+    animation-delay: 1.3s;
+  }
+
+  @keyframes aspiraSsbShimmer {
+    0%   { left: -60%; }
+    100% { left: 140%; }
+  }
+
+  /* Colour themes per bar */
+  .aspira-ssb-fill-profile {
+    background: linear-gradient(90deg, #a8c5ac, #6b8f71);
+  }
+
+  .aspira-ssb-fill-visibility {
+    background: linear-gradient(90deg, #a0b8e0, #5a7ab4);
+  }
+
+  .aspira-ssb-fill-position {
+    background: linear-gradient(90deg, #e0c898, #b48c5a);
+  }
+
+  /* Sub-label (max / descriptor) */
+  .aspira-ssb-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: #b5b5af;
+    font-weight: 300;
+    margin-top: 1px;
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode #aspira-ssb-wrap {
+    background: rgba(30,30,36,0.75);
+    border-color: rgba(255,255,255,0.07);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+
+  .dark-mode .aspira-ssb-label { color: #c0c0bb; }
+  .dark-mode .aspira-ssb-pct   { color: #eaeae6; }
+  .dark-mode .aspira-ssb-track { background: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-ssb-sub   { color: #5a5a56; }
+
+  .dark-mode .aspira-ssb-icon-profile    { background: rgba(107,143,113,0.15); }
+  .dark-mode .aspira-ssb-icon-visibility { background: rgba(90,122,180,0.12);  }
+  .dark-mode .aspira-ssb-icon-position   { background: rgba(180,140,90,0.12);  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    #aspira-ssb-wrap { padding: 22px 20px; gap: 16px; margin-top: 28px; }
+    .aspira-ssb-label { font-size: 0.8rem; }
+  }
+</style>
+<!-- END NEW FEATURE CSS: Sub-Score Bars -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE JS: Sub-Score Bars — isolated IIFE               -->
+<!-- Computes sub-scores from same inputs, injects animated bars   -->
+<!-- into existing #aspira-result-full — no modifications         -->
+<!-- ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ═══════════════════════════════════════════════════════════
+     A — SUB-SCORE CALCULATOR (mirrors logic in aspiraScrScore
+         but returns per-dimension breakdowns)
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSsbCalc(resumeText, jdText) {
+    var text = (resumeText || '').toLowerCase();
+    var jd   = (jdText    || '').toLowerCase();
+    var raw  = resumeText || '';
+    var profile = 0, visibility = 0, positioning = 0;
+
+    /* ── Profile Strength (0–40) ── */
+    var words = text.trim().split(/\s+/).filter(function(w){ return w.length > 0; });
+    if (words.length > 300)      profile += 10;
+    else if (words.length > 100) profile += 5;
+
+    var sHits = 0;
+    ['experience','education','skills','qualification','work history','background'].forEach(function(w){
+      if (text.indexOf(w) !== -1) sHits++;
+    });
+    if (sHits >= 2) profile += 10;
+
+    if (/\d/.test(raw))                   profile += 10;
+    if (/•|–|-\s|\*\s|\d+\.\s/.test(raw)) profile += 10;
+
+    /* ── Visibility (0–30) ── */
+    if (/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(raw)) visibility += 10;
+    if (/(\+?\d[\s\-.]?){8,14}/.test(raw))                   visibility += 10;
+    if (/linkedin\.com|github\.com|portfolio|behance|dribbble|http|www\./i.test(raw)) visibility += 10;
+
+    /* ── Positioning (0–30) ── */
+    var posScore = 0;
+    if (jd.length > 20) {
+      var jdWords  = jd.match(/\b[a-z]{4,}\b/g) || [];
+      var stopList = ['with','that','this','from','have','your','will','been','they','their','when','into','what','more','also','each','some','were','than','then','just','over','such','like'];
+      var uniqueJd = {};
+      jdWords.forEach(function(w){ if (stopList.indexOf(w) === -1) uniqueJd[w] = true; });
+      var matched = 0;
+      Object.keys(uniqueJd).forEach(function(w){ if (text.indexOf(w) !== -1) matched++; });
+      var ratio = matched / Math.max(Object.keys(uniqueJd).length, 1);
+      posScore += (ratio >= 0.35) ? 15 : (ratio >= 0.15) ? 8 : 0;
+    } else {
+      posScore += 7; /* partial credit — no JD provided */
+    }
+
+    var clarityWords = ['manager','developer','designer','analyst','engineer','consultant','specialist','coordinator','director','lead','senior','junior','officer','executive','founder','freelance','architect','strategist','advisor'];
+    var clarityCount = 0;
+    clarityWords.forEach(function(w){ if (text.indexOf(w) !== -1) clarityCount++; });
+    posScore += (clarityCount >= 2) ? 15 : (clarityCount === 1) ? 8 : 0;
+
+    positioning = Math.min(posScore, 30);
+
+    /* Convert to 0–100 percentages per dimension */
+    return {
+      profile:    Math.round((profile    / 40) * 100),
+      visibility: Math.round((visibility / 30) * 100),
+      positioning:Math.round((positioning/ 30) * 100)
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     B — BUILD AND INJECT THE BARS WIDGET
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSsbBuild(subs) {
+    /* Don't build twice */
+    if (document.getElementById('aspira-ssb-wrap')) {
+      aspiraSsbAnimate(subs);
+      return;
+    }
+
+    var wrap = document.createElement('div');
+    wrap.id = 'aspira-ssb-wrap';
+    wrap.setAttribute('aria-label', 'Score breakdown');
+
+    var heading = document.createElement('p');
+    heading.className = 'aspira-ssb-heading';
+    heading.textContent = 'Score Breakdown';
+    wrap.appendChild(heading);
+
+    var bars = [
+      {
+        key:   'profile',
+        label: 'Profile Strength',
+        sub:   'Depth, structure, metrics, formatting',
+        iconClass: 'aspira-ssb-icon-profile',
+        fillClass: 'aspira-ssb-fill-profile',
+        iconSvg:
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<circle cx="6.5" cy="4" r="2"/><path d="M1.5 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/></svg>'
+      },
+      {
+        key:   'visibility',
+        label: 'Visibility',
+        sub:   'Email, phone, LinkedIn / online presence',
+        iconClass: 'aspira-ssb-icon-visibility',
+        fillClass: 'aspira-ssb-fill-visibility',
+        iconSvg:
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<path d="M1.5 6.5S3.5 2 6.5 2s5 4.5 5 4.5-2 4.5-5 4.5-5-4.5-5-4.5z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>'
+      },
+      {
+        key:   'positioning',
+        label: 'Positioning',
+        sub:   'Role clarity, keyword alignment with target',
+        iconClass: 'aspira-ssb-icon-position',
+        fillClass: 'aspira-ssb-fill-position',
+        iconSvg:
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+          '<path d="M2 10l3-3 2 2 4-5"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>'
+      }
+    ];
+
+    bars.forEach(function(bar) {
+      var row = document.createElement('div');
+      row.className = 'aspira-ssb-row';
+      row.id = 'aspira-ssb-row-' + bar.key;
+
+      var meta = document.createElement('div');
+      meta.className = 'aspira-ssb-row-meta';
+
+      var labelWrap = document.createElement('span');
+      labelWrap.className = 'aspira-ssb-label';
+      labelWrap.innerHTML =
+        '<span class="aspira-ssb-label-icon ' + bar.iconClass + '">' + bar.iconSvg + '</span>' +
+        bar.label;
+
+      var pct = document.createElement('span');
+      pct.className = 'aspira-ssb-pct';
+      pct.id = 'aspira-ssb-pct-' + bar.key;
+      pct.textContent = '0%';
+
+      meta.appendChild(labelWrap);
+      meta.appendChild(pct);
+      row.appendChild(meta);
+
+      var track = document.createElement('div');
+      track.className = 'aspira-ssb-track';
+
+      var fill = document.createElement('div');
+      fill.className = 'aspira-ssb-fill ' + bar.fillClass;
+      fill.id = 'aspira-ssb-fill-' + bar.key;
+
+      track.appendChild(fill);
+      row.appendChild(track);
+
+      var subLabel = document.createElement('span');
+      subLabel.className = 'aspira-ssb-sub';
+      subLabel.textContent = bar.sub;
+      row.appendChild(subLabel);
+
+      wrap.appendChild(row);
+    });
+
+    /* Inject after the score wrap inside .aspira-rf-container */
+    var rfContainer = document.querySelector('#aspira-result-full .aspira-rf-container');
+    var scoreWrap   = rfContainer && rfContainer.querySelector('.aspira-rf-score-wrap');
+
+    if (rfContainer && scoreWrap) {
+      scoreWrap.parentNode.insertBefore(wrap, scoreWrap.nextSibling);
+    } else if (rfContainer) {
+      rfContainer.insertBefore(wrap, rfContainer.firstChild.nextSibling);
+    }
+
+    /* Trigger entry animation on next frame */
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        wrap.classList.add('aspira-ssb-visible');
+      });
+    });
+
+    /* Animate bars after a short delay */
+    setTimeout(function() { aspiraSsbAnimate(subs); }, 200);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     C — ANIMATE BARS TO TARGET VALUES
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSsbAnimate(subs) {
+    ['profile', 'visibility', 'positioning'].forEach(function(key, idx) {
+      var target   = subs[key] || 0;
+      var fillEl   = document.getElementById('aspira-ssb-fill-'  + key);
+      var pctEl    = document.getElementById('aspira-ssb-pct-'   + key);
+      if (!fillEl || !pctEl) return;
+
+      var delay = 150 + idx * 130; /* stagger */
+
+      setTimeout(function() {
+        /* Bar width */
+        fillEl.style.width = target + '%';
+
+        /* Count-up number */
+        var start     = 0;
+        var duration  = 1200;
+        var startTime = null;
+
+        function aspiraSsbCount(ts) {
+          if (!startTime) startTime = ts;
+          var elapsed  = ts - startTime;
+          var progress = Math.min(elapsed / duration, 1);
+          var eased    = 1 - Math.pow(1 - progress, 3);
+          var current  = Math.round(eased * target);
+          pctEl.textContent = current + '%';
+          if (progress < 1) requestAnimationFrame(aspiraSsbCount);
+          else pctEl.textContent = target + '%';
+        }
+
+        requestAnimationFrame(aspiraSsbCount);
+      }, delay);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     D — HOOK: collect input on submit, apply on reveal
+  ═══════════════════════════════════════════════════════════ */
+  var aspiraSsbSubs     = null;
+  var aspiraSsbSubmitBtn = document.getElementById('aspira-inp-submit');
+
+  /* Capture sub-scores at submit time (before existing handlers) */
+  if (aspiraSsbSubmitBtn) {
+    aspiraSsbSubmitBtn.addEventListener('click', function() {
+      /* Re-use same input collection logic pattern */
+      var resumeText = '';
+      var jdText     = '';
+
+      var textTab   = document.getElementById('aspira-inh-tab-text');
+      var isTextMode = textTab && textTab.classList.contains('aspira-inh-tab-active');
+      if (isTextMode) {
+        var rtEl = document.getElementById('aspira-inh-resume-text');
+        if (rtEl) resumeText = rtEl.value.trim();
+      }
+
+      ['aspira-inp-freelance-desc','aspira-inp-biz-desc'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.value.trim()) resumeText = (resumeText + ' ' + el.value.trim()).trim();
+      });
+
+      var jdEl = document.getElementById('aspira-inp-jd');
+      if (jdEl && jdEl.value.trim()) jdText = jdEl.value.trim();
+      ['aspira-inh-jdta-freelance','aspira-inh-jdta-business'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.value.trim() && !jdText) jdText = el.value.trim();
+      });
+
+      aspiraSsbSubs = aspiraSsbCalc(resumeText, jdText);
+
+      /* Expose for external access */
+      window.aspiraSsbSubs = aspiraSsbSubs;
+
+    }, true /* capture — runs before existing handlers */);
+  }
+
+  /* Watch for result-full section becoming visible */
+  var aspiraSsbResultFull = document.getElementById('aspira-result-full');
+  if (aspiraSsbResultFull) {
+    var aspiraSsbObserver = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (
+          m.type === 'attributes' &&
+          m.attributeName === 'class' &&
+          aspiraSsbResultFull.classList.contains('aspira-rf-visible')
+        ) {
+          var dataToUse = aspiraSsbSubs || aspiraSsbCalc('', '');
+          setTimeout(function() {
+            aspiraSsbBuild(dataToUse);
+          }, 400); /* after ring/bar existing animations start */
+          aspiraSsbObserver.disconnect();
+        }
+      });
+    });
+    aspiraSsbObserver.observe(aspiraSsbResultFull, { attributes: true });
+  }
+
+})();
+</script>
+<!-- END NEW FEATURE JS: Sub-Score Bars -->
+
 </body>
 </html>
