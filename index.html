@@ -1121,6 +1121,16 @@
           </li>
         </ul>
         <p class="transparency-note">"You deserve to know where you stand before you decide anything."</p>
+
+        <!-- NEW FEATURE: Trust Message — aspira-trust-* -->
+        <div class="aspira-trust-msg" id="aspira-trust-msg" aria-label="Transparency commitment">
+          <svg class="aspira-trust-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7.5 1.5L2 4v4c0 3.3 2.4 5.8 5.5 6.5C10.6 13.8 13 11.3 13 8V4L7.5 1.5z"/>
+            <path d="M5 7.5l2 2 3-3"/>
+          </svg>
+          <p class="aspira-trust-text">Everything here is transparent. You&#x2019;ll always know what&#x2019;s working and what&#x2019;s not.</p>
+        </div>
+        <!-- END NEW FEATURE: Trust Message -->
       </div>
     </div>
   </div>
@@ -1199,6 +1209,13 @@
     <!-- END NEW FEATURE: Social Media Footer -->
 
   </div>
+    <!-- NEW FEATURE: Footer Disclaimer — aspira-disclaimer-* -->
+    <div class="aspira-disclaimer" id="aspira-disclaimer">
+      <p class="aspira-disclaimer-text">
+        We do not guarantee jobs, placements, or business outcomes. We help you improve your chances by improving how you present yourself.
+      </p>
+    </div>
+    <!-- END NEW FEATURE: Footer Disclaimer -->
 </footer>
 
 <!-- NEW FEATURE: Floating WhatsApp Button -->
@@ -8307,6 +8324,79 @@
 
 </style>
 <!-- END NEW FEATURE CSS: Visibility Section -->
+
+<!-- ============================================================ -->
+<!-- NEW FEATURE CSS: Trust Message + Footer Disclaimer           -->
+<!-- aspira-trust-* and aspira-disclaimer-* — fully scoped        -->
+<!-- ============================================================ -->
+<style>
+
+  /* ── Trust message ── */
+  .aspira-trust-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 16px 18px;
+    background: rgba(107,143,113,0.06);
+    border: 1px solid rgba(107,143,113,0.16);
+    border-radius: 12px;
+    max-width: 480px;
+  }
+
+  .aspira-trust-icon {
+    color: #6b8f71;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .aspira-trust-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 400;
+    color: #4a7050;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .dark-mode .aspira-trust-msg {
+    background: rgba(107,143,113,0.07);
+    border-color: rgba(107,143,113,0.14);
+  }
+
+  .dark-mode .aspira-trust-text { color: #8cb890; }
+
+  /* ── Footer disclaimer ── */
+  .aspira-disclaimer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .aspira-disclaimer-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: #c0c0bc;
+    line-height: 1.65;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dark-mode .aspira-disclaimer { border-top-color: rgba(255,255,255,0.05); }
+  .dark-mode .aspira-disclaimer-text { color: #4a4a46; }
+
+  @media (max-width: 640px) {
+    .aspira-trust-msg { max-width: 100%; }
+    .aspira-disclaimer-text { font-size: 0.7rem; }
+  }
+
+</style>
+<!-- END NEW FEATURE CSS: Trust Message + Footer Disclaimer -->
 
 </body>
 </html>
