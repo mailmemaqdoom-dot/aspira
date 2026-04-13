@@ -8919,5 +8919,1470 @@
 </style>
 <!-- END NEW FEATURE CSS: Your Space -->
 
+
+<!-- ============================================================ -->
+<!-- FIX BLOCK: All improvements — aspira-fix-* namespace         -->
+<!-- 1. Hide sticky CTA (AI assistant replaces it)                -->
+<!-- 2. Real resume Before/After with actual text content          -->
+<!-- 3. Filled website sample cards                               -->
+<!-- 4. Your Space real content                                   -->
+<!-- 5. Real AI-powered gap analysis (no WhatsApp on submit)      -->
+<!-- 6. 10 resume samples carousel                                -->
+<!-- ============================================================ -->
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 1 CSS: Hide sticky "Start with Clarity" button
+     The AI assistant chat handles this flow now
+     ──────────────────────────────────────────────────────────── -->
+<style>
+  /* Hide sticky CTA — AI bot handles this flow */
+  #aspira-sticky-cta { display: none !important; }
+
+  /* Also shift WA float so it doesn't sit over bot cap */
+  #aspira-float-wa,
+  #aspira-fab-cap,
+  #aspira-fab-pulse-ring { bottom: 24px !important; right: 24px !important; }
+</style>
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 2: Real Resume Before/After — replaces wireframe bars
+     Injected as a NEW section beneath existing #aspira-beforeafter
+     ──────────────────────────────────────────────────────────── -->
+<section id="aspira-real-ba" class="aspira-rba-section" aria-label="Real resume examples">
+  <div class="aspira-rba-container">
+    <div class="aspira-rba-header">
+      <span class="aspira-rba-eyebrow">Real examples — real difference</span>
+      <h2 class="aspira-rba-title">Actual resume text: before and after</h2>
+      <p class="aspira-rba-sub">The same bullet point. Two completely different impressions.</p>
+    </div>
+
+    <!-- Tabbed pairs -->
+    <div class="aspira-rba-tabs" role="tablist" aria-label="Resume examples">
+      <button class="aspira-rba-tab aspira-rba-tab-active" role="tab" aria-selected="true"  data-rba="0" type="button">Marketing</button>
+      <button class="aspira-rba-tab" role="tab" aria-selected="false" data-rba="1" type="button">Software Dev</button>
+      <button class="aspira-rba-tab" role="tab" aria-selected="false" data-rba="2" type="button">Sales</button>
+      <button class="aspira-rba-tab" role="tab" aria-selected="false" data-rba="3" type="button">HR</button>
+      <button class="aspira-rba-tab" role="tab" aria-selected="false" data-rba="4" type="button">Finance</button>
+    </div>
+
+    <div class="aspira-rba-panels">
+
+      <!-- 0: Marketing -->
+      <div class="aspira-rba-panel aspira-rba-panel-active" data-rba-panel="0">
+        <div class="aspira-rba-pair">
+          <div class="aspira-rba-card aspira-rba-before-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-before">✗ Before</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Ananya Krishnan</p>
+              <p class="aspira-rba-role-line">Marketing Executive</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">XYZ Tech Pvt Ltd &nbsp;·&nbsp; 2020–2023</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-bad">
+                <li>Responsible for social media management</li>
+                <li>Helped with email campaigns</li>
+                <li>Worked on content creation for the marketing team</li>
+                <li>Assisted in organising events</li>
+                <li>Handled customer queries on social platforms</li>
+              </ul>
+              <div class="aspira-rba-section-title">Skills</div>
+              <p class="aspira-rba-skills-line">MS Office, Social Media, Content Writing, Teamwork</p>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item bad">No numbers or outcomes</li>
+              <li class="aspira-rba-problem-item bad">Passive language ("responsible for", "assisted")</li>
+              <li class="aspira-rba-problem-item bad">Skills are generic — no differentiation</li>
+            </ul>
+          </div>
+
+          <div class="aspira-rba-arrow-col" aria-hidden="true">
+            <div class="aspira-rba-arrow-icon">→</div>
+          </div>
+
+          <div class="aspira-rba-card aspira-rba-after-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-after">✓ After Aspira</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Ananya Krishnan</p>
+              <p class="aspira-rba-role-line aspira-rba-role-after">Senior Marketing Manager · B2B SaaS · 4 years</p>
+              <p class="aspira-rba-contact-after">ananya@email.com &nbsp;·&nbsp; linkedin.com/in/ananya</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">XYZ Tech Pvt Ltd &nbsp;·&nbsp; Marketing Manager &nbsp;·&nbsp; 2020–2023</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-good">
+                <li>Grew Instagram following from 2K → 28K in 14 months through targeted content strategy</li>
+                <li>Led 3 email campaigns reaching 45,000 subscribers; avg open rate 34% (industry avg 21%)</li>
+                <li>Produced 60+ pieces of SEO content; drove 40% increase in organic traffic YoY</li>
+                <li>Managed ₹12L annual marketing budget across digital and offline channels</li>
+              </ul>
+              <div class="aspira-rba-section-title">Skills</div>
+              <p class="aspira-rba-skills-line">HubSpot CRM · Meta Ads Manager · Google Analytics · Mailchimp · SEO / SEM</p>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item good">Impact-led bullets with real numbers</li>
+              <li class="aspira-rba-problem-item good">Active ownership language</li>
+              <li class="aspira-rba-problem-item good">Specific, searchable tools listed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1: Software Dev -->
+      <div class="aspira-rba-panel" data-rba-panel="1">
+        <div class="aspira-rba-pair">
+          <div class="aspira-rba-card aspira-rba-before-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-before">✗ Before</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Rahul Menon</p>
+              <p class="aspira-rba-role-line">Software Engineer</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">Infosys &nbsp;·&nbsp; 2019–2023</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-bad">
+                <li>Developed backend APIs</li>
+                <li>Worked on database queries</li>
+                <li>Participated in code reviews</li>
+                <li>Fixed bugs in production</li>
+              </ul>
+              <div class="aspira-rba-section-title">Skills</div>
+              <p class="aspira-rba-skills-line">Java, Python, SQL, Git</p>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item bad">No scale, context, or impact</li>
+              <li class="aspira-rba-problem-item bad">Vague tasks — any developer could claim these</li>
+              <li class="aspira-rba-problem-item bad">Skills list too short for ATS screening</li>
+            </ul>
+          </div>
+          <div class="aspira-rba-arrow-col" aria-hidden="true"><div class="aspira-rba-arrow-icon">→</div></div>
+          <div class="aspira-rba-card aspira-rba-after-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-after">✓ After Aspira</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Rahul Menon</p>
+              <p class="aspira-rba-role-line aspira-rba-role-after">Backend Engineer · Java / Python · Fintech · 5 yrs</p>
+              <p class="aspira-rba-contact-after">rahul@email.com &nbsp;·&nbsp; github.com/rahulmenon</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">Infosys &nbsp;·&nbsp; Senior Software Engineer &nbsp;·&nbsp; 2019–2023</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-good">
+                <li>Built 12 REST APIs serving 2M+ daily requests with <80ms average latency</li>
+                <li>Optimised SQL queries reducing report generation time by 65% for 50k-row datasets</li>
+                <li>Led code review process for a team of 8; reduced post-release defects by 42%</li>
+                <li>Resolved critical production bug causing ₹40L/day revenue loss — fixed in 4 hours</li>
+              </ul>
+              <div class="aspira-rba-section-title">Skills</div>
+              <p class="aspira-rba-skills-line">Java 17 · Python · Spring Boot · PostgreSQL · Redis · Docker · Kubernetes · REST APIs · Git · AWS</p>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item good">Quantified scope (2M requests, ₹40L impact)</li>
+              <li class="aspira-rba-problem-item good">Clear level and specialisation in headline</li>
+              <li class="aspira-rba-problem-item good">Full tech stack — ATS-ready</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: Sales -->
+      <div class="aspira-rba-panel" data-rba-panel="2">
+        <div class="aspira-rba-pair">
+          <div class="aspira-rba-card aspira-rba-before-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-before">✗ Before</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Deepa Nair</p>
+              <p class="aspira-rba-role-line">Sales Executive</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">ABC Insurance &nbsp;·&nbsp; 2021–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-bad">
+                <li>Sold insurance products to customers</li>
+                <li>Met monthly sales targets</li>
+                <li>Maintained client relationships</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item bad">No revenue figures or growth metrics</li>
+              <li class="aspira-rba-problem-item bad">"Met targets" — by how much? Consistently?</li>
+              <li class="aspira-rba-problem-item bad">Zero differentiation from 10,000 other CVs</li>
+            </ul>
+          </div>
+          <div class="aspira-rba-arrow-col" aria-hidden="true"><div class="aspira-rba-arrow-icon">→</div></div>
+          <div class="aspira-rba-card aspira-rba-after-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-after">✓ After Aspira</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Deepa Nair</p>
+              <p class="aspira-rba-role-line aspira-rba-role-after">Senior Sales Manager · Insurance & BFSI · 4 yrs</p>
+              <p class="aspira-rba-contact-after">deepa@email.com &nbsp;·&nbsp; linkedin.com/in/deepanair</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">ABC Insurance &nbsp;·&nbsp; Senior Sales Executive &nbsp;·&nbsp; 2021–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-good">
+                <li>Exceeded annual revenue target by 138% — top performer in a 200-person sales team</li>
+                <li>Built a portfolio of 180+ clients generating ₹2.4Cr in annual premium revenue</li>
+                <li>Achieved 91% policy renewal rate through structured quarterly client check-ins</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item good">138% — instantly separates from the crowd</li>
+              <li class="aspira-rba-problem-item good">Revenue and portfolio size add real credibility</li>
+              <li class="aspira-rba-problem-item good">Retention metric shows relationship quality</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: HR -->
+      <div class="aspira-rba-panel" data-rba-panel="3">
+        <div class="aspira-rba-pair">
+          <div class="aspira-rba-card aspira-rba-before-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-before">✗ Before</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Karthik Suresh</p>
+              <p class="aspira-rba-role-line">HR Executive</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">TechCorp India &nbsp;·&nbsp; 2020–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-bad">
+                <li>Involved in recruitment process</li>
+                <li>Handled employee onboarding</li>
+                <li>Maintained HR records</li>
+                <li>Organised employee engagement activities</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item bad">"Involved in" is weak — own your contribution</li>
+              <li class="aspira-rba-problem-item bad">No hiring volumes or timelines</li>
+              <li class="aspira-rba-problem-item bad">No mention of HR systems or policies</li>
+            </ul>
+          </div>
+          <div class="aspira-rba-arrow-col" aria-hidden="true"><div class="aspira-rba-arrow-icon">→</div></div>
+          <div class="aspira-rba-card aspira-rba-after-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-after">✓ After Aspira</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Karthik Suresh</p>
+              <p class="aspira-rba-role-line aspira-rba-role-after">HR Manager · Talent Acquisition & Operations · 5 yrs</p>
+              <p class="aspira-rba-contact-after">karthik@email.com &nbsp;·&nbsp; linkedin.com/in/karthiksuresh</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">TechCorp India &nbsp;·&nbsp; HR Manager &nbsp;·&nbsp; 2020–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-good">
+                <li>Managed end-to-end recruitment for 120+ roles across Engineering, Product & Operations</li>
+                <li>Reduced average time-to-hire from 47 days to 28 days through structured interview process</li>
+                <li>Designed onboarding programme for 300+ new joiners with 96% 90-day retention rate</li>
+                <li>Implemented Darwinbox HRMS — digitised records for 800-person workforce</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item good">120 roles hired, 300 onboarded — real scale</li>
+              <li class="aspira-rba-problem-item good">Time-to-hire improvement is a key HR metric</li>
+              <li class="aspira-rba-problem-item good">Named HRMS tool — shows technical credibility</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: Finance -->
+      <div class="aspira-rba-panel" data-rba-panel="4">
+        <div class="aspira-rba-pair">
+          <div class="aspira-rba-card aspira-rba-before-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-before">✗ Before</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Preethi Varma</p>
+              <p class="aspira-rba-role-line">Finance Analyst</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">Deloitte India &nbsp;·&nbsp; 2021–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-bad">
+                <li>Prepared financial reports</li>
+                <li>Assisted with audits</li>
+                <li>Worked on Excel models</li>
+                <li>Communicated with clients</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item bad">No portfolio size, revenue, or deal values</li>
+              <li class="aspira-rba-problem-item bad">"Assisted" undersells your actual contribution</li>
+              <li class="aspira-rba-problem-item bad">"Excel models" — which type? For what?</li>
+            </ul>
+          </div>
+          <div class="aspira-rba-arrow-col" aria-hidden="true"><div class="aspira-rba-arrow-icon">→</div></div>
+          <div class="aspira-rba-card aspira-rba-after-card">
+            <div class="aspira-rba-tag-row"><span class="aspira-rba-badge aspira-rba-badge-after">✓ After Aspira</span></div>
+            <div class="aspira-rba-resume-doc">
+              <p class="aspira-rba-name-line">Preethi Varma</p>
+              <p class="aspira-rba-role-line aspira-rba-role-after">Finance Analyst · FP&A & Audit · Big 4 · 3 yrs</p>
+              <p class="aspira-rba-contact-after">preethi@email.com &nbsp;·&nbsp; linkedin.com/in/preethivarma</p>
+              <div class="aspira-rba-section-title">Experience</div>
+              <p class="aspira-rba-company">Deloitte India &nbsp;·&nbsp; Senior Analyst &nbsp;·&nbsp; 2021–2024</p>
+              <ul class="aspira-rba-bullets aspira-rba-bullets-good">
+                <li>Prepared monthly P&L, balance sheet and cash flow reports for 6 portfolio companies</li>
+                <li>Led statutory audit for a listed FMCG client with ₹800Cr revenue — zero major findings</li>
+                <li>Built 3-statement DCF model used in ₹120Cr acquisition due diligence</li>
+                <li>Reduced monthly close cycle from 12 to 7 days by automating reconciliation in Excel VBA</li>
+              </ul>
+            </div>
+            <ul class="aspira-rba-problem-list">
+              <li class="aspira-rba-problem-item good">Named deal values and scope (₹800Cr, ₹120Cr)</li>
+              <li class="aspira-rba-problem-item good">Specific deliverables — DCF, 3-statement model</li>
+              <li class="aspira-rba-problem-item good">Process improvement with measurable time saved</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.aspira-rba-panels -->
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 3: Resume Samples Section — 10 real text samples
+     ──────────────────────────────────────────────────────────── -->
+<section id="aspira-samples" class="aspira-smp-section" aria-label="Resume sample templates">
+  <div class="aspira-smp-container">
+    <div class="aspira-smp-header">
+      <span class="aspira-smp-eyebrow">Free templates</span>
+      <h2 class="aspira-smp-title">10 real resume samples — use as your starting point</h2>
+      <p class="aspira-smp-sub">Each sample is already structured correctly. Customise with your own details.</p>
+    </div>
+
+    <div class="aspira-smp-grid" id="aspira-smp-grid">
+
+      <!-- Sample 1 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Marketing Manager resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge">Marketing</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-1">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Ananya Krishnan</strong> — Senior Marketing Manager · B2B SaaS
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-1" hidden>
+          <pre class="aspira-smp-text">ANANYA KRISHNAN
+Senior Marketing Manager | B2B SaaS | 6+ Years
+ananya@email.com | +91 98765 43210 | linkedin.com/in/ananya | Chennai
+
+PROFESSIONAL SUMMARY
+Results-driven marketing leader with 6+ years driving growth for B2B SaaS companies.
+Specialise in demand generation, content strategy, and marketing operations.
+Delivered consistent 30-40% YoY pipeline growth across two Series-A startups.
+
+EXPERIENCE
+Marketing Manager — XYZ Tech Pvt Ltd, Chennai          2021–2024
+• Grew organic traffic by 40% YoY through SEO-led content strategy (60+ pieces)
+• Launched 3 email campaigns to 45,000 subscribers; avg open rate 34% vs 21% industry avg
+• Managed ₹12L digital marketing budget across Google Ads, Meta, and LinkedIn
+• Built Instagram from 2K to 28K followers in 14 months
+
+Marketing Executive — ABC Solutions, Bangalore          2018–2021
+• Executed B2B demand gen campaigns generating 800+ MQLs per quarter
+• Co-ordinated 4 industry events with 500+ attendees each
+
+EDUCATION
+MBA — Marketing, PSG College of Technology              2016–2018
+B.Com — Loyola College, Chennai                         2013–2016
+
+SKILLS
+HubSpot CRM · Mailchimp · Meta Ads Manager · Google Analytics · Semrush
+Content Strategy · Email Marketing · SEO/SEM · Event Management · Excel</pre>
+        </div>
+      </article>
+
+      <!-- Sample 2 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Software Engineer resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-blue">Software Dev</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-2">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Rahul Menon</strong> — Backend Engineer · Java/Python · Fintech
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-2" hidden>
+          <pre class="aspira-smp-text">RAHUL MENON
+Backend Engineer | Java & Python | Fintech | 5 Years
+rahul@email.com | +91 87654 32109 | github.com/rahulmenon | Pune
+
+PROFESSIONAL SUMMARY
+Backend engineer with 5 years building high-throughput APIs and data pipelines for
+fintech products. Experience with microservices, cloud deployment, and performance
+optimisation at scale (2M+ daily requests). Focused on clean, testable code.
+
+EXPERIENCE
+Senior Software Engineer — Infosys, Pune                2021–2024
+• Built 12 REST APIs handling 2M+ daily requests at <80ms avg latency
+• Optimised PostgreSQL queries — reduced report gen time by 65% for 50k-row datasets
+• Led code reviews for team of 8; cut post-release defects by 42%
+• Resolved critical prod bug causing ₹40L/day revenue loss in under 4 hours
+
+Software Engineer — Wipro, Pune                         2019–2021
+• Developed payment reconciliation module processing ₹500Cr+ monthly transactions
+• Contributed to migration of 3 legacy services to Spring Boot microservices
+
+EDUCATION
+B.Tech Computer Science — VIT Vellore                   2015–2019
+
+SKILLS
+Java 17 · Python 3.11 · Spring Boot · FastAPI · PostgreSQL · Redis
+Docker · Kubernetes · AWS (EC2/S3/RDS) · REST APIs · Git · JUnit · Kafka</pre>
+        </div>
+      </article>
+
+      <!-- Sample 3 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Sales Manager resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-amber">Sales</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-3">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Deepa Nair</strong> — Senior Sales Manager · Insurance & BFSI
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-3" hidden>
+          <pre class="aspira-smp-text">DEEPA NAIR
+Senior Sales Manager | Insurance & BFSI | 6 Years
+deepa@email.com | +91 76543 21098 | linkedin.com/in/deepanair | Mumbai
+
+PROFESSIONAL SUMMARY
+High-performing sales manager with 6 years in insurance and BFSI.
+Consistent top-10% performer with a track record of exceeding targets by 120-140%.
+Specialise in relationship selling, portfolio management, and team mentoring.
+
+EXPERIENCE
+Senior Sales Executive — ABC Insurance, Mumbai          2021–2024
+• Exceeded annual revenue target by 138% — #1 in a 200-person team nationally
+• Built portfolio of 180+ clients generating ₹2.4Cr annual premium
+• Achieved 91% policy renewal rate via structured quarterly client reviews
+• Mentored 4 junior executives — 3 promoted within 18 months
+
+Sales Executive — LIC, Mumbai                           2018–2021
+• Converted 68% of leads to policies in first year (team avg: 42%)
+• Received "Rising Star" award 2019 and 2020
+
+EDUCATION
+MBA — Finance & Marketing, Welingkar Institute          2016–2018
+B.Com — University of Mumbai                            2013–2016
+
+SKILLS
+Consultative Selling · Portfolio Management · CRM (Salesforce) · Negotiation
+Team Leadership · Financial Planning · Client Retention · Presentation Skills</pre>
+        </div>
+      </article>
+
+      <!-- Sample 4 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="HR Manager resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-purple">HR</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-4">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Karthik Suresh</strong> — HR Manager · Talent Acquisition & Ops
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-4" hidden>
+          <pre class="aspira-smp-text">KARTHIK SURESH
+HR Manager | Talent Acquisition & Operations | 5 Years
+karthik@email.com | +91 65432 10987 | linkedin.com/in/karthiksuresh | Hyderabad
+
+PROFESSIONAL SUMMARY
+Strategic HR professional with 5 years managing full-cycle talent acquisition,
+HR operations, and employee experience for tech companies (200–1200 employees).
+Known for reducing time-to-hire and designing scalable HR processes.
+
+EXPERIENCE
+HR Manager — TechCorp India, Hyderabad                  2020–2024
+• Managed end-to-end recruitment for 120+ roles across Eng, Product & Operations
+• Reduced average time-to-hire from 47 to 28 days (40% improvement)
+• Designed onboarding for 300+ joiners — 96% 90-day retention rate
+• Implemented Darwinbox HRMS; digitised records for 800-person workforce
+• Negotiated 6 recruiter/agency contracts saving ₹18L annually
+
+HR Executive — GrowthStart, Hyderabad                   2019–2020
+• Sourced and screened 500+ candidates; filled 35 roles in first 6 months
+
+EDUCATION
+MBA — Human Resources, XLRI Jamshedpur                  2017–2019
+
+SKILLS
+Talent Acquisition · Darwinbox · Workday · HR Analytics · HRBP
+Policy Design · Performance Management · Labour Law · Excel · PowerPoint</pre>
+        </div>
+      </article>
+
+      <!-- Sample 5 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Finance Analyst resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-teal">Finance</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-5">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Preethi Varma</strong> — Finance Analyst · FP&amp;A & Audit · Big 4
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-5" hidden>
+          <pre class="aspira-smp-text">PREETHI VARMA
+Finance Analyst | FP&A & Audit | Deloitte | 3 Years
+preethi@email.com | +91 54321 09876 | linkedin.com/in/preethivarma | Bangalore
+
+PROFESSIONAL SUMMARY
+CA-qualified finance analyst with Big 4 experience in audit and FP&A.
+Expertise in financial modelling, statutory audit, and process automation.
+Delivered ₹120Cr acquisition due diligence and zero-finding listed company audit.
+
+EXPERIENCE
+Senior Analyst — Deloitte India, Bangalore              2021–2024
+• Prepared monthly P&L, balance sheet and cash flow for 6 portfolio companies
+• Led statutory audit for listed FMCG client (₹800Cr revenue) — zero major findings
+• Built 3-statement DCF model used in ₹120Cr M&A due diligence
+• Automated reconciliation in Excel VBA — reduced monthly close from 12 to 7 days
+• Presented financial insights directly to CFO and Board of 3 clients
+
+EDUCATION
+Chartered Accountant (CA Final) — ICAI                  2021
+B.Com (Hons) — Christ University, Bangalore             2015–2018
+
+SKILLS
+Financial Modelling · DCF Valuation · Statutory Audit · FP&A · Excel VBA
+SAP FICO · Tally · Power BI · IND AS / IFRS · Python (basic)</pre>
+        </div>
+      </article>
+
+      <!-- Sample 6 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="UI/UX Designer resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-pink">Design</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-6">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Sneha Pillai</strong> — UI/UX Designer · Fintech & E-commerce
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-6" hidden>
+          <pre class="aspira-smp-text">SNEHA PILLAI
+UI/UX Designer | Fintech & E-commerce | 4 Years
+sneha@email.com | +91 43210 98765 | behance.net/snehapillai | Bangalore
+
+PROFESSIONAL SUMMARY
+Product designer with 4 years crafting user experiences for fintech and e-commerce
+apps used by 1M+ users. Specialise in information architecture, design systems,
+and usability testing. Reduced onboarding drop-off by 38% at last role.
+
+EXPERIENCE
+Product Designer — PayEase Fintech, Bangalore           2022–2024
+• Redesigned onboarding flow — reduced drop-off from 54% to 16% (38% improvement)
+• Built and maintained design system with 120+ components used across 3 products
+• Conducted 40+ user interviews; translated findings into 2 major feature launches
+• Collaborated with 5 engineering squads in 2-week sprint cycles
+
+UI/UX Designer — ShopNow, Bangalore                    2020–2022
+• Designed checkout flow for 500K+ monthly active users
+• Improved cart abandonment rate by 22% through A/B testing of 3 layouts
+
+EDUCATION
+B.Des Interaction Design — NID Ahmedabad               2016–2020
+
+SKILLS
+Figma · Sketch · Adobe XD · InVision · Principle
+User Research · Usability Testing · Prototyping · Design Systems
+HTML/CSS (basic) · Zeplin · JIRA · Miro</pre>
+        </div>
+      </article>
+
+      <!-- Sample 7 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Operations Manager resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-slate">Operations</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-7">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Vikram Rajan</strong> — Operations Manager · Supply Chain & Logistics
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-7" hidden>
+          <pre class="aspira-smp-text">VIKRAM RAJAN
+Operations Manager | Supply Chain & Logistics | 7 Years
+vikram@email.com | +91 32109 87654 | linkedin.com/in/vikramrajan | Delhi
+
+PROFESSIONAL SUMMARY
+Operations leader with 7 years managing supply chain, warehouse, and last-mile
+logistics for FMCG and e-commerce. Reduced fulfilment costs by 28% and improved
+on-time delivery from 74% to 94% across two large operations.
+
+EXPERIENCE
+Operations Manager — BigCart E-commerce, Delhi          2020–2024
+• Managed 3 warehouse hubs processing 8,000+ orders/day (₹45Cr monthly GMV)
+• Improved on-time delivery from 74% to 94% through route optimisation and SLAs
+• Reduced operational cost per order by 28% through process standardisation
+• Led team of 120 across warehousing, QC, and logistics
+• Implemented WMS (SnapFulfil) — reduced picking errors by 61%
+
+Supply Chain Analyst — Hindustan Unilever, Delhi        2017–2020
+• Managed procurement for 18 SKUs totalling ₹30Cr annual spend
+• Reduced stockout incidents by 35% through demand forecasting improvements
+
+EDUCATION
+MBA — Operations & Supply Chain, IIM Kozhikode          2015–2017
+
+SKILLS
+Supply Chain Management · WMS (SnapFulfil) · SAP MM · Lean/Six Sigma
+Demand Planning · Vendor Management · P&L Ownership · Excel · Power BI</pre>
+        </div>
+      </article>
+
+      <!-- Sample 8 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Business Analyst resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-orange">Business Analyst</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-8">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Meera Iyer</strong> — Business Analyst · Product & Consulting
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-8" hidden>
+          <pre class="aspira-smp-text">MEERA IYER
+Business Analyst | Product & Consulting | 5 Years
+meera@email.com | +91 21098 76543 | linkedin.com/in/meeraiyer | Bangalore
+
+PROFESSIONAL SUMMARY
+BA with 5 years bridging business and technology in product and consulting contexts.
+Skilled in requirements gathering, process mapping, and stakeholder management.
+Delivered ₹8Cr cost reduction initiative and 3 full-cycle product feature launches.
+
+EXPERIENCE
+Senior Business Analyst — Accenture, Bangalore          2021–2024
+• Led discovery for banking client — documented 80+ requirements across 6 workstreams
+• Identified process gaps saving client ₹8Cr annually through automation proposal
+• Facilitated 120+ stakeholder sessions across 4 time zones
+• Wrote functional specs for 3 product features shipped to 400K+ users
+
+Business Analyst — Flipkart, Bangalore                  2019–2021
+• Owned product requirements for Seller Dashboard used by 80K+ sellers
+• Reduced seller onboarding time by 3 days through process redesign
+
+EDUCATION
+B.Tech Information Technology — NIT Trichy               2015–2019
+
+SKILLS
+Business Analysis · BPMN · User Stories · SQL · Jira · Confluence
+Stakeholder Management · Wireframing · Power BI · Agile/Scrum · BABOK</pre>
+        </div>
+      </article>
+
+      <!-- Sample 9 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Freelance Graphic Designer resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-pink">Freelancer</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-9">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Tanya Gupta</strong> — Freelance Graphic Designer · Brand & Digital
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-9" hidden>
+          <pre class="aspira-smp-text">TANYA GUPTA
+Freelance Graphic Designer | Brand & Digital | 5 Years
+tanya@email.com | +91 10987 65432 | behance.net/tanyagupta | Remote
+
+PROFESSIONAL SUMMARY
+Independent graphic designer with 5 years serving D2C brands, startups, and agencies.
+Delivered brand identities, packaging, and digital campaigns for 60+ clients across
+India and Southeast Asia. Known for fast turnaround and brand-accurate execution.
+
+FREELANCE WORK (Selected Clients)         2019–Present
+• Designed complete brand identity (logo, palette, typography) for 14 D2C brands
+• Created packaging for Ayurvedic brand launched in 800+ Nykaa stores nationwide
+• Delivered social media creative for 3 funded startups — avg 22% increase in engagement
+• Produced pitch deck designs for 5 startups that raised Series-A funding
+• Retainer clients: 4 ongoing brands (avg retainer ₹25,000/month)
+
+AGENCY EXPERIENCE
+Junior Designer — Ogilvy India, Mumbai                  2018–2019
+• Supported campaigns for 4 FMCG brands with 1M+ reach
+
+EDUCATION
+B.Des Visual Communication — Symbiosis Institute of Design   2014–2018
+
+SKILLS
+Adobe Illustrator · Photoshop · InDesign · Figma · Canva Pro
+Brand Identity · Packaging Design · Social Media Creatives · Motion (basic)
+Client Management · Brief Interpretation · Print & Digital Production</pre>
+        </div>
+      </article>
+
+      <!-- Sample 10 -->
+      <article class="aspira-smp-card" tabindex="0" aria-label="Teacher resume sample">
+        <div class="aspira-smp-card-top">
+          <span class="aspira-smp-role-badge aspira-smp-badge-teal">Education</span>
+          <button class="aspira-smp-expand-btn" type="button" aria-expanded="false" aria-controls="aspira-smp-body-10">View full sample ↓</button>
+        </div>
+        <div class="aspira-smp-preview">
+          <strong>Ravi Chandran</strong> — Senior Teacher / Academic Coordinator
+        </div>
+        <div class="aspira-smp-body" id="aspira-smp-body-10" hidden>
+          <pre class="aspira-smp-text">RAVI CHANDRAN
+Senior Teacher & Academic Coordinator | CBSE | 10 Years
+ravi@email.com | +91 09876 54321 | linkedin.com/in/ravichandran | Chennai
+
+PROFESSIONAL SUMMARY
+Experienced educator with 10 years teaching Mathematics and Science at CBSE schools
+(Grades 8–12). Led academic improvement initiatives that raised school board pass rate
+from 78% to 96%. Department head managing team of 12 subject teachers.
+
+EXPERIENCE
+Senior Teacher & HOD (Science) — Velammal Schools      2018–2024
+• Raised Grade 12 board exam pass rate from 78% to 96% over 3 academic years
+• Designed blended learning curriculum adopted across 4 school branches (2,800 students)
+• Mentored 12 junior teachers — 3 received state-level teaching awards
+• Introduced project-based learning; student STEM competition wins up 3× YoY
+• Coordinated school's first online learning transition during 2020 (Zoom + Google Classroom)
+
+Teacher — Sri Venkateswara School, Chennai              2014–2018
+• Delivered Maths and Physics for Grades 9–11; avg student score 88%
+
+EDUCATION
+M.Sc Mathematics — University of Madras                 2012–2014
+B.Ed — Tamil Nadu Teacher Education University          2014
+
+SKILLS
+CBSE Curriculum · Lesson Planning · Differentiated Instruction
+Google Classroom · Zoom · Smart Board · Student Assessment
+Academic Leadership · Parent Communication · STEM Education</pre>
+        </div>
+      </article>
+
+    </div><!-- /.aspira-smp-grid -->
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 4: Website samples — fill biz cards with real previews
+     (CSS-only mini mockups injected via new section below existing)
+     ──────────────────────────────────────────────────────────── -->
+<section id="aspira-biz-previews" class="aspira-bp-section" aria-label="Website preview samples">
+  <div class="aspira-bp-container">
+    <div class="aspira-bp-header">
+      <span class="aspira-bp-eyebrow">What your website could look like</span>
+      <h2 class="aspira-bp-title">Simple. Professional. Found.</h2>
+      <p class="aspira-bp-sub">These are example layouts — built mobile-first, ready in days.</p>
+    </div>
+
+    <div class="aspira-bp-grid">
+
+      <!-- Salon Preview -->
+      <div class="aspira-bp-card">
+        <div class="aspira-bp-browser" aria-hidden="true">
+          <div class="aspira-bp-browser-bar"><span></span><span></span><span></span></div>
+          <div class="aspira-bp-mockup aspira-bp-mockup-salon">
+            <div class="aspira-bp-mk-hero aspira-bp-mk-hero-salon">
+              <div class="aspira-bp-mk-logo">✦ Luxe Salon</div>
+              <div class="aspira-bp-mk-tagline">Hair · Skin · Nails · Bridal</div>
+              <div class="aspira-bp-mk-btn">Book on WhatsApp →</div>
+            </div>
+            <div class="aspira-bp-mk-services">
+              <div class="aspira-bp-mk-service-chip">Haircut ₹299</div>
+              <div class="aspira-bp-mk-service-chip">Facial ₹599</div>
+              <div class="aspira-bp-mk-service-chip">Bridal ₹4999</div>
+            </div>
+            <div class="aspira-bp-mk-gallery">
+              <div class="aspira-bp-mk-img aspira-bp-mk-img-a"></div>
+              <div class="aspira-bp-mk-img aspira-bp-mk-img-b"></div>
+              <div class="aspira-bp-mk-img aspira-bp-mk-img-c"></div>
+            </div>
+          </div>
+        </div>
+        <div class="aspira-bp-card-label">
+          <strong>Salon &amp; Beauty</strong>
+          <span class="aspira-bp-feat-list">Booking · Gallery · Services · Location</span>
+        </div>
+      </div>
+
+      <!-- Mobile Shop Preview -->
+      <div class="aspira-bp-card">
+        <div class="aspira-bp-browser" aria-hidden="true">
+          <div class="aspira-bp-browser-bar"><span></span><span></span><span></span></div>
+          <div class="aspira-bp-mockup aspira-bp-mockup-mobile">
+            <div class="aspira-bp-mk-hero aspira-bp-mk-hero-mobile">
+              <div class="aspira-bp-mk-logo">📱 TechZone</div>
+              <div class="aspira-bp-mk-tagline">Mobiles · Repairs · Accessories</div>
+              <div class="aspira-bp-mk-btn aspira-bp-mk-btn-blue">Get Repair Quote →</div>
+            </div>
+            <div class="aspira-bp-mk-brands">
+              <div class="aspira-bp-mk-brand">Samsung</div>
+              <div class="aspira-bp-mk-brand">Apple</div>
+              <div class="aspira-bp-mk-brand">OnePlus</div>
+              <div class="aspira-bp-mk-brand">Xiaomi</div>
+            </div>
+            <div class="aspira-bp-mk-repair-box">
+              <div class="aspira-bp-mk-repair-title">Screen Replacement from ₹599</div>
+              <div class="aspira-bp-mk-repair-sub">Same day repair · 3 month warranty</div>
+            </div>
+          </div>
+        </div>
+        <div class="aspira-bp-card-label">
+          <strong>Mobile Shop</strong>
+          <span class="aspira-bp-feat-list">Brands · Repairs · Offers · Enquiry</span>
+        </div>
+      </div>
+
+      <!-- Supermarket Preview -->
+      <div class="aspira-bp-card">
+        <div class="aspira-bp-browser" aria-hidden="true">
+          <div class="aspira-bp-browser-bar"><span></span><span></span><span></span></div>
+          <div class="aspira-bp-mockup aspira-bp-mockup-super">
+            <div class="aspira-bp-mk-hero aspira-bp-mk-hero-super">
+              <div class="aspira-bp-mk-logo">🛒 FreshMart</div>
+              <div class="aspira-bp-mk-tagline">Groceries · Delivery · Fresh Daily</div>
+              <div class="aspira-bp-mk-btn aspira-bp-mk-btn-orange">Order on WhatsApp →</div>
+            </div>
+            <div class="aspira-bp-mk-offer-banner">
+              🏷 This Week: 20% off Fresh Vegetables
+            </div>
+            <div class="aspira-bp-mk-categories">
+              <div class="aspira-bp-mk-cat">🥦 Vegetables</div>
+              <div class="aspira-bp-mk-cat">🍎 Fruits</div>
+              <div class="aspira-bp-mk-cat">🥛 Dairy</div>
+              <div class="aspira-bp-mk-cat">🧴 Personal Care</div>
+            </div>
+          </div>
+        </div>
+        <div class="aspira-bp-card-label">
+          <strong>Supermarket</strong>
+          <span class="aspira-bp-feat-list">Offers · Categories · Order · Delivery</span>
+        </div>
+      </div>
+
+    </div>
+    <p class="aspira-bp-note">All websites include WhatsApp integration, mobile optimisation, and Google Maps. Built and ready in 3–5 days.</p>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 5: Your Space — fill blank bottom with real content
+     ──────────────────────────────────────────────────────────── -->
+<section id="aspira-yourspace-content" class="aspira-ysc-section" aria-label="Your Space — what you get">
+  <div class="aspira-ysc-container">
+    <div class="aspira-ysc-header">
+      <span class="aspira-ysc-eyebrow">How it works after your check</span>
+      <h2 class="aspira-ysc-title">Your Space — what you actually receive</h2>
+    </div>
+
+    <div class="aspira-ysc-timeline">
+      <div class="aspira-ysc-step">
+        <div class="aspira-ysc-step-num" aria-hidden="true">1</div>
+        <div class="aspira-ysc-step-body">
+          <h3 class="aspira-ysc-step-title">Your report arrives on WhatsApp</h3>
+          <p class="aspira-ysc-step-desc">Within 24 hours of your clarity check, you receive a personalised PDF-style report shared directly on WhatsApp. It covers your readiness score, what's working, and every gap we found — in plain language.</p>
+          <div class="aspira-ysc-example-card">
+            <div class="aspira-ysc-ex-label">Example report excerpt:</div>
+            <div class="aspira-ysc-ex-body">
+              <p><strong>📊 Your Readiness Score: 64%</strong></p>
+              <p>✅ <em>Working:</em> Strong experience depth, measurable results in 3 of 5 roles</p>
+              <p>⚠️ <em>Missing:</em> No positioning headline, LinkedIn not aligned, no portfolio link</p>
+              <p>➡️ <em>Priority fix:</em> Rewrite your top-of-resume headline to lead with your specialisation and sector</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aspira-ysc-step">
+        <div class="aspira-ysc-step-num" aria-hidden="true">2</div>
+        <div class="aspira-ysc-step-body">
+          <h3 class="aspira-ysc-step-title">Your action list — specific, prioritised</h3>
+          <p class="aspira-ysc-step-desc">Every report includes a prioritised action list. Not generic advice — specific changes written for your profile. The highest-impact fix is always listed first.</p>
+          <ol class="aspira-ysc-action-list">
+            <li><strong>Rewrite headline</strong> — Add role + sector + years in one clear line</li>
+            <li><strong>Convert 4 task bullets to impact statements</strong> — Include one number each</li>
+            <li><strong>Update LinkedIn About section</strong> — Match your new resume positioning</li>
+            <li><strong>Add LinkedIn URL to resume header</strong> — Currently missing</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="aspira-ysc-step">
+        <div class="aspira-ysc-step-num" aria-hidden="true">3</div>
+        <div class="aspira-ysc-step-body">
+          <h3 class="aspira-ysc-step-title">Your progress — re-check as you improve</h3>
+          <p class="aspira-ysc-step-desc">Once you've made changes, run another clarity check. We track your score across sessions so you can see exactly how much your profile has improved — and what's left to fix.</p>
+          <div class="aspira-ysc-progress-eg" aria-label="Example progress over time">
+            <div class="aspira-ysc-prog-row">
+              <span class="aspira-ysc-prog-label">Check 1 (before)</span>
+              <div class="aspira-ysc-prog-bar"><div class="aspira-ysc-prog-fill" style="width:41%"></div></div>
+              <span class="aspira-ysc-prog-pct">41%</span>
+            </div>
+            <div class="aspira-ysc-prog-row">
+              <span class="aspira-ysc-prog-label">Check 2 (2 weeks later)</span>
+              <div class="aspira-ysc-prog-bar"><div class="aspira-ysc-prog-fill" style="width:67%"></div></div>
+              <span class="aspira-ysc-prog-pct">67%</span>
+            </div>
+            <div class="aspira-ysc-prog-row">
+              <span class="aspira-ysc-prog-label">Check 3 (1 month later)</span>
+              <div class="aspira-ysc-prog-bar"><div class="aspira-ysc-prog-fill aspira-ysc-prog-fill-green" style="width:89%"></div></div>
+              <span class="aspira-ysc-prog-pct">89%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────────────────────
+     FIX 6: Real gap analysis on submit — replaces WA redirect
+     Intercepts the WA open, shows real analysis in-page first,
+     then gives option to continue on WA with the full report
+     ──────────────────────────────────────────────────────────── -->
+<div id="aspira-gap-modal" class="aspira-gap-overlay" role="dialog" aria-modal="true" aria-label="Your gap analysis" aria-hidden="true">
+  <div class="aspira-gap-backdrop" id="aspira-gap-backdrop"></div>
+  <div class="aspira-gap-window" id="aspira-gap-window">
+    <div class="aspira-gap-header">
+      <div>
+        <div class="aspira-gap-header-title">Your Clarity Report</div>
+        <div class="aspira-gap-header-sub" id="aspira-gap-score-headline">Analysing your profile…</div>
+      </div>
+      <button type="button" class="aspira-gap-close" id="aspira-gap-close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Score ring -->
+    <div class="aspira-gap-score-area">
+      <div class="aspira-gap-ring-wrap">
+        <svg class="aspira-gap-ring-svg" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="42" stroke="rgba(168,197,172,0.2)" stroke-width="6"/>
+          <circle class="aspira-gap-ring-arc" cx="50" cy="50" r="42" stroke="#6b8f71" stroke-width="6" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 50 50)"/>
+        </svg>
+        <div class="aspira-gap-ring-inner">
+          <span class="aspira-gap-ring-num" id="aspira-gap-ring-num">0%</span>
+          <span class="aspira-gap-ring-lbl">readiness</span>
+        </div>
+      </div>
+      <div class="aspira-gap-score-meta">
+        <div class="aspira-gap-tier" id="aspira-gap-tier"></div>
+        <p class="aspira-gap-score-desc" id="aspira-gap-score-desc"></p>
+        <div class="aspira-gap-sub-bars" id="aspira-gap-sub-bars"></div>
+      </div>
+    </div>
+
+    <!-- Results panels -->
+    <div class="aspira-gap-panels">
+      <div class="aspira-gap-panel">
+        <div class="aspira-gap-panel-title aspira-gap-title-green">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#6b8f71" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          What's Working
+        </div>
+        <ul class="aspira-gap-list" id="aspira-gap-working"></ul>
+      </div>
+      <div class="aspira-gap-panel">
+        <div class="aspira-gap-panel-title aspira-gap-title-amber">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#c89a3a" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M7 4.5v3M7 9v.5"/></svg>
+          Gaps Found
+        </div>
+        <ul class="aspira-gap-list" id="aspira-gap-missing"></ul>
+      </div>
+    </div>
+
+    <!-- Next steps -->
+    <div class="aspira-gap-next" id="aspira-gap-next-wrap">
+      <div class="aspira-gap-next-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#5a7ab4" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+        Prioritised action plan
+      </div>
+      <ol class="aspira-gap-next-list" id="aspira-gap-next-list"></ol>
+    </div>
+
+    <!-- CTA -->
+    <div class="aspira-gap-footer">
+      <p class="aspira-gap-footer-note">Want the full written report? We'll send it on WhatsApp within 24 hours.</p>
+      <a id="aspira-gap-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="aspira-gap-wa-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Send me the full report on WhatsApp
+      </a>
+      <p class="aspira-gap-transparency">Score based on structure, clarity, and keyword alignment — not a guarantee of outcomes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FIX CSS — all new enhancements                               -->
+<!-- ============================================================ -->
+<style>
+
+  /* ╔══ REAL BEFORE/AFTER ══════════════════════════════════════╗ */
+  .aspira-rba-section { position:relative; z-index:1; padding:100px 0 80px; background:linear-gradient(180deg,transparent,rgba(232,240,233,0.15),transparent); }
+  .aspira-rba-container { max-width:1100px; margin:0 auto; padding:0 32px; }
+  .aspira-rba-header { text-align:center; margin-bottom:40px; }
+  .aspira-rba-eyebrow { display:inline-block; font-family:'DM Sans',sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:#6b8f71; font-weight:500; margin-bottom:12px; }
+  .aspira-rba-title { font-family:'Playfair Display',serif!important; font-size:clamp(1.7rem,3vw,2.4rem)!important; font-weight:500!important; color:#2c2c2a!important; line-height:1.2!important; margin-bottom:10px!important; opacity:1!important; transform:none!important; animation:none!important; }
+  .aspira-rba-sub { font-family:'DM Sans',sans-serif; font-size:.92rem; color:#8a8a85; font-weight:300; }
+
+  /* Tabs */
+  .aspira-rba-tabs { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:28px; }
+  .aspira-rba-tab { font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:400; padding:7px 18px; border-radius:100px; border:1.5px solid rgba(0,0,0,0.1); background:rgba(255,255,255,0.7); color:#8a8a85; cursor:pointer; transition:all .25s ease; -webkit-appearance:none; appearance:none; }
+  .aspira-rba-tab:hover { border-color:#a8c5ac; color:#4a7050; background:rgba(232,240,233,0.5); }
+  .aspira-rba-tab.aspira-rba-tab-active { background:#6b8f71; color:#fff; border-color:#6b8f71; font-weight:500; }
+
+  /* Panels */
+  .aspira-rba-panel { display:none; }
+  .aspira-rba-panel.aspira-rba-panel-active { display:block; animation:aspiraRbaFadeIn .35s ease both; }
+  @keyframes aspiraRbaFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+  /* Pair layout */
+  .aspira-rba-pair { display:grid; grid-template-columns:1fr auto 1fr; gap:0 20px; align-items:start; }
+  .aspira-rba-card { background:rgba(255,255,255,.82); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-radius:18px; padding:24px; display:flex; flex-direction:column; gap:16px; }
+  .aspira-rba-before-card { border:1.5px solid rgba(184,90,58,.18); box-shadow:0 4px 20px rgba(184,90,58,.06); }
+  .aspira-rba-after-card  { border:1.5px solid rgba(107,143,113,.25); box-shadow:0 4px 20px rgba(107,143,113,.1); }
+  .aspira-rba-tag-row { display:flex; }
+  .aspira-rba-badge { display:inline-flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif; font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.09em; padding:3px 12px; border-radius:100px; }
+  .aspira-rba-badge-before { background:rgba(184,90,58,.1); color:#b85a3a; }
+  .aspira-rba-badge-after  { background:rgba(107,143,113,.12); color:#4a7050; }
+
+  /* Resume doc */
+  .aspira-rba-resume-doc { background:rgba(250,249,246,.9); border:1px solid rgba(0,0,0,.06); border-radius:10px; padding:14px 16px; font-family:'DM Sans',sans-serif; font-size:.78rem; color:#2c2c2a; }
+  .aspira-rba-name-line { font-weight:700; font-size:.88rem; margin-bottom:2px; }
+  .aspira-rba-role-line { font-weight:300; color:#8a8a85; font-size:.75rem; margin-bottom:6px; }
+  .aspira-rba-role-after { color:#6b8f71; font-weight:500; }
+  .aspira-rba-contact-after { font-size:.68rem; color:#6b8f71; margin-bottom:8px; }
+  .aspira-rba-section-title { font-weight:700; font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:#4a4a47; border-bottom:1px solid rgba(0,0,0,.07); padding-bottom:4px; margin:8px 0 6px; }
+  .aspira-rba-company { font-size:.72rem; color:#4a4a47; font-weight:500; margin-bottom:5px; }
+  .aspira-rba-bullets { list-style:none; display:flex; flex-direction:column; gap:4px; padding:0; margin:0; }
+  .aspira-rba-bullets li { font-size:.72rem; line-height:1.5; padding-left:10px; position:relative; }
+  .aspira-rba-bullets li::before { content:''; position:absolute; left:0; top:6px; width:4px; height:4px; border-radius:50%; }
+  .aspira-rba-bullets-bad li { color:#8a8a85; }
+  .aspira-rba-bullets-bad li::before { background:#d0a0a0; }
+  .aspira-rba-bullets-good li { color:#2c2c2a; }
+  .aspira-rba-bullets-good li::before { background:#6b8f71; }
+  .aspira-rba-skills-line { font-size:.7rem; color:#6a6a65; margin-top:4px; }
+
+  /* Problem list */
+  .aspira-rba-problem-list { list-style:none; display:flex; flex-direction:column; gap:7px; padding:0; margin:0; }
+  .aspira-rba-problem-item { font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:300; display:flex; align-items:flex-start; gap:7px; line-height:1.45; }
+  .aspira-rba-problem-item.bad  { color:#b85a3a; }
+  .aspira-rba-problem-item.bad::before  { content:'✗'; font-weight:600; flex-shrink:0; }
+  .aspira-rba-problem-item.good { color:#4a7050; }
+  .aspira-rba-problem-item.good::before { content:'✓'; font-weight:600; flex-shrink:0; }
+
+  /* Arrow col */
+  .aspira-rba-arrow-col { display:flex; align-items:center; justify-content:center; padding-top:60px; }
+  .aspira-rba-arrow-icon { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#6b8f71,#5a7a60); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1rem; box-shadow:0 4px 14px rgba(107,143,113,.3); }
+
+  .dark-mode .aspira-rba-card { background:rgba(30,30,36,.85); }
+  .dark-mode .aspira-rba-before-card { border-color:rgba(184,90,58,.12); }
+  .dark-mode .aspira-rba-after-card  { border-color:rgba(107,143,113,.2); }
+  .dark-mode .aspira-rba-resume-doc  { background:rgba(22,22,26,.7); border-color:rgba(255,255,255,.06); }
+  .dark-mode .aspira-rba-name-line { color:#eaeae6; }
+  .dark-mode .aspira-rba-title { color:#eaeae6!important; }
+  .dark-mode .aspira-rba-tab { background:rgba(30,30,36,.8); border-color:rgba(255,255,255,.09); color:#7a7a76; }
+
+  @media(max-width:780px){
+    .aspira-rba-pair { grid-template-columns:1fr; gap:16px; }
+    .aspira-rba-arrow-col { padding-top:0; }
+    .aspira-rba-arrow-icon { transform:rotate(90deg); }
+    .aspira-rba-container { padding:0 20px; }
+    .aspira-rba-section { padding:60px 0; }
+  }
+
+  /* ╔══ RESUME SAMPLES ═════════════════════════════════════════╗ */
+  .aspira-smp-section { position:relative; z-index:1; padding:100px 0 120px; }
+  .aspira-smp-container { max-width:1100px; margin:0 auto; padding:0 32px; }
+  .aspira-smp-header { text-align:center; margin-bottom:48px; }
+  .aspira-smp-eyebrow { display:inline-block; font-family:'DM Sans',sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:#6b8f71; font-weight:500; margin-bottom:12px; }
+  .aspira-smp-title { font-family:'Playfair Display',serif!important; font-size:clamp(1.7rem,3vw,2.4rem)!important; font-weight:500!important; color:#2c2c2a!important; line-height:1.2!important; margin-bottom:10px!important; opacity:1!important; transform:none!important; animation:none!important; }
+  .aspira-smp-sub { font-family:'DM Sans',sans-serif; font-size:.92rem; color:#8a8a85; font-weight:300; }
+
+  .aspira-smp-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  .aspira-smp-card { background:rgba(255,255,255,.78); border:1.5px solid rgba(0,0,0,.07); border-radius:18px; padding:22px; transition:box-shadow .3s ease,transform .3s cubic-bezier(.23,1,.32,1); cursor:pointer; }
+  .aspira-smp-card:hover { box-shadow:0 12px 40px rgba(0,0,0,.08); transform:translateY(-3px); border-color:rgba(107,143,113,.25); }
+  .aspira-smp-card:focus-visible { outline:2px solid #6b8f71; outline-offset:3px; }
+  .aspira-smp-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .aspira-smp-role-badge { font-family:'DM Sans',sans-serif; font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.09em; padding:3px 10px; border-radius:100px; background:rgba(107,143,113,.1); color:#4a7050; }
+  .aspira-smp-badge-blue   { background:rgba(90,122,180,.1); color:#3d5a94; }
+  .aspira-smp-badge-amber  { background:rgba(200,154,58,.1); color:#996a10; }
+  .aspira-smp-badge-purple { background:rgba(120,80,160,.1); color:#5a3a90; }
+  .aspira-smp-badge-teal   { background:rgba(40,160,160,.1); color:#1a8080; }
+  .aspira-smp-badge-pink   { background:rgba(200,80,120,.1); color:#a03060; }
+  .aspira-smp-badge-slate  { background:rgba(80,100,130,.1); color:#3a5070; }
+  .aspira-smp-badge-orange { background:rgba(200,120,40,.1); color:#904000; }
+
+  .aspira-smp-expand-btn { font-family:'DM Sans',sans-serif; font-size:.75rem; color:#6b8f71; background:none; border:none; cursor:pointer; padding:0; -webkit-appearance:none; appearance:none; font-weight:500; }
+  .aspira-smp-expand-btn:hover { color:#4a7050; }
+  .aspira-smp-preview { font-family:'DM Sans',sans-serif; font-size:.85rem; color:#4a4a47; font-weight:300; }
+  .aspira-smp-preview strong { font-weight:600; color:#2c2c2a; }
+
+  .aspira-smp-body { margin-top:14px; border-top:1px solid rgba(0,0,0,.06); padding-top:14px; }
+  .aspira-smp-text { font-family:'DM Sans',sans-serif; font-size:.73rem; line-height:1.65; color:#2c2c2a; white-space:pre-wrap; word-break:break-word; background:rgba(250,249,246,.8); border:1px solid rgba(0,0,0,.06); border-radius:10px; padding:14px; margin:0; overflow:auto; max-height:380px; }
+
+  .dark-mode .aspira-smp-card { background:rgba(30,30,36,.82); border-color:rgba(255,255,255,.07); }
+  .dark-mode .aspira-smp-card:hover { border-color:rgba(107,143,113,.25); }
+  .dark-mode .aspira-smp-preview { color:#c0c0bb; }
+  .dark-mode .aspira-smp-preview strong { color:#eaeae6; }
+  .dark-mode .aspira-smp-text { background:rgba(22,22,26,.7); border-color:rgba(255,255,255,.06); color:#c0c0bb; }
+  .dark-mode .aspira-smp-title { color:#eaeae6!important; }
+  .dark-mode .aspira-smp-body { border-top-color:rgba(255,255,255,.07); }
+
+  @media(max-width:680px){ .aspira-smp-grid{grid-template-columns:1fr;} .aspira-smp-container{padding:0 20px;} .aspira-smp-section{padding:60px 0 80px;} }
+
+  /* ╔══ WEBSITE PREVIEWS ═══════════════════════════════════════╗ */
+  .aspira-bp-section { position:relative; z-index:1; padding:100px 0 120px; background:linear-gradient(180deg,transparent,rgba(230,221,208,.12),transparent); }
+  .aspira-bp-container { max-width:1060px; margin:0 auto; padding:0 32px; }
+  .aspira-bp-header { text-align:center; margin-bottom:48px; }
+  .aspira-bp-eyebrow { display:inline-block; font-family:'DM Sans',sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:#6b8f71; font-weight:500; margin-bottom:12px; }
+  .aspira-bp-title { font-family:'Playfair Display',serif!important; font-size:clamp(1.7rem,3vw,2.4rem)!important; font-weight:500!important; color:#2c2c2a!important; line-height:1.2!important; margin-bottom:10px!important; opacity:1!important; transform:none!important; animation:none!important; }
+  .aspira-bp-sub { font-family:'DM Sans',sans-serif; font-size:.92rem; color:#8a8a85; font-weight:300; }
+  .aspira-bp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:32px; }
+  .aspira-bp-card { display:flex; flex-direction:column; gap:0; }
+  .aspira-bp-browser { border-radius:14px; overflow:hidden; border:1.5px solid rgba(0,0,0,.09); box-shadow:0 8px 32px rgba(0,0,0,.08); background:#f0f0ee; transition:transform .35s cubic-bezier(.23,1,.32,1),box-shadow .35s; }
+  .aspira-bp-card:hover .aspira-bp-browser { transform:translateY(-4px); box-shadow:0 20px 48px rgba(0,0,0,.12); }
+  .aspira-bp-browser-bar { display:flex; gap:5px; padding:8px 12px; background:#e8e8e6; }
+  .aspira-bp-browser-bar span { width:8px; height:8px; border-radius:50%; background:#c0c0bc; }
+  .aspira-bp-browser-bar span:nth-child(1){background:#f28b7e;} .aspira-bp-browser-bar span:nth-child(2){background:#f9bf6e;} .aspira-bp-browser-bar span:nth-child(3){background:#7acc7a;}
+
+  /* Mockup base */
+  .aspira-bp-mockup { padding:0; overflow:hidden; }
+
+  /* Salon */
+  .aspira-bp-mk-hero-salon { background:linear-gradient(135deg,#3a5a44,#6b8f71); padding:20px 16px 16px; }
+  .aspira-bp-mk-hero-mobile { background:linear-gradient(135deg,#2a3a6a,#4a6ab4); padding:20px 16px 16px; }
+  .aspira-bp-mk-hero-super  { background:linear-gradient(135deg,#7a4a10,#c07830); padding:20px 16px 16px; }
+  .aspira-bp-mk-logo { font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:700; color:#fff; margin-bottom:3px; }
+  .aspira-bp-mk-tagline { font-family:'DM Sans',sans-serif; font-size:.68rem; color:rgba(255,255,255,.75); margin-bottom:10px; }
+  .aspira-bp-mk-btn { display:inline-block; background:rgba(255,255,255,.2); color:#fff; font-family:'DM Sans',sans-serif; font-size:.65rem; font-weight:600; padding:5px 12px; border-radius:100px; border:1px solid rgba(255,255,255,.4); }
+  .aspira-bp-mk-btn-blue   { background:rgba(255,255,255,.2); }
+  .aspira-bp-mk-btn-orange { background:rgba(255,255,255,.2); }
+
+  .aspira-bp-mk-services { display:flex; gap:6px; padding:10px 16px; flex-wrap:wrap; background:#fff; }
+  .aspira-bp-mk-service-chip { font-family:'DM Sans',sans-serif; font-size:.62rem; background:rgba(107,143,113,.1); color:#4a7050; padding:3px 8px; border-radius:100px; font-weight:500; }
+
+  .aspira-bp-mk-gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; background:#fff; padding:3px 0 0; }
+  .aspira-bp-mk-img { height:40px; border-radius:4px; }
+  .aspira-bp-mk-img-a { background:linear-gradient(135deg,#c8e0ca,#8ab890); }
+  .aspira-bp-mk-img-b { background:linear-gradient(135deg,#e8c0d0,#c07090); }
+  .aspira-bp-mk-img-c { background:linear-gradient(135deg,#c0d0e8,#708aaa); }
+
+  .aspira-bp-mk-brands { display:flex; gap:6px; padding:10px 16px; flex-wrap:wrap; background:#fff; }
+  .aspira-bp-mk-brand { font-family:'DM Sans',sans-serif; font-size:.62rem; background:rgba(90,122,180,.08); color:#3d5a94; padding:3px 8px; border-radius:100px; font-weight:600; }
+
+  .aspira-bp-mk-repair-box { background:#f0f5ff; margin:0 0 0; padding:10px 16px; }
+  .aspira-bp-mk-repair-title { font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:600; color:#2c2c2a; }
+  .aspira-bp-mk-repair-sub   { font-family:'DM Sans',sans-serif; font-size:.62rem; color:#8a8a85; margin-top:2px; }
+
+  .aspira-bp-mk-offer-banner { background:#fff8e6; border-left:3px solid #c89a3a; padding:7px 14px; font-family:'DM Sans',sans-serif; font-size:.68rem; color:#996a10; font-weight:500; }
+  .aspira-bp-mk-categories { display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:8px 10px 10px; background:#fff; }
+  .aspira-bp-mk-cat { font-family:'DM Sans',sans-serif; font-size:.65rem; background:#f5f3ee; color:#4a4a47; padding:5px 8px; border-radius:8px; text-align:center; }
+
+  .aspira-bp-card-label { padding:12px 4px 0; }
+  .aspira-bp-card-label strong { display:block; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; color:#2c2c2a; margin-bottom:3px; }
+  .aspira-bp-feat-list { font-family:'DM Sans',sans-serif; font-size:.73rem; color:#8a8a85; font-weight:300; }
+  .aspira-bp-note { font-family:'DM Sans',sans-serif; font-size:.78rem; color:#b5b5af; font-weight:300; text-align:center; font-style:italic; }
+
+  .dark-mode .aspira-bp-title { color:#eaeae6!important; }
+  .dark-mode .aspira-bp-browser { border-color:rgba(255,255,255,.08); }
+  .dark-mode .aspira-bp-card-label strong { color:#c0c0bb; }
+
+  @media(max-width:760px){ .aspira-bp-grid{grid-template-columns:1fr;} .aspira-bp-container{padding:0 20px;} .aspira-bp-section{padding:60px 0 80px;} }
+
+  /* ╔══ YOUR SPACE CONTENT ═════════════════════════════════════╗ */
+  .aspira-ysc-section { position:relative; z-index:1; padding:100px 0 120px; }
+  .aspira-ysc-container { max-width:760px; margin:0 auto; padding:0 32px; }
+  .aspira-ysc-header { text-align:center; margin-bottom:56px; }
+  .aspira-ysc-eyebrow { display:inline-block; font-family:'DM Sans',sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:#6b8f71; font-weight:500; margin-bottom:12px; }
+  .aspira-ysc-title { font-family:'Playfair Display',serif!important; font-size:clamp(1.7rem,3vw,2.4rem)!important; font-weight:500!important; color:#2c2c2a!important; line-height:1.25!important; opacity:1!important; transform:none!important; animation:none!important; }
+
+  .aspira-ysc-timeline { display:flex; flex-direction:column; gap:0; }
+  .aspira-ysc-step { display:grid; grid-template-columns:40px 1fr; gap:0 20px; padding-bottom:40px; position:relative; }
+  .aspira-ysc-step:not(:last-child)::before { content:''; position:absolute; left:19px; top:40px; bottom:0; width:1.5px; background:linear-gradient(180deg,rgba(107,143,113,.3),transparent); }
+  .aspira-ysc-step-num { width:40px; height:40px; border-radius:50%; background:#6b8f71; color:#fff; font-family:'Playfair Display',serif; font-size:1rem; font-weight:500; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 4px 14px rgba(107,143,113,.3); }
+  .aspira-ysc-step-title { font-family:'DM Sans',sans-serif!important; font-size:1.05rem!important; font-weight:600!important; color:#2c2c2a!important; margin-bottom:10px!important; line-height:1.3!important; opacity:1!important; transform:none!important; animation:none!important; }
+  .aspira-ysc-step-desc { font-family:'DM Sans',sans-serif; font-size:.88rem; color:#6a6a65; font-weight:300; line-height:1.75; margin-bottom:16px; }
+
+  .aspira-ysc-example-card { background:rgba(232,240,233,.5); border:1px solid rgba(107,143,113,.2); border-radius:12px; padding:14px 16px; }
+  .aspira-ysc-ex-label { font-family:'DM Sans',sans-serif; font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#6b8f71; margin-bottom:8px; }
+  .aspira-ysc-ex-body p { font-family:'DM Sans',sans-serif; font-size:.8rem; line-height:1.6; color:#2c2c2a; margin-bottom:4px; }
+  .aspira-ysc-ex-body p:last-child { margin-bottom:0; }
+
+  .aspira-ysc-action-list { list-style:none; display:flex; flex-direction:column; gap:9px; padding:0; margin:0; counter-reset:aspira-action; }
+  .aspira-ysc-action-list li { font-family:'DM Sans',sans-serif; font-size:.86rem; color:#4a4a47; font-weight:300; display:flex; gap:10px; align-items:flex-start; line-height:1.5; counter-increment:aspira-action; }
+  .aspira-ysc-action-list li::before { content:counter(aspira-action); min-width:20px; height:20px; border-radius:50%; background:#6b8f71; color:#fff; font-size:.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .aspira-ysc-action-list li strong { font-weight:600; color:#2c2c2a; }
+
+  .aspira-ysc-progress-eg { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+  .aspira-ysc-prog-row { display:flex; align-items:center; gap:12px; }
+  .aspira-ysc-prog-label { font-family:'DM Sans',sans-serif; font-size:.75rem; color:#8a8a85; font-weight:300; min-width:160px; }
+  .aspira-ysc-prog-bar { flex:1; height:7px; background:rgba(0,0,0,.06); border-radius:100px; overflow:hidden; }
+  .aspira-ysc-prog-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,#e8a090,#c07050); }
+  .aspira-ysc-prog-fill-green { background:linear-gradient(90deg,#a8c5ac,#6b8f71); }
+  .aspira-ysc-prog-pct { font-family:'Playfair Display',serif; font-size:.8rem; font-weight:500; color:#2c2c2a; min-width:30px; text-align:right; }
+
+  .dark-mode .aspira-ysc-title { color:#eaeae6!important; }
+  .dark-mode .aspira-ysc-step-title { color:#eaeae6!important; }
+  .dark-mode .aspira-ysc-step-desc { color:#8a8a85; }
+  .dark-mode .aspira-ysc-example-card { background:rgba(107,143,113,.08); border-color:rgba(107,143,113,.18); }
+  .dark-mode .aspira-ysc-ex-body p { color:#c0c0bb; }
+  .dark-mode .aspira-ysc-prog-bar { background:rgba(255,255,255,.07); }
+  .dark-mode .aspira-ysc-prog-pct { color:#eaeae6; }
+
+  @media(max-width:640px){ .aspira-ysc-section{padding:60px 0 80px;} .aspira-ysc-container{padding:0 20px;} .aspira-ysc-prog-label{min-width:120px;font-size:.68rem;} }
+
+  /* ╔══ GAP ANALYSIS MODAL ══════════════════════════════════════╗ */
+  .aspira-gap-overlay { position:fixed; inset:0; z-index:110000; display:flex; align-items:flex-end; justify-content:center; padding:0 0 0 0; pointer-events:none; opacity:0; transition:opacity .35s ease; }
+  @media(min-width:640px){ .aspira-gap-overlay{align-items:center;padding:24px;} }
+  .aspira-gap-overlay.aspira-gap-open { pointer-events:auto; opacity:1; }
+  .aspira-gap-backdrop { position:fixed; inset:0; background:rgba(22,22,20,.65); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); cursor:pointer; }
+  .aspira-gap-window { position:relative; z-index:1; background:rgba(250,249,246,.98); border-radius:24px 24px 0 0; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 -20px 60px rgba(0,0,0,.18); transform:translateY(40px); transition:transform .4s cubic-bezier(.23,1,.32,1); padding:0 0 28px; }
+  @media(min-width:640px){ .aspira-gap-window{border-radius:24px;max-width:680px;max-height:85vh;transform:scale(.95) translateY(20px);} }
+  .aspira-gap-overlay.aspira-gap-open .aspira-gap-window { transform:none; }
+
+  .aspira-gap-header { display:flex; align-items:flex-start; justify-content:space-between; padding:22px 24px 18px; border-bottom:1px solid rgba(0,0,0,.06); position:sticky; top:0; background:rgba(250,249,246,.98); backdrop-filter:blur(16px); z-index:2; }
+  .aspira-gap-header-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:500; color:#2c2c2a; }
+  .aspira-gap-header-sub { font-family:'DM Sans',sans-serif; font-size:.78rem; color:#6b8f71; font-weight:400; margin-top:3px; }
+  .aspira-gap-close { background:rgba(0,0,0,.06); border:none; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#4a4a47; transition:background .2s; flex-shrink:0; }
+  .aspira-gap-close:hover { background:rgba(0,0,0,.1); }
+
+  .aspira-gap-score-area { display:grid; grid-template-columns:100px 1fr; gap:20px; padding:20px 24px; align-items:center; }
+  .aspira-gap-ring-wrap { position:relative; width:100px; height:100px; }
+  .aspira-gap-ring-svg { width:100%; height:100%; }
+  .aspira-gap-ring-arc { transition:stroke-dashoffset 1.3s cubic-bezier(.23,1,.32,1); }
+  .aspira-gap-ring-inner { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .aspira-gap-ring-num { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:500; color:#2c2c2a; line-height:1; }
+  .aspira-gap-ring-lbl { font-family:'DM Sans',sans-serif; font-size:.6rem; color:#8a8a85; text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
+
+  .aspira-gap-tier { display:inline-block; font-family:'DM Sans',sans-serif; font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; padding:3px 10px; border-radius:100px; margin-bottom:6px; }
+  .aspira-gap-tier-low    { background:rgba(184,90,58,.1); color:#b85a3a; }
+  .aspira-gap-tier-mid    { background:rgba(200,154,58,.12); color:#996a10; }
+  .aspira-gap-tier-good   { background:rgba(107,143,113,.12); color:#4a7050; }
+  .aspira-gap-tier-strong { background:rgba(107,143,113,.18); color:#3a5e40; }
+  .aspira-gap-score-desc { font-family:'DM Sans',sans-serif; font-size:.8rem; color:#6a6a65; font-weight:300; line-height:1.6; margin-bottom:10px; }
+
+  .aspira-gap-sub-bars { display:flex; flex-direction:column; gap:7px; }
+  .aspira-gap-sub-bar-row { display:flex; flex-direction:column; gap:3px; }
+  .aspira-gap-sub-bar-meta { display:flex; justify-content:space-between; }
+  .aspira-gap-sub-bar-label { font-family:'DM Sans',sans-serif; font-size:.68rem; color:#8a8a85; font-weight:400; }
+  .aspira-gap-sub-bar-pct   { font-family:'DM Sans',sans-serif; font-size:.68rem; color:#4a4a47; font-weight:500; }
+  .aspira-gap-sub-track { height:5px; background:rgba(0,0,0,.06); border-radius:100px; overflow:hidden; }
+  .aspira-gap-sub-fill { height:100%; border-radius:100px; width:0%; transition:width 1.1s cubic-bezier(.23,1,.32,1); }
+  .aspira-gap-sub-fill-0 { background:linear-gradient(90deg,#a8c5ac,#6b8f71); }
+  .aspira-gap-sub-fill-1 { background:linear-gradient(90deg,#a0b8e0,#5a7ab4); }
+  .aspira-gap-sub-fill-2 { background:linear-gradient(90deg,#e0c898,#b48c5a); }
+
+  .aspira-gap-panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:0 24px 16px; }
+  .aspira-gap-panel { }
+  .aspira-gap-panel-title { font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:#2c2c2a; display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+  .aspira-gap-title-green { color:#4a7050; }
+  .aspira-gap-title-amber { color:#996a10; }
+  .aspira-gap-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px; }
+  .aspira-gap-list li { font-family:'DM Sans',sans-serif; font-size:.78rem; color:#4a4a47; font-weight:300; line-height:1.5; padding-left:10px; position:relative; }
+  .aspira-gap-list li::before { content:''; position:absolute; left:0; top:7px; width:4px; height:4px; border-radius:50%; }
+  .aspira-gap-list-working li::before { background:#6b8f71; }
+  .aspira-gap-list-missing li::before  { background:#c89a3a; }
+
+  .aspira-gap-next { padding:0 24px 16px; }
+  .aspira-gap-next-title { font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:#3d5a94; display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+  .aspira-gap-next-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; counter-reset:aspira-gap-counter; }
+  .aspira-gap-next-list li { font-family:'DM Sans',sans-serif; font-size:.8rem; color:#2c2c2a; font-weight:300; display:flex; gap:10px; align-items:flex-start; line-height:1.55; counter-increment:aspira-gap-counter; }
+  .aspira-gap-next-list li::before { content:counter(aspira-gap-counter); min-width:18px; height:18px; border-radius:50%; background:#5a7ab4; color:#fff; font-size:.6rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+  .aspira-gap-next-list li strong { font-weight:600; display:block; margin-bottom:1px; }
+
+  .aspira-gap-footer { padding:16px 24px 0; border-top:1px solid rgba(0,0,0,.06); margin-top:4px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+  .aspira-gap-footer-note { font-family:'DM Sans',sans-serif; font-size:.82rem; color:#8a8a85; font-weight:300; }
+  .aspira-gap-wa-btn { display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; padding:13px 32px; border-radius:100px; text-decoration:none; box-shadow:0 6px 20px rgba(37,211,102,.3); transition:background .3s,transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s; }
+  .aspira-gap-wa-btn:hover { background:#20b857; transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,211,102,.4); color:#fff; text-decoration:none; }
+  .aspira-gap-transparency { font-family:'DM Sans',sans-serif; font-size:.68rem; color:#c0c0bc; font-weight:300; font-style:italic; }
+
+  .dark-mode .aspira-gap-window { background:rgba(22,22,26,.98); }
+  .dark-mode .aspira-gap-header { background:rgba(22,22,26,.98); border-bottom-color:rgba(255,255,255,.07); }
+  .dark-mode .aspira-gap-header-title { color:#eaeae6; }
+  .dark-mode .aspira-gap-close { background:rgba(255,255,255,.07); color:#c0c0bb; }
+  .dark-mode .aspira-gap-ring-num { color:#eaeae6; }
+  .dark-mode .aspira-gap-sub-track { background:rgba(255,255,255,.07); }
+  .dark-mode .aspira-gap-list li { color:#c0c0bb; }
+  .dark-mode .aspira-gap-next-list li { color:#c0c0bb; }
+  .dark-mode .aspira-gap-footer { border-top-color:rgba(255,255,255,.07); }
+  .dark-mode .aspira-gap-score-desc { color:#8a8a85; }
+
+  @media(max-width:500px){ .aspira-gap-panels{grid-template-columns:1fr;} .aspira-gap-score-area{grid-template-columns:80px 1fr;gap:14px;} }
+
+</style>
+
+<!-- ============================================================ -->
+<!-- FIX JS — Samples expand, RBA tabs, Gap analysis modal        -->
+<!-- ============================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  /* ── RBA Tab switching ── */
+  var rbaTabBtns  = document.querySelectorAll('.aspira-rba-tab');
+  var rbaPanels   = document.querySelectorAll('.aspira-rba-panel');
+  rbaTabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var idx = btn.getAttribute('data-rba');
+      rbaTabBtns.forEach(function(b){ b.classList.remove('aspira-rba-tab-active'); b.setAttribute('aria-selected','false'); });
+      rbaPanels.forEach(function(p){ p.classList.remove('aspira-rba-panel-active'); });
+      btn.classList.add('aspira-rba-tab-active');
+      btn.setAttribute('aria-selected','true');
+      var panel = document.querySelector('[data-rba-panel="'+idx+'"]');
+      if(panel) panel.classList.add('aspira-rba-panel-active');
+    });
+  });
+
+  /* ── Sample expand/collapse ── */
+  document.querySelectorAll('.aspira-smp-expand-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var bodyId  = btn.getAttribute('aria-controls');
+      var bodyEl  = document.getElementById(bodyId);
+      var isOpen  = !bodyEl.hidden;
+      bodyEl.hidden = isOpen;
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      btn.textContent = isOpen ? 'View full sample ↓' : 'Collapse ↑';
+    });
+  });
+
+  /* ── Gap Analysis Modal ── */
+  var aspiraGapModal    = document.getElementById('aspira-gap-modal');
+  var aspiraGapClose    = document.getElementById('aspira-gap-close');
+  var aspiraGapBackdrop = document.getElementById('aspira-gap-backdrop');
+  var aspiraGapWaBtn    = document.getElementById('aspira-gap-wa-btn');
+  var aspiraGapRingNum  = document.getElementById('aspira-gap-ring-num');
+  var aspiraGapRingArc  = aspiraGapModal && aspiraGapModal.querySelector('.aspira-gap-ring-arc');
+  var aspiraGapTier     = document.getElementById('aspira-gap-tier');
+  var aspiraGapScoreH   = document.getElementById('aspira-gap-score-headline');
+  var aspiraGapDesc     = document.getElementById('aspira-gap-score-desc');
+  var aspiraGapSubBars  = document.getElementById('aspira-gap-sub-bars');
+  var aspiraGapWorking  = document.getElementById('aspira-gap-working');
+  var aspiraGapMissing  = document.getElementById('aspira-gap-missing');
+  var aspiraGapNextList = document.getElementById('aspira-gap-next-list');
+  var aspiraGapWaUrl    = '';
+
+  function aspiraGapOpen(result, waUrl, subs){
+    if(!aspiraGapModal) return;
+    aspiraGapWaUrl = waUrl || '';
+    if(aspiraGapWaBtn) aspiraGapWaBtn.href = aspiraGapWaUrl;
+
+    /* Score */
+    var sc = result.score || 0;
+    if(aspiraGapScoreH) aspiraGapScoreH.textContent = 'Your readiness: ' + sc + '%';
+
+    /* Tier */
+    var tierText = sc >= 80 ? 'Strong Profile' : sc >= 60 ? 'Good Foundation' : sc >= 40 ? 'Needs Work' : 'Getting Started';
+    var tierClass = sc >= 80 ? 'aspira-gap-tier-strong' : sc >= 60 ? 'aspira-gap-tier-good' : sc >= 40 ? 'aspira-gap-tier-mid' : 'aspira-gap-tier-low';
+    var tierDesc  = sc >= 80 ? 'Your profile is strong. A few refinements and you're ready.'
+                  : sc >= 60 ? 'Good foundation. Target the gaps below for best results.'
+                  : sc >= 40 ? 'Work needed in a few key areas. The fixes are clear.'
+                  : 'Your profile needs significant work — but every gap is fixable.';
+    if(aspiraGapTier){ aspiraGapTier.textContent = tierText; aspiraGapTier.className = 'aspira-gap-tier ' + tierClass; }
+    if(aspiraGapDesc) aspiraGapDesc.textContent = tierDesc;
+
+    /* Ring animation */
+    if(aspiraGapRingArc){
+      var circ = 264;
+      aspiraGapRingArc.style.strokeDashoffset = String(circ);
+      setTimeout(function(){
+        aspiraGapRingArc.style.strokeDashoffset = String(circ - (circ * sc / 100));
+      }, 80);
+    }
+    if(aspiraGapRingNum){
+      var sTime = null;
+      function countUp(ts){
+        if(!sTime) sTime = ts;
+        var p = Math.min((ts - sTime) / 1300, 1);
+        var e = 1 - Math.pow(1-p, 3);
+        aspiraGapRingNum.textContent = Math.round(e * sc) + '%';
+        if(p < 1) requestAnimationFrame(countUp);
+        else aspiraGapRingNum.textContent = sc + '%';
+      }
+      setTimeout(function(){ requestAnimationFrame(countUp); }, 80);
+    }
+
+    /* Sub bars */
+    if(aspiraGapSubBars && subs){
+      aspiraGapSubBars.innerHTML = '';
+      var subDefs = [
+        { label:'Profile Strength', key:'profile',     cls:'aspira-gap-sub-fill-0' },
+        { label:'Visibility',       key:'visibility',  cls:'aspira-gap-sub-fill-1' },
+        { label:'Positioning',      key:'positioning', cls:'aspira-gap-sub-fill-2' }
+      ];
+      subDefs.forEach(function(s, i){
+        var pct = subs[s.key] || 0;
+        var row = document.createElement('div');
+        row.className = 'aspira-gap-sub-bar-row';
+        row.innerHTML =
+          '<div class="aspira-gap-sub-bar-meta"><span class="aspira-gap-sub-bar-label">'+s.label+'</span><span class="aspira-gap-sub-bar-pct" id="aspira-gsb-pct-'+i+'">0%</span></div>' +
+          '<div class="aspira-gap-sub-track"><div class="aspira-gap-sub-fill '+s.cls+'" id="aspira-gsb-fill-'+i+'"></div></div>';
+        aspiraGapSubBars.appendChild(row);
+        var fillEl = document.getElementById('aspira-gsb-fill-'+i);
+        var pctEl  = document.getElementById('aspira-gsb-pct-'+i);
+        setTimeout(function(){
+          if(fillEl) fillEl.style.width = pct + '%';
+          if(pctEl){ var t=null; function c(ts){ if(!t)t=ts; var p2=Math.min((ts-t)/1100,1); pctEl.textContent=Math.round((1-Math.pow(1-p2,3))*pct)+'%'; if(p2<1)requestAnimationFrame(c); else pctEl.textContent=pct+'%'; } requestAnimationFrame(c); }
+        }, 150 + i * 120);
+      });
+    }
+
+    /* Working */
+    if(aspiraGapWorking){
+      aspiraGapWorking.className = 'aspira-gap-list aspira-gap-list-working';
+      aspiraGapWorking.innerHTML = '';
+      (result.working || []).forEach(function(item){
+        var li = document.createElement('li');
+        li.textContent = item;
+        aspiraGapWorking.appendChild(li);
+      });
+    }
+
+    /* Missing */
+    if(aspiraGapMissing){
+      aspiraGapMissing.className = 'aspira-gap-list aspira-gap-list-missing';
+      aspiraGapMissing.innerHTML = '';
+      (result.missing || []).forEach(function(item){
+        var li = document.createElement('li');
+        li.textContent = item;
+        aspiraGapMissing.appendChild(li);
+      });
+    }
+
+    /* Next steps */
+    if(aspiraGapNextList){
+      aspiraGapNextList.innerHTML = '';
+      (result.next || []).forEach(function(step){
+        var li = document.createElement('li');
+        li.innerHTML = '<strong>'+step.title+'</strong>' + step.body;
+        aspiraGapNextList.appendChild(li);
+      });
+    }
+
+    /* Show modal */
+    aspiraGapModal.classList.add('aspira-gap-open');
+    aspiraGapModal.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function aspiraGapCloseModal(){
+    if(!aspiraGapModal) return;
+    aspiraGapModal.classList.remove('aspira-gap-open');
+    aspiraGapModal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  if(aspiraGapClose)    aspiraGapClose.addEventListener('click', aspiraGapCloseModal);
+  if(aspiraGapBackdrop) aspiraGapBackdrop.addEventListener('click', aspiraGapCloseModal);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && aspiraGapModal && aspiraGapModal.classList.contains('aspira-gap-open')) aspiraGapCloseModal(); });
+
+  /* ── Intercept the existing aspiraProcessingShow ──
+     We patch window.aspiraProcessingShow AFTER it has been defined.
+     The original opens WA after 3.2s; we instead show our modal first
+     and let the user choose to open WA from inside it.              */
+  function aspiraGapPatchProcessing(){
+    var original = window.aspiraProcessingShow;
+    if(typeof original !== 'function') return;
+
+    window.aspiraProcessingShow = function(waUrl){
+      /* Run original animation (modal + 3 messages) but suppress WA open */
+      var patchedUrl = null;  /* pass null so original doesn't open WA */
+      original.call(this, patchedUrl);
+
+      /* After animation completes (~3.2s), show gap analysis modal */
+      setTimeout(function(){
+        var result = window.aspiraScrResult || (typeof aspiraScrScore === 'function' ? aspiraScrScore('','') : {score:0,working:[],missing:[],next:[]});
+        var subs   = window.aspiraSsbSubs   || null;
+        aspiraGapOpen(result, waUrl, subs);
+      }, 3400);
+    };
+  }
+
+  /* Try immediately then retry in case processing JS loads after this block */
+  if(window.aspiraProcessingShow) {
+    aspiraGapPatchProcessing();
+  } else {
+    var aspiraGapPatchTimer = setInterval(function(){
+      if(window.aspiraProcessingShow){ aspiraGapPatchProcessing(); clearInterval(aspiraGapPatchTimer); }
+    }, 100);
+  }
+
+})();
+</script>
+<!-- END FIX BLOCK -->
+
 </body>
 </html>
