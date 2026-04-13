@@ -13518,5 +13518,222 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Your Space JS -->
 
+
+<!-- ============================================================ -->
+<!-- INTELLIGENT WA FUNNEL — aspira-waf-*                         -->
+<!-- Builds dynamic personalised message from scoring output      -->
+<!-- Intercepts all WA CTAs after analysis — additive only        -->
+<!-- ============================================================ -->
+<style>
+  .aspira-waf-btn-upgraded { position:relative; overflow:hidden; }
+  .aspira-waf-btn-upgraded::before {
+    content:''; position:absolute; top:6px; right:8px;
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(255,255,255,0.7);
+    animation:aspiraWafPulse 2s ease-in-out infinite;
+  }
+  @keyframes aspiraWafPulse {
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:0.4;transform:scale(0.7);}
+  }
+  .aspira-waf-score-hint {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'DM Sans',sans-serif; font-size:0.72rem;
+    font-weight:400; color:#8a8a85; letter-spacing:0.02em;
+    transition:opacity 0.3s ease;
+  }
+  .aspira-waf-score-hint-pill {
+    background:rgba(107,143,113,0.1); border:1px solid rgba(107,143,113,0.2);
+    color:#4a7050; padding:2px 9px; border-radius:100px;
+    font-weight:600; font-size:0.7rem;
+  }
+  .aspira-waf-score-hint-pill-amber {
+    background:rgba(200,154,58,0.1); border-color:rgba(200,154,58,0.2); color:#996a10;
+  }
+  .aspira-waf-score-hint-pill-red {
+    background:rgba(184,90,58,0.1); border-color:rgba(184,90,58,0.2); color:#b85a3a;
+  }
+  .dark-mode .aspira-waf-score-hint { color:#6a6a65; }
+  .dark-mode .aspira-waf-score-hint-pill { background:rgba(107,143,113,0.12); border-color:rgba(107,143,113,0.18); }
+</style>
+
+<script>
+(function(){
+  'use strict';
+
+  var ASPIRA_WAF_BASE = 'https://wa.me/917550270450';
+
+  /* ══ MESSAGE BUILDER ══════════════════════════════════════════ */
+  function aspiraWafBuildMessage(context) {
+    context = context || 'general';
+    var r = window.aspiraScrResult;
+
+    if (!r || (!r.score && r.score !== 0)) {
+      var fb = {
+        'general': 'Hi, I would like to start with a Clarity Check on Aspira.',
+        'fix':     'Hi, I need help fixing my resume and improving my clarity score.',
+        'build':   'Hi, I want help building my professional presence.',
+        'talk':    'Hi, I would like to discuss improving my profile on Aspira.',
+        'report':  'Hi, I would like to receive my full clarity report.'
+      };
+      return fb[context] || fb['general'];
+    }
+
+    var score   = r.score    != null ? r.score   : null;
+    var jdMatch = r.jdMatch  != null ? r.jdMatch : null;
+    var gapLines = [];
+
+    /* Primary: use human-readable missing list from advanced scorer */
+    if (r.missing && r.missing.length > 0) {
+      r.missing.slice(0, 3).forEach(function(gap) {
+        var short = gap.length > 65 ? gap.substring(0, 62) + '…' : gap;
+        gapLines.push('- ' + short);
+      });
+    }
+
+    /* Fallback: use raw missing keywords */
+    if (gapLines.length === 0 && r.jdMatchResult && r.jdMatchResult.missing && r.jdMatchResult.missing.length > 0) {
+      gapLines.push('- Missing keywords: ' + r.jdMatchResult.missing.slice(0, 4).join(', '));
+    }
+
+    if (gapLines.length === 0) {
+      gapLines.push('- Profile needs structural improvements');
+      gapLines.push('- Need help with positioning and clarity');
+    }
+
+    var openers = {
+      'general': 'Hi, I checked my profile on Aspira.',
+      'fix':     'Hi, I checked my profile on Aspira and need help fixing these issues.',
+      'build':   'Hi, I checked my profile on Aspira. I want to build a stronger presence.',
+      'talk':    'Hi, I reviewed my Aspira clarity check and would like to discuss next steps.',
+      'report':  'Hi, I checked my profile on Aspira and would like the full written report.'
+    };
+
+    var parts = [];
+    parts.push(openers[context] || openers['general']);
+    parts.push('');
+
+    if (score !== null)   parts.push('My clarity score: ' + score + '%');
+    if (jdMatch !== null) parts.push('JD Match: ' + jdMatch + '%');
+
+    if (gapLines.length > 0) {
+      parts.push('');
+      parts.push('Main gaps:');
+      gapLines.forEach(function(l){ parts.push(l); });
+    }
+
+    parts.push('');
+    parts.push('I need help improving this.');
+
+    return parts.join('\n');
+  }
+
+  function aspiraWafUrl(context) {
+    return ASPIRA_WAF_BASE + '?text=' + encodeURIComponent(aspiraWafBuildMessage(context));
+  }
+
+  /* ══ LABEL BUILDER ════════════════════════════════════════════ */
+  function aspiraWafLabel(context, score) {
+    if (context === 'report') return 'Get Help Improving This';
+    if (context === 'fix')    return 'Fix These Gaps on WhatsApp';
+    if (context === 'build')  return 'Build My Presence on WhatsApp';
+    if (context === 'talk')   return 'Talk Through My Results';
+    if (score == null)        return 'Get Help Improving This';
+    if (score >= 75)          return 'Polish My Profile on WhatsApp';
+    if (score >= 50)          return 'Fix These Gaps on WhatsApp';
+    return 'Get Help Improving This';
+  }
+
+  /* ══ SCORE HINT ═══════════════════════════════════════════════ */
+  function aspiraWafBuildHint(r) {
+    if (!r || r.score == null) return null;
+    var hint = document.createElement('span');
+    hint.className = 'aspira-waf-score-hint';
+    var sc = r.score;
+    var sCls = sc >= 60 ? '' : sc >= 40 ? ' aspira-waf-score-hint-pill-amber' : ' aspira-waf-score-hint-pill-red';
+    hint.innerHTML = 'Score <span class="aspira-waf-score-hint-pill' + sCls + '">' + sc + '%</span>';
+    var jd = r.jdMatch;
+    if (jd != null) {
+      var jCls = jd >= 60 ? '' : jd >= 35 ? ' aspira-waf-score-hint-pill-amber' : ' aspira-waf-score-hint-pill-red';
+      hint.innerHTML += ' · JD Match <span class="aspira-waf-score-hint-pill' + jCls + '">' + jd + '%</span>';
+    }
+    return hint;
+  }
+
+  /* ══ PATCH ONE BUTTON ═════════════════════════════════════════ */
+  function aspiraWafPatchBtn(el, context, showHint) {
+    if (!el) return;
+    var r     = window.aspiraScrResult;
+    var score = r ? r.score : null;
+
+    /* Update href on anchor tags */
+    if (el.tagName === 'A') {
+      el.href = aspiraWafUrl(context);
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener noreferrer');
+    }
+
+    /* Update visible label text — replace text nodes only, preserve SVGs */
+    var newLabel = aspiraWafLabel(context, score);
+    Array.prototype.slice.call(el.childNodes).forEach(function(node) {
+      if (node.nodeType === 3 && node.textContent.trim().length > 2) {
+        node.textContent = ' ' + newLabel + ' ';
+      }
+    });
+
+    el.classList.add('aspira-waf-btn-upgraded');
+
+    /* Inject score hint line beneath anchor (once only) */
+    if (showHint && r && r.score != null && el.parentNode) {
+      var nextEl = el.nextElementSibling;
+      if (!nextEl || !nextEl.classList || !nextEl.classList.contains('aspira-waf-score-hint')) {
+        var hint = aspiraWafBuildHint(r);
+        if (hint) el.parentNode.insertBefore(hint, el.nextSibling);
+      }
+    }
+  }
+
+  /* ══ UPGRADE ALL WA CTÁS ══════════════════════════════════════ */
+  function aspiraWafUpgradeAll() {
+    if (!window.aspiraScrResult) return;
+
+    aspiraWafPatchBtn(document.getElementById('aspira-gap-wa-btn'),    'report', false);
+    aspiraWafPatchBtn(document.getElementById('aspira-act-btn-fix'),   'fix',    false);
+    aspiraWafPatchBtn(document.getElementById('aspira-act-btn-build'), 'build',  false);
+    aspiraWafPatchBtn(document.getElementById('aspira-act-btn-wa'),    'talk',   false);
+
+    var rfCta = document.querySelector('.aspira-rf-cta-btn');
+    if (rfCta) aspiraWafPatchBtn(rfCta, 'report', true);
+
+    var meActionBtn = document.querySelector('.aspira-me-action-btn');
+    if (meActionBtn) aspiraWafPatchBtn(meActionBtn, 'fix', false);
+  }
+
+  /* ══ TRIGGER HOOKS via MutationObserver ═══════════════════════ */
+  function aspiraWafObserve(elId, classToWatch, delay) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class' && el.classList.contains(classToWatch)) {
+          setTimeout(aspiraWafUpgradeAll, delay);
+        }
+      });
+    }).observe(el, { attributes: true });
+  }
+
+  aspiraWafObserve('aspira-gap-modal',   'aspira-gap-open',   250);
+  aspiraWafObserve('aspira-result-full', 'aspira-rf-visible',  600);
+  aspiraWafObserve('aspira-actions',     'aspira-act-visible', 200);
+
+  /* ══ EXPOSE GLOBALS ═══════════════════════════════════════════ */
+  window.aspiraWafUpgradeAll   = aspiraWafUpgradeAll;
+  window.aspiraWafBuildMessage = aspiraWafBuildMessage;
+  window.aspiraWafUrl          = aspiraWafUrl;
+
+})();
+</script>
+<!-- END: Intelligent WA Funnel -->
+
 </body>
 </html>
