@@ -12391,5 +12391,1132 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Match Engine JS -->
 
+
+<!-- ============================================================ -->
+<!-- FEATURE: Aspira Space — localStorage Account System          -->
+<!-- ID: aspira-space                                             -->
+<!-- Key: aspira_user_data                                        -->
+<!-- aspira-sp-* prefix — fully isolated, no external deps        -->
+<!-- ============================================================ -->
+
+<!-- ── Your Space Dashboard Section ── -->
+<section
+  id="aspira-space"
+  class="aspira-sp-section"
+  aria-label="Your Space — personal clarity dashboard"
+>
+  <div class="aspira-sp-container">
+
+    <!-- Header -->
+    <div class="aspira-sp-header">
+      <span class="aspira-sp-eyebrow">Saved to your device</span>
+      <h2 class="aspira-sp-title">Your Space</h2>
+      <p class="aspira-sp-sub">Your resume, scores, and analysis history — stored privately on this device. No account needed.</p>
+    </div>
+
+    <!-- ── LOGGED-IN STATE (has saved data) ── -->
+    <div id="aspira-sp-dashboard" class="aspira-sp-dashboard" hidden>
+
+      <!-- Welcome + status bar -->
+      <div class="aspira-sp-status-bar">
+        <div class="aspira-sp-status-left">
+          <div class="aspira-sp-avatar" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="7" r="3"/>
+              <path d="M4 18c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+            </svg>
+          </div>
+          <div>
+            <p class="aspira-sp-status-name" id="aspira-sp-name">Your Space</p>
+            <p class="aspira-sp-status-meta" id="aspira-sp-meta">Saved locally on this device</p>
+          </div>
+        </div>
+        <div class="aspira-sp-status-right">
+          <span class="aspira-sp-badge-saved" aria-label="Data saved">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5l2.5 2.5 4.5-4"/></svg>
+            Saved
+          </span>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="aspira-sp-stats" id="aspira-sp-stats">
+
+        <div class="aspira-sp-stat-card" id="aspira-sp-card-score">
+          <div class="aspira-sp-stat-icon aspira-sp-icon-sage" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="9" r="7"/>
+              <path d="M9 5v4l2.5 2"/>
+            </svg>
+          </div>
+          <span class="aspira-sp-stat-num" id="aspira-sp-last-score">—</span>
+          <span class="aspira-sp-stat-lbl">Last Readiness Score</span>
+          <div class="aspira-sp-mini-bar">
+            <div class="aspira-sp-mini-fill" id="aspira-sp-score-fill"></div>
+          </div>
+        </div>
+
+        <div class="aspira-sp-stat-card" id="aspira-sp-card-match">
+          <div class="aspira-sp-stat-icon aspira-sp-icon-blue" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9s2.5-5 6-5 6 5 6 5-2.5 5-6 5-6-5-6-5z"/>
+              <circle cx="9" cy="9" r="2"/>
+            </svg>
+          </div>
+          <span class="aspira-sp-stat-num" id="aspira-sp-last-match">—</span>
+          <span class="aspira-sp-stat-lbl">JD Match Score</span>
+          <div class="aspira-sp-mini-bar">
+            <div class="aspira-sp-mini-fill aspira-sp-fill-blue" id="aspira-sp-match-fill"></div>
+          </div>
+        </div>
+
+        <div class="aspira-sp-stat-card">
+          <div class="aspira-sp-stat-icon aspira-sp-icon-amber" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="2" width="10" height="13" rx="2"/>
+              <path d="M6 6h5M6 9h4M6 12h3"/>
+              <path d="M13 5l2 2v8a1 1 0 01-1 1h-1"/>
+            </svg>
+          </div>
+          <span class="aspira-sp-stat-num aspira-sp-stat-sm" id="aspira-sp-resume-words">—</span>
+          <span class="aspira-sp-stat-lbl">Resume words saved</span>
+        </div>
+
+        <div class="aspira-sp-stat-card">
+          <div class="aspira-sp-stat-icon aspira-sp-icon-sand" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="9" r="7"/>
+              <path d="M9 5v4l3 1.5"/>
+            </svg>
+          </div>
+          <span class="aspira-sp-stat-num aspira-sp-stat-sm" id="aspira-sp-last-date">—</span>
+          <span class="aspira-sp-stat-lbl">Last analysis</span>
+        </div>
+
+      </div><!-- /.aspira-sp-stats -->
+
+      <!-- Previous resume preview -->
+      <div class="aspira-sp-resume-preview" id="aspira-sp-resume-preview" hidden>
+        <div class="aspira-sp-preview-label">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="2" y="1.5" width="8" height="10" rx="1.5"/><path d="M4 4.5h5M4 6.5h4M4 8.5h3"/></svg>
+          Saved resume text
+          <button class="aspira-sp-preview-toggle" id="aspira-sp-preview-toggle" type="button" aria-expanded="false">
+            Show preview
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 4l3.5 3.5L9 4"/></svg>
+          </button>
+        </div>
+        <pre class="aspira-sp-preview-text" id="aspira-sp-preview-text" hidden></pre>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="aspira-sp-actions">
+
+        <button type="button" class="aspira-sp-btn aspira-sp-btn-primary" id="aspira-sp-rerun-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 8a6 6 0 1110.5-4.5"/>
+            <path d="M12 3.5V7h-3.5"/>
+          </svg>
+          Re-run Clarity Check
+        </button>
+
+        <button type="button" class="aspira-sp-btn aspira-sp-btn-secondary" id="aspira-sp-load-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 3v7M5 7l3 3 3-3"/>
+            <rect x="2" y="11" width="12" height="2" rx="1"/>
+          </svg>
+          Load saved resume into editor
+        </button>
+
+        <button type="button" class="aspira-sp-btn aspira-sp-btn-ghost" id="aspira-sp-clear-btn" aria-label="Clear saved data">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 4h10M5 4V3a1 1 0 012 0v1M10 4l-.7 7.5A1 1 0 018.3 12H5.7a1 1 0 01-1-.5L4 4"/>
+          </svg>
+          Clear saved data
+        </button>
+
+      </div>
+
+      <!-- Toast notification -->
+      <div class="aspira-sp-toast" id="aspira-sp-toast" aria-live="polite" aria-atomic="true" hidden></div>
+
+    </div><!-- /#aspira-sp-dashboard -->
+
+    <!-- ── EMPTY STATE (no saved data yet) ── -->
+    <div id="aspira-sp-empty" class="aspira-sp-empty">
+
+      <div class="aspira-sp-empty-illustration" aria-hidden="true">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="36" cy="36" r="28" stroke-dasharray="6 4" opacity="0.3"/>
+          <circle cx="36" cy="36" r="18" opacity="0.15"/>
+          <path d="M28 36h16M36 28v16" opacity="0.6"/>
+          <circle cx="36" cy="36" r="5" fill="currentColor" opacity="0.08"/>
+        </svg>
+      </div>
+
+      <h3 class="aspira-sp-empty-title">Your Space is ready.</h3>
+      <p class="aspira-sp-empty-desc">
+        Run your first Clarity Check — your resume, score, and analysis will be saved automatically to this device. No login. No account. Completely private.
+      </p>
+
+      <div class="aspira-sp-empty-features">
+        <div class="aspira-sp-empty-feat">
+          <span class="aspira-sp-feat-icon" aria-hidden="true">🔒</span>
+          Saved only on your device
+        </div>
+        <div class="aspira-sp-empty-feat">
+          <span class="aspira-sp-feat-icon" aria-hidden="true">♻️</span>
+          Re-run checks anytime
+        </div>
+        <div class="aspira-sp-empty-feat">
+          <span class="aspira-sp-feat-icon" aria-hidden="true">📈</span>
+          Track your score over time
+        </div>
+      </div>
+
+      <button type="button" class="aspira-sp-create-btn" id="aspira-sp-create-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 4v10M4 9h10"/>
+        </svg>
+        Create Your Space
+      </button>
+      <p class="aspira-sp-create-note">Or just run a Clarity Check — it's created automatically.</p>
+
+    </div><!-- /#aspira-sp-empty -->
+
+  </div>
+</section>
+<!-- END: Your Space Section -->
+
+<!-- ============================================================ -->
+<!-- YOUR SPACE CSS — aspira-sp-* fully scoped                    -->
+<!-- ============================================================ -->
+<style>
+  /* ── Section ── */
+  .aspira-sp-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 0 120px;
+    background: linear-gradient(180deg, transparent 0%, rgba(107,143,113,0.05) 50%, transparent 100%);
+  }
+
+  .aspira-sp-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Header ── */
+  .aspira-sp-header {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+
+  .aspira-sp-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .aspira-sp-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    font-weight: 500 !important;
+    color: #2c2c2a !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 12px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .aspira-sp-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── Empty state ── */
+  .aspira-sp-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 48px 32px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px dashed rgba(107,143,113,0.3);
+    border-radius: 24px;
+    animation: aspiraSspFadeIn 0.5s ease both;
+  }
+
+  @keyframes aspiraSspFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .aspira-sp-empty-illustration { color: #6b8f71; opacity: 0.6; }
+
+  .aspira-sp-empty-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.35rem !important;
+    font-weight: 500 !important;
+    color: #2c2c2a !important;
+    margin: 0 !important;
+    opacity: 1 !important; transform: none !important; animation: none !important;
+  }
+
+  .aspira-sp-empty-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.75;
+    max-width: 440px;
+    margin: 0;
+  }
+
+  .aspira-sp-empty-features {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 4px 0;
+  }
+
+  .aspira-sp-empty-feat {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: #6a6a65;
+    font-weight: 300;
+  }
+
+  .aspira-sp-feat-icon { font-size: 0.9rem; }
+
+  /* Create button */
+  .aspira-sp-create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: #2c2c2a;
+    color: #faf9f6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.16);
+    transition: background 0.3s ease, transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: 4px;
+  }
+
+  .aspira-sp-create-btn:hover {
+    background: #6b8f71;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(107,143,113,0.32);
+  }
+
+  .aspira-sp-create-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: #b5b5af;
+    font-weight: 300;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* ── Dashboard ── */
+  .aspira-sp-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: aspiraSspFadeIn 0.5s ease both;
+  }
+
+  /* Status bar */
+  .aspira-sp-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(107,143,113,0.18);
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .aspira-sp-status-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .aspira-sp-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(107,143,113,0.12);
+    color: #6b8f71;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .aspira-sp-status-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c2c2a;
+    margin: 0;
+  }
+
+  .aspira-sp-status-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    color: #8a8a85;
+    font-weight: 300;
+    margin: 2px 0 0;
+  }
+
+  .aspira-sp-badge-saved {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #4a7050;
+    background: rgba(107,143,113,0.1);
+    border: 1px solid rgba(107,143,113,0.2);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  /* Stats grid */
+  .aspira-sp-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .aspira-sp-stat-card {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 16px;
+    padding: 20px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+  }
+
+  .aspira-sp-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.07);
+  }
+
+  .aspira-sp-stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .aspira-sp-icon-sage { background: rgba(107,143,113,0.12); color: #6b8f71; }
+  .aspira-sp-icon-blue { background: rgba(90,122,180,0.1);   color: #5a7ab4; }
+  .aspira-sp-icon-amber{ background: rgba(200,154,58,0.1);   color: #c89a3a; }
+  .aspira-sp-icon-sand { background: rgba(196,180,154,0.15); color: #8a7a60; }
+
+  .aspira-sp-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    line-height: 1;
+  }
+
+  .aspira-sp-stat-sm { font-size: 1.1rem; }
+
+  .aspira-sp-stat-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    color: #b5b5af;
+    font-weight: 400;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Mini progress bar inside stat card */
+  .aspira-sp-mini-bar {
+    height: 3px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+
+  .aspira-sp-mini-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #a8c5ac, #6b8f71);
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-sp-fill-blue { background: linear-gradient(90deg, #a0b8e0, #5a7ab4); }
+
+  /* Resume preview */
+  .aspira-sp-resume-preview {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 14px;
+    padding: 16px 20px;
+  }
+
+  .aspira-sp-preview-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #4a4a47;
+  }
+
+  .aspira-sp-preview-toggle {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #6b8f71;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: color 0.2s;
+  }
+
+  .aspira-sp-preview-toggle:hover { color: #4a7050; }
+
+  .aspira-sp-preview-toggle svg {
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-sp-preview-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  .aspira-sp-preview-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: #4a4a47;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: rgba(250,249,246,0.8);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 12px 0 0;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  /* Action buttons */
+  .aspira-sp-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .aspira-sp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 11px 24px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(0.23,1,0.32,1);
+    -webkit-appearance: none;
+    appearance: none;
+    white-space: nowrap;
+  }
+
+  .aspira-sp-btn:focus-visible { outline: 2px solid #6b8f71; outline-offset: 3px; }
+
+  .aspira-sp-btn-primary {
+    background: #6b8f71;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(107,143,113,0.28);
+  }
+
+  .aspira-sp-btn-primary:hover {
+    background: #5a7a60;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(107,143,113,0.36);
+  }
+
+  .aspira-sp-btn-secondary {
+    background: rgba(255,255,255,0.85);
+    color: #2c2c2a;
+    border: 1.5px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .aspira-sp-btn-secondary:hover {
+    background: rgba(232,240,233,0.8);
+    border-color: #a8c5ac;
+    transform: translateY(-2px);
+    color: #2c2c2a;
+  }
+
+  .aspira-sp-btn-ghost {
+    background: transparent;
+    color: #b5b5af;
+    font-size: 0.78rem;
+    padding: 8px 12px;
+    font-weight: 400;
+  }
+
+  .aspira-sp-btn-ghost:hover { color: #b85a3a; }
+
+  /* Toast */
+  .aspira-sp-toast {
+    padding: 10px 18px;
+    background: #2c2c2a;
+    color: #faf9f6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    border-radius: 100px;
+    text-align: center;
+    animation: aspiraSspToastIn 0.3s ease both;
+  }
+
+  @keyframes aspiraSspToastIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-sp-title  { color: #eaeae6 !important; }
+  .dark-mode .aspira-sp-empty  { background: rgba(30,30,36,0.75); border-color: rgba(107,143,113,0.18); }
+  .dark-mode .aspira-sp-empty-title { color: #eaeae6 !important; }
+  .dark-mode .aspira-sp-status-bar  { background: rgba(30,30,36,0.85); border-color: rgba(107,143,113,0.14); }
+  .dark-mode .aspira-sp-status-name { color: #eaeae6; }
+  .dark-mode .aspira-sp-stat-card   { background: rgba(30,30,36,0.82); border-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-sp-stat-num    { color: #eaeae6; }
+  .dark-mode .aspira-sp-mini-bar    { background: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-sp-resume-preview { background: rgba(30,30,36,0.7); border-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-sp-preview-text   { background: rgba(22,22,26,0.7); border-color: rgba(255,255,255,0.06); color: #c0c0bb; }
+  .dark-mode .aspira-sp-preview-label  { color: #c0c0bb; }
+  .dark-mode .aspira-sp-btn-secondary  { background: rgba(30,30,36,0.8); border-color: rgba(255,255,255,0.1); color: #c0c0bb; }
+  .dark-mode .aspira-sp-btn-secondary:hover { background: rgba(107,143,113,0.1); border-color: rgba(107,143,113,0.35); color: #eaeae6; }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .aspira-sp-section { padding: 60px 0 80px; }
+    .aspira-sp-container { padding: 0 20px; }
+    .aspira-sp-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .aspira-sp-actions { flex-direction: column; align-items: stretch; }
+    .aspira-sp-btn { justify-content: center; }
+    .aspira-sp-empty-features { flex-direction: column; gap: 10px; }
+  }
+
+  @media (max-width: 400px) {
+    .aspira-sp-stats { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- ============================================================ -->
+<!-- YOUR SPACE JS — isolated IIFE                                 -->
+<!-- localStorage key: aspira_user_data                           -->
+<!-- ============================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════════════════════════════════════════════════════
+     CONSTANTS & STORAGE HELPERS
+  ═══════════════════════════════════════════════════════════ */
+  var ASPIRA_SP_KEY     = 'aspira_user_data';
+  var ASPIRA_SP_HISTORY = 'aspira_score_history'; /* optional history array */
+  var aspiraSpToastTimer = null;
+
+  function aspiraSspSave(data) {
+    try {
+      localStorage.setItem(ASPIRA_SP_KEY, JSON.stringify(data));
+      return true;
+    } catch(e) {
+      console.warn('[Aspira Space] localStorage write failed:', e);
+      return false;
+    }
+  }
+
+  function aspiraSspLoad() {
+    try {
+      var raw = localStorage.getItem(ASPIRA_SP_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function aspiraSspClear() {
+    try {
+      localStorage.removeItem(ASPIRA_SP_KEY);
+      localStorage.removeItem(ASPIRA_SP_HISTORY);
+    } catch(e) {}
+  }
+
+  /* Append to history array (max 20 entries) */
+  function aspiraSspSaveHistory(entry) {
+    try {
+      var hist = JSON.parse(localStorage.getItem(ASPIRA_SP_HISTORY) || '[]');
+      hist.unshift(entry);
+      if (hist.length > 20) hist = hist.slice(0, 20);
+      localStorage.setItem(ASPIRA_SP_HISTORY, JSON.stringify(hist));
+    } catch(e) {}
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     COLLECT RESUME TEXT FROM ALL POSSIBLE INPUT SOURCES
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspCollectResume() {
+    var text = '';
+    var jd   = '';
+
+    /* Text-mode resume input */
+    var textTab = document.getElementById('aspira-inh-tab-text');
+    if (textTab && textTab.classList.contains('aspira-inh-tab-active')) {
+      var rtEl = document.getElementById('aspira-inh-resume-text');
+      if (rtEl && rtEl.value.trim()) text = rtEl.value.trim();
+    }
+
+    /* Panel textareas */
+    ['aspira-inp-freelance-desc','aspira-inp-biz-desc'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el && el.value.trim()) text = (text + ' ' + el.value.trim()).trim();
+    });
+
+    /* JD */
+    var jdEl = document.getElementById('aspira-inp-jd');
+    if (jdEl && jdEl.value.trim()) jd = jdEl.value.trim();
+    ['aspira-inh-jdta-freelance','aspira-inh-jdta-business'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el && el.value.trim() && !jd) jd = el.value.trim();
+    });
+
+    return { resumeText: text, jdText: jd };
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     COLLECT RESULT FROM window.aspiraScrResult
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspCollectResult() {
+    var r = window.aspiraScrResult;
+    if (!r) return null;
+    return {
+      score:    r.score    || 0,
+      jdMatch:  r.jdMatch  != null ? r.jdMatch : null,
+      kmScore:  r.kmScore  != null ? r.kmScore  : null,
+      depthScore:  r.depthScore  || 0,
+      structScore: r.structScore || 0
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     SAVE: called after successful submit
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspPersist() {
+    var input   = aspiraSspCollectResume();
+    var result  = aspiraSspCollectResult();
+    var now     = new Date();
+
+    /* Load existing data to preserve anything already saved */
+    var existing = aspiraSspLoad() || {};
+
+    var updated = {
+      resumeText:     input.resumeText   || existing.resumeText  || '',
+      jdText:         input.jdText       || existing.jdText      || '',
+      score:          (result && result.score)   != null ? result.score   : (existing.score   || null),
+      jdMatch:        (result && result.jdMatch) != null ? result.jdMatch : (existing.jdMatch || null),
+      kmScore:        (result && result.kmScore) != null ? result.kmScore : null,
+      depthScore:     (result && result.depthScore)  || null,
+      structScore:    (result && result.structScore) || null,
+      lastAnalysis:   now.toISOString(),
+      createdAt:      existing.createdAt || now.toISOString(),
+      checksRun:      (existing.checksRun || 0) + 1
+    };
+
+    var saved = aspiraSspSave(updated);
+
+    /* Save to history */
+    if (result) {
+      aspiraSspSaveHistory({
+        date:     now.toISOString(),
+        score:    result.score,
+        jdMatch:  result.jdMatch
+      });
+    }
+
+    /* Refresh dashboard if visible */
+    if (saved) {
+      aspiraSpRender(updated);
+      aspiraSspShowToast('✓ Analysis saved to Your Space');
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     FORMAT DATE
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspFormatDate(isoStr) {
+    try {
+      var d = new Date(isoStr);
+      var now = new Date();
+      var diff = Math.floor((now - d) / 1000);
+
+      if (diff < 60)        return 'Just now';
+      if (diff < 3600)      return Math.floor(diff/60) + 'm ago';
+      if (diff < 86400)     return Math.floor(diff/3600) + 'h ago';
+      if (diff < 172800)    return 'Yesterday';
+
+      return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    } catch(e) {
+      return '—';
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     RENDER DASHBOARD
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSpRender(data) {
+    var emptyEl     = document.getElementById('aspira-sp-empty');
+    var dashboardEl = document.getElementById('aspira-sp-dashboard');
+    if (!emptyEl || !dashboardEl) return;
+
+    if (!data) {
+      /* Show empty state */
+      emptyEl.hidden     = false;
+      dashboardEl.hidden = true;
+      return;
+    }
+
+    /* Show dashboard */
+    emptyEl.hidden     = true;
+    dashboardEl.hidden = false;
+
+    /* Status meta */
+    var metaEl = document.getElementById('aspira-sp-meta');
+    if (metaEl) {
+      var runs = data.checksRun || 1;
+      metaEl.textContent = runs + ' clarity check' + (runs !== 1 ? 's' : '') + ' completed · Saved locally';
+    }
+
+    /* Last score */
+    var scoreEl     = document.getElementById('aspira-sp-last-score');
+    var scoreFillEl = document.getElementById('aspira-sp-score-fill');
+    if (data.score != null) {
+      if (scoreEl)     scoreEl.textContent = data.score + '%';
+      if (scoreFillEl) {
+        setTimeout(function(){ scoreFillEl.style.width = data.score + '%'; }, 100);
+      }
+    } else {
+      if (scoreEl) scoreEl.textContent = '—';
+    }
+
+    /* JD match */
+    var matchEl     = document.getElementById('aspira-sp-last-match');
+    var matchFillEl = document.getElementById('aspira-sp-match-fill');
+    if (data.jdMatch != null) {
+      if (matchEl)     matchEl.textContent = data.jdMatch + '%';
+      if (matchFillEl) {
+        setTimeout(function(){ matchFillEl.style.width = data.jdMatch + '%'; }, 150);
+      }
+    } else {
+      if (matchEl) matchEl.textContent = 'No JD';
+    }
+
+    /* Word count */
+    var wordsEl = document.getElementById('aspira-sp-resume-words');
+    if (wordsEl) {
+      var wc = data.resumeText ? data.resumeText.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length : 0;
+      wordsEl.textContent = wc > 0 ? wc.toLocaleString() : '—';
+    }
+
+    /* Last date */
+    var dateEl = document.getElementById('aspira-sp-last-date');
+    if (dateEl) {
+      dateEl.textContent = data.lastAnalysis ? aspiraSspFormatDate(data.lastAnalysis) : '—';
+    }
+
+    /* Resume preview */
+    var previewWrap = document.getElementById('aspira-sp-resume-preview');
+    var previewText = document.getElementById('aspira-sp-preview-text');
+    if (previewWrap && previewText && data.resumeText && data.resumeText.length > 20) {
+      previewWrap.hidden = false;
+      previewText.textContent = data.resumeText.slice(0, 1200) + (data.resumeText.length > 1200 ? '\n…' : '');
+    } else if (previewWrap) {
+      previewWrap.hidden = true;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     TOAST HELPER
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspShowToast(msg, duration) {
+    var toast = document.getElementById('aspira-sp-toast');
+    if (!toast) return;
+    toast.textContent = msg || '';
+    toast.hidden = false;
+    clearTimeout(aspiraSpToastTimer);
+    aspiraSpToastTimer = setTimeout(function(){
+      toast.hidden = true;
+    }, duration || 3000);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     AUTO-LOAD: restore previous resume text into inputs
+  ═══════════════════════════════════════════════════════════ */
+  function aspiraSspAutoLoad(data) {
+    if (!data || !data.resumeText || data.resumeText.length < 20) return;
+
+    /* Prefer to load into text-mode input if it exists */
+    var textModeInput = document.getElementById('aspira-inh-resume-text');
+    if (textModeInput && !textModeInput.value.trim()) {
+      textModeInput.value = data.resumeText;
+      /* Switch to text tab silently */
+      var textTab   = document.getElementById('aspira-inh-tab-text');
+      var uploadTab = document.getElementById('aspira-inh-tab-upload');
+      var textWrap  = document.getElementById('aspira-inh-text-wrap');
+      var uploadWrap= document.getElementById('aspira-inh-upload-wrap');
+      if (textTab && uploadTab && textWrap && uploadWrap) {
+        textTab.classList.add('aspira-inh-tab-active');
+        textTab.setAttribute('aria-selected','true');
+        uploadTab.classList.remove('aspira-inh-tab-active');
+        uploadTab.setAttribute('aria-selected','false');
+        textWrap.className  = 'aspira-inh-panel aspira-inh-panel-visible';
+        uploadWrap.className= 'aspira-inh-panel aspira-inh-panel-hidden';
+      }
+    }
+
+    /* Restore JD if available */
+    if (data.jdText) {
+      var jdEl = document.getElementById('aspira-inp-jd');
+      if (jdEl && !jdEl.value.trim()) jdEl.value = data.jdText;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     BIND BUTTONS
+  ═══════════════════════════════════════════════════════════ */
+
+  /* "Create Your Space" button (in empty state) */
+  var createBtn = document.getElementById('aspira-sp-create-btn');
+  if (createBtn) {
+    createBtn.addEventListener('click', function(){
+      /* Create an empty space record */
+      var now  = new Date();
+      var data = aspiraSspLoad() || {};
+      if (!data.createdAt) {
+        data.createdAt  = now.toISOString();
+        data.checksRun  = data.checksRun || 0;
+        data.resumeText = data.resumeText || '';
+        aspiraSspSave(data);
+      }
+      aspiraSpRender(data);
+      aspiraSspShowToast('Your Space is ready. Run a Clarity Check to save your first analysis.');
+
+      /* Scroll to input section */
+      var inputSection = document.getElementById('aspira-input') || document.getElementById('aspira-start');
+      if (inputSection) {
+        setTimeout(function(){
+          inputSection.scrollIntoView({ behavior:'smooth', block:'start' });
+        }, 300);
+      }
+    });
+  }
+
+  /* "Re-run Clarity" button */
+  var rerunBtn = document.getElementById('aspira-sp-rerun-btn');
+  if (rerunBtn) {
+    rerunBtn.addEventListener('click', function(){
+      var data = aspiraSspLoad();
+      if (data) aspiraSspAutoLoad(data);
+      var inputSection = document.getElementById('aspira-input') || document.getElementById('aspira-start');
+      if (inputSection) {
+        inputSection.scrollIntoView({ behavior:'smooth', block:'start' });
+        aspiraSspShowToast('Your saved resume has been loaded. Update if needed and run your check.');
+      }
+    });
+  }
+
+  /* "Load saved resume" button */
+  var loadBtn = document.getElementById('aspira-sp-load-btn');
+  if (loadBtn) {
+    loadBtn.addEventListener('click', function(){
+      var data = aspiraSspLoad();
+      if (!data || !data.resumeText) {
+        aspiraSspShowToast('No saved resume found. Run a Clarity Check first.');
+        return;
+      }
+      aspiraSspAutoLoad(data);
+      aspiraSspShowToast('✓ Saved resume loaded into the editor.');
+
+      var inputSection = document.getElementById('aspira-input');
+      if (inputSection) {
+        setTimeout(function(){
+          inputSection.scrollIntoView({ behavior:'smooth', block:'start' });
+        }, 200);
+      }
+    });
+  }
+
+  /* "Clear saved data" button */
+  var clearBtn = document.getElementById('aspira-sp-clear-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function(){
+      if (!confirm('Clear all saved data? This cannot be undone.')) return;
+      aspiraSspClear();
+      aspiraSpRender(null);
+      aspiraSspShowToast('Saved data cleared.');
+    });
+  }
+
+  /* Preview toggle */
+  var previewToggle = document.getElementById('aspira-sp-preview-toggle');
+  var previewTextEl = document.getElementById('aspira-sp-preview-text');
+  if (previewToggle && previewTextEl) {
+    previewToggle.addEventListener('click', function(){
+      var isOpen = previewTextEl.hidden === false;
+      previewTextEl.hidden = isOpen;
+      previewToggle.setAttribute('aria-expanded', String(!isOpen));
+      previewToggle.childNodes[0].textContent = isOpen ? 'Show preview' : 'Hide preview';
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     INTERCEPT SUBMIT: save after result is ready
+  ═══════════════════════════════════════════════════════════ */
+  var aspiraSspSubmit = document.getElementById('aspira-inp-submit');
+  if (aspiraSspSubmit) {
+    aspiraSspSubmit.addEventListener('click', function(){
+      /* Wait for scoring engine to run (it uses capture phase — runs before us) */
+      setTimeout(function(){
+        aspiraSspPersist();
+      }, 4000); /* after processing modal + gap modal open */
+    }, false);
+  }
+
+  /* Also watch for gap modal open to capture the result once displayed */
+  var aspiraSspGapModal = document.getElementById('aspira-gap-modal');
+  if (aspiraSspGapModal) {
+    var aspiraSspGapObs = new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraSspGapModal.classList.contains('aspira-gap-open')) {
+            setTimeout(function(){
+              var input  = aspiraSspCollectResume();
+              var result = aspiraSspCollectResult();
+              var now    = new Date();
+              var existing = aspiraSspLoad() || {};
+
+              var updated = {
+                resumeText:  input.resumeText  || existing.resumeText  || '',
+                jdText:      input.jdText      || existing.jdText      || '',
+                score:       (result && result.score  != null) ? result.score  : (existing.score  || null),
+                jdMatch:     (result && result.jdMatch != null) ? result.jdMatch: (existing.jdMatch || null),
+                kmScore:     (result && result.kmScore)    || null,
+                depthScore:  (result && result.depthScore) || null,
+                structScore: (result && result.structScore)|| null,
+                lastAnalysis: now.toISOString(),
+                createdAt:   existing.createdAt || now.toISOString(),
+                checksRun:   (existing.checksRun || 0) + 1
+              };
+
+              /* Only save if we actually have new result data */
+              if (result && result.score) {
+                aspiraSspSave(updated);
+                aspiraSspSaveHistory({ date: now.toISOString(), score: result.score, jdMatch: result.jdMatch });
+                aspiraSpRender(updated);
+              }
+            }, 300);
+          }
+        }
+      });
+    });
+    aspiraSspGapObs.observe(aspiraSspGapModal, { attributes: true });
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     INIT: load existing data on page load
+  ═══════════════════════════════════════════════════════════ */
+  (function aspiraSpInit(){
+    var existing = aspiraSspLoad();
+
+    /* Render dashboard or empty state */
+    aspiraSpRender(existing);
+
+    /* Auto-load resume text silently if no text is currently in inputs */
+    if (existing && existing.resumeText) {
+      /* Only auto-load after a short delay so inputs are fully rendered */
+      setTimeout(function(){
+        var currentText = '';
+        var textInput = document.getElementById('aspira-inh-resume-text');
+        var freeInput = document.getElementById('aspira-inp-freelance-desc');
+        var bizInput  = document.getElementById('aspira-inp-biz-desc');
+        if (textInput) currentText += textInput.value;
+        if (freeInput) currentText += freeInput.value;
+        if (bizInput)  currentText += bizInput.value;
+
+        /* Only auto-load if inputs are empty */
+        if (!currentText.trim()) {
+          aspiraSspAutoLoad(existing);
+        }
+      }, 800);
+    }
+  })();
+
+})();
+</script>
+<!-- END: Your Space JS -->
+
 </body>
 </html>
