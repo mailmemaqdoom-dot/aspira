@@ -11485,5 +11485,911 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Advanced Scoring Bridge -->
 
+
+<!-- ============================================================ -->
+<!-- FIX: Separate AI bot & WA buttons + brand-aligned icons      -->
+<!-- Match Engine section + Keyword visualization                  -->
+<!-- aspira-me-* / aspira-btn-* prefix — fully isolated           -->
+<!-- ============================================================ -->
+
+<!-- ── BUTTON SEPARATION & BRAND ICON OVERRIDE CSS ── -->
+<style>
+  /*
+   * Layout: WA button stays at bottom:24px right:24px
+   * AI bot cap moves to bottom:96px right:24px (58px btn + 14px gap)
+   * Both fully visible, no overlap
+   */
+
+  /* Override the blanket fix that stacks them at same position */
+  #aspira-fab-cap,
+  #aspira-fab-pulse-ring {
+    bottom: 96px !important;
+    right: 24px !important;
+  }
+
+  /* WA stays at 24px — already set by prior fix */
+  #aspira-float-wa {
+    bottom: 24px !important;
+    right: 24px !important;
+  }
+
+  /* Mobile: tighter stack */
+  @media (max-width: 600px) {
+    #aspira-fab-cap,
+    #aspira-fab-pulse-ring { bottom: 84px !important; right: 18px !important; }
+    #aspira-float-wa        { bottom: 18px !important; right: 18px !important; }
+  }
+
+  /* ── Brand-aligned AI bot icon colour ──
+   * Override the green gradient to Aspira charcoal/sage palette  */
+  #aspira-fab-cap {
+    background: linear-gradient(145deg, #2c2c2a 0%, #3e3e3a 100%) !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.14) !important;
+  }
+
+  #aspira-fab-cap.aspira-fab-hovered {
+    background: linear-gradient(145deg, #6b8f71 0%, #4e6e54 100%) !important;
+    box-shadow: 0 12px 32px rgba(107,143,113,0.42), 0 4px 12px rgba(0,0,0,0.14) !important;
+  }
+
+  /* Override AI bot SVG dots to white (on dark bg) */
+  #aspira-fab-icon circle { fill: rgba(107,143,113,0.9) !important; }
+  #aspira-fab-cap.aspira-fab-hovered #aspira-fab-icon circle { fill: rgba(255,255,255,0.9) !important; }
+
+  /* Dark mode variants */
+  .dark-mode #aspira-fab-cap {
+    background: linear-gradient(145deg, #1a1a18 0%, #2c2c2a 100%) !important;
+  }
+  .dark-mode #aspira-fab-cap.aspira-fab-hovered {
+    background: linear-gradient(145deg, #6b8f71 0%, #4e6e54 100%) !important;
+  }
+
+  /* ── Small label beneath each FAB ── */
+  #aspira-fab-label-ai,
+  #aspira-fab-label-wa {
+    position: fixed;
+    right: 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(44,44,42,0.5);
+    text-align: center;
+    width: 58px;
+    pointer-events: none;
+    z-index: 9997;
+    line-height: 1;
+  }
+
+  #aspira-fab-label-ai { bottom: 155px; }
+  #aspira-fab-label-wa { bottom: 83px; }
+
+  @media (max-width: 600px) {
+    #aspira-fab-label-ai { display: none; }
+    #aspira-fab-label-wa { display: none; }
+  }
+
+  .dark-mode #aspira-fab-label-ai,
+  .dark-mode #aspira-fab-label-wa { color: rgba(255,255,255,0.3); }
+</style>
+
+<!-- FAB labels (micro text beneath each button) -->
+<div id="aspira-fab-label-ai" aria-hidden="true">Clarity</div>
+<div id="aspira-fab-label-wa" aria-hidden="true">WhatsApp</div>
+
+<!-- ============================================================ -->
+<!-- MATCH ENGINE SECTION — #aspira-match-engine                  -->
+<!-- JD vs Resume keyword visualization                           -->
+<!-- ============================================================ -->
+<section
+  id="aspira-match-engine"
+  class="aspira-me-section"
+  aria-label="JD vs Resume Match Engine"
+>
+  <div class="aspira-me-container">
+
+    <!-- Header -->
+    <div class="aspira-me-header reveal">
+      <span class="aspira-me-eyebrow">AI-powered keyword analysis</span>
+      <h2 class="aspira-me-title">JD vs Resume Match Engine</h2>
+      <p class="aspira-me-sub">Here's how your profile aligns with this role</p>
+    </div>
+
+    <!-- Main match card — populated by JS -->
+    <div class="aspira-me-card reveal" id="aspira-me-card" aria-live="polite">
+
+      <!-- Empty state (shown before any analysis) -->
+      <div class="aspira-me-empty" id="aspira-me-empty">
+        <div class="aspira-me-empty-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="22" cy="22" r="18"/>
+            <path d="M14 22h16M22 14l8 8-8 8"/>
+            <circle cx="22" cy="22" r="5" stroke-dasharray="4 2"/>
+          </svg>
+        </div>
+        <p class="aspira-me-empty-title">No analysis yet</p>
+        <p class="aspira-me-empty-desc">Upload or paste your resume above, add a job description, and run your Clarity Check. Your keyword match will appear here.</p>
+        <a href="#aspira-input" class="aspira-me-empty-cta">
+          Run a Clarity Check
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5h9M8 3l3 3.5L8 10"/></svg>
+        </a>
+      </div>
+
+      <!-- Result state (hidden until analysis runs) -->
+      <div class="aspira-me-result" id="aspira-me-result" hidden>
+
+        <!-- Top row: score ring + summary -->
+        <div class="aspira-me-score-row">
+
+          <!-- Circular score -->
+          <div class="aspira-me-ring-wrap" id="aspira-me-ring-wrap">
+            <svg class="aspira-me-ring-svg" viewBox="0 0 110 110" fill="none" aria-hidden="true">
+              <circle cx="55" cy="55" r="46" stroke="rgba(168,197,172,0.18)" stroke-width="6"/>
+              <circle
+                class="aspira-me-ring-arc"
+                id="aspira-me-ring-arc"
+                cx="55" cy="55" r="46"
+                stroke="#6b8f71"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-dasharray="289"
+                stroke-dashoffset="289"
+                transform="rotate(-90 55 55)"
+              />
+            </svg>
+            <div class="aspira-me-ring-inner">
+              <span class="aspira-me-ring-pct" id="aspira-me-ring-pct">0%</span>
+              <span class="aspira-me-ring-lbl">match</span>
+            </div>
+          </div>
+
+          <!-- Summary text -->
+          <div class="aspira-me-summary">
+            <div class="aspira-me-tier-badge" id="aspira-me-tier"></div>
+            <p class="aspira-me-insight" id="aspira-me-insight"></p>
+            <div class="aspira-me-stat-row">
+              <div class="aspira-me-stat">
+                <span class="aspira-me-stat-num aspira-me-stat-green" id="aspira-me-matched-count">0</span>
+                <span class="aspira-me-stat-lbl">Keywords matched</span>
+              </div>
+              <div class="aspira-me-stat-divider" aria-hidden="true"></div>
+              <div class="aspira-me-stat">
+                <span class="aspira-me-stat-num aspira-me-stat-amber" id="aspira-me-sem-count">0</span>
+                <span class="aspira-me-stat-lbl">Semantic matches</span>
+              </div>
+              <div class="aspira-me-stat-divider" aria-hidden="true"></div>
+              <div class="aspira-me-stat">
+                <span class="aspira-me-stat-num aspira-me-stat-red" id="aspira-me-missing-count">0</span>
+                <span class="aspira-me-stat-lbl">Missing keywords</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keyword columns -->
+        <div class="aspira-me-kw-grid">
+
+          <!-- Matched -->
+          <div class="aspira-me-kw-col">
+            <div class="aspira-me-kw-col-header aspira-me-col-green">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+              Matched
+              <span class="aspira-me-kw-count" id="aspira-me-kw-matched-total"></span>
+            </div>
+            <ul class="aspira-me-kw-list" id="aspira-me-kw-matched" aria-label="Matched keywords"></ul>
+          </div>
+
+          <!-- Semantic -->
+          <div class="aspira-me-kw-col">
+            <div class="aspira-me-kw-col-header aspira-me-col-amber">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2v4M7 8v.5M3.5 5.5a5 5 0 100 3"/></svg>
+              Synonyms
+              <span class="aspira-me-kw-count" id="aspira-me-kw-sem-total"></span>
+            </div>
+            <ul class="aspira-me-kw-list" id="aspira-me-kw-sem" aria-label="Semantic matches"></ul>
+          </div>
+
+          <!-- Missing -->
+          <div class="aspira-me-kw-col">
+            <div class="aspira-me-kw-col-header aspira-me-col-red">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg>
+              Missing
+              <span class="aspira-me-kw-count" id="aspira-me-kw-missing-total"></span>
+            </div>
+            <ul class="aspira-me-kw-list" id="aspira-me-kw-missing" aria-label="Missing keywords"></ul>
+          </div>
+
+        </div><!-- /.aspira-me-kw-grid -->
+
+        <!-- Action strip -->
+        <div class="aspira-me-action-strip" id="aspira-me-action-strip">
+          <p class="aspira-me-action-text">Add the missing keywords naturally to your resume to improve this score.</p>
+          <a href="https://wa.me/917550270450?text=Hi!%20I%20ran%20my%20keyword%20match%20analysis%20and%20would%20like%20help%20improving%20my%20resume%20alignment."
+             target="_blank" rel="noopener noreferrer" class="aspira-me-action-btn">
+            Get help improving alignment →
+          </a>
+        </div>
+
+        <!-- No JD notice -->
+        <div class="aspira-me-nojd" id="aspira-me-nojd" hidden>
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 5v3M7.5 10v.5"/></svg>
+          Paste a job description for keyword-by-keyword alignment analysis
+        </div>
+
+      </div><!-- /.aspira-me-result -->
+
+    </div><!-- /.aspira-me-card -->
+
+  </div>
+</section>
+<!-- END: Match Engine Section -->
+
+<!-- ============================================================ -->
+<!-- MATCH ENGINE CSS — aspira-me-* fully scoped                  -->
+<!-- ============================================================ -->
+<style>
+
+  /* ── Section ── */
+  .aspira-me-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 0 120px;
+    background: linear-gradient(180deg, transparent, rgba(232,240,233,0.12), transparent);
+  }
+
+  .aspira-me-container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Header ── */
+  .aspira-me-header {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+
+  .aspira-me-eyebrow {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6b8f71;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .aspira-me-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem) !important;
+    font-weight: 500 !important;
+    color: #2c2c2a !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 12px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .aspira-me-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Main card ── */
+  .aspira-me-card {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(0,0,0,0.07);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+  }
+
+  /* ── Empty state ── */
+  .aspira-me-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 64px 40px;
+    text-align: center;
+  }
+
+  .aspira-me-empty-icon { color: #c0c0bc; }
+
+  .aspira-me-empty-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c2c2a;
+  }
+
+  .aspira-me-empty-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: #8a8a85;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 400px;
+  }
+
+  .aspira-me-empty-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6b8f71;
+    text-decoration: none;
+    margin-top: 4px;
+    padding: 9px 22px;
+    border: 1.5px solid rgba(107,143,113,0.3);
+    border-radius: 100px;
+    transition: all 0.28s ease;
+  }
+
+  .aspira-me-empty-cta:hover {
+    background: rgba(107,143,113,0.08);
+    border-color: #6b8f71;
+    text-decoration: none;
+    color: #4a7050;
+    gap: 10px;
+  }
+
+  /* ── Result: score row ── */
+  .aspira-me-score-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 28px;
+    align-items: center;
+    padding: 32px 36px 28px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  /* Ring */
+  .aspira-me-ring-wrap {
+    position: relative;
+    width: 110px;
+    height: 110px;
+  }
+
+  .aspira-me-ring-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .aspira-me-ring-arc {
+    transition: stroke-dashoffset 1.4s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-me-ring-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .aspira-me-ring-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    line-height: 1;
+  }
+
+  .aspira-me-ring-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    color: #8a8a85;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+
+  /* Summary */
+  .aspira-me-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aspira-me-tier-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 12px;
+    border-radius: 100px;
+    width: fit-content;
+  }
+
+  .aspira-me-tier-strong { background: rgba(107,143,113,0.15); color: #3a5e40; }
+  .aspira-me-tier-good   { background: rgba(107,143,113,0.1);  color: #4a7050; }
+  .aspira-me-tier-mid    { background: rgba(200,154,58,0.12);  color: #996a10; }
+  .aspira-me-tier-low    { background: rgba(184,90,58,0.1);    color: #b85a3a; }
+
+  .aspira-me-insight {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: #4a4a47;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Stats row */
+  .aspira-me-stat-row {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .aspira-me-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 16px 0 0;
+  }
+
+  .aspira-me-stat:first-child { padding-left: 0; }
+
+  .aspira-me-stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(0,0,0,0.08);
+    margin: 0 16px 0 0;
+    flex-shrink: 0;
+  }
+
+  .aspira-me-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  .aspira-me-stat-green { color: #6b8f71; }
+  .aspira-me-stat-amber { color: #c89a3a; }
+  .aspira-me-stat-red   { color: #b85a3a; }
+
+  .aspira-me-stat-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.66rem;
+    color: #b5b5af;
+    font-weight: 300;
+  }
+
+  /* ── Keyword columns ── */
+  .aspira-me-kw-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .aspira-me-kw-col {
+    padding: 24px 20px;
+    border-right: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .aspira-me-kw-col:last-child { border-right: none; }
+
+  .aspira-me-kw-col-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+  }
+
+  .aspira-me-col-green { color: #4a7050; border-bottom-color: rgba(107,143,113,0.35); }
+  .aspira-me-col-amber { color: #996a10; border-bottom-color: rgba(200,154,58,0.35); }
+  .aspira-me-col-red   { color: #b85a3a; border-bottom-color: rgba(184,90,58,0.3);  }
+
+  .aspira-me-kw-count {
+    margin-left: auto;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 100px;
+  }
+
+  .aspira-me-col-green .aspira-me-kw-count { background: rgba(107,143,113,0.12); color: #4a7050; }
+  .aspira-me-col-amber .aspira-me-kw-count { background: rgba(200,154,58,0.12);  color: #996a10; }
+  .aspira-me-col-red   .aspira-me-kw-count { background: rgba(184,90,58,0.1);    color: #b85a3a; }
+
+  .aspira-me-kw-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .aspira-me-kw-list::-webkit-scrollbar { width: 3px; }
+  .aspira-me-kw-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+
+  /* Keyword pills */
+  .aspira-me-kw-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    padding: 4px 10px;
+    border-radius: 8px;
+    width: fit-content;
+    max-width: 100%;
+    word-break: break-word;
+
+    /* Stagger animation */
+    opacity: 0;
+    transform: translateX(-8px);
+    animation: aspiraMeKwIn 0.35s cubic-bezier(0.23,1,0.32,1) both;
+  }
+
+  @keyframes aspiraMeKwIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .aspira-me-kw-matched { background: rgba(107,143,113,0.1); color: #2c2c2a; }
+  .aspira-me-kw-matched .aspira-me-kw-dot { color: #6b8f71; }
+  .aspira-me-kw-sem     { background: rgba(200,154,58,0.09); color: #2c2c2a; }
+  .aspira-me-kw-sem .aspira-me-kw-dot     { color: #c89a3a; }
+  .aspira-me-kw-missing { background: rgba(184,90,58,0.08); color: #4a4a47; }
+  .aspira-me-kw-missing .aspira-me-kw-dot { color: #b85a3a; }
+
+  .aspira-me-kw-dot {
+    font-size: 0.9rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .aspira-me-kw-empty {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: #c0c0bc;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* ── Action strip ── */
+  .aspira-me-action-strip {
+    padding: 18px 28px;
+    background: rgba(107,143,113,0.05);
+    border-top: 1px solid rgba(107,143,113,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .aspira-me-action-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: #6a6a65;
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .aspira-me-action-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #6b8f71;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .aspira-me-action-btn:hover { color: #4a7050; text-decoration: none; }
+
+  /* ── No-JD notice ── */
+  .aspira-me-nojd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #8a8a85;
+    font-weight: 300;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    font-style: italic;
+  }
+
+  .aspira-me-nojd svg { flex-shrink: 0; color: #c0c0bc; }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-me-card { background: rgba(30,30,36,0.85); border-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-me-title { color: #eaeae6 !important; }
+  .dark-mode .aspira-me-empty-title { color: #eaeae6; }
+  .dark-mode .aspira-me-empty-icon { color: #3a3a36; }
+  .dark-mode .aspira-me-ring-pct { color: #eaeae6; }
+  .dark-mode .aspira-me-score-row { border-bottom-color: rgba(255,255,255,0.06); }
+  .dark-mode .aspira-me-insight { color: #c0c0bb; }
+  .dark-mode .aspira-me-stat-divider { background: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-me-kw-col { border-right-color: rgba(255,255,255,0.06); }
+  .dark-mode .aspira-me-kw-matched { background: rgba(107,143,113,0.12); }
+  .dark-mode .aspira-me-kw-sem     { background: rgba(200,154,58,0.1);   }
+  .dark-mode .aspira-me-kw-missing { background: rgba(184,90,58,0.1);    }
+  .dark-mode .aspira-me-kw-matched,
+  .dark-mode .aspira-me-kw-sem,
+  .dark-mode .aspira-me-kw-missing { color: #c0c0bb; }
+  .dark-mode .aspira-me-action-strip { background: rgba(107,143,113,0.06); border-top-color: rgba(107,143,113,0.1); }
+  .dark-mode .aspira-me-nojd { border-top-color: rgba(255,255,255,0.06); }
+
+  /* ── Mobile ── */
+  @media (max-width: 720px) {
+    .aspira-me-section { padding: 60px 0 80px; }
+    .aspira-me-container { padding: 0 20px; }
+    .aspira-me-score-row { grid-template-columns: 90px 1fr; gap: 18px; padding: 24px; }
+    .aspira-me-ring-wrap { width: 90px; height: 90px; }
+    .aspira-me-ring-pct { font-size: 1.2rem; }
+    .aspira-me-kw-grid { grid-template-columns: 1fr; }
+    .aspira-me-kw-col { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .aspira-me-kw-col:last-child { border-bottom: none; }
+    .aspira-me-stat-row { flex-wrap: wrap; gap: 8px; }
+    .aspira-me-stat-divider { display: none; }
+    .aspira-me-stat { padding: 0 12px 0 0; }
+    .aspira-me-action-strip { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<!-- ============================================================ -->
+<!-- MATCH ENGINE JS — aspira-me-* isolated IIFE                  -->
+<!-- Populates section from window.aspiraScrResult                -->
+<!-- ============================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  var aspiraMeCard      = document.getElementById('aspira-me-card');
+  var aspiraMeEmpty     = document.getElementById('aspira-me-empty');
+  var aspiraMeResult    = document.getElementById('aspira-me-result');
+  var aspiraMeRingArc   = document.getElementById('aspira-me-ring-arc');
+  var aspiraMeRingPct   = document.getElementById('aspira-me-ring-pct');
+  var aspiraMeTier      = document.getElementById('aspira-me-tier');
+  var aspiraMeInsight   = document.getElementById('aspira-me-insight');
+  var aspiraMeMatchedC  = document.getElementById('aspira-me-matched-count');
+  var aspiraMeSemC      = document.getElementById('aspira-me-sem-count');
+  var aspiraMeMissingC  = document.getElementById('aspira-me-missing-count');
+  var aspiraMeKwMatch   = document.getElementById('aspira-me-kw-matched');
+  var aspiraMeKwSem     = document.getElementById('aspira-me-kw-sem');
+  var aspiraMeKwMissing = document.getElementById('aspira-me-kw-missing');
+  var aspiraMeMatchedT  = document.getElementById('aspira-me-kw-matched-total');
+  var aspiraMeSemT      = document.getElementById('aspira-me-kw-sem-total');
+  var aspiraMeMissingT  = document.getElementById('aspira-me-kw-missing-total');
+  var aspiraMeNojd      = document.getElementById('aspira-me-nojd');
+  var aspiraMeActionStrip = document.getElementById('aspira-me-action-strip');
+
+  /* ── Build a keyword pill ── */
+  function aspiraMeBuildPill(word, type, delayMs) {
+    var li = document.createElement('li');
+    var pill = document.createElement('span');
+    pill.className = 'aspira-me-kw-pill aspira-me-kw-' + type;
+    pill.style.animationDelay = delayMs + 'ms';
+
+    var dot = document.createElement('span');
+    dot.className = 'aspira-me-kw-dot';
+    dot.setAttribute('aria-hidden', 'true');
+    dot.textContent = type === 'matched' ? '✓' : type === 'sem' ? '≈' : '✗';
+
+    pill.appendChild(dot);
+    pill.appendChild(document.createTextNode(word));
+    li.appendChild(pill);
+    return li;
+  }
+
+  /* ── Count-up animation ── */
+  function aspiraMeCountUp(el, target, duration) {
+    if (!el) return;
+    duration = duration || 1000;
+    var startTime = null;
+    function frame(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased    = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target);
+      if (progress < 1) requestAnimationFrame(frame);
+      else el.textContent = String(target);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ── Main render function ── */
+  function aspiraMeRender(result) {
+    if (!result || !aspiraMeResult) return;
+
+    var jdMatchResult = result.jdMatchResult || {};
+    var matched  = (jdMatchResult.matchedDirect || []).slice(0, 25);
+    var semMatch = (jdMatchResult.matchedSem    || []).slice(0, 15);
+    var missing  = (jdMatchResult.missing       || []).slice(0, 25);
+    var jdMatch  = result.jdMatch;
+    var hasJD    = jdMatch !== null && jdMatch !== undefined;
+
+    /* Show result, hide empty */
+    if (aspiraMeEmpty) aspiraMeEmpty.hidden = true;
+    aspiraMeResult.hidden = false;
+
+    /* ── Ring animation ── */
+    var pct = hasJD ? jdMatch : Math.round((result.score || 0) * 0.7);
+    if (aspiraMeRingArc) {
+      var circ = 289;
+      aspiraMeRingArc.style.strokeDashoffset = String(circ);
+      /* Colour the arc based on score */
+      aspiraMeRingArc.style.stroke =
+        pct >= 60 ? '#6b8f71' :
+        pct >= 35 ? '#c89a3a' : '#b85a3a';
+      setTimeout(function() {
+        aspiraMeRingArc.style.strokeDashoffset = String(circ - (circ * pct / 100));
+      }, 100);
+    }
+
+    /* Count-up percentage */
+    if (aspiraMeRingPct) {
+      var s2 = null;
+      function cpct(ts) {
+        if (!s2) s2 = ts;
+        var p = Math.min((ts - s2) / 1400, 1);
+        aspiraMeRingPct.textContent = Math.round((1 - Math.pow(1-p, 3)) * pct) + '%';
+        if (p < 1) requestAnimationFrame(cpct);
+        else aspiraMeRingPct.textContent = pct + '%';
+      }
+      setTimeout(function() { requestAnimationFrame(cpct); }, 100);
+    }
+
+    /* ── Tier badge ── */
+    if (aspiraMeTier) {
+      var tierText  = pct >= 70 ? 'Strong Alignment' : pct >= 45 ? 'Partial Alignment' : hasJD ? 'Low Alignment' : 'General Score';
+      var tierClass = pct >= 70 ? 'aspira-me-tier-strong' : pct >= 45 ? 'aspira-me-tier-good' : hasJD ? 'aspira-me-tier-low' : 'aspira-me-tier-mid';
+      aspiraMeTier.textContent = tierText;
+      aspiraMeTier.className   = 'aspira-me-tier-badge ' + tierClass;
+    }
+
+    /* ── Insight text ── */
+    if (aspiraMeInsight) {
+      if (!hasJD) {
+        aspiraMeInsight.textContent = 'No job description provided. Add one for precise keyword alignment scoring.';
+      } else if (pct >= 60) {
+        aspiraMeInsight.textContent = 'Your resume aligns well with the role — keyword coverage is strong. Focus on the missing terms to push above 75%.';
+      } else if (pct >= 35) {
+        aspiraMeInsight.textContent = 'Your resume is missing key role-specific keywords. Adding the missing terms naturally into your bullets could significantly improve this score.';
+      } else {
+        aspiraMeInsight.textContent = 'Low alignment detected. Your resume currently uses different language from this job description. Rewrite key bullet points to mirror the role's terminology.';
+      }
+    }
+
+    /* ── Stat counts with animation ── */
+    setTimeout(function() {
+      aspiraMeCountUp(aspiraMeMatchedC, matched.length,  900);
+      aspiraMeCountUp(aspiraMeSemC,     semMatch.length, 900);
+      aspiraMeCountUp(aspiraMeMissingC, missing.length,  900);
+    }, 200);
+
+    /* Update totals in column headers */
+    if (aspiraMeMatchedT) aspiraMeMatchedT.textContent = matched.length;
+    if (aspiraMeSemT)     aspiraMeSemT.textContent     = semMatch.length;
+    if (aspiraMeMissingT) aspiraMeMissingT.textContent = missing.length;
+
+    /* ── Keyword lists ── */
+    function aspiraPopList(listEl, words, type) {
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      if (words.length === 0) {
+        var empty = document.createElement('li');
+        empty.className = 'aspira-me-kw-empty';
+        empty.textContent = type === 'matched' ? 'No direct matches found'
+                          : type === 'sem'     ? 'No semantic matches'
+                          : 'All keywords matched!';
+        listEl.appendChild(empty);
+      } else {
+        words.forEach(function(w, i) {
+          listEl.appendChild(aspiraMeBuildPill(w, type, 40 + i * 35));
+        });
+      }
+    }
+
+    aspiraPopList(aspiraMeKwMatch,   matched,  'matched');
+    aspiraPopList(aspiraMeKwSem,     semMatch, 'sem');
+    aspiraPopList(aspiraMeKwMissing, missing,  'missing');
+
+    /* ── Show/hide JD notice ── */
+    if (aspiraMeNojd) {
+      aspiraMeNojd.hidden = hasJD;
+    }
+
+    /* Show action strip only if there are missing keywords */
+    if (aspiraMeActionStrip) {
+      aspiraMeActionStrip.style.display = (hasJD && missing.length > 0) ? '' : 'none';
+    }
+  }
+
+  /* ── Scroll to and reveal when result exists ── */
+  function aspiraMeCheckAndReveal() {
+    var result = window.aspiraScrResult;
+    if (!result) return;
+    var hasData = result.jdMatchResult &&
+      ((result.jdMatchResult.matchedDirect || []).length > 0 ||
+       (result.jdMatchResult.missing       || []).length > 0 ||
+       result.jdMatch !== null);
+
+    if (!hasData && !result.score) return;
+    aspiraMeRender(result);
+  }
+
+  /* ── Watch for submit → render on result reveal ── */
+  var aspiraMeResultSection = document.getElementById('aspira-result-full');
+  if (aspiraMeResultSection) {
+    var aspiraMeObs = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraMeResultSection.classList.contains('aspira-rf-visible')) {
+            setTimeout(aspiraMeCheckAndReveal, 600);
+          }
+        }
+      });
+    });
+    aspiraMeObs.observe(aspiraMeResultSection, { attributes: true });
+  }
+
+  /* ── Also respond to gap modal open (for immediate display) ── */
+  var aspiraMeGapModal = document.getElementById('aspira-gap-modal');
+  if (aspiraMeGapModal) {
+    var aspiraMeGapObs = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraMeGapModal.classList.contains('aspira-gap-open')) {
+            setTimeout(aspiraMeCheckAndReveal, 400);
+          }
+        }
+      });
+    });
+    aspiraMeGapObs.observe(aspiraMeGapModal, { attributes: true });
+  }
+
+  /* ── Smooth scroll to match engine when empty CTA is clicked ── */
+  document.querySelectorAll('a[href="#aspira-input"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.getElementById('aspira-input');
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+})();
+</script>
+<!-- END: Match Engine JS -->
+
 </body>
 </html>
