@@ -13735,5 +13735,419 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Intelligent WA Funnel -->
 
+
+<!-- ============================================================ -->
+<!-- URGENCY & TRUST SIGNAL BLOCK — aspira-uts-*                  -->
+<!-- Revealed below result section. Calm, honest, no aggression.  -->
+<!-- ============================================================ -->
+<section
+  id="aspira-uts-block"
+  class="aspira-uts-section"
+  aria-label="Take action on your results"
+  aria-hidden="true"
+>
+  <div class="aspira-uts-container">
+
+    <!-- Divider mark -->
+    <div class="aspira-uts-mark" aria-hidden="true">
+      <span class="aspira-uts-mark-line"></span>
+      <span class="aspira-uts-mark-dot"></span>
+      <span class="aspira-uts-mark-line"></span>
+    </div>
+
+    <!-- Primary trust message -->
+    <p class="aspira-uts-line-1" id="aspira-uts-line-1">
+      Most people stay stuck because they don't fix what's missing early.
+    </p>
+
+    <!-- Second, empowering line -->
+    <p class="aspira-uts-line-2" id="aspira-uts-line-2">
+      You now know what's holding you back.<br>
+      <span class="aspira-uts-line-2-em">You can choose to act on it.</span>
+    </p>
+
+    <!-- CTA pair -->
+    <div class="aspira-uts-cta-wrap">
+
+      <a
+        id="aspira-uts-cta-primary"
+        href="https://wa.me/917550270450"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="aspira-uts-btn-primary"
+        aria-label="Fix this now — start on WhatsApp"
+      >
+        Fix This Now
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 7.5h9M9 4l3 3.5L9 11"/>
+        </svg>
+      </a>
+
+      <button
+        id="aspira-uts-cta-secondary"
+        type="button"
+        class="aspira-uts-btn-secondary"
+        aria-label="Dismiss — I'll come back later"
+      >
+        I'll come back later
+      </button>
+
+    </div><!-- /.aspira-uts-cta-wrap -->
+
+    <!-- Reassurance footnote -->
+    <p class="aspira-uts-footnote" id="aspira-uts-footnote">
+      No pressure. Your results are saved. You can return to this any time.
+    </p>
+
+  </div>
+</section>
+<!-- END: Urgency & Trust Block -->
+
+<!-- ============================================================ -->
+<!-- URGENCY & TRUST CSS — aspira-uts-* fully scoped              -->
+<!-- ============================================================ -->
+<style>
+
+  /* ── Section ── */
+  .aspira-uts-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 0 100px;
+
+    /* Hidden by default — revealed by JS */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      max-height 0.7s cubic-bezier(0.23,1,0.32,1),
+      opacity    0.55s ease,
+      padding    0.55s ease;
+  }
+
+  .aspira-uts-section.aspira-uts-visible {
+    max-height: 500px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0 0 100px;
+  }
+
+  /* Dismissed state */
+  .aspira-uts-section.aspira-uts-dismissed {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    padding: 0 !important;
+    transition:
+      max-height 0.4s cubic-bezier(0.23,1,0.32,1),
+      opacity    0.3s ease,
+      padding    0.3s ease;
+  }
+
+  .aspira-uts-container {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+  }
+
+  /* ── Divider mark ── */
+  .aspira-uts-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .aspira-uts-mark-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(107,143,113,0.3), transparent);
+  }
+
+  .aspira-uts-mark-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(107,143,113,0.45);
+    flex-shrink: 0;
+  }
+
+  /* ── Line 1: the honest observation ── */
+  .aspira-uts-line-1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #4a4a47;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    max-width: 480px;
+
+    /* Staggered entry */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.55s ease 0.1s, transform 0.55s cubic-bezier(0.23,1,0.32,1) 0.1s;
+  }
+
+  .aspira-uts-section.aspira-uts-visible .aspira-uts-line-1 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Line 2: the empowerment ── */
+  .aspira-uts-line-2 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #6a6a65;
+    line-height: 1.75;
+    margin-bottom: 36px;
+    max-width: 460px;
+
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.55s ease 0.22s, transform 0.55s cubic-bezier(0.23,1,0.32,1) 0.22s;
+  }
+
+  .aspira-uts-section.aspira-uts-visible .aspira-uts-line-2 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .aspira-uts-line-2-em {
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    color: #2c2c2a;
+    font-size: 1.05rem;
+  }
+
+  /* ── CTA wrap ── */
+  .aspira-uts-cta-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 320px;
+
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.55s ease 0.35s, transform 0.55s cubic-bezier(0.23,1,0.32,1) 0.35s;
+  }
+
+  .aspira-uts-section.aspira-uts-visible .aspira-uts-cta-wrap {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Primary button */
+  .aspira-uts-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    background: #2c2c2a;
+    color: #faf9f6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 15px 32px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.14);
+    transition:
+      background 0.3s ease,
+      transform  0.3s cubic-bezier(0.23,1,0.32,1),
+      box-shadow 0.3s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .aspira-uts-btn-primary:hover {
+    background: #6b8f71;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(107,143,113,0.3);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .aspira-uts-btn-primary:hover svg {
+    transform: translateX(3px);
+  }
+
+  .aspira-uts-btn-primary svg {
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+    flex-shrink: 0;
+  }
+
+  /* Secondary (ghost dismiss) */
+  .aspira-uts-btn-secondary {
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: #b5b5af;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 100px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: transparent;
+    transition: color 0.25s ease, text-decoration-color 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+
+  .aspira-uts-btn-secondary:hover {
+    color: #8a8a85;
+    text-decoration-color: rgba(138,138,133,0.4);
+  }
+
+  .aspira-uts-btn-secondary:focus-visible {
+    outline: 2px solid rgba(107,143,113,0.5);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Footnote */
+  .aspira-uts-footnote {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: #c0c0bc;
+    font-weight: 300;
+    font-style: italic;
+    margin-top: 16px;
+
+    opacity: 0;
+    transition: opacity 0.5s ease 0.5s;
+  }
+
+  .aspira-uts-section.aspira-uts-visible .aspira-uts-footnote {
+    opacity: 1;
+  }
+
+  /* ── Dark mode ── */
+  .dark-mode .aspira-uts-line-1   { color: #c0c0bb; }
+  .dark-mode .aspira-uts-line-2   { color: #8a8a85; }
+  .dark-mode .aspira-uts-line-2-em { color: #eaeae6; }
+  .dark-mode .aspira-uts-mark-line { background: linear-gradient(90deg, transparent, rgba(107,143,113,0.2), transparent); }
+  .dark-mode .aspira-uts-mark-dot  { background: rgba(107,143,113,0.3); }
+
+  .dark-mode .aspira-uts-btn-primary {
+    background: rgba(255,255,255,0.07);
+    color: #eaeae6;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  }
+
+  .dark-mode .aspira-uts-btn-primary:hover {
+    background: #6b8f71;
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .dark-mode .aspira-uts-btn-secondary { color: #4a4a46; }
+  .dark-mode .aspira-uts-btn-secondary:hover { color: #6a6a65; }
+
+  /* ── Mobile ── */
+  @media (max-width: 500px) {
+    .aspira-uts-container { padding: 0 20px; }
+    .aspira-uts-line-1 { font-size: 0.92rem; }
+    .aspira-uts-line-2 { font-size: 0.9rem; }
+    .aspira-uts-btn-primary { font-size: 0.9rem; padding: 14px 24px; }
+  }
+
+</style>
+<!-- END: Urgency & Trust CSS -->
+
+<!-- ============================================================ -->
+<!-- URGENCY & TRUST JS — isolated IIFE aspira-uts-*              -->
+<!-- Reveals below results + hooks into WA funnel for smart URL   -->
+<!-- ============================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  var aspiraUtsSection   = document.getElementById('aspira-uts-block');
+  var aspiraUtsPrimary   = document.getElementById('aspira-uts-cta-primary');
+  var aspiraUtsSecondary = document.getElementById('aspira-uts-cta-secondary');
+  var aspiraUtsFootnote  = document.getElementById('aspira-uts-footnote');
+
+  if (!aspiraUtsSection) return;
+
+  /* ── Update primary CTA with smart WA URL if funnel engine available ── */
+  function aspiraUtsUpdateCta() {
+    if (!aspiraUtsPrimary) return;
+    if (typeof window.aspiraWafUrl === 'function') {
+      aspiraUtsPrimary.href = window.aspiraWafUrl('fix');
+    }
+    /* Update footnote to include score if available */
+    var r = window.aspiraScrResult;
+    if (r && r.score != null && aspiraUtsFootnote) {
+      aspiraUtsFootnote.textContent =
+        'No pressure. Your score (' + r.score + '%) is saved. You can return to this any time.';
+    }
+  }
+
+  /* ── Reveal the section ── */
+  function aspiraUtsReveal() {
+    aspiraUtsSection.classList.add('aspira-uts-visible');
+    aspiraUtsSection.removeAttribute('aria-hidden');
+    aspiraUtsUpdateCta();
+  }
+
+  /* ── Dismiss ── */
+  function aspiraUtsDismiss() {
+    aspiraUtsSection.classList.add('aspira-uts-dismissed');
+    aspiraUtsSection.setAttribute('aria-hidden', 'true');
+  }
+
+  /* Secondary button dismisses the block */
+  if (aspiraUtsSecondary) {
+    aspiraUtsSecondary.addEventListener('click', aspiraUtsDismiss);
+  }
+
+  /* ── Watch for result section becoming visible ── */
+  var aspiraUtsResultFull = document.getElementById('aspira-result-full');
+  if (aspiraUtsResultFull) {
+    new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraUtsResultFull.classList.contains('aspira-rf-visible')) {
+            /* Delay: let result cards animate in first */
+            setTimeout(aspiraUtsReveal, 900);
+          }
+        }
+      });
+    }).observe(aspiraUtsResultFull, { attributes: true });
+  }
+
+  /* ── Also watch for action buttons section reveal ── */
+  var aspiraUtsActSection = document.getElementById('aspira-actions');
+  if (aspiraUtsActSection) {
+    new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraUtsActSection.classList.contains('aspira-act-visible') &&
+              !aspiraUtsSection.classList.contains('aspira-uts-visible')) {
+            setTimeout(aspiraUtsReveal, 700);
+          }
+        }
+      });
+    }).observe(aspiraUtsActSection, { attributes: true });
+  }
+
+})();
+</script>
+<!-- END: Urgency & Trust JS -->
+
 </body>
 </html>
