@@ -10937,5 +10937,553 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Advanced Scoring Engine -->
 
+
+<!-- ============================================================ -->
+<!-- ADVANCED SCORING BRIDGE — aspira-asb-*                       -->
+<!-- Connects the advanced engine to the gap modal + result page   -->
+<!-- No modifications to existing code — pure additive bridge     -->
+<!-- ============================================================ -->
+<style>
+  /* ── JD Match banner on main result page ── */
+  #aspira-asb-jd-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+    background: rgba(107,143,113,0.08);
+    border: 1px solid rgba(107,143,113,0.2);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    animation: aspiraAsbFadeIn 0.5s ease both;
+  }
+
+  #aspira-asb-jd-banner.aspira-asb-visible {
+    display: flex;
+  }
+
+  @keyframes aspiraAsbFadeIn {
+    from { opacity:0; transform:translateY(8px); }
+    to   { opacity:1; transform:none; }
+  }
+
+  .aspira-asb-jd-pct-large {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #6b8f71;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .aspira-asb-jd-pct-low    { color: #b85a3a; }
+  .aspira-asb-jd-pct-mid    { color: #c89a3a; }
+  .aspira-asb-jd-pct-good   { color: #6b8f71; }
+
+  .aspira-asb-jd-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .aspira-asb-jd-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #8a8a85;
+  }
+
+  .aspira-asb-jd-insight-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #4a4a47;
+    line-height: 1.5;
+  }
+
+  .aspira-asb-jd-missing {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: #8a8a85;
+    font-weight: 300;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  /* ── 3-pill sub-score row on result page ── */
+  #aspira-asb-pill-row {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  #aspira-asb-pill-row.aspira-asb-visible {
+    display: grid;
+  }
+
+  .aspira-asb-pill {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+  }
+
+  .aspira-asb-pill:hover { border-color: rgba(107,143,113,0.3); }
+
+  .aspira-asb-pill-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    display: block;
+    line-height: 1.1;
+  }
+
+  .aspira-asb-pill-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.66rem;
+    color: #8a8a85;
+    font-weight: 400;
+    display: block;
+    margin-top: 5px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .aspira-asb-pill-bar {
+    height: 3px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .aspira-asb-pill-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  .aspira-asb-fill-km     { background: linear-gradient(90deg, #e0c898, #b48c5a); }
+  .aspira-asb-fill-depth  { background: linear-gradient(90deg, #a8c5ac, #6b8f71); }
+  .aspira-asb-fill-struct { background: linear-gradient(90deg, #a0b8e0, #5a7ab4); }
+
+  /* Modal JD match row (duplicate of existing style but with count-up) */
+  #aspira-asb-modal-jd-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: rgba(107,143,113,0.07);
+    border: 1px solid rgba(107,143,113,0.18);
+    border-radius: 10px;
+    margin: 0 24px 14px;
+    flex-wrap: wrap;
+  }
+
+  .aspira-asb-modal-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #6b8f71;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+
+  .aspira-asb-modal-pct-low  { color: #b85a3a; }
+  .aspira-asb-modal-pct-mid  { color: #c89a3a; }
+
+  .aspira-asb-modal-insight {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: #6a6a65;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  #aspira-asb-modal-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 0 24px 14px;
+  }
+
+  .aspira-asb-modal-pill {
+    background: rgba(250,249,246,0.9);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    padding: 10px 10px;
+    text-align: center;
+  }
+
+  .aspira-asb-modal-pill-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2c2c2a;
+    display: block;
+  }
+
+  .aspira-asb-modal-pill-lbl {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    color: #8a8a85;
+    font-weight: 400;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* dark mode */
+  .dark-mode #aspira-asb-jd-banner { background: rgba(107,143,113,0.07); border-color: rgba(107,143,113,0.15); }
+  .dark-mode .aspira-asb-jd-insight-text { color: #c0c0bb; }
+  .dark-mode .aspira-asb-pill { background: rgba(30,30,36,0.8); border-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-asb-pill-num { color: #eaeae6; }
+  .dark-mode .aspira-asb-pill-bar { background: rgba(255,255,255,0.07); }
+  .dark-mode #aspira-asb-modal-jd-row { background: rgba(107,143,113,0.07); border-color: rgba(107,143,113,0.14); }
+  .dark-mode .aspira-asb-modal-pill { background: rgba(30,30,36,0.8); border-color: rgba(255,255,255,0.07); }
+  .dark-mode .aspira-asb-modal-pill-num { color: #eaeae6; }
+
+  @media(max-width:500px){
+    #aspira-asb-pill-row { grid-template-columns: 1fr 1fr; }
+    #aspira-asb-modal-breakdown { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════════════════════════════════════════════════════════
+     BRIDGE: Intercepts the gap modal open event via MutationObserver
+     and injects advanced scoring data (JD match, sub-scores) without
+     needing to modify the existing aspiraGapOpen IIFE.
+  ═══════════════════════════════════════════════════════════════ */
+
+  var aspiraAsbModal = document.getElementById('aspira-gap-modal');
+  var aspiraAsbInjected = false;
+
+  /* ── Build JD match row + pill breakdown in modal ── */
+  function aspiraAsbBuildModalElements() {
+    if (document.getElementById('aspira-asb-modal-jd-row')) return;
+    var panels = aspiraAsbModal && aspiraAsbModal.querySelector('.aspira-gap-panels');
+    if (!panels) return;
+
+    /* JD match row */
+    var jdRow = document.createElement('div');
+    jdRow.id = 'aspira-asb-modal-jd-row';
+    jdRow.setAttribute('aria-label', 'Job description match score');
+    jdRow.innerHTML =
+      '<span class="aspira-asb-modal-pct" id="aspira-asb-modal-pct">Analysing JD…</span>' +
+      '<span class="aspira-asb-modal-insight" id="aspira-asb-modal-insight">Comparing your resume against the job description.</span>';
+    panels.parentNode.insertBefore(jdRow, panels);
+
+    /* 3-pill sub-score breakdown */
+    var breakdown = document.createElement('div');
+    breakdown.id = 'aspira-asb-modal-breakdown';
+    breakdown.innerHTML =
+      '<div class="aspira-asb-modal-pill">' +
+        '<span class="aspira-asb-modal-pill-num" id="aspira-asb-km-num">—</span>' +
+        '<span class="aspira-asb-modal-pill-lbl">Keyword Match</span>' +
+      '</div>' +
+      '<div class="aspira-asb-modal-pill">' +
+        '<span class="aspira-asb-modal-pill-num" id="aspira-asb-dep-num">—</span>' +
+        '<span class="aspira-asb-modal-pill-lbl">Content Depth</span>' +
+      '</div>' +
+      '<div class="aspira-asb-modal-pill">' +
+        '<span class="aspira-asb-modal-pill-num" id="aspira-asb-str-num">—</span>' +
+        '<span class="aspira-asb-modal-pill-lbl">Structure</span>' +
+      '</div>';
+    panels.parentNode.insertBefore(breakdown, panels);
+  }
+
+  /* ── Populate modal with advanced data ── */
+  function aspiraAsbPopulateModal(result) {
+    aspiraAsbBuildModalElements();
+
+    var pctEl     = document.getElementById('aspira-asb-modal-pct');
+    var insightEl = document.getElementById('aspira-asb-modal-insight');
+    var kmEl      = document.getElementById('aspira-asb-km-num');
+    var depEl     = document.getElementById('aspira-asb-dep-num');
+    var strEl     = document.getElementById('aspira-asb-str-num');
+
+    var jdMatch    = result.jdMatch;
+    var kmScore    = result.kmScore    != null ? result.kmScore    : null;
+    var depthScore = result.depthScore != null ? result.depthScore : null;
+    var structScore= result.structScore!= null ? result.structScore : null;
+    var jdMatchResult = result.jdMatchResult || {};
+
+    /* JD match text */
+    if (jdMatch !== null && jdMatch !== undefined) {
+      if (pctEl) {
+        pctEl.textContent = 'JD Match: ' + jdMatch + '%';
+        pctEl.className   = 'aspira-asb-modal-pct ' +
+          (jdMatch >= 60 ? '' : jdMatch >= 35 ? 'aspira-asb-modal-pct-mid' : 'aspira-asb-modal-pct-low');
+      }
+      var insightText, insightClass;
+      if (jdMatch >= 60) {
+        insightText = 'Your resume aligns well with the role — keyword coverage is strong.';
+      } else if (jdMatch >= 35) {
+        var topMissed = (jdMatchResult.missing || []).slice(0, 4);
+        insightText = 'Your resume is missing key role-specific keywords.'
+          + (topMissed.length ? ' Missing: ' + topMissed.join(', ') + '.' : '');
+      } else {
+        var topMissed2 = (jdMatchResult.missing || []).slice(0, 5);
+        insightText = 'Low alignment — many critical job keywords are absent.'
+          + (topMissed2.length ? ' Add: ' + topMissed2.join(', ') + '.' : '');
+      }
+      if (insightEl) insightEl.textContent = insightText;
+    } else {
+      if (pctEl)     pctEl.textContent  = 'No JD provided';
+      if (insightEl) insightEl.textContent = 'Paste a job description for precise keyword alignment scoring.';
+    }
+
+    /* Pill sub-scores with count-up */
+    function aspiraAsbCountUp(el, target) {
+      if (!el || target == null) return;
+      var start = null;
+      var duration = 900;
+      function frame(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / duration, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(e * target) + '%';
+        if (p < 1) requestAnimationFrame(frame);
+        else el.textContent = target + '%';
+      }
+      requestAnimationFrame(frame);
+    }
+
+    setTimeout(function() {
+      aspiraAsbCountUp(kmEl,  kmScore);
+      aspiraAsbCountUp(depEl, depthScore);
+      aspiraAsbCountUp(strEl, structScore);
+    }, 200);
+  }
+
+  /* ── Build JD Match banner on the main result page ── */
+  function aspiraAsbBuildResultBanner(result) {
+    var resultSection = document.getElementById('aspira-result-full');
+    if (!resultSection) return;
+
+    var scoreWrap = resultSection.querySelector('.aspira-rf-score-wrap');
+    if (!scoreWrap) return;
+
+    /* Don't build twice */
+    if (document.getElementById('aspira-asb-jd-banner')) {
+      aspiraAsbPopulateBanner(result);
+      return;
+    }
+
+    /* JD Match banner */
+    var banner = document.createElement('div');
+    banner.id = 'aspira-asb-jd-banner';
+    banner.setAttribute('aria-label', 'JD match score');
+    banner.innerHTML =
+      '<div class="aspira-asb-jd-pct-large" id="aspira-asb-banner-pct">—</div>' +
+      '<div class="aspira-asb-jd-meta">' +
+        '<span class="aspira-asb-jd-label">JD Match Score</span>' +
+        '<span class="aspira-asb-jd-insight-text" id="aspira-asb-banner-insight">—</span>' +
+        '<span class="aspira-asb-jd-missing" id="aspira-asb-banner-missing"></span>' +
+      '</div>';
+
+    /* 3-pill row */
+    var pillRow = document.createElement('div');
+    pillRow.id = 'aspira-asb-pill-row';
+    var pills = [
+      { id: 'aspira-asb-pr-km',    lbl: 'Keyword Match', fillCls: 'aspira-asb-fill-km',     val: result.jdMatch    != null ? result.jdMatch    : result.kmScore },
+      { id: 'aspira-asb-pr-dep',   lbl: 'Content Depth', fillCls: 'aspira-asb-fill-depth',  val: result.depthScore  },
+      { id: 'aspira-asb-pr-str',   lbl: 'Structure',      fillCls: 'aspira-asb-fill-struct', val: result.structScore }
+    ];
+    pills.forEach(function(p) {
+      var div = document.createElement('div');
+      div.className = 'aspira-asb-pill';
+      div.innerHTML =
+        '<span class="aspira-asb-pill-num" id="' + p.id + '-num">0%</span>' +
+        '<span class="aspira-asb-pill-lbl">' + p.lbl + '</span>' +
+        '<div class="aspira-asb-pill-bar"><div class="aspira-asb-pill-fill ' + p.fillCls + '" id="' + p.id + '-bar"></div></div>';
+      pillRow.appendChild(div);
+    });
+
+    /* Insert both after score wrap */
+    scoreWrap.parentNode.insertBefore(banner,  scoreWrap.nextSibling);
+    scoreWrap.parentNode.insertBefore(pillRow, banner.nextSibling);
+
+    aspiraAsbPopulateBanner(result);
+    aspiraAsbAnimatePills(pills, result);
+  }
+
+  function aspiraAsbPopulateBanner(result) {
+    var pctEl     = document.getElementById('aspira-asb-banner-pct');
+    var insightEl = document.getElementById('aspira-asb-banner-insight');
+    var missingEl = document.getElementById('aspira-asb-banner-missing');
+    var banner    = document.getElementById('aspira-asb-jd-banner');
+    if (!banner) return;
+
+    var jdMatch       = result.jdMatch;
+    var jdMatchResult = result.jdMatchResult || {};
+    var hasJD         = jdMatch !== null && jdMatch !== undefined;
+
+    banner.classList.add('aspira-asb-visible');
+
+    if (hasJD) {
+      var cls = jdMatch >= 60 ? 'aspira-asb-jd-pct-good' : jdMatch >= 35 ? 'aspira-asb-jd-pct-mid' : 'aspira-asb-jd-pct-low';
+      if (pctEl) { pctEl.textContent = jdMatch + '%'; pctEl.className = 'aspira-asb-jd-pct-large ' + cls; }
+
+      if (jdMatch >= 60) {
+        if (insightEl) insightEl.textContent = 'Your resume aligns well with the role — keyword coverage is strong.';
+      } else if (jdMatch >= 35) {
+        if (insightEl) insightEl.textContent = 'Your resume is missing some key role-specific keywords.';
+        var missed = (jdMatchResult.missing || []).slice(0, 5);
+        if (missingEl && missed.length) missingEl.textContent = 'Missing: ' + missed.join(', ');
+      } else {
+        if (insightEl) insightEl.textContent = 'Low alignment — many critical job keywords are absent from your resume.';
+        var missed2 = (jdMatchResult.missing || []).slice(0, 6);
+        if (missingEl && missed2.length) missingEl.textContent = 'Add: ' + missed2.join(', ');
+      }
+    } else {
+      if (pctEl)     { pctEl.textContent = '—'; pctEl.className = 'aspira-asb-jd-pct-large'; }
+      if (insightEl) insightEl.textContent = 'No JD provided — paste a job description for keyword alignment scoring.';
+    }
+  }
+
+  function aspiraAsbAnimatePills(pills, result) {
+    var pillRow = document.getElementById('aspira-asb-pill-row');
+    if (pillRow) pillRow.classList.add('aspira-asb-visible');
+
+    var vals = {
+      'aspira-asb-pr-km':  result.jdMatch    != null ? result.jdMatch    : (result.kmScore || 0),
+      'aspira-asb-pr-dep': result.depthScore  != null ? result.depthScore  : 0,
+      'aspira-asb-pr-str': result.structScore != null ? result.structScore : 0
+    };
+
+    Object.keys(vals).forEach(function(id, idx) {
+      var target  = vals[id];
+      var numEl   = document.getElementById(id + '-num');
+      var barEl   = document.getElementById(id + '-bar');
+      setTimeout(function() {
+        if (barEl) barEl.style.width = target + '%';
+        if (numEl) {
+          var start2 = null;
+          function fr(ts) {
+            if (!start2) start2 = ts;
+            var p2 = Math.min((ts - start2) / 1100, 1);
+            numEl.textContent = Math.round((1 - Math.pow(1 - p2, 3)) * target) + '%';
+            if (p2 < 1) requestAnimationFrame(fr);
+            else numEl.textContent = target + '%';
+          }
+          requestAnimationFrame(fr);
+        }
+      }, 150 + idx * 120);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     WATCH: MutationObserver on the gap modal — fires when it opens
+     (class 'aspira-gap-open' is added) and injects advanced data
+  ═══════════════════════════════════════════════════════════════ */
+  if (aspiraAsbModal) {
+    var aspiraAsbModalObs = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraAsbModal.classList.contains('aspira-gap-open')) {
+            /* Modal just opened — grab the latest advanced result */
+            var advResult = window.aspiraScrResult || null;
+            if (advResult) {
+              /* Small delay to let existing modal content render first */
+              setTimeout(function() {
+                aspiraAsbPopulateModal(advResult);
+              }, 120);
+            }
+          }
+        }
+      });
+    });
+    aspiraAsbModalObs.observe(aspiraAsbModal, { attributes: true });
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     WATCH: MutationObserver on result-full section — fires when it
+     becomes visible and adds the JD banner + pill row
+  ═══════════════════════════════════════════════════════════════ */
+  var aspiraAsbResultFull = document.getElementById('aspira-result-full');
+  if (aspiraAsbResultFull) {
+    var aspiraAsbResultObs = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (aspiraAsbResultFull.classList.contains('aspira-rf-visible')) {
+            var advResult = window.aspiraScrResult || null;
+            if (advResult) {
+              setTimeout(function() {
+                aspiraAsbBuildResultBanner(advResult);
+              }, 500);
+            }
+            aspiraAsbResultObs.disconnect();
+          }
+        }
+      });
+    });
+    aspiraAsbResultObs.observe(aspiraAsbResultFull, { attributes: true });
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     ENSURE: aspiraScrResult uses the advanced engine output format.
+     If the submit fires and window.aspiraScrScore is the advanced
+     version, the result will already have kmScore/depthScore/structScore.
+     We also update window.aspiraScrResult after each submission.
+  ═══════════════════════════════════════════════════════════════ */
+  var aspiraAsbSubmitBtn = document.getElementById('aspira-inp-submit');
+  if (aspiraAsbSubmitBtn) {
+    aspiraAsbSubmitBtn.addEventListener('click', function() {
+      /* Collect input (mirrors existing pattern) */
+      var resumeText = '';
+      var jdText     = '';
+
+      var textTab = document.getElementById('aspira-inh-tab-text');
+      var isTextMode = textTab && textTab.classList.contains('aspira-inh-tab-active');
+      if (isTextMode) {
+        var rtEl = document.getElementById('aspira-inh-resume-text');
+        if (rtEl) resumeText = rtEl.value.trim();
+      }
+
+      ['aspira-inp-freelance-desc','aspira-inp-biz-desc'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.value.trim()) resumeText = (resumeText + ' ' + el.value.trim()).trim();
+      });
+
+      var jdEl = document.getElementById('aspira-inp-jd');
+      if (jdEl && jdEl.value.trim()) jdText = jdEl.value.trim();
+
+      ['aspira-inh-jdta-freelance','aspira-inh-jdta-business'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.value.trim() && !jdText) jdText = el.value.trim();
+      });
+
+      /* Run advanced scorer (window.aspiraScrScore is overridden to aspiraAdvScore) */
+      if (typeof window.aspiraAdvScore === 'function') {
+        window.aspiraScrResult = window.aspiraAdvScore(resumeText, jdText);
+        /* Also update sub-score bars input */
+        window.aspiraSsbSubs = {
+          profile:     window.aspiraScrResult.structScore,
+          visibility:  Math.min((window.aspiraScrResult.structScore || 0) + ((window.aspiraScrResult.depthScore || 0) > 50 ? 10 : 0), 100),
+          positioning: window.aspiraScrResult.jdMatch != null ? window.aspiraScrResult.jdMatch : Math.round((window.aspiraScrResult.depthScore || 0) * 0.6)
+        };
+      }
+    }, false /* bubble — runs after capture-phase validators */);
+  }
+
+})();
+</script>
+<!-- END: Advanced Scoring Bridge -->
+
 </body>
 </html>
