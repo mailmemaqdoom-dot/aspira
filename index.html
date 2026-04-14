@@ -14844,5 +14844,356 @@ Academic Leadership · Parent Communication · STEM Education</pre>
 </script>
 <!-- END: Core Fix Block -->
 
+
+<!-- ============================================================ -->
+<!-- SAFE REINIT SCRIPT — aspira-safe-reinit                      -->
+<!-- Safely reinitialises all broken interactions after DOM load  -->
+<!-- Maps task selectors → real existing element IDs/classes      -->
+<!-- All logic wrapped in try-catch; zero modifications elsewhere  -->
+<!-- ============================================================ -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  "use strict";
+
+  /* ═══════════════════════════════════════════════════════════════
+     1. SAFE SELECTOR HELPER
+  ═══════════════════════════════════════════════════════════════ */
+  function getEl(selector) {
+    try {
+      var el = document.querySelector(selector);
+      return el ? el : null;
+    } catch(e) {
+      console.warn("[Aspira SafeReinit] getEl failed for:", selector, e.message);
+      return null;
+    }
+  }
+
+  function getAll(selector) {
+    try {
+      return document.querySelectorAll(selector);
+    } catch(e) {
+      console.warn("[Aspira SafeReinit] getAll failed for:", selector, e.message);
+      return [];
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     2. OPEN ASSISTANT MODAL (shared helper)
+     Works with the class-based .aspira-ast-open mechanism
+  ═══════════════════════════════════════════════════════════════ */
+  function aspiraOpenAssistant() {
+    try {
+      var overlay = getEl("#aspira-assistant");
+      if (!overlay) return;
+
+      /* Reset and open using the existing class system */
+      overlay.classList.add("aspira-ast-open");
+      overlay.removeAttribute("aria-hidden");
+      document.body.style.overflow = "hidden";
+
+      /* If the assistant init function exposed a reset, call it */
+      if (typeof window.aspiraAstOpen === "function") {
+        window.aspiraAstOpen();
+        return;
+      }
+
+      /* Fallback: manually clear messages and trigger step 1 via custom event */
+      var messages = getEl("#aspira-ast-messages");
+      var inputArea = getEl("#aspira-ast-input-area");
+      if (messages)  messages.innerHTML  = "";
+      if (inputArea) inputArea.innerHTML = "";
+
+      /* Fire custom event that existing IIFE may listen to */
+      try {
+        overlay.dispatchEvent(new CustomEvent("aspira:assistant:open", { bubbles: true }));
+      } catch(ev) {}
+
+    } catch(e) {
+      console.warn("[Aspira SafeReinit] openAssistant error:", e.message);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     3. FIX BOT BUTTON
+     Targets: #aspira-bot-button (task alias)
+              #aspira-fix2-bot-btn (real element from fix block)
+  ═══════════════════════════════════════════════════════════════ */
+  try {
+    var botSelectors = ["#aspira-bot-button", "#aspira-fix2-bot-btn"];
+    botSelectors.forEach(function(sel) {
+      var botBtn = getEl(sel);
+      if (!botBtn) return;
+
+      /* Clone to remove stale listeners, then re-attach */
+      var freshBot = botBtn.cloneNode(true);
+      botBtn.parentNode.replaceChild(freshBot, botBtn);
+
+      freshBot.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        aspiraOpenAssistant();
+      });
+    });
+  } catch(e) {
+    console.warn("[Aspira SafeReinit] botBtn error:", e.message);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     4. FIX WHATSAPP BUTTON
+     Targets: #aspira-whatsapp-button (task alias)
+              #aspira-float-wa (real element)
+     Restores native WA open behaviour (was intercepted by assistant)
+  ═══════════════════════════════════════════════════════════════ */
+  try {
+    var waSelectors = ["#aspira-whatsapp-button", "#aspira-float-wa"];
+    waSelectors.forEach(function(sel) {
+      var waBtn = getEl(sel);
+      if (!waBtn) return;
+
+      /* Re-attach clean click — opens WA in new tab */
+      waBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var href = waBtn.getAttribute("href") || "https://wa.me/917550270450";
+        window.open(href, "_blank", "noopener,noreferrer");
+      }, true /* capture — runs before previous interceptors */);
+    });
+  } catch(e) {
+    console.warn("[Aspira SafeReinit] waBtn error:", e.message);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     5. FIX RESUME SAMPLE FILTER
+     Targets: .aspira-filter-btn (task alias)
+              .aspira-fix2-filter-btn (real class from fix block)
+     Items:   .aspira-sample-item (task alias)
+              .aspira-smp-card (real class)
+     data-type → data-filter (mapped)
+  ═══════════════════════════════════════════════════════════════ */
+  try {
+    /* Selector aliases — handle both naming conventions */
+    var filterBtnSel  = ".aspira-filter-btn, .aspira-fix2-filter-btn";
+    var sampleItemSel = ".aspira-sample-item, .aspira-smp-card";
+
+    var filterBtns  = getAll(filterBtnSel);
+    var sampleItems = getAll(sampleItemSel);
+
+    /* Map badge text to category for .aspira-smp-card items
+       (they use data-filter on the button, not data-type on the card) */
+    var ASPIRA_SR_CAT_MAP = {
+      "Marketing":       "general",
+      "Software Dev":    "tech",
+      "Sales":           "sales",
+      "HR":              "general",
+      "Finance":         "general",
+      "Design":          "tech",
+      "Operations":      "general",
+      "Business Analyst":"tech",
+      "Freelancer":      "general",
+      "Education":       "general"
+    };
+
+    function getCardCategory(card) {
+      /* Check explicit data-type first */
+      if (card.dataset && card.dataset.type) return card.dataset.type;
+      /* Fall back to badge text */
+      var badge = card.querySelector(".aspira-smp-role-badge, .aspira-filter-badge");
+      if (badge) {
+        return ASPIRA_SR_CAT_MAP[badge.textContent.trim()] || "general";
+      }
+      return "general";
+    }
+
+    filterBtns.forEach(function(btn) {
+      /* Fresh listener — no clone needed, just add */
+      btn.addEventListener("click", function() {
+        try {
+          var filterType = this.getAttribute("data-type") || this.getAttribute("data-filter") || "all";
+
+          /* Show / hide items */
+          sampleItems.forEach(function(item) {
+            var itemCat = getCardCategory(item);
+            var show    = filterType === "all" || itemCat === filterType;
+
+            if (show) {
+              item.style.display   = "";
+              item.style.opacity   = "1";
+              item.style.visibility = "visible";
+              item.classList.remove("aspira-fix2-hidden");
+            } else {
+              item.style.display   = "none";
+              item.style.opacity   = "0";
+              item.style.visibility = "hidden";
+              item.classList.add("aspira-fix2-hidden");
+            }
+          });
+
+          /* Update active states on ALL filter buttons (both classes) */
+          getAll(filterBtnSel).forEach(function(b) {
+            b.classList.remove("active", "aspira-fix2-filter-active");
+            b.setAttribute("aria-pressed", "false");
+          });
+          this.classList.add("active", "aspira-fix2-filter-active");
+          this.setAttribute("aria-pressed", "true");
+
+        } catch(innerE) {
+          console.warn("[Aspira SafeReinit] filter click error:", innerE.message);
+        }
+      });
+    });
+
+  } catch(e) {
+    console.warn("[Aspira SafeReinit] filter error:", e.message);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     6. FIX "START CLARITY" / SCROLL BUTTONS
+     Targets: .aspira-start-btn (task alias)
+              .aspira-qs-continue-btn, [href="#aspira-start"],
+              [href="#aspira-input"], .btn-ghost[href="#flow"]
+  ═══════════════════════════════════════════════════════════════ */
+  try {
+    var scrollBtnSel = [
+      ".aspira-start-btn",
+      ".aspira-qs-continue-btn",
+      ".btn-ghost"
+    ].join(", ");
+
+    getAll(scrollBtnSel).forEach(function(btn) {
+      btn.addEventListener("click", function(e) {
+        try {
+          var href   = btn.getAttribute("href") || "";
+          var anchor = href.startsWith("#") ? href : null;
+          if (!anchor) return; /* Not a scroll link */
+          e.preventDefault();
+          var target = getEl(anchor);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } catch(innerE) {
+          console.warn("[Aspira SafeReinit] scroll click error:", innerE.message);
+        }
+      });
+    });
+
+    /* Also ensure the generic "Start with Clarity" anchors work */
+    getAll('[href="#aspira-start"], [href="#aspira-input"]').forEach(function(a) {
+      a.addEventListener("click", function(e) {
+        try {
+          e.preventDefault();
+          var targetId = a.getAttribute("href");
+          var target   = getEl(targetId);
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch(innerE) {}
+      });
+    });
+
+  } catch(e) {
+    console.warn("[Aspira SafeReinit] scrollBtns error:", e.message);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     7. FIX MODAL CLOSE BUTTONS (assistant + gap modal)
+  ═══════════════════════════════════════════════════════════════ */
+  try {
+    /* Assistant close */
+    var astCloseBtn = getEl("#aspira-ast-close");
+    if (astCloseBtn) {
+      astCloseBtn.addEventListener("click", function() {
+        var overlay = getEl("#aspira-assistant");
+        if (overlay) {
+          overlay.classList.remove("aspira-ast-open");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+        document.body.style.overflow = "";
+      });
+    }
+
+    /* Gap modal close */
+    var gapClose = getEl("#aspira-gap-close");
+    if (gapClose) {
+      gapClose.addEventListener("click", function() {
+        var modal = getEl("#aspira-gap-modal");
+        if (modal) {
+          modal.classList.remove("aspira-gap-open");
+          modal.setAttribute("aria-hidden", "true");
+        }
+        document.body.style.overflow = "";
+      });
+    }
+
+    /* Backdrop closes */
+    var astBackdrop = getEl("#aspira-ast-backdrop");
+    if (astBackdrop) {
+      astBackdrop.addEventListener("click", function() {
+        var overlay = getEl("#aspira-assistant");
+        if (overlay) overlay.classList.remove("aspira-ast-open");
+        document.body.style.overflow = "";
+      });
+    }
+
+    var gapBackdrop = getEl("#aspira-gap-backdrop");
+    if (gapBackdrop) {
+      gapBackdrop.addEventListener("click", function() {
+        var modal = getEl("#aspira-gap-modal");
+        if (modal) modal.classList.remove("aspira-gap-open");
+        document.body.style.overflow = "";
+      });
+    }
+
+    /* Escape key for all modals */
+    document.addEventListener("keydown", function(e) {
+      if (e.key !== "Escape") return;
+      try {
+        var ast = getEl("#aspira-assistant");
+        if (ast && ast.classList.contains("aspira-ast-open")) {
+          ast.classList.remove("aspira-ast-open");
+          ast.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+        var gap = getEl("#aspira-gap-modal");
+        if (gap && gap.classList.contains("aspira-gap-open")) {
+          gap.classList.remove("aspira-gap-open");
+          gap.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+      } catch(innerE) {}
+    });
+
+  } catch(e) {
+    console.warn("[Aspira SafeReinit] modal close error:", e.message);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     8. GLOBAL ERROR SAFETY — catch uncaught errors silently
+  ═══════════════════════════════════════════════════════════════ */
+  window.addEventListener("error", function(e) {
+    try {
+      console.warn(
+        "[Aspira Safe Mode] JS error prevented crash:", 
+        e.message || "unknown",
+        "at", (e.filename || ""), "line", (e.lineno || "")
+      );
+    } catch(silent) {}
+    /* Do NOT call e.preventDefault() — allows browser dev tools to still show errors */
+  });
+
+  window.addEventListener("unhandledrejection", function(e) {
+    try {
+      console.warn("[Aspira Safe Mode] Unhandled promise rejection:", e.reason);
+    } catch(silent) {}
+  });
+
+  /* ═══════════════════════════════════════════════════════════════
+     9. EXPOSE HELPERS GLOBALLY for debugging
+  ═══════════════════════════════════════════════════════════════ */
+  window.aspiraGetEl           = getEl;
+  window.aspiraGetAll          = getAll;
+  window.aspiraOpenAssistant   = aspiraOpenAssistant;
+
+}); /* END DOMContentLoaded */
+</script>
+<!-- END: Safe Reinit Script -->
+
 </body>
 </html>
