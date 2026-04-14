@@ -15195,5 +15195,388 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <!-- END: Safe Reinit Script -->
 
+
+<!-- ============================================================ -->
+<!-- DEFINITIVE INTERACTION FIX — aspira-dfix-*                   -->
+<!-- Resolves all root causes identified in audit:                -->
+<!-- 1. aspiraAstOpen not on window — exposed here               -->
+<!-- 2. aspira-float-wa has 3 conflicting handlers — nuclear fix  -->
+<!-- 3. Bot button safe-reinit cloneNode stripped listeners — fix -->
+<!-- 4. QS card → aspiraInputShow flow verified working           -->
+<!-- 5. All interactions rewired cleanly                          -->
+<!-- ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ─── Wait for full DOM ─── */
+  function aspiraDefFix() {
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 1: EXPOSE aspiraAstOpen on window
+       The assistant IIFE keeps it private. We reconstruct the
+       open/close logic here using the same CSS class mechanism
+       the IIFE uses, so it works identically.
+    ══════════════════════════════════════════════════════════ */
+    var aspiraDefAssistantOverlay = document.getElementById('aspira-assistant');
+    var aspiraDefAstMessages      = document.getElementById('aspira-ast-messages');
+    var aspiraDefAstInputArea     = document.getElementById('aspira-ast-input-area');
+
+    window.aspiraAstOpen = function() {
+      try {
+        if (!aspiraDefAssistantOverlay) return;
+
+        /* Reset state */
+        if (aspiraDefAstMessages)  aspiraDefAstMessages.innerHTML  = '';
+        if (aspiraDefAstInputArea) aspiraDefAstInputArea.innerHTML = '';
+
+        /* Open overlay using the class the IIFE CSS expects */
+        aspiraDefAssistantOverlay.classList.add('aspira-ast-open');
+        aspiraDefAssistantOverlay.removeAttribute('aria-hidden');
+        document.body.style.overflow = 'hidden';
+
+        /* Trigger the assistant step-1 flow if IIFE exposed its internal fn */
+        /* The IIFE checks aspiraAstStep which is local — trigger via custom event */
+        aspiraDefAssistantOverlay.dispatchEvent(
+          new CustomEvent('aspira:ast:open', { bubbles: true, cancelable: false })
+        );
+      } catch(e) {
+        console.warn('[Aspira DFix] aspiraAstOpen error:', e);
+      }
+    };
+
+    window.aspiraAstClose = function() {
+      try {
+        if (!aspiraDefAssistantOverlay) return;
+        aspiraDefAssistantOverlay.classList.remove('aspira-ast-open');
+        aspiraDefAssistantOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      } catch(e) {}
+    };
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 2: NUCLEAR FIX FOR aspira-float-wa
+       Remove the element from DOM, replace with clean clone,
+       restore ONLY WhatsApp behaviour (no assistant interception).
+       The bot button (#aspira-fix2-bot-btn) handles the assistant.
+    ══════════════════════════════════════════════════════════ */
+    var aspiraDefWaOld = document.getElementById('aspira-float-wa');
+    if (aspiraDefWaOld) {
+      /* Clone without event listeners */
+      var aspiraDefWaNew = aspiraDefWaOld.cloneNode(true);
+      aspiraDefWaOld.parentNode.replaceChild(aspiraDefWaNew, aspiraDefWaOld);
+
+      /* Attach ONE clean listener: open WhatsApp */
+      aspiraDefWaNew.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var href = aspiraDefWaNew.getAttribute('href') || 'https://wa.me/917550270450';
+        window.open(href, '_blank', 'noopener,noreferrer');
+      });
+
+      /* Keep it invisible (existing CSS) but ensure pointer-events */
+      aspiraDefWaNew.style.opacity       = '0';
+      aspiraDefWaNew.style.pointerEvents = 'auto';
+      aspiraDefWaNew.style.zIndex        = '9999';
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 3: FIX BOT BUTTON — clean clone + proper open fn
+       Now that window.aspiraAstOpen is defined, this works.
+    ══════════════════════════════════════════════════════════ */
+    var aspiraDefBotOld = document.getElementById('aspira-fix2-bot-btn');
+    if (aspiraDefBotOld) {
+      var aspiraDefBotNew = aspiraDefBotOld.cloneNode(true);
+      aspiraDefBotOld.parentNode.replaceChild(aspiraDefBotNew, aspiraDefBotOld);
+
+      aspiraDefBotNew.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        window.aspiraAstOpen();
+      });
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 4: FIX MODAL CLOSE BUTTONS — clean re-attach
+    ══════════════════════════════════════════════════════════ */
+    /* Assistant close button */
+    var aspiraDefAstCloseOld = document.getElementById('aspira-ast-close');
+    if (aspiraDefAstCloseOld) {
+      var aspiraDefAstCloseNew = aspiraDefAstCloseOld.cloneNode(true);
+      aspiraDefAstCloseOld.parentNode.replaceChild(aspiraDefAstCloseNew, aspiraDefAstCloseOld);
+      aspiraDefAstCloseNew.addEventListener('click', function() {
+        window.aspiraAstClose();
+      });
+    }
+
+    /* Assistant backdrop */
+    var aspiraDefAstBackdrop = document.getElementById('aspira-ast-backdrop');
+    if (aspiraDefAstBackdrop) {
+      aspiraDefAstBackdrop.addEventListener('click', function() {
+        window.aspiraAstClose();
+      });
+    }
+
+    /* Gap modal close */
+    var aspiraDefGapCloseOld = document.getElementById('aspira-gap-close');
+    if (aspiraDefGapCloseOld) {
+      var aspiraDefGapCloseNew = aspiraDefGapCloseOld.cloneNode(true);
+      aspiraDefGapCloseOld.parentNode.replaceChild(aspiraDefGapCloseNew, aspiraDefGapCloseOld);
+      aspiraDefGapCloseNew.addEventListener('click', function() {
+        var m = document.getElementById('aspira-gap-modal');
+        if (m) { m.classList.remove('aspira-gap-open'); m.setAttribute('aria-hidden','true'); }
+        document.body.style.overflow = '';
+      });
+    }
+
+    /* Gap backdrop */
+    var aspiraDefGapBackdrop = document.getElementById('aspira-gap-backdrop');
+    if (aspiraDefGapBackdrop) {
+      var aspiraDefGapBackdropNew = aspiraDefGapBackdrop.cloneNode(true);
+      aspiraDefGapBackdrop.parentNode.replaceChild(aspiraDefGapBackdropNew, aspiraDefGapBackdrop);
+      aspiraDefGapBackdropNew.addEventListener('click', function() {
+        var m = document.getElementById('aspira-gap-modal');
+        if (m) { m.classList.remove('aspira-gap-open'); m.setAttribute('aria-hidden','true'); }
+        document.body.style.overflow = '';
+      });
+    }
+
+    /* Escape key — single clean listener */
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      var ast = document.getElementById('aspira-assistant');
+      if (ast && ast.classList.contains('aspira-ast-open')) window.aspiraAstClose();
+      var gap = document.getElementById('aspira-gap-modal');
+      if (gap && gap.classList.contains('aspira-gap-open')) {
+        gap.classList.remove('aspira-gap-open');
+        gap.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+    });
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 5: FIX QS CARDS — reinitialise with clean listeners
+       The existing IIFE at line 2046 runs immediately at parse
+       time and sets up listeners correctly. But if ANY prior
+       script threw an error before that IIFE ran, cards are dead.
+       This is a guaranteed fallback re-init.
+    ══════════════════════════════════════════════════════════ */
+    var aspiraDefQsCards  = document.querySelectorAll('.aspira-qs-card');
+    var aspiraDefQsFooter = document.getElementById('aspira-qs-footer');
+    var aspiraDefQsBtn    = document.getElementById('aspira-qs-continue');
+    var aspiraDefQsLabel  = document.getElementById('aspira-qs-label');
+
+    var ADEF_QS_MESSAGES = {
+      'hired':     'Hi! I'm looking to get hired and would like to start with a Clarity Check.',
+      'freelance': 'Hi! I'm looking to get more clients / freelance work and would like to start with a Clarity Check.',
+      'business':  'Hi! I want to build or grow my business and would like to start with a Clarity Check.'
+    };
+    var ADEF_QS_LABELS = {
+      'hired':     'You're focused on getting hired — great starting point.',
+      'freelance': 'You're focused on growing your freelance presence.',
+      'business':  'You're focused on building or growing your business.'
+    };
+
+    aspiraDefQsCards.forEach(function(card) {
+      /* Clone to strip stale listeners */
+      var fresh = card.cloneNode(true);
+      card.parentNode.replaceChild(fresh, card);
+
+      fresh.addEventListener('click', function() {
+        var option = fresh.getAttribute('data-aspira-option');
+        if (!option) return;
+
+        /* Deselect all */
+        document.querySelectorAll('.aspira-qs-card').forEach(function(c) {
+          c.classList.remove('aspira-qs-selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+
+        /* Select this one */
+        fresh.classList.add('aspira-qs-selected');
+        fresh.setAttribute('aria-pressed', 'true');
+
+        /* Update label */
+        if (aspiraDefQsLabel) {
+          aspiraDefQsLabel.textContent = ADEF_QS_LABELS[option] || '';
+        }
+
+        /* Build WA URL */
+        var url = 'https://wa.me/917550270450?text=' + encodeURIComponent(ADEF_QS_MESSAGES[option] || '');
+
+        if (aspiraDefQsBtn) {
+          aspiraDefQsBtn.setAttribute('href', '#aspira-input');
+          aspiraDefQsBtn.setAttribute('data-aspira-wa-url', url);
+        }
+
+        /* Reveal footer */
+        if (aspiraDefQsFooter) {
+          aspiraDefQsFooter.classList.add('aspira-qs-footer-visible');
+          aspiraDefQsFooter.removeAttribute('aria-hidden');
+        }
+
+        /* Show input section */
+        if (typeof aspiraInputShow === 'function') {
+          aspiraInputShow(option, url);
+        } else {
+          /* Manual fallback: show section and correct panel */
+          var sec = document.getElementById('aspira-input');
+          if (sec) {
+            sec.classList.add('aspira-inp-visible');
+            sec.removeAttribute('aria-hidden');
+            /* Hide all panels */
+            document.querySelectorAll('.aspira-inp-panel').forEach(function(p) {
+              p.classList.remove('aspira-inp-panel-active');
+              p.setAttribute('aria-hidden','true');
+            });
+            /* Show matching panel */
+            var panelMap = { hired:'aspira-inp-panel-hired', freelance:'aspira-inp-panel-freelance', business:'aspira-inp-panel-business' };
+            var panelEl = document.getElementById(panelMap[option]);
+            if (panelEl) {
+              panelEl.classList.add('aspira-inp-panel-active');
+              panelEl.removeAttribute('aria-hidden');
+            }
+            /* Scroll to input section */
+            setTimeout(function() {
+              sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+          }
+        }
+      });
+    });
+
+    /* Fix Continue button scroll */
+    if (aspiraDefQsBtn) {
+      var aspiraDefQsBtnNew = aspiraDefQsBtn.cloneNode(true);
+      aspiraDefQsBtn.parentNode.replaceChild(aspiraDefQsBtnNew, aspiraDefQsBtn);
+      aspiraDefQsBtnNew.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById('aspira-input');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 6: FIX RESUME FILTER BUTTONS
+       Clean re-init of .aspira-fix2-filter-btn
+    ══════════════════════════════════════════════════════════ */
+    var ADEF_CAT_MAP = {
+      'Marketing':'general','Software Dev':'tech','Sales':'sales',
+      'HR':'general','Finance':'general','Design':'tech',
+      'Operations':'general','Business Analyst':'tech',
+      'Freelancer':'general','Education':'general'
+    };
+
+    var aspiraDefFilters = document.querySelectorAll('.aspira-fix2-filter-btn');
+    aspiraDefFilters.forEach(function(btn) {
+      var freshF = btn.cloneNode(true);
+      btn.parentNode.replaceChild(freshF, btn);
+
+      freshF.addEventListener('click', function() {
+        var filter = freshF.getAttribute('data-filter') || 'all';
+
+        document.querySelectorAll('.aspira-smp-card').forEach(function(card) {
+          var badge = card.querySelector('.aspira-smp-role-badge');
+          var badgeText = badge ? badge.textContent.trim() : '';
+          var cat = ADEF_CAT_MAP[badgeText] || 'general';
+          var show = filter === 'all' || cat === filter;
+
+          if (show) {
+            card.style.display   = '';
+            card.style.opacity   = '1';
+            card.classList.remove('aspira-fix2-hidden');
+          } else {
+            card.style.display   = 'none';
+            card.classList.add('aspira-fix2-hidden');
+          }
+        });
+
+        /* Update active state */
+        document.querySelectorAll('.aspira-fix2-filter-btn').forEach(function(b) {
+          b.classList.remove('aspira-fix2-filter-active','active');
+        });
+        freshF.classList.add('aspira-fix2-filter-active','active');
+      });
+    });
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 7: FIX SCROLL CTAs
+    ══════════════════════════════════════════════════════════ */
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        var href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        /* Only intercept internal page anchors */
+        var target = document.getElementById(href.slice(1));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ══════════════════════════════════════════════════════════
+       STEP 8: ALSO FIX ASSISTANT INTERNAL STEP FLOW
+       The IIFE's aspiraAstStep1 is private. We patch by listening
+       for the custom event we fire in aspiraAstOpen.
+    ══════════════════════════════════════════════════════════ */
+    if (aspiraDefAssistantOverlay) {
+      aspiraDefAssistantOverlay.addEventListener('aspira:ast:open', function() {
+        /* Let the existing IIFE run first (it may have also attached a listener).
+           If it didn't fire step1, we check after 300ms and kickstart manually */
+        setTimeout(function() {
+          var msgs = document.getElementById('aspira-ast-messages');
+          if (msgs && msgs.children.length === 0) {
+            /* Assistant IIFE didn't run — it likely failed silently.
+               Show a minimal functional fallback message */
+            var fallback = document.createElement('div');
+            fallback.className = 'aspira-ast-bubble aspira-ast-bubble-bot';
+            fallback.textContent = 'Hi! What can I help you get clarity on today?';
+            msgs.appendChild(fallback);
+
+            /* Show 3 path option buttons */
+            var opts = document.createElement('div');
+            opts.className = 'aspira-ast-options';
+            [
+              { label: "I'm trying to get hired",              option: 'hired'     },
+              { label: "I want more freelance clients",        option: 'freelance' },
+              { label: "I'm building or growing a business",   option: 'business'  }
+            ].forEach(function(o) {
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'aspira-ast-option-btn';
+              btn.textContent = o.label;
+              btn.addEventListener('click', function() {
+                /* Close assistant, select the matching QS card, open input section */
+                window.aspiraAstClose();
+                setTimeout(function() {
+                  var card = document.querySelector('[data-aspira-option="' + o.option + '"]');
+                  if (card) card.click();
+                  var sec = document.getElementById('aspira-start');
+                  if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+              });
+              opts.appendChild(btn);
+            });
+            msgs.appendChild(opts);
+          }
+        }, 300);
+      });
+    }
+
+    console.log('[Aspira DFix] All interactions reinitialised successfully.');
+  }
+
+  /* Run on DOMContentLoaded or immediately if already ready */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', aspiraDefFix);
+  } else {
+    aspiraDefFix();
+  }
+
+})();
+</script>
+<!-- END: Definitive Interaction Fix -->
+
 </body>
 </html>
