@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspira | Career & Business Growth Platform</title>
+  <!-- Existing fonts and base styles would be here -->
+  <style>
+    /* NEW SAAS NAVIGATION & LAYOUT */
+    :root {
+      --primary: #6b8f71;
+      --primary-dark: #5a7a60;
+      --bg-light: #faf9f6;
+      --text-main: #2c2c2a;
+      --text-muted: #8a8a85;
+    }
+
+    .saas-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(250, 249, 246, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 1rem 0;
+    }
+
+    .saas-nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* DUAL PATH HERO */
+    .dual-path-hero {
+      padding: 160px 0 100px;
+      background: var(--bg-light);
+      text-align: center;
+    }
+
+    .path-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 4rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .path-card {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      border: 1px solid rgba(0,0,0,0.05);
+      text-align: left;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .path-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+      border-color: var(--primary);
+    }
+
+    .path-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .path-card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .path-features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 2rem;
+    }
+
+    .path-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .path-features li::before {
+      content: "✓";
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .btn-path {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .path-card:hover .btn-path {
+      background: var(--primary-dark);
+    }
+
+    /* SECTION HIERARCHY */
+    .system-section {
+      padding: 100px 0;
+      display: none; /* Hidden by default, shown based on path */
+    }
+
+    .system-section.active {
+      display: block;
+    }
+
+    /* Existing styles from index.html would follow... */
+  </style>
+</head>
+<body>
+  <nav class="saas-nav">
+    <div class="container">
+      <div class="logo" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700;">Aspira<span>.</span></div>
+      <div class="nav-links">
+        <a href="#career">Career Growth</a>
+        <a href="#business">Business Growth</a>
+        <a href="#your-space">Your Space</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="dual-path-hero">
+    <div class="container">
+      <span style="text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 600; font-size: 0.8rem;">Welcome to Aspira</span>
+      <h1 style="font-family: 'Playfair Display', serif; font-size: 3.5rem; margin: 1rem 0;">Choose Your Growth Path</h1>
+      <p style="max-width: 600px; margin: 0 auto; color: var(--text-muted);">Select the system that matches your current goals. We've built specialized tools for both career professionals and business owners.</p>
+      
+      <div class="path-selector">
+        <!-- CAREER PATH -->
+        <a href="#career-system" class="path-card" onclick="showSystem('career')">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎓</div>
+          <h3>Career Growth System</h3>
+          <p>For professionals looking to land their dream role or level up their career presence.</p>
+          <ul class="path-features">
+            <li>AI Resume Builder & Scoring</li>
+            <li>Job Readiness Analysis</li>
+            <li>Professional Sample Library</li>
+            <li>Career Clarity Reports</li>
+          </ul>
+          <span class="btn-path">Enter Career System</span>
+        </a>
+
+        <!-- BUSINESS PATH -->
+        <a href="#business-system" class="path-card" onclick="showSystem('business')">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏢</div>
+          <h3>Business Growth System</h3>
+          <p>For entrepreneurs and local businesses ready to build a professional digital presence.</p>
+          <ul class="path-features">
+            <li>High-Conversion Websites</li>
+            <li>Digital Presence Audit</li>
+            <li>Business Branding Tools</li>
+            <li>Growth Strategy Maps</li>
+          </ul>
+          <span class="btn-path">Enter Business System</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CAREER SYSTEM SECTION -->
+  <div id="career-system" class="system-section">
+    <!-- Existing Career Content (Resume sections, etc.) goes here -->
+    <div class="container">
+      <h2 style="text-align: center; font-family: 'Playfair Display', serif; margin-bottom: 3rem;">Career Growth Tools</h2>
+      <!-- Re-inserting existing sections like #recognition, #flow, #services (Career parts) -->
+    </div>
+  </div>
+
+  <!-- BUSINESS SYSTEM SECTION -->
+  <div id="business-system" class="system-section">
+    <!-- Existing Business Content (Website types, etc.) goes here -->
+    <div class="container">
+      <h2 style="text-align: center; font-family: 'Playfair Display', serif; margin-bottom: 3rem;">Business Growth Tools</h2>
+      <!-- Re-inserting existing sections like #aspira-biz-types -->
+    </div>
+  </div>
+
+  <!-- YOUR SPACE (DASHBOARD) -->
+  <div id="your-space" class="system-section active">
+    <!-- Re-inserting existing #aspira-yourspace and #aspira-sp-section -->
+  </div>
+
+  <script>
+    function showSystem(type) {
+      document.querySelectorAll('.system-section').forEach(s => s.classList.remove('active'));
+      if (type === 'career') {
+        document.getElementById('career-system').classList.add('active');
+        document.getElementById('career-system').scrollIntoView({ behavior: 'smooth' });
+      } else if (type === 'business') {
+        document.getElementById('business-system').classList.add('active');
+        document.getElementById('business-system').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    // Initialize based on hash if present
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash === '#career-system') showSystem('career');
+      if (hash === '#business-system') showSystem('business');
+    });
+  </script>
+
+  <!-- Rest of existing scripts and footer from index.html -->
+</body>
+</html>
