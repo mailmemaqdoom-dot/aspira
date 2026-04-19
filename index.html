@@ -211,10 +211,19 @@
             transition: var(--transition);
             border-radius: 4px;
         }
+        
+        .category-btn:hover {
+            box-shadow: 0 0 12px rgba(120, 1, 21, 0.2);
+        }
+        
+        .category-btn:active {
+            transform: scale(0.98);
+        }
 
         .category-btn.active {
             background: var(--maroon);
             color: var(--butter);
+            box-shadow: 0 0 15px rgba(120, 1, 21, 0.3);
         }
 
         textarea {
@@ -233,7 +242,12 @@
         textarea:focus {
             outline: none;
             border-color: var(--maroon);
-            box-shadow: 0 0 15px rgba(120, 1, 21, 0.1);
+            box-shadow: 0 0 20px rgba(120, 1, 21, 0.2);
+        }
+        
+        [data-theme="dark"] textarea:focus {
+            border-color: #ff979a;
+            box-shadow: 0 0 20px rgba(255, 151, 154, 0.2);
         }
 
         .action-btn {
@@ -250,7 +264,15 @@
 
         .action-btn:hover {
             transform: scale(1.02);
-            filter: brightness(1.1);
+            box-shadow: 0 0 20px rgba(120, 1, 21, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        [data-theme="dark"] .action-btn:hover {
+            box-shadow: 0 0 20px rgba(255, 151, 154, 0.4);
         }
 
         /* Results Display */
@@ -269,12 +291,22 @@
             margin-bottom: 1.5rem;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.5s ease;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .result-card.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+        
+        .result-card h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .result-card p {
+            line-height: 1.7;
+            opacity: 0.9;
         }
 
         .score-circle {
@@ -527,6 +559,63 @@
             transform: scale(0.95);
         }
 
+        /* Loading State */
+        .loading-state {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.7;
+        }
+        
+        .loading-state.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .loading-text {
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--maroon);
+            margin: 0 4px;
+            animation: pulse 1.4s infinite;
+        }
+        
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes pulse {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-8px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.7;
+            }
+        }
+        
         /* Reflection Layer */
         .reflection-line {
             font-style: italic;
@@ -604,14 +693,22 @@
         </section>
 
         <section id="reflection" style="display:none;">
-            <p class="reflection-line">“What’s seen isn’t always what’s intended.”</p>
+            <p class="reflection-line">"What's seen isn't always what's intended."</p>
+            <div class="loading-state" id="reflection-loading">
+                <div class="loading-text">Understanding what is being shared…</div>
+                <div><span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span></div>
+            </div>
             <div class="results-container" id="results-display">
                 <!-- Results cards will be injected here -->
             </div>
         </section>
 
         <section id="gaps" style="display:none;">
-            <p class="reflection-line">“What feels clear internally may not appear the same externally.”</p>
+            <p class="reflection-line">"What feels clear internally may not appear the same externally."</p>
+            <div class="loading-state" id="gaps-loading">
+                <div class="loading-text">Mapping how this may be perceived…</div>
+                <div><span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span></div>
+            </div>
             <div class="results-container" id="gaps-display">
                 <!-- Gaps cards will be injected here -->
             </div>
@@ -761,6 +858,8 @@
 
             const reflectionDisplay = document.getElementById('results-display');
             const gapsDisplay = document.getElementById('gaps-display');
+            const reflectionLoading = document.getElementById('reflection-loading');
+            const gapsLoading = document.getElementById('gaps-loading');
             const waContainer = document.getElementById('whatsapp-container');
 
             reflectionDisplay.style.display = 'block';
@@ -769,61 +868,91 @@
             // Clear previous
             reflectionDisplay.innerHTML = '';
             gapsDisplay.innerHTML = '';
+            
+            // Show loading states
+            reflectionLoading.classList.add('active');
+            gapsLoading.classList.add('active');
 
-            const cards = [
-                { container: reflectionDisplay, html: `
-                    <div class="result-card">
-                        <div class="score-circle">${data.score}</div>
-                        <h3>Clarity Score</h3>
-                        <p>${data.strengths}</p>
-                    </div>` 
+            // Scroll to reflection section
+            isScrolling = true;
+            document.getElementById('reflection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => { isScrolling = false; }, 1000);
+
+            // Result cards with loading delays
+            const resultSequence = [
+                {
+                    delay: 300,
+                    container: reflectionDisplay,
+                    loadingElement: reflectionLoading,
+                    html: `
+                        <div class="result-card">
+                            <div class="score-circle">${data.score}</div>
+                            <h3>Clarity Score</h3>
+                            <p>${data.strengths}</p>
+                        </div>`
                 },
-                { container: gapsDisplay, html: `
-                    <div class="result-card">
-                        <h3>Perception Insights</h3>
-                        <p>${data.perception}</p>
-                    </div>` 
+                {
+                    delay: 1200,
+                    container: gapsDisplay,
+                    loadingElement: gapsLoading,
+                    html: `
+                        <div class="result-card">
+                            <h3>Perception Insights</h3>
+                            <p>${data.perception}</p>
+                        </div>`
                 },
-                { container: gapsDisplay, html: `
-                    <div class="result-card">
-                        <h3>Identified Gaps</h3>
-                        <p>${data.gaps}</p>
-                    </div>` 
+                {
+                    delay: 1800,
+                    container: gapsDisplay,
+                    loadingElement: null,
+                    html: `
+                        <div class="result-card">
+                            <h3>Identified Gaps</h3>
+                            <p>${data.gaps}</p>
+                        </div>`
                 },
-                { container: gapsDisplay, html: `
-                    <div class="result-card">
-                        <h3>Next Steps</h3>
-                        <p>${data.steps}</p>
-                    </div>` 
+                {
+                    delay: 2400,
+                    container: gapsDisplay,
+                    loadingElement: null,
+                    html: `
+                        <div class="result-card">
+                            <h3>Next Steps</h3>
+                            <p>${data.steps}</p>
+                        </div>`
                 }
             ];
 
-            // Reveal in sequence
-            cards.forEach((card, index) => {
+            // Reveal in sequence with pacing
+            resultSequence.forEach((item, index) => {
                 setTimeout(() => {
-                    const div = document.createElement('div');
-                    div.innerHTML = card.html;
-                    const cardElement = div.firstElementChild;
-                    card.container.appendChild(cardElement);
-                    setTimeout(() => cardElement.classList.add('visible'), 50);
-                    
-                    if (index === 0) {
-                        isScrolling = true;
-                        document.getElementById('reflection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        setTimeout(() => { isScrolling = false; }, 1000);
+                    // Hide loading state when first card appears
+                    if (item.loadingElement) {
+                        item.loadingElement.classList.remove('active');
                     }
-                }, index * 600);
+                    
+                    const div = document.createElement('div');
+                    div.innerHTML = item.html;
+                    const cardElement = div.firstElementChild;
+                    item.container.appendChild(cardElement);
+                    
+                    // Trigger animation
+                    setTimeout(() => cardElement.classList.add('visible'), 50);
+                }, item.delay);
             });
 
-            // WhatsApp
-            const message = `ASPIRA Clarity Score: ${data.score}. Gaps identified: ${data.gaps}`;
-            const waUrl = `https://wa.me/917550270450?text=${encodeURIComponent(message)}`;
-            waContainer.innerHTML = `
-                <a href="${waUrl}" target="_blank" class="whatsapp-btn">
-                    Connect Pathways via WhatsApp
-                </a>
-            `;
+            // WhatsApp button appears after all results
+            setTimeout(() => {
+                const message = `ASPIRA Clarity Score: ${data.score}. Gaps identified: ${data.gaps}`;
+                const waUrl = `https://wa.me/917550270450?text=${encodeURIComponent(message)}`;
+                waContainer.innerHTML = `
+                    <a href="${waUrl}" target="_blank" class="whatsapp-btn">
+                        Connect Pathways via WhatsApp
+                    </a>
+                `;
+            }, 3000);
         }
+
 
         // AI Assistant Logic
         const aiToggle = document.getElementById('ai-toggle');
@@ -862,13 +991,75 @@
             aiInput.value = '';
 
             setTimeout(() => {
-                let response = "Clarity is a journey. Try focusing on your 'career', 'freelance' work, or 'business' presence.";
-                if (text.includes('career')) response = "In a career context, clarity often resides in the alignment between your past impact and future intent.";
-                if (text.includes('freelance')) response = "For freelancers, clarity is the bridge between your skill and the client's specific pain point.";
-                if (text.includes('business')) response = "Business clarity requires transparency in how value is created and delivered.";
-                
+                let response = getAiResponse(text);
                 appendMessage(response, 'ai');
             }, 600);
+        }
+        
+        function getAiResponse(text) {
+            // Career-related keywords
+            const careerKeywords = ['career', 'job', 'resume', 'cv', 'experience', 'skills', 'professional', 'work', 'position', 'role', 'employment'];
+            // Freelance-related keywords
+            const freelanceKeywords = ['freelance', 'service', 'client', 'project', 'portfolio', 'rate', 'proposal', 'gig'];
+            // Business-related keywords
+            const businessKeywords = ['business', 'startup', 'company', 'market', 'product', 'presence', 'brand', 'growth', 'strategy', 'pitch'];
+            // Platform/feature keywords
+            const platformKeywords = ['how', 'work', 'platform', 'aspira', 'clarity', 'score', 'result', 'gap', 'insight', 'perception'];
+            
+            // Check which category matches
+            const isCareer = careerKeywords.some(k => text.includes(k));
+            const isFreelance = freelanceKeywords.some(k => text.includes(k));
+            const isBusiness = businessKeywords.some(k => text.includes(k));
+            const isPlatform = platformKeywords.some(k => text.includes(k));
+            
+            // Career responses
+            if (isCareer) {
+                const careerResponses = [
+                    "In a career context, clarity often resides in the alignment between past impact and future intent.",
+                    "Clarity in a resume means the reader understands not just what was done, but the measurable difference made.",
+                    "Career clarity emerges when the narrative connects specific achievements to genuine strengths."
+                ];
+                return careerResponses[Math.floor(Math.random() * careerResponses.length)];
+            }
+            
+            // Freelance responses
+            if (isFreelance) {
+                const freelanceResponses = [
+                    "For freelancers, clarity is the bridge between skill and the client's specific pain point.",
+                    "Service clarity means potential clients immediately understand the exact problem being solved.",
+                    "Freelance positioning becomes clear when the offering is specific enough to attract the right projects."
+                ];
+                return freelanceResponses[Math.floor(Math.random() * freelanceResponses.length)];
+            }
+            
+            // Business responses
+            if (isBusiness) {
+                const businessResponses = [
+                    "Business clarity requires transparency in how value is created and delivered to the market.",
+                    "A clear business presence means stakeholders quickly grasp the core transformation being offered.",
+                    "Clarity in business communication bridges the gap between internal understanding and external perception."
+                ];
+                return businessResponses[Math.floor(Math.random() * businessResponses.length)];
+            }
+            
+            // Platform/feature responses
+            if (isPlatform) {
+                const platformResponses = [
+                    "ASPIRA analyzes text to reveal gaps between intention and perception. The score reflects how clearly the message comes across.",
+                    "The clarity score measures how well the content communicates. Higher scores suggest the message is likely to resonate as intended.",
+                    "Results highlight what's working and what may need refinement. Gaps often reveal opportunities for stronger communication.",
+                    "Perception insights show how the content might be received. Sometimes what feels clear internally reads differently externally."
+                ];
+                return platformResponses[Math.floor(Math.random() * platformResponses.length)];
+            }
+            
+            // Default responses
+            const defaultResponses = [
+                "Clarity helps reveal what can be improved. Try asking about career, freelance work, or business presence.",
+                "The goal is to understand how clearly something comes across. What aspect would be helpful to explore?",
+                "Clarity emerges when intention and perception align. What would be most useful to clarify?"
+            ];
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
         }
 
         function appendMessage(text, sender) {
@@ -876,7 +1067,14 @@
             div.className = `message ${sender}`;
             div.textContent = text;
             aiMessages.appendChild(div);
+            
+            // Add subtle animation
+            div.style.opacity = '0';
+            div.style.transform = 'translateY(10px)';
             setTimeout(() => {
+                div.style.transition = 'all 0.3s ease';
+                div.style.opacity = '1';
+                div.style.transform = 'translateY(0)';
                 aiMessages.scrollTop = aiMessages.scrollHeight;
             }, 50);
         }
