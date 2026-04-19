@@ -17,10 +17,53 @@
         }
 
         [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: var(--butter);
-            --card-bg: rgba(40, 40, 40, 0.8);
-            --nav-bg: rgba(26, 26, 26, 0.8);
+            --bg-color: #0d0d0d;
+            --text-color: #f0f0f0;
+            --card-bg: rgba(25, 25, 25, 0.95);
+            --nav-bg: rgba(18, 18, 18, 0.95);
+        }
+        
+        [data-theme="dark"] .nav-links a {
+            color: #f0f0f0;
+        }
+        
+        [data-theme="dark"] .category-btn {
+            border-color: #ff979a;
+            color: #ff979a;
+        }
+        
+        [data-theme="dark"] .category-btn.active {
+            background: #ff979a;
+            color: #0d0d0d;
+        }
+        
+        [data-theme="dark"] .action-btn {
+            background: #ff979a;
+            color: #0d0d0d;
+        }
+        
+        [data-theme="dark"] .action-btn:hover {
+            background: #ff7d80;
+        }
+        
+        [data-theme="dark"] .score-circle {
+            border-color: #ff979a;
+            color: #ff979a;
+        }
+        
+        [data-theme="dark"] .ai-header {
+            background: #ff979a;
+            color: #0d0d0d;
+        }
+        
+        [data-theme="dark"] .message.user {
+            background: #ff979a;
+            color: #0d0d0d;
+        }
+        
+        [data-theme="dark"] textarea::placeholder,
+        [data-theme="dark"] .ai-input input::placeholder {
+            color: rgba(240, 240, 240, 0.5);
         }
 
         * {
@@ -32,6 +75,8 @@
 
         html {
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
@@ -40,6 +85,9 @@
             transition: var(--transition);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         /* Glass Effect */
@@ -109,12 +157,13 @@
         /* Hero Section */
         section {
             min-height: 100vh;
-            padding: 6rem 2rem 2rem;
+            padding: 6rem 1.5rem 1rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            gap: 1.5rem;
         }
 
         .hero-stacked {
@@ -254,13 +303,28 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 24px rgba(120, 1, 21, 0.3);
             z-index: 1001;
             transition: var(--transition);
+            border: none;
+            padding: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .ai-toggle {
+                bottom: 6.5rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+            }
         }
 
         .ai-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
+        }
+        
+        .ai-toggle:active {
+            transform: scale(0.95);
         }
 
         .ai-modal {
@@ -270,13 +334,39 @@
             width: 350px;
             height: 450px;
             background: var(--bg-color);
-            border: 1px solid rgba(120, 1, 21, 0.1);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(120, 1, 21, 0.15);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
             display: none;
             flex-direction: column;
             z-index: 1001;
             overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .ai-modal {
+                position: fixed;
+                bottom: 56px;
+                right: 1rem;
+                left: 1rem;
+                width: auto;
+                max-width: none;
+                height: 60vh;
+                max-height: 400px;
+                border-radius: 20px;
+            }
         }
 
         .ai-header {
@@ -324,37 +414,91 @@
 
         .ai-input input {
             flex: 1;
-            padding: 0.5rem;
+            padding: 0.75rem;
             border: 1px solid rgba(120, 1, 21, 0.2);
-            border-radius: 4px;
+            border-radius: 6px;
             background: var(--card-bg);
             color: var(--text-color);
+            font-size: 1rem;
+            min-height: 44px;
+        }
+        
+        .ai-input input:focus {
+            outline: none;
+            border-color: var(--maroon);
         }
 
         /* Mobile Experience */
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .top-nav { padding: 1rem; }
+            .top-nav { padding: 0.75rem 1rem; }
             .hero-stacked .wordmark { font-size: 2rem; }
+            
+            section {
+                padding: 5.5rem 1rem 5.5rem;
+                gap: 1rem;
+            }
+            
+            .input-container {
+                padding: 0 0.5rem;
+            }
+            
+            .category-btn {
+                padding: 1rem 1.2rem;
+                font-size: 0.95rem;
+                min-height: 44px;
+            }
+            
+            textarea {
+                min-height: 180px;
+                padding: 1.2rem;
+                font-size: 1rem;
+            }
+            
+            .action-btn {
+                padding: 1.2rem 2rem;
+                font-size: 1rem;
+                min-height: 48px;
+            }
+            
+            .result-card {
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+            }
             
             .bottom-bar {
                 position: fixed;
                 bottom: 0;
+                left: 0;
+                right: 0;
                 width: 100%;
                 background: var(--nav-bg);
                 backdrop-filter: blur(10px);
                 display: flex;
                 justify-content: space-around;
-                padding: 0.8rem;
+                align-items: center;
+                padding: 0.75rem 0;
                 border-top: 1px solid rgba(120, 1, 21, 0.1);
                 z-index: 1000;
+                height: 56px;
             }
 
             .bottom-bar a {
                 text-decoration: none;
                 color: var(--text-color);
-                font-size: 0.8rem;
+                font-size: 0.85rem;
                 font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 48px;
+                min-width: 48px;
+                flex: 1;
+                transition: var(--transition);
+            }
+            
+            .bottom-bar a:active {
+                opacity: 0.6;
             }
         }
 
@@ -364,12 +508,24 @@
             border: none;
             color: var(--text-color);
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.7;
             transition: var(--transition);
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
         }
 
-        .theme-toggle:hover { opacity: 1; }
+        .theme-toggle:hover { 
+            opacity: 1;
+        }
+        
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
 
         /* Reflection Layer */
         .reflection-line {
@@ -494,19 +650,25 @@
     </div>
 
     <script>
-        // Theme Management
+        // Theme Management (with aspira_theme key)
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('aspira_theme') || 'light';
         body.setAttribute('data-theme', savedTheme);
+        updateThemeToggleIcon(savedTheme);
 
         themeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            localStorage.setItem('aspira_theme', newTheme);
+            updateThemeToggleIcon(newTheme);
         });
+        
+        function updateThemeToggleIcon(theme) {
+            themeToggle.textContent = theme === 'light' ? '◑' : '◐';
+        }
 
         // Category Selection
         const catBtns = document.querySelectorAll('.category-btn');
@@ -577,10 +739,20 @@
         
         analyzeBtn.addEventListener('click', () => {
             const text = inputArea.value.trim();
-            if (!text) return;
+            if (!text) {
+                inputArea.focus();
+                return;
+            }
 
             const results = analyzeClarity(text, selectedCategory);
             displayResults(results);
+        });
+        
+        // Allow Enter key in textarea
+        inputArea.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                analyzeBtn.click();
+            }
         });
 
         function displayResults(data) {
@@ -635,7 +807,11 @@
                     card.container.appendChild(cardElement);
                     setTimeout(() => cardElement.classList.add('visible'), 50);
                     
-                    if (index === 0) document.getElementById('reflection').scrollIntoView();
+                    if (index === 0) {
+                        isScrolling = true;
+                        document.getElementById('reflection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        setTimeout(() => { isScrolling = false; }, 1000);
+                    }
                 }, index * 600);
             });
 
@@ -657,11 +833,22 @@
         const aiInput = document.getElementById('ai-user-input');
         const aiMessages = document.getElementById('ai-messages');
 
-        aiToggle.addEventListener('click', () => aiModal.style.display = 'flex');
+        aiToggle.addEventListener('click', () => {
+            aiModal.style.display = 'flex';
+            setTimeout(() => aiInput.focus(), 300);
+        });
         closeAi.addEventListener('click', () => aiModal.style.display = 'none');
         document.getElementById('mobile-ask').addEventListener('click', (e) => {
             e.preventDefault();
             aiModal.style.display = 'flex';
+            setTimeout(() => aiInput.focus(), 300);
+        });
+        
+        // Close modal on outside click
+        document.addEventListener('click', (e) => {
+            if (aiModal.style.display === 'flex' && !aiModal.contains(e.target) && !aiToggle.contains(e.target)) {
+                aiModal.style.display = 'none';
+            }
         });
 
         aiSend.addEventListener('click', handleAiMessage);
@@ -689,24 +876,72 @@
             div.className = `message ${sender}`;
             div.textContent = text;
             aiMessages.appendChild(div);
-            aiMessages.scrollTop = aiMessages.scrollHeight;
+            setTimeout(() => {
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            }, 50);
         }
 
-        // Smooth Scroll Active Link
+        // Enhanced Navigation & Scroll Behavior
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('section');
+        
+        // Smooth scroll with active highlight
+        let isScrolling = false;
         window.addEventListener('scroll', () => {
+            if (isScrolling) return;
+            
             let current = '';
-            const sections = document.querySelectorAll('section');
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 100) {
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200 && window.pageYOffset < sectionTop + sectionHeight - 200) {
                     current = section.getAttribute('id');
                 }
             });
 
-            document.querySelectorAll('.nav-links a').forEach(a => {
+            navLinks.forEach(a => {
                 a.classList.remove('active');
                 if (a.getAttribute('href').includes(current)) {
                     a.classList.add('active');
+                }
+            });
+        }, { passive: true });
+        
+        // Enhanced navigation click handling
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    isScrolling = true;
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, 1000);
+                }
+            });
+        });
+        
+        // Bottom bar navigation for mobile
+        const bottomBarLinks = document.querySelectorAll('.bottom-bar a');
+        bottomBarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.id !== 'mobile-ask') {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        isScrolling = true;
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        setTimeout(() => {
+                            isScrolling = false;
+                        }, 1000);
+                    }
                 }
             });
         });
