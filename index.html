@@ -333,6 +333,330 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
 @media(max-width:480px){
   .h-badge{margin-bottom:24px}
 }
+
+/* ══════════════════════════════════════════
+   BUSINESS CLARITY LAYER — ADD-ON MODULE
+══════════════════════════════════════════ */
+#biz-clarity{
+  background:var(--bg);
+  padding:110px 28px 100px;
+  min-height:auto;
+  border-top:1px solid var(--bd);
+}
+
+/* Entry header */
+.bcl-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(120,1,21,.07);border:1px solid var(--bd2);
+  border-radius:100px;padding:5px 16px;
+  font-size:.62rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--c);
+  margin-bottom:32px;
+}
+.bcl-dot{width:5px;height:5px;border-radius:50%;background:var(--c);animation:blink 2.5s ease-in-out infinite}
+.bcl-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.4rem);
+  font-weight:400;color:var(--t1);line-height:1.2;
+  margin-bottom:14px;
+}
+.bcl-title em{font-style:italic;color:var(--c)}
+.bcl-sub{
+  font-size:.88rem;color:var(--t2);
+  line-height:1.82;max-width:500px;
+  margin:0 auto 64px;
+}
+
+/* ── Step indicator ── */
+.bcl-flow{
+  width:100%;max-width:700px;
+  position:relative;
+}
+
+/* ── Step panels ── */
+.bcl-step{
+  display:none;
+  animation:bclIn .4s var(--ease) forwards;
+}
+.bcl-step.active{display:block}
+@keyframes bclIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.bcl-step-eye{
+  font-size:.6rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--c);
+  margin-bottom:10px;
+}
+.bcl-step-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.4rem,3vw,2rem);
+  font-weight:400;color:var(--t1);
+  margin-bottom:28px;line-height:1.25;
+}
+
+/* ── Business type cards ── */
+.biz-type-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:0;
+}
+.biz-type-card{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--rm);padding:24px 20px;
+  text-align:left;cursor:pointer;
+  transition:all .3s var(--ease);
+  box-shadow:var(--s1);
+  position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.biz-type-card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--c2);opacity:0;
+  transition:opacity .25s;
+}
+.biz-type-card:hover{border-color:var(--bd2);box-shadow:var(--s2);transform:translateY(-2px)}
+.biz-type-card:hover::before{opacity:1}
+.biz-type-card:active{transform:scale(.97)}
+.biz-type-card.selected{border-color:var(--c);box-shadow:var(--s2)}
+.biz-type-card.selected::before{opacity:1}
+.btc-icon{font-size:1.6rem;margin-bottom:12px;display:block}
+.btc-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:500;color:var(--t1);
+  margin-bottom:5px;
+}
+.btc-desc{font-size:.76rem;color:var(--t2);line-height:1.6}
+
+/* ── Problem selection ── */
+.prob-list{
+  display:flex;flex-direction:column;
+  gap:10px;margin-bottom:24px;
+}
+.prob-item{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--rm);padding:18px 20px;
+  text-align:left;cursor:pointer;
+  display:flex;align-items:center;gap:14px;
+  transition:all .25s var(--ease);
+  box-shadow:var(--s1);
+  -webkit-tap-highlight-color:transparent;
+}
+.prob-item:hover{border-color:var(--bd2);box-shadow:var(--s2);transform:translateX(3px)}
+.prob-item:active{transform:scale(.98)}
+.prob-item.selected{border-color:var(--c);background:var(--c2)}
+.prob-radio{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--bd2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s var(--ease);
+}
+.prob-item.selected .prob-radio{border-color:var(--c);background:var(--c)}
+.prob-radio::after{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#fff;opacity:0;transition:opacity .2s;
+}
+.prob-item.selected .prob-radio::after{opacity:1}
+[data-theme="dark"] .prob-radio::after{background:#0b0909}
+.prob-text{font-size:.84rem;font-weight:500;color:var(--t1);line-height:1.45}
+.prob-icon{font-size:1.1rem;flex-shrink:0}
+
+/* ── Context textarea ── */
+.bcl-ta-wrap{position:relative;margin-bottom:14px}
+.bcl-ta{
+  width:100%;height:120px;
+  padding:16px 18px;
+  border:1px solid var(--bd);
+  background:var(--bg);color:var(--t1);
+  border-radius:var(--rm);resize:none;
+  font-size:.88rem;font-family:'DM Sans',sans-serif;
+  line-height:1.65;transition:all .3s var(--ease);
+  -webkit-user-select:text;user-select:text;
+}
+.bcl-ta::placeholder{color:var(--t3);font-style:italic}
+.bcl-ta:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)}
+
+/* ── Navigation buttons ── */
+.bcl-nav{
+  display:flex;gap:10px;align-items:center;
+  margin-top:20px;
+}
+.bcl-back{
+  padding:11px 22px;background:transparent;
+  border:1px solid var(--bd2);border-radius:100px;
+  color:var(--t2);font-size:.8rem;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  transition:all .25s var(--ease);
+}
+.bcl-back:hover{border-color:var(--c);color:var(--c);background:var(--c2)}
+.bcl-back:active{transform:scale(.97)}
+.bcl-next{
+  flex:1;padding:13px 24px;background:var(--c);
+  color:#fff;border:none;border-radius:100px;
+  font-size:.84rem;font-weight:600;
+  font-family:'DM Sans',sans-serif;letter-spacing:.3px;
+  cursor:pointer;transition:all .3s var(--ease);
+  box-shadow:0 3px 16px rgba(120,1,21,.24);
+}
+.bcl-next:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(120,1,21,.34)}
+.bcl-next:active{transform:scale(.97)}
+[data-theme="dark"] .bcl-next{color:#0b0909}
+
+/* ── Recommendation output ── */
+.bcl-output{
+  display:none;
+  animation:bclIn .5s var(--ease) forwards;
+  width:100%;
+}
+.bcl-output.active{display:block}
+
+.bcl-rec-header{
+  background:var(--c2);border:1px solid var(--bd2);
+  border-radius:var(--rl);padding:24px 26px;
+  margin-bottom:16px;text-align:left;
+}
+.bcl-rec-header-eye{
+  font-size:.6rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--c);margin-bottom:8px;
+}
+.bcl-rec-header h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:400;color:var(--t1);
+  margin-bottom:6px;
+}
+.bcl-rec-header p{font-size:.83rem;color:var(--t2);line-height:1.72}
+
+.bcl-rec-card{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--rl);padding:26px;
+  margin-bottom:12px;
+  box-shadow:var(--s1);
+  opacity:0;transform:translateY(16px);
+  transition:all .6s var(--spring);
+  text-align:left;
+}
+.bcl-rec-card.vis{opacity:1;transform:translateY(0);box-shadow:var(--s2)}
+.bcl-rec-card:hover{box-shadow:var(--s3);border-color:var(--bd2)}
+.bcl-rec-lbl{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:8px}
+.bcl-rec-card h4{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;font-weight:500;color:var(--t1);
+  margin-bottom:7px;line-height:1.3;
+}
+.bcl-rec-card p{font-size:.83rem;color:var(--t2);line-height:1.75}
+.bcl-rec-card .bcl-why{
+  margin-top:12px;padding-top:12px;
+  border-top:1px solid var(--bd);
+  font-size:.78rem;color:var(--t3);line-height:1.7;
+  font-style:italic;
+}
+
+/* ── Explore button (soft CTA) ── */
+.bcl-explore-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;
+  background:transparent;color:var(--c);
+  border:1px solid var(--bd2);border-radius:100px;
+  font-size:.77rem;font-weight:600;
+  font-family:'DM Sans',sans-serif;letter-spacing:.2px;
+  cursor:pointer;transition:all .25s var(--ease);
+  margin-top:14px;text-decoration:none;
+}
+.bcl-explore-btn:hover{background:var(--c2);border-color:var(--c)}
+.bcl-explore-btn:active{transform:scale(.97)}
+
+/* ── Micro-education cards ── */
+.bcl-edu-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  width:100%;margin-top:12px;
+}
+.bcl-edu-card{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--rm);padding:20px;
+  text-align:left;transition:all .3s var(--ease);
+}
+.bcl-edu-card:hover{border-color:var(--bd2);box-shadow:var(--s2)}
+.bcl-edu-icon{font-size:1.3rem;margin-bottom:10px;display:block}
+.bcl-edu-ttl{
+  font-size:.82rem;font-weight:600;color:var(--t1);
+  margin-bottom:7px;line-height:1.4;
+}
+.bcl-edu-desc{font-size:.76rem;color:var(--t2);line-height:1.7}
+
+/* ── Connect panel ── */
+.bcl-connect-panel{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--rl);padding:28px 26px;
+  margin-top:16px;text-align:center;
+  box-shadow:var(--s1);
+}
+.bcl-connect-panel h4{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;font-weight:400;color:var(--t1);
+  margin-bottom:8px;
+}
+.bcl-connect-panel p{font-size:.82rem;color:var(--t2);margin-bottom:20px;line-height:1.7}
+.bcl-connect-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.bcl-wa-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#25D366;color:#fff;
+  padding:12px 22px;border-radius:100px;
+  text-decoration:none;font-weight:600;font-size:.82rem;
+  transition:all .3s var(--ease);
+  box-shadow:0 3px 14px rgba(37,211,102,.24);
+  font-family:'DM Sans',sans-serif;
+}
+.bcl-wa-btn:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(37,211,102,.36)}
+.bcl-wa-btn:active{transform:scale(.97)}
+.bcl-tg-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#229ED9;color:#fff;
+  padding:12px 22px;border-radius:100px;
+  text-decoration:none;font-weight:600;font-size:.82rem;
+  transition:all .3s var(--ease);
+  box-shadow:0 3px 14px rgba(34,158,217,.22);
+  font-family:'DM Sans',sans-serif;
+}
+.bcl-tg-btn:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(34,158,217,.34)}
+.bcl-tg-btn:active{transform:scale(.97)}
+
+/* ── Reset link ── */
+.bcl-restart{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.76rem;color:var(--t3);
+  cursor:pointer;background:none;border:none;
+  font-family:'DM Sans',sans-serif;
+  margin-top:20px;transition:color .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.bcl-restart:hover{color:var(--c)}
+
+/* ── Progress dots ── */
+.bcl-progress{
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:28px;justify-content:center;
+}
+.bcl-pdot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--bd2);transition:all .3s var(--ease);
+}
+.bcl-pdot.done{background:var(--c);transform:scale(1.2)}
+.bcl-pdot.active{background:var(--c);width:18px;border-radius:100px}
+
+/* Mobile overrides for BCL */
+@media(max-width:768px){
+  #biz-clarity{padding:70px 18px 90px}
+  .biz-type-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .bcl-edu-grid{grid-template-columns:1fr}
+  .bcl-connect-btns{flex-direction:column;align-items:stretch}
+  .bcl-wa-btn,.bcl-tg-btn{justify-content:center}
+  .bcl-nav{flex-direction:column}
+  .bcl-back,.bcl-next{width:100%;text-align:center;justify-content:center}
+}
+@media(max-width:380px){
+  .biz-type-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -361,6 +685,7 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
     <a href="#value">About</a>
     <a href="#how">How It Works</a>
     <a href="#begin">Analyze</a>
+    <a href="#biz-clarity">Business</a>
     <a href="#connect">Connect</a>
   </div>
   <div class="fn-right">
@@ -382,6 +707,9 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
   </a>
   <a class="mob-tab" href="#begin" id="mt-begin">
     <div class="mchip">◎</div>Analyze
+  </a>
+  <a class="mob-tab" href="#biz-clarity" id="mt-biz">
+    <div class="mchip">⬡</div>Business
   </a>
   <button class="mob-tab" id="mt-theme">
     <div class="mchip" id="mt-ti">◑</div>Theme
@@ -535,6 +863,142 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     BUSINESS CLARITY LAYER — ADD-ON MODULE
+═══════════════════════════════════════════════════════ -->
+<section id="biz-clarity">
+
+  <!-- Header -->
+  <div class="bcl-badge reveal"><span class="bcl-dot"></span>Business Clarity Layer</div>
+  <h2 class="bcl-title reveal d1">Running a business<br>shouldn't feel <em>unclear.</em></h2>
+  <p class="bcl-sub reveal d2">Most tools don't fail because they don't work — they fail because they are not clearly understood. Let's find what actually helps your situation.</p>
+
+  <!-- Progress dots -->
+  <div class="bcl-progress" id="bcl-progress">
+    <div class="bcl-pdot active" id="pdot-0"></div>
+    <div class="bcl-pdot" id="pdot-1"></div>
+    <div class="bcl-pdot" id="pdot-2"></div>
+  </div>
+
+  <div class="bcl-flow reveal d3">
+
+    <!-- ── STEP 1: Business Type ── -->
+    <div class="bcl-step active" id="bcl-s1">
+      <div class="bcl-step-eye">Step 1 of 3</div>
+      <div class="bcl-step-title">What best describes your business?</div>
+      <div class="biz-type-grid">
+        <div class="biz-type-card" data-type="local-shop" onclick="bclSelectType(this)">
+          <span class="btc-icon">🏪</span>
+          <div class="btc-name">Local Shop</div>
+          <p class="btc-desc">Retail, grocery, pharmacy, bakery, or any physical store serving your community.</p>
+        </div>
+        <div class="biz-type-card" data-type="service-provider" onclick="bclSelectType(this)">
+          <span class="btc-icon">✂️</span>
+          <div class="btc-name">Service Provider</div>
+          <p class="btc-desc">Barber, salon, tailor, repair shop, or any skilled service business.</p>
+        </div>
+        <div class="biz-type-card" data-type="freelancer" onclick="bclSelectType(this)">
+          <span class="btc-icon">💼</span>
+          <div class="btc-name">Freelancer</div>
+          <p class="btc-desc">Designer, photographer, writer, developer, or independent professional.</p>
+        </div>
+        <div class="biz-type-card" data-type="online-seller" onclick="bclSelectType(this)">
+          <span class="btc-icon">📦</span>
+          <div class="btc-name">Online Seller</div>
+          <p class="btc-desc">WhatsApp business, Instagram shop, or any product sold through digital channels.</p>
+        </div>
+      </div>
+      <div class="bcl-nav" style="margin-top:24px">
+        <button class="bcl-next" id="bcl-next-1" onclick="bclGoStep(2)" disabled>Choose your challenge →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Problem Selection ── -->
+    <div class="bcl-step" id="bcl-s2">
+      <div class="bcl-step-eye">Step 2 of 3</div>
+      <div class="bcl-step-title">What's the main challenge you're facing?</div>
+      <div class="prob-list">
+        <div class="prob-item" data-prob="no-customers" onclick="bclSelectProb(this)">
+          <span class="prob-icon">👥</span>
+          <div class="prob-radio"></div>
+          <span class="prob-text">Not getting enough customers</span>
+        </div>
+        <div class="prob-item" data-prob="wa-overload" onclick="bclSelectProb(this)">
+          <span class="prob-icon">💬</span>
+          <div class="prob-radio"></div>
+          <span class="prob-text">Too many WhatsApp messages to handle</span>
+        </div>
+        <div class="prob-item" data-prob="slow-response" onclick="bclSelectProb(this)">
+          <span class="prob-icon">⏱️</span>
+          <div class="prob-radio"></div>
+          <span class="prob-text">No time to respond to customers quickly</span>
+        </div>
+        <div class="prob-item" data-prob="bookings" onclick="bclSelectProb(this)">
+          <span class="prob-icon">📅</span>
+          <div class="prob-radio"></div>
+          <span class="prob-text">Difficulty managing bookings or orders</span>
+        </div>
+        <div class="prob-item" data-prob="visibility" onclick="bclSelectProb(this)">
+          <span class="prob-icon">📍</span>
+          <div class="prob-radio"></div>
+          <span class="prob-text">Low visibility in local market</span>
+        </div>
+      </div>
+      <div class="bcl-nav">
+        <button class="bcl-back" onclick="bclGoStep(1)">← Back</button>
+        <button class="bcl-next" id="bcl-next-2" onclick="bclGoStep(3)" disabled>Add context →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Context ── -->
+    <div class="bcl-step" id="bcl-s3">
+      <div class="bcl-step-eye">Step 3 of 3</div>
+      <div class="bcl-step-title">Tell us a little more <em>(optional)</em></div>
+      <div class="bcl-ta-wrap">
+        <textarea class="bcl-ta" id="bcl-context" placeholder="Describe your situation briefly. How many customers a day? What tools do you already use? Any specific challenges?"></textarea>
+      </div>
+      <div class="bcl-nav">
+        <button class="bcl-back" onclick="bclGoStep(2)">← Back</button>
+        <button class="bcl-next" onclick="bclShowOutput()">See clarity insights →</button>
+      </div>
+    </div>
+
+    <!-- ── OUTPUT ── -->
+    <div class="bcl-output" id="bcl-output">
+
+      <div class="bcl-rec-header">
+        <div class="bcl-rec-header-eye">Clarity Insight</div>
+        <h3 id="bcl-out-title">What may help improve this situation</h3>
+        <p id="bcl-out-summary"></p>
+      </div>
+
+      <div id="bcl-cards-wrap"></div>
+
+      <!-- Micro education -->
+      <div id="bcl-edu-wrap" style="margin-top:24px"></div>
+
+      <!-- Connect panel -->
+      <div class="bcl-connect-panel" id="bcl-connect-panel" style="display:none">
+        <h4>Ready to take the next step?</h4>
+        <p id="bcl-connect-msg">Share your situation and we'll help you find the clearest path forward.</p>
+        <div class="bcl-connect-btns">
+          <a class="bcl-wa-btn" id="bcl-wa-link" href="#" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Continue on WhatsApp
+          </a>
+          <a class="bcl-tg-btn" id="bcl-tg-link" href="#" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Continue on Telegram
+          </a>
+        </div>
+      </div>
+
+      <button class="bcl-restart" onclick="bclReset()">← Start over</button>
+    </div>
+
+  </div>
+</section>
+
 </main>
 
 <button class="ai-fab" id="ai-fab" aria-label="Open Clarity Assistant">
@@ -580,7 +1044,7 @@ let isSc=false;
 window.addEventListener('scroll',()=>{fnav.classList.toggle('compact',window.scrollY>40);syncNav();},{passive:true});
 
 const dLinks=document.querySelectorAll('.fn-links a');
-const sIds=['hero','value','manifesto','how','begin','understand','reflection','gaps','connect'];
+const sIds=['hero','value','manifesto','how','begin','understand','reflection','gaps','connect','biz-clarity'];
 function syncNav(){
   if(isSc) return;
   let cur='hero';
@@ -591,11 +1055,10 @@ function syncNav(){
   dLinks.forEach(a=>{
     a.classList.remove('active');
     const h=a.getAttribute('href').replace('#','');
-    const map={hero:'hero',value:'value',how:'how',begin:'begin',connect:'connect'};
-    const mapped={hero:['hero'],value:['value','manifesto'],how:['how'],begin:['begin','understand','reflection','gaps'],connect:['connect']};
+    const mapped={hero:['hero'],value:['value','manifesto'],how:['how'],begin:['begin','understand','reflection','gaps'],connect:['connect'],'biz-clarity':['biz-clarity']};
     Object.entries(mapped).forEach(([key,ids])=>{if(ids.includes(cur)&&h===key) a.classList.add('active');});
   });
-  const tmap={hero:'mt-home',value:'mt-about',manifesto:'mt-about',how:'mt-about',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin'};
+  const tmap={hero:'mt-home',value:'mt-about',manifesto:'mt-about',how:'mt-about',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin','biz-clarity':'mt-biz'};
   document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
   const tid=tmap[cur];if(tid){const t=document.getElementById(tid);if(t)t.classList.add('active');}
 }
@@ -706,6 +1169,185 @@ function aiResp(t){
   return ["Clarity helps reveal what can be improved. Try asking about career, freelance work, or business presence.","The goal is to understand how clearly something comes across. What aspect would be helpful to explore?","Clarity emerges when intention and perception align. What would be most useful to clarify?"][Math.floor(Math.random()*3)];
 }
 function addMsg(text,sender){const d=document.createElement('div');d.className=`msg ${sender}`;d.textContent=text;aiMsgs.appendChild(d);setTimeout(()=>{aiMsgs.scrollTop=aiMsgs.scrollHeight;},50);}
+
+/* ════════════════════════════════════════
+   BUSINESS CLARITY LAYER — JS MODULE
+   Isolated: does not touch existing logic
+════════════════════════════════════════ */
+let bclType=null,bclProb=null,bclStep=1;
+
+/* ── Type selection ── */
+function bclSelectType(el){
+  document.querySelectorAll('.biz-type-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  bclType=el.dataset.type;
+  document.getElementById('bcl-next-1').disabled=false;
+}
+
+/* ── Problem selection ── */
+function bclSelectProb(el){
+  document.querySelectorAll('.prob-item').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  bclProb=el.dataset.prob;
+  document.getElementById('bcl-next-2').disabled=false;
+}
+
+/* ── Step navigation ── */
+function bclGoStep(n){
+  document.querySelectorAll('.bcl-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('bcl-s'+n).classList.add('active');
+  bclStep=n;
+  bclUpdateProgress(n-1);
+  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function bclUpdateProgress(active){
+  for(let i=0;i<3;i++){
+    const d=document.getElementById('pdot-'+i);
+    d.classList.remove('active','done');
+    if(i<active) d.classList.add('done');
+    else if(i===active) d.classList.add('active');
+  }
+}
+
+/* ── Insight data ── */
+const BCL_DATA={
+  'no-customers':{
+    summary:"Visibility and trust are the two biggest barriers to new customers. Most small businesses are better than they appear online.",
+    cards:[
+      {lbl:'The Issue',title:'Visibility Gap',body:"Potential customers can't choose you if they can't find you. Most local searches happen on Google Maps, WhatsApp referrals, and Instagram — even before a website.",why:'Being present where customers already look costs less than advertising.'},
+      {lbl:'What May Help',title:'Local Presence Tools',body:"Setting up a Google Business Profile, maintaining a simple Instagram page, and encouraging existing customers to share your contact — these three steps often create more walk-ins than any paid campaign.",why:'Organic, trust-based discovery converts better than cold ads for local businesses.'},
+      {lbl:'Suggested Direction',title:'Word-of-mouth systems',body:"A simple WhatsApp status update with daily offers, a 'refer a friend' message to existing customers, or a short video of your work shared weekly — these build visibility without any technical skills.",why:'People trust recommendations. Making it easy for customers to refer you is free marketing.'}
+    ],
+    edu:{icon:'📍',title:'How local shops can get found without paid ads',body:'Update your Google Maps listing, post weekly on WhatsApp Status, and ask happy customers to save your number. Simple, free, effective.'},
+    connect:"I run a {type} and I'm looking for ways to get more customers. Looking for clarity on practical steps."
+  },
+  'wa-overload':{
+    summary:"When messages outnumber your capacity to reply, customers feel ignored — even when you're working hard.",
+    cards:[
+      {lbl:'The Issue',title:'Communication Overload',body:"WhatsApp is powerful but unstructured. When enquiries, orders, follow-ups, and complaints all arrive in one place, important messages get missed and response time suffers.",why:'Missed messages mean lost customers, not because of bad service — but poor message flow.'},
+      {lbl:'What May Help',title:'Automated Response Systems',body:"WhatsApp Business (free) allows you to set greeting messages, away replies, and quick replies for common questions. This alone handles 40–60% of routine messages without manual effort.",why:'Customers feel heard even when you are unavailable. Trust increases with faster responses.'},
+      {lbl:'Suggested Direction',title:'Message triage approach',body:"Separate your WhatsApp into: (1) a broadcast list for updates, (2) quick replies for FAQs, and (3) manual handling for actual orders. This three-layer approach reduces chaos without expensive tools.",why:'Structure removes stress and ensures nothing important falls through.'}
+    ],
+    edu:{icon:'💬',title:'How barbers & shops can reduce WhatsApp overload',body:'Switch to WhatsApp Business. Set a greeting, create quick replies for your top 5 questions, and use broadcast lists to share offers — without replying to each person individually.'},
+    connect:"I run a {type} and I'm overwhelmed with WhatsApp messages. Looking for clarity on how to manage this better."
+  },
+  'slow-response':{
+    summary:"Response speed directly affects whether a customer stays or moves to a competitor — often within minutes.",
+    cards:[
+      {lbl:'The Issue',title:'Response Time Gap',body:"Customers typically expect a reply within 1–2 hours for WhatsApp enquiries. Delays beyond that often result in them contacting someone else — without telling you.",why:"It's not about being rude. Customers simply go where they get answers fastest."},
+      {lbl:'What May Help',title:'Automated First Responses',body:"An automated acknowledgment — 'Thanks for reaching out, I'll confirm your booking within 2 hours' — buys time and reassures the customer they've been heard.",why:'A 10-second automated message prevents a 10-minute loss of a customer.'},
+      {lbl:'Suggested Direction',title:'Timed response systems',body:"WhatsApp Business away messages, saved quick-reply templates, and simple booking link tools (like Calendly or Google Forms for appointments) can handle the first layer of customer contact automatically.",why:'Your time is better spent doing your work — not just confirming you received messages.'}
+    ],
+    edu:{icon:'⚡',title:'How service providers can improve response time',body:'Set WhatsApp Business away messages for off-hours. Create quick replies for "I got your message" and "Here are my available slots." Customers feel attended to, even when you\'re busy.'},
+    connect:"I run a {type} and I struggle to respond to customers fast enough. Looking for tools to help manage response time."
+  },
+  'bookings':{
+    summary:"Managing bookings manually through chat creates confusion, double-bookings, and unnecessary back-and-forth.",
+    cards:[
+      {lbl:'The Issue',title:'Unstructured Booking Flow',body:"When appointments are confirmed through WhatsApp messages alone, there's no record, no reminders, and no clear schedule. This leads to missed slots and customer frustration.",why:"Booking confusion often reads as unprofessionalism — even when your actual service is excellent."},
+      {lbl:'What May Help',title:'Simple Booking Systems',body:"A free Google Form or a tool like Calendly can capture: name, service needed, preferred time, and phone number — and send automatic confirmation messages. No app development required.",why:'Structure reduces mistakes and makes your business feel more organized to customers.'},
+      {lbl:'Suggested Direction',title:'WhatsApp booking link approach',body:"Share a booking link in your WhatsApp Status and profile. Let customers self-schedule. Follow up with a single confirmation message. This removes most of the back-and-forth.",why:'Less conversation per booking means more time doing the actual work.'}
+    ],
+    edu:{icon:'📅',title:'How service businesses can manage bookings without chaos',body:'Create a free Google Form with: name, service, date preference, phone number. Share the link as your WhatsApp profile link. You get a clean list, they get a quick booking process.'},
+    connect:"I run a {type} and I'm having difficulty managing bookings and orders. Looking for clarity on simpler systems."
+  },
+  'visibility':{
+    summary:"Being good at what you do isn't enough if people nearby don't know you exist or can't find your contact.",
+    cards:[
+      {lbl:'The Issue',title:'Local Discovery Gap',body:"Most small businesses rely entirely on word-of-mouth, which is slow and unpredictable. Modern customers search Google Maps, Instagram, and WhatsApp communities before asking friends.",why:"Your next customer is likely online right now, looking for what you offer — and finding someone else."},
+      {lbl:'What May Help',title:'Free Local Presence Setup',body:"Google Business Profile (free), a simple Instagram page with your location tagged, and being listed in local WhatsApp community groups are the three highest-impact steps for local visibility — before any paid advertising.",why:'Being findable is the first step. Being chosen comes after.'},
+      {lbl:'Suggested Direction',title:'Consistent local signals',body:"Post your location in every Instagram post. Ask customers to tag you. Share your Google Maps link in WhatsApp Status. These repeated local signals build search visibility over time without spending money.",why:'Consistency over time outperforms any single campaign for local businesses.'}
+    ],
+    edu:{icon:'🗺️',title:'How local businesses can improve visibility for free',body:'Claim your Google Business listing today (free). Add photos, your hours, and your WhatsApp number. Ask 5 customers to leave a review. Your map ranking improves within weeks.'},
+    connect:"I run a {type} and I have low visibility in my local market. Looking for clarity on how to get found more easily."
+  }
+};
+
+const TYPE_LABELS={
+  'local-shop':'Local Shop','service-provider':'Service Provider',
+  'freelancer':'Freelancer','online-seller':'Online Seller'
+};
+
+/* ── Show output ── */
+function bclShowOutput(){
+  if(!bclType||!bclProb) return;
+  const data=BCL_DATA[bclProb];
+  const typeLabel=TYPE_LABELS[bclType]||'Business';
+  const context=document.getElementById('bcl-context').value.trim();
+
+  // Hide steps, show output
+  document.querySelectorAll('.bcl-step').forEach(s=>s.classList.remove('active'));
+  bclUpdateProgress(3);
+  document.getElementById('bcl-output').classList.add('active');
+  document.getElementById('bcl-progress').style.display='none';
+  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Populate header
+  document.getElementById('bcl-out-summary').textContent=data.summary;
+
+  // Render recommendation cards with staggered delay
+  const wrap=document.getElementById('bcl-cards-wrap');
+  wrap.innerHTML='';
+  data.cards.forEach((card,i)=>{
+    const div=document.createElement('div');
+    div.className='bcl-rec-card';
+    div.innerHTML=`<div class="bcl-rec-lbl">${card.lbl}</div><h4>${card.title}</h4><p>${card.body}</p><p class="bcl-why">💡 ${card.why}</p>`;
+    wrap.appendChild(div);
+    setTimeout(()=>{div.classList.add('vis');},200+i*280);
+  });
+
+  // Micro education
+  const eduWrap=document.getElementById('bcl-edu-wrap');
+  const edu=data.edu;
+  eduWrap.innerHTML=`
+    <div class="bcl-rec-lbl" style="text-align:left;margin-bottom:14px">Quick Guidance</div>
+    <div class="bcl-edu-grid">
+      <div class="bcl-edu-card">
+        <span class="bcl-edu-icon">${edu.icon}</span>
+        <div class="bcl-edu-ttl">${edu.title}</div>
+        <p class="bcl-edu-desc">${edu.body}</p>
+      </div>
+      <div class="bcl-edu-card">
+        <span class="bcl-edu-icon">📋</span>
+        <div class="bcl-edu-ttl">How freelancers can track leads simply</div>
+        <p class="bcl-edu-desc">Keep a simple WhatsApp group or notes list: name, service asked, date contacted, follow-up needed. No CRM required to start.</p>
+      </div>
+    </div>`;
+
+  // Generate structured connect message
+  setTimeout(()=>{
+    const raw=data.connect.replace('{type}',typeLabel.toLowerCase());
+    const msg=`Business Clarity Request\nBusiness Type: ${typeLabel}\nChallenge: ${raw.split('and I')[1]?.trim()||bclProb.replace(/-/g,' ')}\nContext: ${context||'Not provided'}\nLooking for clarity on tools and improvements.`;
+    const waUrl=`https://wa.me/917550270450?text=${encodeURIComponent(msg)}`;
+    const tgUrl=`https://t.me/+917550270450?text=${encodeURIComponent(msg)}`;
+    document.getElementById('bcl-wa-link').href=waUrl;
+    document.getElementById('bcl-tg-link').href=tgUrl;
+    document.getElementById('bcl-connect-panel').style.display='block';
+  },1200);
+}
+
+/* ── Reset ── */
+function bclReset(){
+  bclType=null;bclProb=null;bclStep=1;
+  document.querySelectorAll('.bcl-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('bcl-s1').classList.add('active');
+  document.getElementById('bcl-output').classList.remove('active');
+  document.getElementById('bcl-progress').style.display='flex';
+  document.getElementById('bcl-next-1').disabled=true;
+  document.getElementById('bcl-next-2').disabled=true;
+  document.querySelectorAll('.biz-type-card').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.prob-item').forEach(p=>p.classList.remove('selected'));
+  document.getElementById('bcl-context').value='';
+  document.getElementById('bcl-connect-panel').style.display='none';
+  document.getElementById('bcl-cards-wrap').innerHTML='';
+  document.getElementById('bcl-edu-wrap').innerHTML='';
+  bclUpdateProgress(0);
+  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+}
+/* ─ also wire mobile biz tab ─ */
+const mtBiz=document.getElementById('mt-biz');
+if(mtBiz){mtBiz.addEventListener('click',e=>{e.preventDefault();goTo('biz-clarity');});}
 </script>
 </body>
 </html>
