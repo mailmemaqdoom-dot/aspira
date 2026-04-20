@@ -657,6 +657,249 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
 @media(max-width:380px){
   .biz-type-grid{grid-template-columns:1fr}
 }
+
+/* ══════════════════════════════════════════
+   ABOUT SECTION
+══════════════════════════════════════════ */
+#about{
+  background:var(--bg2);
+  padding:120px 28px 110px;
+  min-height:auto;
+  border-top:1px solid var(--bd);
+}
+.abt-inner{width:100%;max-width:760px;text-align:left}
+.abt-rule{
+  width:36px;height:1px;
+  background:var(--c);opacity:.5;
+  margin-bottom:32px;
+}
+.abt-block{margin-bottom:52px}
+.abt-block:last-child{margin-bottom:0}
+.abt-block-eye{
+  font-size:.6rem;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--c);margin-bottom:14px;
+}
+.abt-block-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,3.5vw,2.2rem);
+  font-weight:400;color:var(--t1);
+  line-height:1.25;margin-bottom:18px;
+}
+.abt-block-title em{font-style:italic;color:var(--c)}
+.abt-body{font-size:.88rem;color:var(--t2);line-height:1.9;max-width:600px}
+.abt-body + .abt-body{margin-top:14px}
+.abt-pull{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2.5vw,1.45rem);
+  font-weight:400;font-style:italic;
+  color:var(--t1);line-height:1.5;
+  border-left:2px solid var(--c);
+  padding-left:20px;margin:24px 0;
+  opacity:.85;
+}
+
+/* ══════════════════════════════════════════
+   FAQ SECTION
+══════════════════════════════════════════ */
+#faq{
+  padding:120px 28px 110px;
+  min-height:auto;
+  background:var(--bg);
+  border-top:1px solid var(--bd);
+}
+.faq-inner{width:100%;max-width:720px}
+.faq-list{display:flex;flex-direction:column;gap:0;margin-top:16px}
+.faq-item{
+  border-bottom:1px solid var(--bd);
+  overflow:hidden;
+}
+.faq-item:first-child{border-top:1px solid var(--bd)}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  padding:20px 4px;
+  cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,2vw,1.18rem);
+  font-weight:500;color:var(--t1);
+  line-height:1.35;
+  transition:color .2s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;
+}
+.faq-q:hover{color:var(--c)}
+.faq-icon{
+  width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--bd2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--t3);
+  transition:all .3s var(--ease);
+}
+.faq-item.open .faq-icon{
+  background:var(--c2);border-color:var(--c);
+  color:var(--c);transform:rotate(45deg);
+}
+.faq-item.open .faq-q{color:var(--c)}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .45s var(--ease),padding .35s var(--ease);
+}
+.faq-a-inner{
+  padding:0 4px 22px;
+  font-size:.86rem;color:var(--t2);line-height:1.85;
+}
+.faq-item.open .faq-a{max-height:320px}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+.site-footer{
+  background:var(--bg3);
+  border-top:1px solid var(--bd);
+  padding:64px 28px 40px;
+  position:relative;z-index:1;
+}
+.footer-inner{
+  max-width:900px;margin:0 auto;
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  margin-bottom:52px;
+}
+.footer-brand{}
+.footer-logo{
+  display:flex;align-items:center;gap:9px;
+  text-decoration:none;color:inherit;
+  margin-bottom:16px;
+}
+.footer-logo-mark{width:20px;height:20px;color:var(--c)}
+.footer-logo-word{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;letter-spacing:3px;font-size:.9rem;color:var(--t1);
+}
+.footer-brand-desc{
+  font-size:.8rem;color:var(--t3);line-height:1.8;
+  max-width:220px;
+}
+.footer-socials{display:flex;align-items:center;gap:10px;margin-top:20px}
+.footer-social-btn{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--bd2);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .25s var(--ease);
+  text-decoration:none;color:var(--t3);
+  flex-shrink:0;
+}
+.footer-social-btn:hover{border-color:var(--c);color:var(--c);background:var(--c2);transform:translateY(-2px)}
+.footer-social-btn:active{transform:scale(.94)}
+.footer-social-btn svg{width:14px;height:14px;fill:currentColor}
+
+.footer-col-title{
+  font-size:.65rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--t3);
+  margin-bottom:18px;
+}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a,.footer-links button{
+  font-size:.82rem;color:var(--t2);text-decoration:none;
+  transition:color .2s var(--ease);
+  background:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  text-align:left;padding:0;
+}
+.footer-links a:hover,.footer-links button:hover{color:var(--c)}
+
+.footer-bottom{
+  max-width:900px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;
+  padding-top:28px;
+  border-top:1px solid var(--bd);
+}
+.footer-copy{font-size:.74rem;color:var(--t3);letter-spacing:.2px}
+.footer-copy a{color:var(--t3);text-decoration:none;transition:color .2s}
+.footer-copy a:hover{color:var(--c)}
+.footer-bottom-links{display:flex;gap:18px}
+.footer-bottom-links a,.footer-bottom-links button{
+  font-size:.74rem;color:var(--t3);text-decoration:none;
+  background:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  transition:color .2s var(--ease);
+}
+.footer-bottom-links a:hover,.footer-bottom-links button:hover{color:var(--c)}
+
+@media(max-width:768px){
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:10px}
+}
+@media(max-width:480px){
+  .footer-inner{grid-template-columns:1fr}
+  .footer-brand{grid-column:auto}
+  .site-footer{padding:52px 20px 32px}
+}
+
+/* ══════════════════════════════════════════
+   TERMS & CONDITIONS MODAL
+══════════════════════════════════════════ */
+.tnc-overlay{
+  position:fixed;inset:0;
+  background:rgba(23,4,10,.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  z-index:3000;
+  display:none;
+  align-items:center;justify-content:center;
+  padding:20px;
+  animation:fadeIn .3s var(--ease);
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.tnc-overlay.open{display:flex}
+.tnc-modal{
+  background:var(--bg);
+  border:1px solid var(--bd2);
+  border-radius:var(--rl);
+  box-shadow:var(--s4);
+  width:100%;max-width:680px;
+  max-height:88svh;
+  display:flex;flex-direction:column;
+  animation:tncIn .4s var(--spring);
+  overflow:hidden;
+}
+@keyframes tncIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.tnc-header{
+  padding:22px 26px 18px;
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;flex-shrink:0;
+}
+.tnc-header-left{}
+.tnc-header-eye{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:6px}
+.tnc-header h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;color:var(--t1)}
+.tnc-close{
+  background:none;border:1px solid var(--bd2);border-radius:50%;
+  width:30px;height:30px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--t3);cursor:pointer;
+  transition:all .2s var(--ease);margin-top:2px;
+}
+.tnc-close:hover{border-color:var(--c);color:var(--c)}
+.tnc-body{
+  flex:1;overflow-y:auto;padding:26px 26px 32px;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;
+  -webkit-user-select:text;user-select:text;
+}
+.tnc-section{margin-bottom:32px}
+.tnc-section:last-child{margin-bottom:0}
+.tnc-section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:500;color:var(--t1);
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:1px solid var(--bd);
+}
+.tnc-section p{font-size:.83rem;color:var(--t2);line-height:1.85;margin-bottom:8px}
+.tnc-section p:last-child{margin-bottom:0}
+.tnc-updated{font-size:.72rem;color:var(--t3);margin-top:28px;padding-top:18px;border-top:1px solid var(--bd);font-style:italic}
 </style>
 </head>
 <body>
@@ -686,6 +929,8 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
     <a href="#how">How It Works</a>
     <a href="#begin">Analyze</a>
     <a href="#biz-clarity">Business</a>
+    <a href="#about">Story</a>
+    <a href="#faq">FAQ</a>
     <a href="#connect">Connect</a>
   </div>
   <div class="fn-right">
@@ -999,6 +1244,315 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     ABOUT SECTION
+═══════════════════════════════════════════════════════ -->
+<section id="about" style="display:block">
+  <div class="abt-inner">
+    <div class="s-eye reveal">About ASPIRA</div>
+    <div class="abt-rule reveal"></div>
+
+    <div class="abt-block reveal d1">
+      <div class="abt-block-eye">Vision</div>
+      <div class="abt-block-title"><em>Clarity</em> as a starting point —<br>before effort begins.</div>
+      <p class="abt-body">Most effort happens before clarity arrives. People work hard, present well, communicate carefully — and still feel unseen. The vision here is simple: clarity should come first, not after years of trial and adjustment.</p>
+      <blockquote class="abt-pull">"Clarity becoming the starting point before effort."</blockquote>
+    </div>
+
+    <div class="abt-block reveal d1">
+      <div class="abt-block-eye">Mission</div>
+      <div class="abt-block-title">To help what exists<br>be seen <em>clearly.</em></div>
+      <p class="abt-body">Not to make something new out of nothing. Not to reshape or rebrand. The mission is quieter than that — to help what is already real come through without distortion, without noise, without the fog that builds up between intention and perception.</p>
+      <blockquote class="abt-pull">"To help what exists be seen clearly, without distortion or noise."</blockquote>
+    </div>
+
+    <div class="abt-block reveal d2">
+      <div class="abt-block-eye">Philosophy</div>
+      <div class="abt-block-title">Effort is rarely<br>the <em>problem.</em></div>
+      <p class="abt-body">What gets in the way is not the quality of work or the depth of skill. It is the gap — between what is meant and what is understood. Between what is offered and what is perceived. That gap is where clarity lives, or where it is missing.</p>
+      <blockquote class="abt-pull">"Clarity does not create something new. It reveals what was already there."</blockquote>
+      <p class="abt-body">This is not a platform built on urgency or optimization. It is built on the quiet belief that when something is communicated clearly, the right things tend to follow — without force, without noise.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FAQ SECTION
+═══════════════════════════════════════════════════════ -->
+<section id="faq" style="display:block">
+  <div class="s-eye reveal">Clarity Questions</div>
+  <h2 class="s-title reveal d1">Things worth<br>asking <em>openly.</em></h2>
+  <p class="s-sub reveal d2">Questions that come up when something new is being considered. Answered simply, without overexplaining.</p>
+
+  <div class="faq-inner reveal d3">
+    <div class="faq-list" id="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          What does this platform actually do?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">It helps understand how something — a professional narrative, a business description, a service pitch — is being presented, and where clarity may be missing. It does not rewrite or rebuild. It reflects.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Does this guarantee a job, a client, or business growth?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">No. Outcomes depend on too many things outside this space. What is focused on here is clarity and visibility — how something comes across. That alone can shift things meaningfully, but it is not a guarantee of any specific result.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Who is this for?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Anyone who is trying to be understood more clearly. Someone building a career and not sure how their profile reads. A freelancer whose services are not attracting the right work. A small business owner who is busy but invisible. A person who is doing good work but not being seen for it.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          What happens after submitting details?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">The context is reviewed, and clarity can be explored further through a direct conversation — through WhatsApp or Telegram. There is no automated queue or response system. The interaction is human.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Is this a resume-writing or consulting service?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Neither. It is not a writing service, a consultancy, or a coaching product. It is a clarity layer — something that helps identify where perception and intention diverge, and what might close that gap.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Why is there no instant automated score or result?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Clarity cannot be meaningfully reduced to an instant automated output without deeper context. A number alone does not explain what is actually unclear, or why. The analysis here attempts to be more considered — even if slower.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Is personal information stored or shared?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Only what is shared directly — and only to understand the situation better. Nothing is passed to third parties, used for advertising, or stored beyond what the conversation requires. The interaction is private and contextual.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          How is clarity different from feedback?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Feedback often evaluates quality — good, bad, better. Clarity asks a different question: is this being understood the way it was intended? Something can be high quality and still unclear. Clarity is about the gap between meaning and perception, not about judgement.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Can this help someone who is not in a career or corporate environment?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Yes. A barber who runs a WhatsApp-based business, a home baker who wants more orders, a local tailor who is skilled but hard to find — clarity matters in every context where communication shapes opportunity.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          What if something is already clear — is there still value here?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Sometimes what feels clear from the inside is not what comes through on the outside. The value in that case is confirmation — or the quiet discovery of one small gap that was easy to miss precisely because everything else felt fine.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Is this connected to any tool, platform, or product?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">No affiliation. No tool is promoted here for commercial reasons. When a category of tool is suggested — like automated responses or booking systems — it is suggested because it fits the situation, not because of any partnership or incentive.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          How long does the process take?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">The initial input takes a few minutes. The follow-up conversation — if any — happens at whatever pace feels natural. There is no timeline being pushed. Clarity is not something to be rushed.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Is there a cost involved?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">The clarity layer and insights available here are offered freely. If there is a point where deeper engagement — such as a more structured review or direct support — is offered, that will be communicated clearly, with no pressure attached.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          What if the insights don't feel relevant?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">That is a fair outcome. Not everything will land for every person. Clarity is contextual. If something here does not fit, the right thing to do is set it aside — not to force relevance where there isn't any.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="faqToggle(this)">
+          Why WhatsApp and Telegram for connection?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Because that is where real conversations happen — especially for small business owners, freelancers, and people who are not sitting at a desk with a formal email flow. Meeting people where they already are felt more honest than building a formal inbox.</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <!-- Brand col -->
+    <div class="footer-brand">
+      <a class="footer-logo" href="#hero">
+        <svg class="footer-logo-mark" viewBox="0 0 100 100"><use href="#ia"/></svg>
+        <span class="footer-logo-word">ASPIRA</span>
+      </a>
+      <p class="footer-brand-desc">A clarity intelligence system. Helping what exists be seen clearly — across career, freelance, and business.</p>
+      <div class="footer-socials">
+        <!-- LinkedIn -->
+        <a class="footer-social-btn" href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <!-- WhatsApp -->
+        <a class="footer-social-btn" href="https://wa.me/917550270450" target="_blank" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+        <!-- Telegram -->
+        <a class="footer-social-btn" href="https://t.me/+917550270450" target="_blank" aria-label="Telegram">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Explore col -->
+    <div class="footer-col">
+      <div class="footer-col-title">Explore</div>
+      <div class="footer-links">
+        <a href="#value">About</a>
+        <a href="#how">How It Works</a>
+        <a href="#begin">Analyze Clarity</a>
+        <a href="#biz-clarity">Business Layer</a>
+        <a href="#about">Story</a>
+      </div>
+    </div>
+
+    <!-- Support col -->
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <div class="footer-links">
+        <a href="#faq">Clarity Questions</a>
+        <button onclick="openTnC()">Terms & Conditions</button>
+        <a href="#connect">Connect</a>
+      </div>
+    </div>
+
+    <!-- Connect col -->
+    <div class="footer-col">
+      <div class="footer-col-title">Reach Out</div>
+      <div class="footer-links">
+        <a href="https://wa.me/917550270450" target="_blank">WhatsApp</a>
+        <a href="https://t.me/+917550270450" target="_blank">Telegram</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 ASPIRA · Clarity Intelligence System · <button onclick="openTnC()" style="background:none;border:none;cursor:pointer;font-size:.74rem;color:var(--t3);font-family:'DM Sans',sans-serif;transition:color .2s;padding:0" onmouseover="this.style.color='var(--c)'" onmouseout="this.style.color='var(--t3)'">Terms apply</button></span>
+    <div class="footer-bottom-links">
+      <a href="#faq">FAQ</a>
+      <button onclick="openTnC()">Terms & Conditions</button>
+      <a href="#about">Story</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     TERMS & CONDITIONS MODAL
+═══════════════════════════════════════════════════════ -->
+<div class="tnc-overlay" id="tnc-overlay" onclick="closeTnCOutside(event)">
+  <div class="tnc-modal" id="tnc-modal">
+    <div class="tnc-header">
+      <div class="tnc-header-left">
+        <div class="tnc-header-eye">Legal &amp; Clarity</div>
+        <h2>Terms &amp; Conditions</h2>
+      </div>
+      <button class="tnc-close" onclick="closeTnC()">✕</button>
+    </div>
+    <div class="tnc-body">
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Nature of This Service</div>
+        <p>ASPIRA is a clarity guidance platform. It helps individuals and small business owners understand how their professional narrative, service, or business presence is being perceived — and where gaps in clarity may exist.</p>
+        <p>This is not a recruitment agency, business consultancy, resume-writing service, marketing agency, or any form of professional advisory. Nothing here constitutes legal, financial, or career advice.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">No Guarantees</div>
+        <p>Engaging with ASPIRA does not guarantee employment, clients, business growth, increased revenue, or any measurable outcome. Clarity is a contributing factor to many things — but outcomes depend on far more than any single platform can provide.</p>
+        <p>Any insights, suggestions, or clarity scores offered are reflective only — they are observations, not promises.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">User Responsibility</div>
+        <p>By using this platform, you take responsibility for how you use the insights offered. The information shared in conversations or through the clarity tool is used only to provide relevant guidance — not to make decisions on your behalf.</p>
+        <p>You are encouraged to use your own judgement when applying any suggestions. Nothing here replaces professional advice where it is genuinely needed.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Data Usage</div>
+        <p>Information submitted through this platform — including text descriptions, business context, and selected categories — is used solely to provide clarity insights and continue relevant conversation.</p>
+        <p>No personal data is sold, transferred to third parties for commercial purposes, or used for advertising. Data is handled with care and retained only as long as necessary for the conversation at hand.</p>
+        <p>This platform does not require account creation, email registration, or payment details. The interaction is intentionally low-footprint.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Communication Consent</div>
+        <p>By choosing to connect through WhatsApp or Telegram, you consent to receiving a response through that channel. This may include clarity insights, follow-up questions, or guidance relevant to your situation.</p>
+        <p>No unsolicited marketing messages, bulk promotions, or automated campaigns will be sent. Communication happens only when you initiate it.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Limitation of Liability</div>
+        <p>ASPIRA is not liable for any decisions made, actions taken, or outcomes experienced as a result of engaging with this platform. Clarity insights are offered in good faith, based on what is shared — but cannot account for every variable in a person's situation.</p>
+        <p>Use of this platform is entirely voluntary and at the user's discretion.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Intellectual Property</div>
+        <p>The content, design, framing, and structure of ASPIRA — including its clarity scoring logic, educational content, and language — are original work. They may not be reproduced, adapted, or distributed without permission.</p>
+      </div>
+
+      <div class="tnc-section">
+        <div class="tnc-section-title">Updates to These Terms</div>
+        <p>These terms may be updated periodically. When they are, the changes will be reflected here with a revised date. Continued use of the platform after an update implies acceptance of the revised terms.</p>
+        <p>If something here is unclear, the clearest thing to do is ask — directly, through WhatsApp or Telegram.</p>
+      </div>
+
+      <p class="tnc-updated">Last updated: June 2025 · These terms are written to be read, not just agreed to.</p>
+
+    </div>
+  </div>
+</div>
+
 </main>
 
 <button class="ai-fab" id="ai-fab" aria-label="Open Clarity Assistant">
@@ -1044,7 +1598,7 @@ let isSc=false;
 window.addEventListener('scroll',()=>{fnav.classList.toggle('compact',window.scrollY>40);syncNav();},{passive:true});
 
 const dLinks=document.querySelectorAll('.fn-links a');
-const sIds=['hero','value','manifesto','how','begin','understand','reflection','gaps','connect','biz-clarity'];
+const sIds=['hero','value','manifesto','how','begin','understand','reflection','gaps','connect','biz-clarity','about','faq'];
 function syncNav(){
   if(isSc) return;
   let cur='hero';
@@ -1055,10 +1609,10 @@ function syncNav(){
   dLinks.forEach(a=>{
     a.classList.remove('active');
     const h=a.getAttribute('href').replace('#','');
-    const mapped={hero:['hero'],value:['value','manifesto'],how:['how'],begin:['begin','understand','reflection','gaps'],connect:['connect'],'biz-clarity':['biz-clarity']};
+    const mapped={hero:['hero'],value:['value','manifesto'],how:['how'],begin:['begin','understand','reflection','gaps'],connect:['connect'],'biz-clarity':['biz-clarity'],about:['about'],faq:['faq']};
     Object.entries(mapped).forEach(([key,ids])=>{if(ids.includes(cur)&&h===key) a.classList.add('active');});
   });
-  const tmap={hero:'mt-home',value:'mt-about',manifesto:'mt-about',how:'mt-about',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin','biz-clarity':'mt-biz'};
+  const tmap={hero:'mt-home',value:'mt-about',manifesto:'mt-about',how:'mt-about',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin','biz-clarity':'mt-biz',about:'mt-home',faq:'mt-home'};
   document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
   const tid=tmap[cur];if(tid){const t=document.getElementById(tid);if(t)t.classList.add('active');}
 }
@@ -1348,6 +1902,48 @@ function bclReset(){
 /* ─ also wire mobile biz tab ─ */
 const mtBiz=document.getElementById('mt-biz');
 if(mtBiz){mtBiz.addEventListener('click',e=>{e.preventDefault();goTo('biz-clarity');});}
+
+/* ════════════════════════════════════════
+   FAQ ACCORDION
+════════════════════════════════════════ */
+function faqToggle(el){
+  const item=el.parentElement;
+  const isOpen=item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(i=>{
+    i.classList.remove('open');
+    i.querySelector('.faq-icon').textContent='+';
+  });
+  // Open clicked if it was closed
+  if(!isOpen){
+    item.classList.add('open');
+    el.querySelector('.faq-icon').textContent='×';
+  }
+}
+
+/* ════════════════════════════════════════
+   TERMS & CONDITIONS MODAL
+════════════════════════════════════════ */
+function openTnC(){
+  const overlay=document.getElementById('tnc-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeTnC(){
+  const overlay=document.getElementById('tnc-overlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeTnCOutside(e){
+  if(e.target===document.getElementById('tnc-overlay')) closeTnC();
+}
+// Escape key closes T&C
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeTnC();
+});
+// Wire footer logo scroll
+const footerLogo=document.querySelector('.footer-logo');
+if(footerLogo){footerLogo.addEventListener('click',e=>{e.preventDefault();goTo('hero');});}
 </script>
 </body>
 </html>
