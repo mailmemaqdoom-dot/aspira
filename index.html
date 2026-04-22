@@ -233,6 +233,37 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
 .r-lbl{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:8px}
 .r-card h3{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:var(--t1);margin-bottom:8px;line-height:1.3}
 .r-card p{font-size:.85rem;color:var(--t2);line-height:1.78}
+.r-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.r-card ul li{font-size:.85rem;color:var(--t2);line-height:1.72;padding-left:16px;position:relative}
+.r-card ul li::before{content:'·';position:absolute;left:0;color:var(--c);font-size:1.1rem;line-height:1.4}
+
+/* Clarity level card */
+.ci-level-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:36px 30px;margin-bottom:12px;opacity:0;transform:translateY(22px);transition:all .7s var(--spring);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--s1);text-align:center}
+.ci-level-card.vis{opacity:1;transform:translateY(0);box-shadow:var(--s2)}
+.ci-level-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:300;color:var(--c);letter-spacing:2px;line-height:1;margin-bottom:12px}
+.ci-level-num{font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.ci-score-row{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:20px}
+.ci-ring{width:80px;height:80px;position:relative;flex-shrink:0}
+.ci-ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.ci-ring-bg{fill:none;stroke:var(--bd);stroke-width:4}
+.ci-ring-fill{fill:none;stroke:var(--c);stroke-width:4;stroke-linecap:round;stroke-dasharray:251.2;stroke-dashoffset:251.2;transition:stroke-dashoffset 1.8s var(--ease)}
+.ci-ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--c)}
+.ci-score-meta{text-align:left}
+.ci-score-label{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.ci-score-desc{font-size:.82rem;color:var(--t2);line-height:1.65;max-width:280px}
+.ci-dimension-bar{margin-top:20px;padding-top:20px;border-top:1px solid var(--bd)}
+.ci-dim-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.ci-dim-row:last-child{margin-bottom:0}
+.ci-dim-label{font-size:.68rem;font-weight:600;color:var(--t2);width:90px;flex-shrink:0;text-align:right}
+.ci-dim-track{flex:1;height:3px;background:var(--bd);border-radius:100px;overflow:hidden}
+.ci-dim-fill{height:100%;background:var(--c);border-radius:100px;transition:width 1.2s var(--ease);width:0}
+.ci-dim-val{font-size:.65rem;color:var(--t3);width:28px;text-align:right;font-weight:600;flex-shrink:0}
+
+/* Truth moment card */
+.ci-truth-card{background:var(--c2);border:1px solid var(--bd2);border-radius:var(--rl);padding:28px 30px;margin-bottom:12px;opacity:0;transform:translateY(22px);transition:all .7s var(--spring)}
+.ci-truth-card.vis{opacity:1;transform:translateY(0)}
+.ci-truth-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:400;font-style:italic;color:var(--t1);line-height:1.55;border-left:2px solid var(--c);padding-left:18px}
+
 .sc-inner{display:flex;align-items:center;gap:24px}
 .sc-ring{width:92px;height:92px;position:relative;flex-shrink:0}
 .sc-ring svg{transform:rotate(-90deg);width:100%;height:100%}
@@ -1078,21 +1109,21 @@ textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c2)
   <div id="understand-content" style="max-width:520px;width:100%"></div>
 </section>
 
-<!-- ═══ §5 SEE REFLECTION ═══ -->
+<!-- ═══ §5 CLARITY INDEX — PRIMARY OUTPUT ═══ -->
 <section id="reflection" style="display:none">
   <p class="ref-line">"What's seen isn't always what's intended."</p>
   <div class="loading" id="refl-load">
-    <div class="load-w">Understanding what is being shared…</div>
+    <div class="load-w">Reading the structure of what was shared…</div>
     <div class="load-bar"><div class="load-fill"></div></div>
   </div>
   <div class="results-box" id="refl-display"></div>
 </section>
 
-<!-- ═══ §6 HIDDEN GAPS ═══ -->
+<!-- ═══ §6 DEPTH ANALYSIS ═══ -->
 <section id="gaps" style="display:none">
   <p class="ref-line">"What feels clear internally may not appear the same externally."</p>
   <div class="loading" id="gaps-load">
-    <div class="load-w">Mapping how this may be perceived…</div>
+    <div class="load-w">Identifying what surfaces and what stays hidden…</div>
     <div class="load-bar"><div class="load-fill"></div></div>
   </div>
   <div class="results-box" id="gaps-display"></div>
@@ -1646,20 +1677,177 @@ document.querySelectorAll('.cat-btn').forEach(btn=>{
   });
 });
 
-function analyze(text,cat){
-  let score=40;
-  if(text.length>50) score+=10;
-  if(text.length>200) score+=20;
-  const w=text.split(/\s+/).length;if(w>20&&w<100) score+=15;
-  const kw={career:['experience','skills','achieved','managed','developed'],freelance:['services','portfolio','clients','deliver','expertise'],business:['market','growth','solution','value','strategy']};
-  kw[cat].forEach(k=>{if(text.toLowerCase().includes(k)) score+=5;});
-  score=Math.min(Math.max(score,10),98);
-  const ins={
-    career:{strengths:"The professional narrative shows foundational structure.",gaps:"Specific impact metrics are currently obscured.",perception:"May be viewed as capable but perhaps not yet distinctive.",steps:"Focus on quantifying achievements rather than listing duties."},
-    freelance:{strengths:"The service offering is present and identifiable.",gaps:"The unique value proposition lacks sharp definition.",perception:"Potential clients might see a generalist instead of a specialist.",steps:"Define the specific problem you solve better than anyone else."},
-    business:{strengths:"The business intent is clear and ambitious.",gaps:"The connection between solution and market need is soft.",perception:"Stakeholders may seek more transparency in the core model.",steps:"Articulate the direct transformation your business facilitates."}
+/* ════════════════════════════════════════════════════════
+   CLARITY INDEX ENGINE — DETERMINISTIC, RULE-BASED
+   Same input → same output. Zero randomness.
+════════════════════════════════════════════════════════ */
+function ciWords(t){return t.trim().split(/\s+/).filter(w=>w.length>0)}
+function ciSentences(t){return t.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>4)}
+function ciParagraphs(t){return t.split(/\n\s*\n/).map(s=>s.trim()).filter(s=>s.length>0)}
+
+function ciLength(words){
+  const n=words.length;
+  if(n<20)  return{score:4, note:'Very brief — not enough surface for meaningful analysis.'};
+  if(n<50)  return{score:10,note:'Brief. The core intent comes through, but context is thin.'};
+  if(n<=150)return{score:20,note:'Optimal length. Enough to read clearly without dilution.'};
+  if(n<=250)return{score:16,note:'Slightly extended. The main thread remains traceable.'};
+  if(n<=350)return{score:11,note:'Length begins to soften the central message.'};
+  return      {score:6, note:'Extended length. The core clarity may be harder to locate.'};
+}
+
+function ciStructure(text,words){
+  const paras=ciParagraphs(text);
+  const sents=ciSentences(text);
+  const avgSentLen=words.length/Math.max(sents.length,1);
+  let score=0;let note='';
+  if(paras.length>=2){score+=7;note='Multiple paragraphs suggest intentional structure.'}
+  else{score+=3;note='The content reads as a single block without breaks.'}
+  if(avgSentLen>=8&&avgSentLen<=22){score+=8;note+=' Sentence length supports readability.'}
+  else if(avgSentLen<8){score+=4;note+=' Sentences are short — may read as fragmented.'}
+  else{score+=3;note+=' Long sentences may obscure individual ideas.'}
+  return{score:Math.min(score,15),note};
+}
+
+function ciRoleDefined(text,cat){
+  const t=text.toLowerCase();
+  const roleSignals={
+    career:['i am','i work','i help','my role','my background','i have','i lead','i manage','i build','i design','i develop','i support','i create','i specialize','specialise','position','title','professional','expert','consultant'],
+    freelance:['i offer','i provide','i deliver','i create','my service','i work with','clients','i help','freelance','services include','i specialize','specialise','available for','for hire','i take on','projects'],
+    business:['we provide','we offer','our product','our service','our platform','we help','we build','our business','founded','established','we specialize','specialise','solutions','we serve','our mission','we create']
   };
-  return {score,...ins[cat],category:cat};
+  const signals=roleSignals[cat]||roleSignals.career;
+  const found=signals.filter(s=>t.includes(s));
+  const ratio=found.length/signals.length;
+  if(ratio>=0.3) return{score:20,defined:true, note:'A role or service identity is present.'};
+  if(ratio>=0.15)return{score:13,defined:true, note:'Some indication of role exists, though not fully stated.'};
+  if(ratio>=0.05)return{score:7, defined:false,note:'Role or service identity is only partially suggested.'};
+  return            {score:3, defined:false,note:'No clear role or service identity is established.'};
+}
+
+function ciOutcome(text){
+  const t=text.toLowerCase();
+  const outcomeSignals=['result','results','achieved','delivered','increased','reduced','improved','saved','grew','generated','built','launched','impact','outcome','success','completed','led to','resulted in','helped','enabled','allowed','produced','created','won','awarded','recognized','certified'];
+  const metricSignals=['%','percent','revenue','users','clients','customers','projects','years','months','hours','days','team','people'];
+  const foundO=outcomeSignals.filter(s=>t.includes(s));
+  const foundM=metricSignals.filter(s=>t.includes(s));
+  if(foundO.length>=3&&foundM.length>=1) return{score:15,note:'Outcomes and measurable context are both present.'};
+  if(foundO.length>=2) return{score:11,note:'Outcomes are referenced, though specifics are limited.'};
+  if(foundO.length>=1) return{score:7, note:'A result is mentioned but remains general.'};
+  return{score:2,note:'No outcome or result is stated.'};
+}
+
+function ciAudience(text,cat){
+  const t=text.toLowerCase();
+  const audienceSignals={
+    career:['hiring','companies','organisations','organizations','teams','startups','enterprises','industries','sector','field'],
+    freelance:['clients','businesses','brands','startups','agencies','individuals','owners','founders','small business'],
+    business:['customers','users','businesses','enterprises','smes','merchants','consumers','professionals','individuals','teams']
+  };
+  const signals=audienceSignals[cat]||audienceSignals.career;
+  const found=signals.filter(s=>t.includes(s));
+  if(found.length>=2) return{score:10,note:'An audience is indicated within the text.'};
+  if(found.length===1) return{score:6,note:'An audience is referenced but not fully described.'};
+  return{score:2,note:'The intended audience is not directly identified.'};
+}
+
+function ciAmbiguity(text){
+  const t=text.toLowerCase();
+  const vague=['various','many things','all kinds','different areas','multiple domains','diverse','versatile','various aspects','broad experience','wide range','everything','anything','lot of things','passionate about','love to','excited about','enthusiastic','go-getter','team player','hard worker','dynamic','motivated','driven','results-oriented','strategic thinker'];
+  const found=vague.filter(s=>t.includes(s));
+  const topFound=found.slice(0,3).join(', ');
+  if(found.length===0) return{penalty:0, note:'Language is specific — vague filler terms are absent.',found:[]};
+  if(found.length<=2)  return{penalty:-6, note:'Some generalised language is present ('+topFound+').',found};
+  return               {penalty:-14,note:'Multiple vague phrases are present ('+topFound+').',found};
+}
+
+function ciConsistency(words){
+  const freq={};
+  words.forEach(w=>{const k=w.toLowerCase().replace(/[^a-z]/g,'');if(k.length>4)freq[k]=(freq[k]||0)+1;});
+  const repeated=Object.entries(freq).filter(([,v])=>v>=3).length;
+  const total=Object.keys(freq).length;
+  const uniqueRatio=total/Math.max(words.length,1);
+  if(uniqueRatio>0.7&&repeated===0) return{score:10,note:'Vocabulary is varied — no significant repetition detected.'};
+  if(uniqueRatio>0.55)              return{score:7, note:'Vocabulary is reasonably varied.'};
+  if(repeated<=2)                   return{score:5, note:'Some repetition present but does not dominate.'};
+  return                            {score:3, note:'Notable repetition — certain terms recur frequently.'};
+}
+
+function ciLevel(score){
+  if(score>=80)return{level:'Resonant',  num:5,desc:'The message lands with clarity and intention. The reader can see what is being offered and why it matters.'};
+  if(score>=63)return{level:'Defined',   num:4,desc:'A clear identity is present. Most of what matters comes through — a few refinements would complete the picture.'};
+  if(score>=46)return{level:'Forming',   num:3,desc:'The core is recognisable, but the full picture is still assembling. Structure is there; specificity is building.'};
+  if(score>=30)return{level:'Emerging',  num:2,desc:'Something real is here — but it has not yet fully surfaced. The shape exists without the edges.'};
+  return        {level:'Obscured',   num:1,desc:'The content is present, but clarity has not yet found it. What is intended is harder to read than what is written.'};
+}
+
+function ciObservations(dims,cat,level){
+  const {lengthD,structureD,roleD,outcomeD,audienceD,ambigD,consistD}=dims;
+  const catLabel={career:'professional narrative',freelance:'service offering',business:'business presence'}[cat]||'content';
+  const clear=[];
+  if(roleD.defined) clear.push('A '+catLabel+' identity is present — the reader can locate a role or service within the text.');
+  if(outcomeD.score>=11) clear.push('Results or outcomes are referenced, giving the narrative grounding beyond description alone.');
+  if(lengthD.score>=16) clear.push('The length is measured — enough to communicate without overwhelming.');
+  if(structureD.score>=12) clear.push('The structure supports reading — there is a discernible flow.');
+  if(audienceD.score>=6) clear.push('An intended audience is suggested, which adds directional clarity.');
+  if(consistD.score>=7) clear.push('Vocabulary is varied — the writing does not circle back on itself.');
+  if(ambigD.penalty===0) clear.push('The language is concrete — generalised filler is largely absent.');
+  const clearFinal=clear.slice(0,3).length>0?clear.slice(0,3):['The act of submitting this is itself a signal — clarity is being sought.'];
+  const gaps=[];
+  if(!roleD.defined) gaps.push('The '+catLabel+' identity is present but not yet precisely stated — what is offered and to whom remains partly implied.');
+  if(outcomeD.score<7) gaps.push('What happened as a result of the work is not yet visible — effort is described, but its landing is absent.');
+  if(audienceD.score<6) gaps.push('The person or organisation this is directed at is not named — the intended reader is unclear.');
+  if(ambigD.penalty<=-6){const match=ambigD.note.match(/\(([^)]+)\)/);gaps.push('Generalised language ('+(match?match[1]:'several phrases')+') softens the specificity of what is being communicated.');}
+  if(structureD.score<7) gaps.push('The content reads as an unbroken block — separation between ideas is not yet visible.');
+  if(lengthD.score<10) gaps.push('The brevity leaves context unstated — a reader would need to infer what is not written.');
+  const gapsFinal=gaps.slice(0,3).length>0?gaps.slice(0,3):['At this level, what may be missing is specificity — not substance.'];
+  const strengthen=[];
+  if(outcomeD.score<11) strengthen.push('Naming one specific result — a number, a timeframe, a transformation — would anchor the narrative in evidence.');
+  if(!roleD.defined) strengthen.push('A single clear sentence stating the '+catLabel+' role or offering would centre what is currently distributed across the text.');
+  if(audienceD.score<6) strengthen.push('Naming the intended audience, even briefly, creates a frame that makes everything else read more purposefully.');
+  if(ambigD.penalty<=-6) strengthen.push('Replacing generalised phrases with specific examples — even one — closes the distance between intent and perception.');
+  if(structureD.score<7) strengthen.push('A paragraph break would give the reader a natural pause — and signal that distinct ideas are being held separately.');
+  if(lengthD.score===20&&outcomeD.score<11) strengthen.push('The length is right. The next layer is specificity within that space — not more words, but sharper ones.');
+  if(consistD.score<5) strengthen.push('Varying the language around key ideas would prevent the text from feeling like it is restating itself.');
+  const strengthenFinal=strengthen.slice(0,3).length>0?strengthen.slice(0,3):['The foundation is present — the next step is sharpening what already exists.'];
+  return{clear:clearFinal,gaps:gapsFinal,strengthen:strengthenFinal};
+}
+
+function ciTruth(dims,level,cat){
+  const {lengthD,roleD,outcomeD,audienceD,ambigD}=dims;
+  if(level.num===5) return 'What is written and what is meant are close to the same thing here.';
+  if(level.num===4&&outcomeD.score>=11) return 'The work is visible. What it produced is visible. The gap that remains is small.';
+  if(level.num===4) return 'The shape is clear. The edges are still forming.';
+  if(ambigD.penalty<=-14) return 'The words are present, but they are standing in for something more specific that has not yet been named.';
+  if(!roleD.defined&&level.num<=3) return 'Something real exists here — it simply has not yet been given a precise outline.';
+  if(outcomeD.score<7&&level.num<=3) return 'Effort is visible. What it changed — is not yet part of the story.';
+  if(level.num===3) return 'The core is recognisable. The specificity that would make it land fully is close.';
+  if(level.num===2) return 'The intention is there. The surface through which it is expressed is still forming.';
+  return 'Clarity is not absent here — it is waiting for the language to catch up with what is known.';
+}
+
+function analyze(text,cat){
+  const words=ciWords(text);
+  const lengthD    =ciLength(words);
+  const structureD =ciStructure(text,words);
+  const roleD      =ciRoleDefined(text,cat);
+  const outcomeD   =ciOutcome(text);
+  const audienceD  =ciAudience(text,cat);
+  const ambigD     =ciAmbiguity(text);
+  const consistD   =ciConsistency(words);
+  const rawScore=lengthD.score+structureD.score+roleD.score+outcomeD.score+audienceD.score+ambigD.penalty+consistD.score;
+  const score=Math.min(Math.max(rawScore,4),98);
+  const level=ciLevel(score);
+  const dimBars=[
+    {label:'Length',    val:Math.round((lengthD.score/20)*100)},
+    {label:'Structure', val:Math.round((structureD.score/15)*100)},
+    {label:'Role',      val:Math.round((roleD.score/20)*100)},
+    {label:'Outcomes',  val:Math.round((outcomeD.score/15)*100)},
+    {label:'Audience',  val:Math.round((audienceD.score/10)*100)}
+  ];
+  const dims={lengthD,structureD,roleD,outcomeD,audienceD,ambigD,consistD};
+  const obs=ciObservations(dims,cat,level);
+  const truth=ciTruth(dims,level,cat);
+  return{score,level,dimBars,obs,truth,category:cat,wordCount:words.length};
 }
 
 document.getElementById('analyze-btn').addEventListener('click',()=>{
@@ -1671,6 +1859,8 @@ document.getElementById('clarity-input').addEventListener('keydown',e=>{
   if(e.ctrlKey&&e.key==='Enter') document.getElementById('analyze-btn').click();
 });
 
+const WA_SVG='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+
 function showResults(data){
   ['understand','reflection','gaps','connect'].forEach(id=>{document.getElementById(id).style.display='flex';});
   const rD=document.getElementById('refl-display'),gD=document.getElementById('gaps-display');
@@ -1679,13 +1869,18 @@ function showResults(data){
   rD.style.display='block';gD.style.display='block';
   rD.innerHTML='';gD.innerHTML='';wa.innerHTML='';uc.innerHTML='';
   rL.classList.add('on');gL.classList.add('on');
-  uc.innerHTML=`<div class="r-card vis" style="text-align:left"><div class="r-lbl">Your Input</div><h3>Category: ${data.category.charAt(0).toUpperCase()+data.category.slice(1)}</h3><p>${data.strengths}</p></div>`;
+  uc.innerHTML='<div class="r-card vis" style="text-align:left"><div class="r-lbl">Context</div><h3>'+data.wordCount+' words &middot; '+data.category.charAt(0).toUpperCase()+data.category.slice(1)+'</h3><p>Evaluated across five dimensions: length, structure, role definition, outcomes, and audience clarity.</p></div>';
   isSc=true;document.getElementById('reflection').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{isSc=false;},1000);
+  const barsHTML=data.dimBars.map(d=>'<div class="ci-dim-row"><span class="ci-dim-label">'+d.label+'</span><div class="ci-dim-track"><div class="ci-dim-fill" data-val="'+d.val+'" style="width:0%"></div></div><span class="ci-dim-val">'+d.val+'</span></div>').join('');
+  function liHTML(arr){return arr.map(s=>'<li>'+s+'</li>').join('')}
+  const C=2*Math.PI*40;
+  const offset=C-(C*data.score/100);
   const seq=[
-    {d:320,c:rD,l:rL,h:`<div class="r-card"><div class="sc-inner"><div class="sc-ring"><svg viewBox="0 0 100 100"><circle class="sc-bg" cx="50" cy="50" r="40"/><circle class="sc-fill" id="sc-arc" cx="50" cy="50" r="40"/></svg><div class="sc-num">${data.score}</div></div><div><div class="r-lbl">Clarity Score</div><h3>Your Clarity Index</h3><p>${data.strengths}</p></div></div></div>`},
-    {d:1300,c:gD,l:gL,h:`<div class="r-card"><div class="r-lbl">Perception</div><h3>Perception Insights</h3><p>${data.perception}</p></div>`},
-    {d:2000,c:gD,l:null,h:`<div class="r-card"><div class="r-lbl">Gaps</div><h3>Identified Gaps</h3><p>${data.gaps}</p></div>`},
-    {d:2700,c:gD,l:null,h:`<div class="r-card"><div class="r-lbl">Action</div><h3>Next Steps</h3><p>${data.steps}</p></div>`}
+    {d:320,c:rD,l:rL,h:'<div class="ci-level-card"><div class="ci-level-num">Clarity Level '+data.level.num+' of 5</div><div class="ci-level-name">'+data.level.level+'</div><div class="ci-score-row"><div class="ci-ring"><svg viewBox="0 0 100 100"><circle class="ci-ring-bg" cx="50" cy="50" r="40"/><circle class="ci-ring-fill" id="ci-arc" cx="50" cy="50" r="40"/></svg><div class="ci-ring-num">'+data.score+'</div></div><div class="ci-score-meta"><div class="ci-score-label">Clarity Index</div><p class="ci-score-desc">'+data.level.desc+'</p></div></div><div class="ci-dimension-bar">'+barsHTML+'</div></div>'},
+    {d:1100,c:rD,l:null,h:'<div class="r-card"><div class="r-lbl">What Is Clear</div><h3>What surfaces when this is read</h3><ul>'+liHTML(data.obs.clear)+'</ul></div>'},
+    {d:1900,c:gD,l:gL,h:'<div class="r-card"><div class="r-lbl">What May Not Be Visible</div><h3>What a reader might not see</h3><ul>'+liHTML(data.obs.gaps)+'</ul></div>'},
+    {d:2700,c:gD,l:null,h:'<div class="r-card"><div class="r-lbl">What Could Strengthen It</div><h3>Where the signal could become sharper</h3><ul>'+liHTML(data.obs.strengthen)+'</ul></div>'},
+    {d:3400,c:gD,l:null,h:'<div class="ci-truth-card"><div class="r-lbl">Truth Moment</div><p class="ci-truth-text">'+data.truth+'</p></div>'}
   ];
   seq.forEach((item,i)=>{
     setTimeout(()=>{
@@ -1693,15 +1888,17 @@ function showResults(data){
       const wrap=document.createElement('div');wrap.innerHTML=item.h;
       const card=wrap.firstElementChild;item.c.appendChild(card);
       setTimeout(()=>card.classList.add('vis'),30);
-      if(i===0){setTimeout(()=>{const arc=document.getElementById('sc-arc');if(arc){const C=2*Math.PI*40;arc.style.strokeDasharray=C;arc.style.strokeDashoffset=C;setTimeout(()=>{arc.style.strokeDashoffset=C-(C*data.score/100);},80);}},50);}
+      if(i===0){setTimeout(()=>{const arc=document.getElementById('ci-arc');if(arc){arc.style.strokeDasharray=C;arc.style.strokeDashoffset=C;setTimeout(()=>{arc.style.strokeDashoffset=offset;},80);}document.querySelectorAll('.ci-dim-fill').forEach(bar=>{bar.style.width=bar.dataset.val+'%';});},50);}
     },item.d);
   });
   setTimeout(()=>{
-    const msg=`ASPIRA Clarity Score: ${data.score}. Gaps identified: ${data.gaps}`;
-    const url=`https://wa.me/917550270450?text=${encodeURIComponent(msg)}`;
-    wa.innerHTML=`<a href="${url}" target="_blank" class="wa-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Connect Pathways via WhatsApp</a>`;
-  },3600);
+    const msg='ASPIRA Clarity Index\nLevel: '+data.level.level+' ('+data.score+'/100)\nCategory: '+data.category+'\nWords analysed: '+data.wordCount;
+    const url='https://wa.me/917550270450?text='+encodeURIComponent(msg);
+    wa.innerHTML='<a href="'+url+'" target="_blank" class="wa-btn">'+WA_SVG+'Connect Pathways via WhatsApp</a>';
+  },4200);
 }
+
+function addMsg(text,sender){const d=document.createElement('div');d.className=`msg ${sender}`;d.textContent=text;aiMsgs.appendChild(d);setTimeout(()=>{aiMsgs.scrollTop=aiMsgs.scrollHeight;},50);}
 
 const aiModal=document.getElementById('ai-modal');
 const aiInp=document.getElementById('ai-inp');
@@ -1714,20 +1911,28 @@ document.getElementById('mob-ask').addEventListener('click',e=>{e.preventDefault
 document.addEventListener('click',e=>{if(aiModal.style.display==='flex'&&!aiModal.contains(e.target)&&!document.getElementById('ai-fab').contains(e.target)) closeAI();});
 document.getElementById('ai-send').addEventListener('click',handleAI);
 aiInp.addEventListener('keypress',e=>{if(e.key==='Enter') handleAI();});
-function handleAI(){const t=aiInp.value.trim();if(!t) return;addMsg(aiInp.value,'user');aiInp.value='';setTimeout(()=>addMsg(aiResp(t.toLowerCase()),'ai'),660);}
-function aiResp(t){
-  if(['career','job','resume','cv','experience','skills','professional','role','employment'].some(k=>t.includes(k))) return ["In a career context, clarity often resides in the alignment between past impact and future intent.","Clarity in a resume means the reader understands not just what was done, but the measurable difference made.","Career clarity emerges when the narrative connects specific achievements to genuine strengths."][Math.floor(Math.random()*3)];
-  if(['freelance','service','client','project','portfolio','rate','proposal','gig'].some(k=>t.includes(k))) return ["For freelancers, clarity is the bridge between skill and the client's specific pain point.","Service clarity means potential clients immediately understand the exact problem being solved.","Freelance positioning becomes clear when the offering is specific enough to attract the right projects."][Math.floor(Math.random()*3)];
-  if(['business','startup','company','market','product','brand','growth','strategy','pitch'].some(k=>t.includes(k))) return ["Business clarity requires transparency in how value is created and delivered to the market.","A clear business presence means stakeholders quickly grasp the core transformation being offered.","Clarity in business communication bridges the gap between internal understanding and external perception."][Math.floor(Math.random()*3)];
-  if(['how','platform','aspira','clarity','score','result','gap','insight','perception'].some(k=>t.includes(k))) return ["ASPIRA analyzes text to reveal gaps between intention and perception.","The clarity score measures how well the content communicates.","Results highlight what's working and what may need refinement."][Math.floor(Math.random()*3)];
-  return ["Clarity helps reveal what can be improved. Try asking about career, freelance work, or business presence.","The goal is to understand how clearly something comes across. What aspect would be helpful to explore?","Clarity emerges when intention and perception align. What would be most useful to clarify?"][Math.floor(Math.random()*3)];
-}
-function addMsg(text,sender){const d=document.createElement('div');d.className=`msg ${sender}`;d.textContent=text;aiMsgs.appendChild(d);setTimeout(()=>{aiMsgs.scrollTop=aiMsgs.scrollHeight;},50);}
+function handleAI(){const t=aiInp.value.trim();if(!t) return;addMsg(aiInp.value,'user');aiInp.value='';setTimeout(()=>addMsg(aiResp(t.toLowerCase()),'ai'),500);}
 
-/* ════════════════════════════════════════
-   BUSINESS CLARITY LAYER — JS MODULE
-   Isolated: does not touch existing logic
-════════════════════════════════════════ */
+/* Deterministic: keyword matched to the most contextually precise single response. No randomness. */
+function aiResp(t){
+  if(['career','job','resume','cv','employment'].some(k=>t.includes(k)))
+    return 'In a career context, clarity lives in the alignment between past impact and future intent. What was done matters less than what changed because of it.';
+  if(['experience','skills','professional','role'].some(k=>t.includes(k)))
+    return 'Clarity in a professional narrative means a reader can locate the role, the contribution, and the result — without needing to infer any of them.';
+  if(['freelance','gig','proposal','rate','for hire'].some(k=>t.includes(k)))
+    return 'For a service offering, clarity is the bridge between skill and the specific problem a client brings. The more precisely the problem is named, the more clearly the service lands.';
+  if(['service','client','portfolio','deliver'].some(k=>t.includes(k)))
+    return 'Service clarity means a potential client can read the offering and immediately understand the problem being solved — not just the capability being offered.';
+  if(['business','startup','company','brand','pitch'].some(k=>t.includes(k)))
+    return 'Business clarity requires a visible connection between what is offered, who it is for, and what changes as a result. When any of those three is missing, perception becomes uncertain.';
+  if(['market','growth','strategy','product'].some(k=>t.includes(k)))
+    return 'A business presence becomes clear when stakeholders can locate the transformation being offered — not just the product or service, but what shifts for the person receiving it.';
+  if(['score','index','level','result','how','aspira','platform'].some(k=>t.includes(k)))
+    return 'The Clarity Index evaluates five observable dimensions: length, structure, role definition, outcomes, and audience clarity. Each input produces the same result every time — there is no estimation.';
+  if(['gap','perception','insight','visible'].some(k=>t.includes(k)))
+    return 'A clarity gap is the distance between what is intended and what is perceived. It is not a failure — it is information. The gap shows where the next layer of specificity belongs.';
+  return 'Clarity is not about adding more — it is about making what exists more findable. The question worth asking: what would a reader still need to infer after reading this?';
+}
 let bclType=null,bclProb=null,bclStep=1;
 
 /* ── Type selection ── */
