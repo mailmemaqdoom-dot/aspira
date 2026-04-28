@@ -760,6 +760,54 @@ button:focus-visible,a:focus-visible{border-radius:var(--rs)}
 /* ── Smooth scroll offset compensation for fixed nav ── */
 html{scroll-padding-top:80px}
 
+/* ══════════════════════════════════════════════════════
+   INLINE SVG VISUALS — CSS
+══════════════════════════════════════════════════════ */
+.hero-visual{
+  position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.hero-visual svg{
+  width:100%;height:100%;
+  opacity:0;
+  animation:heroVisualIn 2.4s cubic-bezier(.22,1,.36,1) .4s forwards;
+}
+@keyframes heroVisualIn{
+  from{opacity:0;transform:scale(1.03)}
+  to{opacity:1;transform:scale(1)}
+}
+[data-theme="dark"] .hero-visual svg{opacity:.45 !important}
+
+.val-visual,.how-visual,.pm-visual,.cp-visual,.bcl-visual,.abt-visual{
+  opacity:0;transition:opacity 1s cubic-bezier(.22,1,.36,1);
+}
+.val-visual.vis,.how-visual.vis,.pm-visual.vis,.cp-visual.vis,.bcl-visual.vis,.abt-visual.vis{
+  opacity:1;
+}
+.val-visual{width:100%;max-width:580px;margin:0 auto 56px}
+.how-visual{width:100%;max-width:860px;margin:-10px auto 28px}
+.pm-visual{width:100%;max-width:440px;margin:0 auto 40px}
+.cp-visual{width:100%;max-width:440px;margin:0 auto 48px}
+.bcl-visual{width:100%;max-width:520px;margin:0 auto 44px}
+.abt-visual{width:100%;max-width:380px;margin:0 0 44px}
+
+.manifesto-visual{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.1;
+}
+.manifesto-visual svg{width:100%;height:100%}
+
+.begin-visual{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  pointer-events:none;opacity:.055;width:300px;
+}
+[data-theme="dark"] .begin-visual{opacity:.035}
+
+@media(max-width:768px){
+  .begin-visual{display:none}
+  .val-visual{margin-bottom:36px}
+  .pm-visual,.cp-visual,.bcl-visual{max-width:300px}
+  .how-visual{display:none}
+}
+
 /* ── Improved loading bar ── */
 .loading{text-align:center;padding:52px 0}
 .load-w{
@@ -798,6 +846,167 @@ html{scroll-padding-top:80px}
 /* ── Hero stats dark mode ── */
 [data-theme="dark"] .h-stat-n{color:var(--c)}
 [data-theme="dark"] .h-vr{opacity:.3}
+
+/* ══════════════════════════════════════════════════════════
+   INTERACTIVE SCROLL · ANIMATION · 3D EFFECTS SYSTEM
+   Additive only — zero existing CSS modified
+══════════════════════════════════════════════════════════ */
+
+/* ── Scroll progress indicator ── */
+#scroll-progress{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--c) 0%,rgba(120,1,21,.25) 100%);
+  z-index:9999;transition:width .08s linear;
+  pointer-events:none;border-radius:0 100px 100px 0;
+}
+[data-theme="dark"] #scroll-progress{
+  background:linear-gradient(90deg,var(--c) 0%,rgba(255,158,162,.2) 100%);
+}
+
+/* ── Particle canvas ── */
+#particle-canvas{
+  position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.3;
+}
+[data-theme="dark"] #particle-canvas{opacity:.15}
+
+/* ── Hero wordmark 3D flip-in ── */
+#hero-wordmark-wrap{
+  display:inline-flex;perspective:800px;
+  transform-style:preserve-3d;
+}
+.hw-char{
+  display:inline-block;
+  opacity:0;
+  transform:rotateX(90deg) translateZ(16px);
+  transition:opacity .55s var(--ease),transform .55s var(--spring);
+  will-change:transform,opacity;
+  transform-origin:center 100%;
+}
+.hw-char.hw-vis{opacity:1;transform:rotateX(0deg) translateZ(0px)}
+
+/* ── Hero logo: 3D spin-in (override markIn) ── */
+@keyframes markIn{
+  0%{opacity:0;transform:perspective(500px) rotateY(-90deg) scale(.6)}
+  65%{transform:perspective(500px) rotateY(10deg) scale(1.06)}
+  100%{opacity:1;transform:perspective(500px) rotateY(0) scale(1)}
+}
+
+/* ── Section entrance scroll reveal ── */
+.s-enter{
+  opacity:0;transform:translateY(36px);
+  transition:opacity .85s var(--ease),transform .85s var(--ease);
+  will-change:opacity,transform;
+}
+.s-enter.s-in{opacity:1;transform:translateY(0)}
+.s-enter.d1{transition-delay:.1s}
+.s-enter.d2{transition-delay:.22s}
+.s-enter.d3{transition-delay:.36s}
+.s-enter.d4{transition-delay:.52s}
+.s-enter.d5{transition-delay:.7s}
+
+/* ── 3D tilt cards — val, cp, result ── */
+.tilt3{
+  transform-style:preserve-3d;
+  transition:transform .1s linear,box-shadow .3s var(--ease);
+  will-change:transform;
+}
+.tilt3-inner{
+  transform:translateZ(6px);
+  transition:transform .1s linear;
+}
+
+/* ── How step number: spring hover ── */
+.how-num{transition:transform .4s var(--spring),background .3s,color .3s,box-shadow .3s}
+.how-step:hover .how-num{
+  transform:scale(1.12) rotate(-5deg) !important;
+  background:var(--c);color:#fff;
+  box-shadow:0 8px 22px rgba(120,1,21,.26);
+}
+[data-theme="dark"] .how-step:hover .how-num{color:#0b0909}
+
+/* ── Stat counters: spring lift on hover ── */
+.h-stat{cursor:default}
+.h-stat-n{
+  display:inline-block;
+  transition:transform .38s var(--spring);
+}
+.h-stat:hover .h-stat-n{transform:scale(1.2) translateY(-4px)}
+
+/* ── Manifesto shimmer ── */
+@keyframes shimmer{
+  0%{background-position:200% center}
+  100%{background-position:-200% center}
+}
+.shimmer-on{
+  background:linear-gradient(90deg,var(--t1) 30%,var(--c) 48%,var(--t1) 66%);
+  background-size:250% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:shimmer 2.2s var(--ease) 1 both;
+}
+[data-theme="dark"] .shimmer-on{
+  background:linear-gradient(90deg,var(--t1) 30%,var(--c) 48%,var(--t1) 66%);
+  background-size:250% auto;
+  -webkit-background-clip:text;background-clip:text;
+}
+
+/* ── Animated divider line ── */
+.anim-line{
+  height:1px;width:0;margin:0 auto;
+  background:linear-gradient(90deg,transparent,var(--c) 40%,var(--c) 60%,transparent);
+  transition:width 1s var(--ease);opacity:.22;
+}
+.anim-line.expanded{width:160px}
+
+/* ── Result card float-in animation ── */
+@keyframes cardFloat{
+  0%{opacity:0;transform:translateY(22px) scale(.97)}
+  55%{transform:translateY(-2px) scale(1.005)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.r-card.vis,.ci-level-card.vis,.ci-truth-card.vis{
+  animation:cardFloat .65s var(--spring) both;
+}
+
+/* ── FAB: continuous gentle pulse ring ── */
+@keyframes fabRing{
+  0%,100%{box-shadow:0 4px 20px rgba(120,1,21,.28),0 0 0 0 rgba(120,1,21,.14)}
+  50%{box-shadow:0 4px 20px rgba(120,1,21,.28),0 0 0 10px rgba(120,1,21,0)}
+}
+.ai-fab{animation:fabRing 3.2s ease-in-out infinite}
+[data-theme="dark"] .ai-fab{animation:fabRingDark 3.2s ease-in-out infinite}
+@keyframes fabRingDark{
+  0%,100%{box-shadow:0 4px 20px rgba(255,158,162,.22),0 0 0 0 rgba(255,158,162,.1)}
+  50%{box-shadow:0 4px 20px rgba(255,158,162,.22),0 0 0 10px rgba(255,158,162,0)}
+}
+
+/* ── Magnetic button wobble ── */
+.mag{transition:transform .18s var(--ease)}
+
+/* ── BCL step transition: 3D page turn ── */
+@keyframes bclIn{
+  from{opacity:0;transform:translateX(18px) scale(.98)}
+  to{opacity:1;transform:translateX(0) scale(1)}
+}
+
+/* ── Mobile: strip heavy 3D, keep animations ── */
+@media(max-width:768px){
+  .tilt3{transform:none !important;transition:box-shadow .3s var(--ease),opacity .85s var(--ease),transform .85s var(--ease) !important}
+  #particle-canvas{display:none}
+  .hw-char{transition-duration:.4s}
+}
+
+/* ── Respect reduced-motion ── */
+@media(prefers-reduced-motion:reduce){
+  .hw-char,.s-enter,.kinetic-char{
+    transition:none !important;animation:none !important;
+    opacity:1 !important;transform:none !important;
+  }
+  .ai-fab{animation:none !important}
+  .shimmer-on{animation:none !important;-webkit-text-fill-color:var(--t1);color:var(--t1)}
+  #particle-canvas,#scroll-progress{display:none !important}
+  .r-card.vis,.ci-level-card.vis,.ci-truth-card.vis{animation:none !important}
+}
 
 /* ══════════════════════════════════════════════════════
    PERCEPTION MIRROR — CSS
@@ -1412,6 +1621,12 @@ html{scroll-padding-top:80px}
   </symbol>
 </svg>
 
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Particle canvas -->
+<canvas id="particle-canvas"></canvas>
+
 <div class="orb o1"></div>
 <div class="orb o2"></div>
 <div class="orb o3"></div>
@@ -1474,13 +1689,99 @@ html{scroll-padding-top:80px}
 
 <!-- ═══ §0 HERO — PURE BRAND IDENTITY ═══ -->
 <section id="hero">
+
+<!-- Hero ambient visual: blurred chaos resolving into alignment -->
+<div class="hero-visual" aria-hidden="true">
+  <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <filter id="hv-blur-heavy" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="28"/>
+      </filter>
+      <filter id="hv-blur-soft" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="8"/>
+      </filter>
+      <filter id="hv-blur-light" x="-10%" y="-10%" width="120%" height="120%">
+        <feGaussianBlur stdDeviation="2"/>
+      </filter>
+      <radialGradient id="hv-g1" cx="30%" cy="35%" r="50%">
+        <stop offset="0%" stop-color="#780115" stop-opacity=".18"/>
+        <stop offset="100%" stop-color="#780115" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="hv-g2" cx="75%" cy="65%" r="45%">
+        <stop offset="0%" stop-color="#ff979a" stop-opacity=".12"/>
+        <stop offset="100%" stop-color="#ff979a" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="hv-g3" cx="55%" cy="20%" r="35%">
+        <stop offset="0%" stop-color="#fff2bd" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#fff2bd" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="hv-line-fade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#780115" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#780115" stop-opacity=".35"/>
+        <stop offset="70%" stop-color="#780115" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="#780115" stop-opacity="0"/>
+      </linearGradient>
+      <style>
+        .hv-drift1{animation:hvDrift1 18s ease-in-out infinite alternate}
+        .hv-drift2{animation:hvDrift2 22s ease-in-out infinite alternate}
+        .hv-drift3{animation:hvDrift3 14s ease-in-out infinite alternate}
+        .hv-line-grow{animation:hvLineGrow 3.2s cubic-bezier(.22,1,.36,1) 1.2s both}
+        .hv-line-grow2{animation:hvLineGrow 3.8s cubic-bezier(.22,1,.36,1) 1.8s both}
+        .hv-line-grow3{animation:hvLineGrow 4.4s cubic-bezier(.22,1,.36,1) 2.2s both}
+        @keyframes hvDrift1{from{transform:translate(0,0)}to{transform:translate(40px,-25px)}}
+        @keyframes hvDrift2{from{transform:translate(0,0)}to{transform:translate(-30px,35px)}}
+        @keyframes hvDrift3{from{transform:translate(0,0)}to{transform:translate(20px,20px)}}
+        @keyframes hvLineGrow{from{opacity:0;stroke-dashoffset:600}to{opacity:1;stroke-dashoffset:0}}
+      </style>
+    </defs>
+    <!-- Soft colour orbs — blurred ambient field -->
+    <ellipse class="hv-drift1" cx="320" cy="280" rx="380" ry="280" fill="url(#hv-g1)" filter="url(#hv-blur-heavy)"/>
+    <ellipse class="hv-drift2" cx="880" cy="440" rx="320" ry="240" fill="url(#hv-g2)" filter="url(#hv-blur-heavy)"/>
+    <ellipse class="hv-drift3" cx="620" cy="120" rx="240" ry="180" fill="url(#hv-g3)" filter="url(#hv-blur-heavy)"/>
+
+    <!-- Scattered blurred dots — representing unclear state -->
+    <g filter="url(#hv-blur-soft)" opacity=".3">
+      <circle cx="200" cy="180" r="14" fill="#780115"/>
+      <circle cx="950" cy="220" r="10" fill="#ff979a"/>
+      <circle cx="140" cy="490" r="18" fill="#780115"/>
+      <circle cx="1060" cy="500" r="12" fill="#ff979a"/>
+      <circle cx="580" cy="600" r="8" fill="#780115"/>
+    </g>
+
+    <!-- Resolving lines — clarity emerging — horizontal alignment -->
+    <g opacity=".55">
+      <!-- Three converging lines from left chaos to right alignment -->
+      <path class="hv-line-grow" d="M 80 280 C 300 260 500 310 740 300" stroke="url(#hv-line-fade)" stroke-width="1" fill="none" stroke-dasharray="600"/>
+      <path class="hv-line-grow2" d="M 60 340 C 280 330 520 340 760 338" stroke="url(#hv-line-fade)" stroke-width=".7" fill="none" stroke-dasharray="600" opacity=".6"/>
+      <path class="hv-line-grow3" d="M 100 400 C 320 395 540 400 780 398" stroke="url(#hv-line-fade)" stroke-width=".5" fill="none" stroke-dasharray="600" opacity=".4"/>
+    </g>
+
+    <!-- Sharp aligned mark at resolution point — the clarity moment -->
+    <g transform="translate(760,300)" opacity=".22" filter="url(#hv-blur-light)">
+      <line x1="0" y1="60" x2="-28" y2="-60" stroke="#780115" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="0" y1="60" x2="28" y2="-60" stroke="#780115" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="-17" y1="8" x2="17" y2="8" stroke="#780115" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Fine grid — very subtle structure -->
+    <g opacity=".03" stroke="#780115" stroke-width=".5">
+      <line x1="0" y1="140" x2="1200" y2="140"/>
+      <line x1="0" y1="350" x2="1200" y2="350"/>
+      <line x1="0" y1="560" x2="1200" y2="560"/>
+      <line x1="300" y1="0" x2="300" y2="700"/>
+      <line x1="600" y1="0" x2="600" y2="700"/>
+      <line x1="900" y1="0" x2="900" y2="700"/>
+    </g>
+  </svg>
+</div>
+
 <div class="hero-inner">
 
   <div class="h-badge"><span class="h-dot"></span>Clarity Intelligence System</div>
 
   <svg class="h-mark" viewBox="0 0 100 100"><use href="#ia"/></svg>
 
-  <h1 class="h-wordmark">ASPIRA</h1>
+  <h1 class="h-wordmark" id="hero-wordmark-el">ASPIRA</h1>
   <div class="h-rule"></div>
   <p class="h-tagline">Clarity Connects.</p>
 
@@ -1500,7 +1801,7 @@ html{scroll-padding-top:80px}
   </div>
 
   <div class="h-ctas">
-    <button class="btn-p" id="hero-cta">Analyze My Clarity <span class="arr">→</span></button>
+    <button class="btn-p mag" id="hero-cta">Analyze My Clarity <span class="arr">→</span></button>
     <a class="btn-g" href="#value">Discover ASPIRA <span class="arr">↓</span></a>
   </div>
 
@@ -1517,18 +1818,51 @@ html{scroll-padding-top:80px}
   <div class="s-eye reveal">"Sometimes, the effort is already there."</div>
   <h2 class="s-title reveal d1">What's Missing<br>Is <em>Clarity.</em></h2>
   <p class="s-sub reveal d2">ASPIRA is an intelligence system that reveals the gap between how you present yourself and how the world perceives you — then shows you exactly how to close it.</p>
+
+  <!-- Value section visual: two sides bridged by a line — intention vs perception closing -->
+  <div class="val-visual reveal d2" aria-hidden="true">
+    <svg viewBox="0 0 580 90" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <defs>
+        <linearGradient id="vv-bridge" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#ff979a" stop-opacity=".4"/>
+          <stop offset="50%" stop-color="#780115" stop-opacity=".65"/>
+          <stop offset="100%" stop-color="#fff2bd" stop-opacity=".3"/>
+        </linearGradient>
+      </defs>
+      <!-- Left block — intention side -->
+      <rect x="0" y="28" width="160" height="2" rx="1" fill="#780115" opacity=".18"/>
+      <rect x="0" y="20" width="90" height="2" rx="1" fill="#780115" opacity=".10"/>
+      <rect x="0" y="36" width="130" height="2" rx="1" fill="#780115" opacity=".08"/>
+      <circle cx="168" cy="29" r="5" fill="#780115" opacity=".25"/>
+
+      <!-- Bridge arc — the gap being closed -->
+      <path d="M 173 29 Q 290 8 407 29" stroke="url(#vv-bridge)" stroke-width="1.5" stroke-linecap="round"/>
+
+      <!-- Right block — perception side -->
+      <circle cx="412" cy="29" r="5" fill="#780115" opacity=".25"/>
+      <rect x="420" y="28" width="160" height="2" rx="1" fill="#780115" opacity=".18"/>
+      <rect x="490" y="20" width="90" height="2" rx="1" fill="#780115" opacity=".10"/>
+      <rect x="450" y="36" width="130" height="2" rx="1" fill="#780115" opacity=".08"/>
+
+      <!-- Labels -->
+      <text x="80" y="62" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" font-style="italic" fill="#780115" opacity=".4">intention</text>
+      <text x="290" y="6" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#780115" opacity=".3">clarity</text>
+      <text x="500" y="62" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" font-style="italic" fill="#780115" opacity=".4">perception</text>
+    </svg>
+  </div>
+
   <div class="val-grid">
-    <div class="val-card reveal">
+    <div class="val-card reveal tilt3">
       <span class="val-icon">🔍</span>
       <div class="val-ttl">Perception Analysis</div>
       <p class="val-desc">ASPIRA reads your professional narrative and scores how clearly your message lands — from a reader's perspective, not yours.</p>
     </div>
-    <div class="val-card reveal d1">
+    <div class="val-card reveal d1 tilt3">
       <span class="val-icon">⚡</span>
       <div class="val-ttl">Gap Identification</div>
       <p class="val-desc">Discover the hidden disconnects between your intentions and the external impression you create — the gaps most people never see.</p>
     </div>
-    <div class="val-card reveal d2">
+    <div class="val-card reveal d2 tilt3">
       <span class="val-icon">🧭</span>
       <div class="val-ttl">Clear Pathways</div>
       <p class="val-desc">Receive precise, actionable next steps that transform unclear communication into compelling clarity — for careers, freelance, and business.</p>
@@ -1538,6 +1872,12 @@ html{scroll-padding-top:80px}
 
 <!-- ═══ §1b MANIFESTO BAND ═══ -->
 <section id="manifesto">
+  <!-- Manifesto ambient: oversized A mark as watermark -->
+  <div class="manifesto-visual" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <text x="50%" y="72%" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="420" font-weight="300" fill="#fff2bd" opacity=".12" letter-spacing="60">ASPIRA</text>
+    </svg>
+  </div>
   <p class="mfst-q reveal">"Sometimes, the effort is already there.<br>What's missing is clarity."</p>
 </section>
 
@@ -1546,6 +1886,34 @@ html{scroll-padding-top:80px}
   <div class="s-eye reveal">How It Works</div>
   <h2 class="s-title reveal d1">Three Steps to<br>Absolute <em>Clarity</em></h2>
   <p class="s-sub reveal d2">No lengthy onboarding. No guesswork. Share your narrative — ASPIRA does the rest.</p>
+
+  <!-- How visual: three nodes connected by flowing path -->
+  <div class="how-visual reveal d1" aria-hidden="true">
+    <svg viewBox="0 0 860 80" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <defs>
+        <linearGradient id="hw-path" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#780115" stop-opacity=".15"/>
+          <stop offset="50%" stop-color="#780115" stop-opacity=".45"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity=".15"/>
+        </linearGradient>
+      </defs>
+      <!-- Connecting path -->
+      <path d="M 144 40 Q 300 16 430 40 Q 560 64 716 40" stroke="url(#hw-path)" stroke-width="1.2" stroke-dasharray="4 6" stroke-linecap="round"/>
+      <!-- Node 1 -->
+      <circle cx="72" cy="40" r="32" stroke="#780115" stroke-opacity=".18" stroke-width="1"/>
+      <circle cx="72" cy="40" r="22" fill="#780115" fill-opacity=".06"/>
+      <text x="72" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="18" fill="#780115" opacity=".5" font-weight="400">01</text>
+      <!-- Node 2 -->
+      <circle cx="430" cy="40" r="32" stroke="#780115" stroke-opacity=".28" stroke-width="1.2"/>
+      <circle cx="430" cy="40" r="22" fill="#780115" fill-opacity=".10"/>
+      <text x="430" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="18" fill="#780115" opacity=".65" font-weight="400">02</text>
+      <!-- Node 3 -->
+      <circle cx="788" cy="40" r="32" stroke="#780115" stroke-opacity=".18" stroke-width="1"/>
+      <circle cx="788" cy="40" r="22" fill="#780115" fill-opacity=".06"/>
+      <text x="788" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="18" fill="#780115" opacity=".5" font-weight="400">03</text>
+    </svg>
+  </div>
+
   <div class="how-wrap">
     <div class="how-step reveal">
       <div class="how-num">01</div>
@@ -1564,6 +1932,16 @@ html{scroll-padding-top:80px}
 
 <!-- ═══ §3 BEGIN — FORM (after brand context is established) ═══ -->
 <section id="begin">
+  <!-- Begin ambient: very subtle wave pattern right side -->
+  <div class="begin-visual" aria-hidden="true">
+    <svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M 280 0 Q 220 150 280 300 Q 340 450 280 600" stroke="#780115" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 240 0 Q 180 150 240 300 Q 300 450 240 600" stroke="#780115" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+      <path d="M 200 0 Q 140 150 200 300 Q 260 450 200 600" stroke="#780115" stroke-width=".7" stroke-linecap="round" opacity=".35"/>
+      <path d="M 160 50 Q 100 200 160 350 Q 220 480 160 600" stroke="#780115" stroke-width=".4" stroke-linecap="round" opacity=".18"/>
+    </svg>
+  </div>
+
   <div class="s-eye reveal">Begin Clarity</div>
   <h2 class="s-title reveal d1">Understand Self</h2>
   <p class="form-q reveal d2">"Sometimes, the effort is already there. What's missing is clarity."</p>
@@ -1609,6 +1987,43 @@ html{scroll-padding-top:80px}
 
 <!-- ═══ §6b PERCEPTION MIRROR ═══ -->
 <section id="perception-mirror">
+  <!-- Perception Mirror visual: mirrored shape with distortion -->
+  <div class="pm-visual reveal" aria-hidden="true">
+    <svg viewBox="0 0 440 110" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <defs>
+        <linearGradient id="pm-grad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#780115" stop-opacity="0"/>
+          <stop offset="30%" stop-color="#780115" stop-opacity=".3"/>
+          <stop offset="70%" stop-color="#780115" stop-opacity=".3"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="pm-distort">
+          <feTurbulence type="fractalNoise" baseFrequency=".018 .08" numOctaves="2" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <!-- Mirror axis — centre vertical line -->
+      <line x1="220" y1="0" x2="220" y2="110" stroke="#780115" stroke-opacity=".12" stroke-width="1" stroke-dasharray="3 5"/>
+
+      <!-- Upper half — clear intent side -->
+      <rect x="80" y="28" width="120" height="2" rx="1" fill="#780115" opacity=".25"/>
+      <rect x="100" y="36" width="80" height="2" rx="1" fill="#780115" opacity=".16"/>
+      <rect x="90" y="44" width="100" height="2" rx="1" fill="#780115" opacity=".12"/>
+      <text x="140" y="18" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".3" letter-spacing="2">INTENT</text>
+
+      <!-- Lower half — reflection, slightly distorted and faded -->
+      <g filter="url(#pm-distort)" opacity=".35">
+        <rect x="240" y="28" width="120" height="2" rx="1" fill="#780115" opacity=".55"/>
+        <rect x="240" y="36" width="80" height="2" rx="1" fill="#780115" opacity=".38"/>
+        <rect x="250" y="44" width="100" height="2" rx="1" fill="#780115" opacity=".28"/>
+      </g>
+      <text x="300" y="18" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".3" letter-spacing="2">PERCEPTION</text>
+
+      <!-- Horizontal mirror line -->
+      <line x1="60" y1="60" x2="380" y2="60" stroke="url(#pm-grad)" stroke-width=".8"/>
+    </svg>
+  </div>
+
   <p class="pm-eyebrow" id="pm-eye">Perception Mirror</p>
   <p class="pm-primary" id="pm-primary"></p>
   <div class="pm-rule" id="pm-rule"></div>
@@ -1622,10 +2037,54 @@ html{scroll-padding-top:80px}
   <h2 class="cp-title" id="cp-title">Three ways to<br>move <em>forward.</em></h2>
   <p class="cp-sub" id="cp-sub">"Clarity opens before choice — not after."</p>
 
+  <!-- Pathways visual: single root diverging into three branches -->
+  <div class="cp-visual" aria-hidden="true">
+    <svg viewBox="0 0 440 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <defs>
+        <linearGradient id="cp-root" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#780115" stop-opacity=".45"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity=".2"/>
+        </linearGradient>
+        <linearGradient id="cp-b1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#780115" stop-opacity=".35"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity=".08"/>
+        </linearGradient>
+        <linearGradient id="cp-b2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#780115" stop-opacity=".45"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity=".12"/>
+        </linearGradient>
+        <linearGradient id="cp-b3" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#780115" stop-opacity=".35"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity=".08"/>
+        </linearGradient>
+      </defs>
+      <!-- Root stem from top -->
+      <line x1="220" y1="0" x2="220" y2="40" stroke="url(#cp-root)" stroke-width="1.5" stroke-linecap="round"/>
+
+      <!-- Branching node -->
+      <circle cx="220" cy="44" r="4" fill="#780115" opacity=".25"/>
+
+      <!-- Left branch — Refine -->
+      <path d="M 220 44 Q 160 62 100 100" stroke="url(#cp-b1)" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="100" cy="104" r="3" fill="#780115" opacity=".18"/>
+      <text x="100" y="118" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".35" letter-spacing="1">Refine</text>
+
+      <!-- Centre branch — Tools -->
+      <path d="M 220 44 L 220 100" stroke="url(#cp-b2)" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="220" cy="104" r="3" fill="#780115" opacity=".28"/>
+      <text x="220" y="118" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".45" letter-spacing="1">Tools</text>
+
+      <!-- Right branch — Guidance -->
+      <path d="M 220 44 Q 280 62 340 100" stroke="url(#cp-b3)" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="340" cy="104" r="3" fill="#780115" opacity=".18"/>
+      <text x="340" y="118" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".35" letter-spacing="1">Guidance</text>
+    </svg>
+  </div>
+
   <div class="cp-grid" id="cp-grid">
 
     <!-- Path 1: Refine Clarity -->
-    <div class="cp-card" id="cp-card-1">
+    <div class="cp-card tilt3" id="cp-card-1">
       <div class="cp-num">01</div>
       <div class="cp-card-title">Refine Clarity</div>
       <p class="cp-card-desc">Strengthen how this is expressed and understood.</p>
@@ -1636,7 +2095,7 @@ html{scroll-padding-top:80px}
     </div>
 
     <!-- Path 2: Use Tools -->
-    <div class="cp-card" id="cp-card-2">
+    <div class="cp-card tilt3" id="cp-card-2">
       <div class="cp-num">02</div>
       <div class="cp-card-title">Use Tools</div>
       <p class="cp-card-desc">Use simple tools to improve visibility and response.</p>
@@ -1647,7 +2106,7 @@ html{scroll-padding-top:80px}
     </div>
 
     <!-- Path 3: Continue with Guidance -->
-    <div class="cp-card" id="cp-card-3">
+    <div class="cp-card tilt3" id="cp-card-3">
       <div class="cp-num">03</div>
       <div class="cp-card-title">Continue with Guidance</div>
       <p class="cp-card-desc">Take this further with direct clarity support.</p>
@@ -1679,6 +2138,51 @@ html{scroll-padding-top:80px}
      BUSINESS CLARITY LAYER — ADD-ON MODULE
 ═══════════════════════════════════════════════════════ -->
 <section id="biz-clarity">
+
+  <!-- BCL visual: abstract small-business scene — shopfront, desk, connection lines -->
+  <div class="bcl-visual reveal" aria-hidden="true">
+    <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <defs>
+        <linearGradient id="bcl-g1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#780115" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#780115" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#780115" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Abstract shopfront — left -->
+      <rect x="20" y="50" width="80" height="54" rx="3" stroke="#780115" stroke-opacity=".2" stroke-width="1"/>
+      <rect x="20" y="35" width="80" height="16" rx="2" fill="#780115" fill-opacity=".06" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+      <rect x="38" y="62" width="20" height="28" rx="2" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+      <rect x="66" y="62" width="24" height="20" rx="1" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+      <line x1="20" y1="104" x2="100" y2="104" stroke="#780115" stroke-opacity=".22" stroke-width="1"/>
+      <text x="60" y="30" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="8" fill="#780115" opacity=".28" letter-spacing="1.5">SHOP</text>
+
+      <!-- Abstract freelancer desk — centre -->
+      <rect x="210" y="62" width="100" height="8" rx="2" stroke="#780115" stroke-opacity=".2" stroke-width="1"/>
+      <rect x="224" y="30" width="72" height="50" rx="3" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+      <rect x="232" y="38" width="56" height="34" rx="1" fill="#780115" fill-opacity=".04"/>
+      <rect x="240" y="44" width="40" height="2" rx="1" fill="#780115" fill-opacity=".18"/>
+      <rect x="240" y="50" width="30" height="2" rx="1" fill="#780115" fill-opacity=".12"/>
+      <rect x="240" y="56" width="36" height="2" rx="1" fill="#780115" fill-opacity=".10"/>
+      <line x1="248" y1="70" x2="272" y2="70" stroke="#780115" stroke-opacity=".16" stroke-width=".8"/>
+      <text x="260" y="26" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="8" fill="#780115" opacity=".28" letter-spacing="1.5">FREELANCE</text>
+
+      <!-- Abstract mobile/WhatsApp — right -->
+      <rect x="410" y="32" width="52" height="82" rx="6" stroke="#780115" stroke-opacity=".2" stroke-width="1"/>
+      <rect x="416" y="40" width="40" height="60" rx="2" fill="#780115" fill-opacity=".04"/>
+      <circle cx="436" cy="108" r="4" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+      <rect x="420" y="46" width="32" height="6" rx="2" fill="#780115" fill-opacity=".12"/>
+      <rect x="420" y="56" width="20" height="4" rx="1" fill="#780115" fill-opacity=".10"/>
+      <rect x="430" y="64" width="20" height="4" rx="1" fill="#780115" fill-opacity=".08"/>
+      <rect x="420" y="72" width="24" height="4" rx="1" fill="#780115" fill-opacity=".10"/>
+      <text x="436" y="28" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="8" fill="#780115" opacity=".28" letter-spacing="1.5">ONLINE</text>
+
+      <!-- Connecting dotted lines between them -->
+      <path d="M 102 76 Q 156 60 208 76" stroke="url(#bcl-g1)" stroke-width=".8" stroke-dasharray="3 5" stroke-linecap="round"/>
+      <path d="M 312 76 Q 362 60 408 76" stroke="url(#bcl-g1)" stroke-width=".8" stroke-dasharray="3 5" stroke-linecap="round"/>
+    </svg>
+  </div>
 
   <!-- Header -->
   <div class="bcl-badge reveal"><span class="bcl-dot"></span>Business Clarity Layer</div>
@@ -1816,6 +2320,33 @@ html{scroll-padding-top:80px}
 ═══════════════════════════════════════════════════════ -->
 <section id="about" style="display:block">
   <div class="abt-inner">
+    <!-- About visual: quiet vertical line with nodes — like a spine of thought -->
+    <div class="abt-visual reveal" aria-hidden="true">
+      <svg viewBox="0 0 380 90" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <defs>
+          <linearGradient id="abt-g" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#780115" stop-opacity="0"/>
+            <stop offset="25%" stop-color="#780115" stop-opacity=".35"/>
+            <stop offset="75%" stop-color="#780115" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#780115" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Main horizontal spine -->
+        <line x1="0" y1="45" x2="380" y2="45" stroke="url(#abt-g)" stroke-width=".8"/>
+        <!-- Vision node -->
+        <circle cx="70" cy="45" r="4" fill="#780115" fill-opacity=".2" stroke="#780115" stroke-opacity=".3" stroke-width=".8"/>
+        <line x1="70" y1="45" x2="70" y2="20" stroke="#780115" stroke-opacity=".15" stroke-width=".8"/>
+        <text x="70" y="14" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".35" letter-spacing="1.5">VISION</text>
+        <!-- Mission node -->
+        <circle cx="190" cy="45" r="5" fill="#780115" fill-opacity=".25" stroke="#780115" stroke-opacity=".4" stroke-width="1"/>
+        <line x1="190" y1="45" x2="190" y2="72" stroke="#780115" stroke-opacity=".18" stroke-width=".8"/>
+        <text x="190" y="82" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".35" letter-spacing="1.5">MISSION</text>
+        <!-- Philosophy node -->
+        <circle cx="310" cy="45" r="4" fill="#780115" fill-opacity=".2" stroke="#780115" stroke-opacity=".3" stroke-width=".8"/>
+        <line x1="310" y1="45" x2="310" y2="20" stroke="#780115" stroke-opacity=".15" stroke-width=".8"/>
+        <text x="310" y="14" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#780115" opacity=".35" letter-spacing="1.5">PHILOSOPHY</text>
+      </svg>
+    </div>
     <div class="s-eye reveal">About ASPIRA</div>
     <div class="abt-rule reveal"></div>
 
@@ -2216,9 +2747,14 @@ document.getElementById('hero-cta').addEventListener('click',()=>goTo('begin'));
 document.getElementById('fn-cta').addEventListener('click',()=>goTo('begin'));
 
 const ro=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});
-},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+      ro.unobserve(e.target);
+    }
+  });
+},{threshold:.08});
+document.querySelectorAll('.reveal,.val-visual,.how-visual,.pm-visual,.cp-visual,.bcl-visual,.abt-visual').forEach(el=>ro.observe(el));
 
 let selCat='career';
 document.querySelectorAll('.cat-btn').forEach(btn=>{
@@ -3026,6 +3562,317 @@ document.addEventListener('keydown',e=>{
 // Wire footer logo scroll
 const footerLogo=document.querySelector('.footer-logo');
 if(footerLogo){footerLogo.addEventListener('click',e=>{e.preventDefault();goTo('hero');});}
+
+/* ════════════════════════════════════════════════════════════
+   INTERACTIVE SCROLL · 3D · ANIMATION ENGINE
+   Fully additive — touches no existing functionality
+════════════════════════════════════════════════════════════ */
+(function ASPIRA_FX(){
+  const isMobile=()=>window.innerWidth<=768;
+  const prefersReducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(prefersReducedMotion) return;
+
+  /* ── 1. SCROLL PROGRESS BAR ── */
+  const progBar=document.getElementById('scroll-progress');
+  function updateProgress(){
+    if(!progBar) return;
+    const total=document.documentElement.scrollHeight-window.innerHeight;
+    const pct=total>0?(window.scrollY/total)*100:0;
+    progBar.style.width=pct+'%';
+  }
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  updateProgress();
+
+  /* ── 2. PARTICLE CANVAS ── */
+  const canvas=document.getElementById('particle-canvas');
+  if(canvas && !isMobile()){
+    const ctx2=canvas.getContext('2d');
+    let W,H,particles=[];
+
+    function resizeCanvas(){
+      W=canvas.width=window.innerWidth;
+      H=canvas.height=window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize',resizeCanvas,{passive:true});
+
+    function createParticle(){
+      return{
+        x:Math.random()*W,
+        y:Math.random()*H,
+        r:Math.random()*1.4+0.3,
+        vx:(Math.random()-.5)*0.18,
+        vy:-Math.random()*0.22-0.08,
+        alpha:Math.random()*0.35+0.05,
+        life:Math.random()*400+200,
+        age:0,
+      };
+    }
+
+    for(let i=0;i<55;i++) particles.push(createParticle());
+
+    function isDark(){return document.body.getAttribute('data-theme')==='dark'}
+    function particleColor(a){
+      return isDark()
+        ?`rgba(255,158,162,${a})`
+        :`rgba(120,1,21,${a})`;
+    }
+
+    let animId;
+    function animParticles(){
+      ctx2.clearRect(0,0,W,H);
+      particles.forEach((p,i)=>{
+        p.x+=p.vx; p.y+=p.vy; p.age++;
+        const ratio=p.age/p.life;
+        const a=p.alpha*(ratio<0.2?ratio/0.2:ratio>0.8?(1-ratio)/0.2:1);
+        ctx2.beginPath();
+        ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx2.fillStyle=particleColor(a);
+        ctx2.fill();
+        if(p.age>=p.life||p.y<-10) particles[i]=createParticle();
+      });
+      animId=requestAnimationFrame(animParticles);
+    }
+    animParticles();
+    // Pause when tab hidden
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden)cancelAnimationFrame(animId);
+      else animParticles();
+    });
+  }
+
+  /* ── 3. PARALLAX ORBS ON SCROLL ── */
+  const orb1=document.querySelector('.o1');
+  const orb2=document.querySelector('.o2');
+  const orb3=document.querySelector('.o3');
+  function parallaxOrbs(){
+    const sy=window.scrollY;
+    if(orb1) orb1.style.transform=`translate(${sy*0.04}px,${sy*0.06}px)`;
+    if(orb2) orb2.style.transform=`translate(${-sy*0.03}px,${-sy*0.045}px)`;
+    if(orb3) orb3.style.transform=`translate(${sy*0.02}px,${sy*0.03}px)`;
+  }
+  window.addEventListener('scroll',parallaxOrbs,{passive:true});
+
+  /* ── 4. HERO WORDMARK 3D CHARACTER SPLIT ── */
+  const wrapEl=document.getElementById('hero-wordmark-el');
+  if(wrapEl){
+    const text=wrapEl.textContent||'ASPIRA';
+    wrapEl.textContent='';
+    wrapEl.style.display='inline-flex';
+    wrapEl.style.perspective='800px';
+    wrapEl.style.transformStyle='preserve-3d';
+    const chars=[...text];
+    const charEls=chars.map((ch,i)=>{
+      const span=document.createElement('span');
+      span.className='hw-char';
+      span.textContent=ch==' '?'\u00a0':ch;
+      span.style.transitionDelay=(0.2+i*0.07)+'s';
+      wrapEl.appendChild(span);
+      return span;
+    });
+    // Trigger after a short frame to allow paint
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        charEls.forEach(el=>el.classList.add('hw-vis'));
+      });
+    });
+
+    /* 3D mouse-track on hero wordmark */
+    wrapEl.addEventListener('mousemove',e=>{
+      if(isMobile()) return;
+      const rect=wrapEl.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
+      const rx=((e.clientY-cy)/rect.height)*12;
+      const ry=(-(e.clientX-cx)/rect.width)*12;
+      wrapEl.style.transform=`perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    wrapEl.addEventListener('mouseleave',()=>{
+      wrapEl.style.transform='perspective(800px) rotateX(0) rotateY(0)';
+      wrapEl.style.transition='transform .6s var(--ease)';
+      setTimeout(()=>{wrapEl.style.transition='';},600);
+    });
+  }
+
+  /* ── 5. 3D TILT CARDS ── */
+  function initTilt(el){
+    if(isMobile()) return;
+    const strength=8;
+    el.addEventListener('mousemove',e=>{
+      const rect=el.getBoundingClientRect();
+      const x=(e.clientX-rect.left)/rect.width  - 0.5;
+      const y=(e.clientY-rect.top) /rect.height - 0.5;
+      const rX=-y*strength;
+      const rY= x*strength;
+      el.style.transform=`perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.025) translateZ(4px)`;
+    });
+    el.addEventListener('mouseleave',()=>{
+      el.style.transform='perspective(900px) rotateX(0) rotateY(0) scale(1) translateZ(0)';
+    });
+    el.addEventListener('mouseenter',()=>{
+      el.style.transition='transform .12s linear,box-shadow .3s var(--ease)';
+    });
+  }
+  document.querySelectorAll('.tilt3').forEach(initTilt);
+
+  /* ── 6. MAGNETIC BUTTONS ── */
+  function initMagnetic(el){
+    if(isMobile()) return;
+    el.addEventListener('mousemove',e=>{
+      const rect=el.getBoundingClientRect();
+      const dx=(e.clientX-(rect.left+rect.width/2))*0.22;
+      const dy=(e.clientY-(rect.top+rect.height/2))*0.22;
+      el.style.transform=`translate(${dx}px,${dy}px)`;
+    });
+    el.addEventListener('mouseleave',()=>{
+      el.style.transform='';
+      el.style.transition='transform .45s var(--spring)';
+      setTimeout(()=>{el.style.transition='';},450);
+    });
+  }
+  document.querySelectorAll('.mag').forEach(initMagnetic);
+
+  /* ── 7. SECTION ENTRANCE SCROLL OBSERVER ── */
+  const enterObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('s-in');enterObs.unobserve(e.target);}
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
+  // Apply to section titles, eyebrows, bodies not already covered by .reveal
+  document.querySelectorAll('.s-title,.s-eye,.s-sub,.abt-block,.bcl-badge,.bcl-title,.bcl-sub,.pm-eyebrow,.cp-eyebrow,.cp-title').forEach(el=>{
+    if(!el.classList.contains('reveal')){
+      el.classList.add('s-enter');
+      enterObs.observe(el);
+    }
+  });
+
+  /* ── 8. MANIFESTO SHIMMER ON ENTER ── */
+  const manifesto=document.getElementById('manifesto');
+  const manifestoQ=manifesto?.querySelector('.mfst-q');
+  if(manifesto&&manifestoQ){
+    const mobs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        manifestoQ.classList.add('shimmer-on');
+        mobs.disconnect();
+      }
+    },{threshold:0.3});
+    mobs.observe(manifesto);
+  }
+
+  /* ── 9. ANIMATED SECTION DIVIDER LINES ── */
+  document.querySelectorAll('.anim-line').forEach(el=>{
+    const lineObs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        el.classList.add('expanded');
+        lineObs.disconnect();
+      }
+    },{threshold:0.5});
+    lineObs.observe(el);
+  });
+
+  /* ── 10. SMOOTH CURSOR SPOTLIGHT (desktop only) ── */
+  if(!isMobile()){
+    let mx=0,my=0,cx=0,cy=0;
+    const spotlight=document.createElement('div');
+    spotlight.style.cssText='position:fixed;pointer-events:none;z-index:0;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(120,1,21,.045) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .6s;opacity:0;will-change:transform;';
+    document.body.appendChild(spotlight);
+
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;spotlight.style.opacity='1';});
+    document.addEventListener('mouseleave',()=>{spotlight.style.opacity='0';});
+
+    let spotId;
+    function animSpotlight(){
+      cx+=(mx-cx)*0.10;
+      cy+=(my-cy)*0.10;
+      spotlight.style.left=cx+'px';
+      spotlight.style.top=cy+'px';
+      spotId=requestAnimationFrame(animSpotlight);
+    }
+    animSpotlight();
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden)cancelAnimationFrame(spotId);
+      else animSpotlight();
+    });
+  }
+
+  /* ── 11. COUNTER ANIMATION FOR STATS ── */
+  const statsSection=document.querySelector('.h-stats');
+  if(statsSection){
+    const statObs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        document.querySelectorAll('.h-stat-n').forEach(el=>{
+          el.style.animation='statPop .5s var(--spring) forwards';
+        });
+        statObs.disconnect();
+      }
+    },{threshold:0.8});
+    statObs.observe(statsSection);
+  }
+  // Inject statPop keyframe dynamically
+  const statStyle=document.createElement('style');
+  statStyle.textContent='@keyframes statPop{0%{transform:scale(0.4) translateY(8px);opacity:0}60%{transform:scale(1.18) translateY(-2px)}100%{transform:scale(1) translateY(0);opacity:1}}';
+  document.head.appendChild(statStyle);
+
+  /* ── 12. HOW STEPS: sequential entrance ── */
+  document.querySelectorAll('.how-step').forEach((el,i)=>{
+    el.style.opacity='0';
+    el.style.transform='translateY(28px)';
+    el.style.transition='opacity .7s var(--ease),transform .7s var(--ease)';
+    el.style.transitionDelay=(i*0.18)+'s';
+    const hObs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        el.style.opacity='1';
+        el.style.transform='translateY(0)';
+        hObs.disconnect();
+      }
+    },{threshold:0.2});
+    hObs.observe(el);
+  });
+
+  /* ── 13. RESULT CARD FLOAT OBSERVER ── */
+  // Result cards already get .vis class from showResults() which triggers cardFloat
+  // This ensures any card added after DOM load still animates
+  const mutObs=new MutationObserver(muts=>{
+    muts.forEach(m=>{
+      m.addedNodes.forEach(node=>{
+        if(node.classList&&(node.classList.contains('r-card')||node.classList.contains('ci-level-card')||node.classList.contains('ci-truth-card')||node.classList.contains('bcl-rec-card'))){
+          node.style.willChange='transform,opacity';
+        }
+      });
+    });
+  });
+  ['refl-display','gaps-display'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) mutObs.observe(el,{childList:true});
+  });
+
+  /* ── 14. TOUCH RIPPLE on mobile tap ── */
+  if(isMobile()){
+    const rippleStyle=document.createElement('style');
+    rippleStyle.textContent=`
+    .ripple-host{position:relative;overflow:hidden}
+    @keyframes ripple{from{transform:scale(0);opacity:.3}to{transform:scale(2.5);opacity:0}}
+    .ripple-ring{position:absolute;border-radius:50%;background:var(--c);pointer-events:none;animation:ripple .55s var(--ease) forwards;transform-origin:center}`;
+    document.head.appendChild(rippleStyle);
+
+    document.querySelectorAll('.btn-p,.sub-btn,.fn-cta,.cp-btn,.bcl-next,.wa-btn,.bcl-wa-btn').forEach(btn=>{
+      btn.classList.add('ripple-host');
+      btn.addEventListener('touchstart',e=>{
+        const rect=btn.getBoundingClientRect();
+        const t=e.touches[0];
+        const x=t.clientX-rect.left;
+        const y=t.clientY-rect.top;
+        const size=Math.max(rect.width,rect.height)*1.4;
+        const ring=document.createElement('span');
+        ring.className='ripple-ring';
+        ring.style.cssText=`width:${size}px;height:${size}px;left:${x-size/2}px;top:${y-size/2}px;`;
+        btn.appendChild(ring);
+        setTimeout(()=>ring.remove(),600);
+      },{passive:true});
+    });
+  }
+
+})();
 </script>
 </body>
 </html>
