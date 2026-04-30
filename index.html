@@ -2094,8 +2094,7 @@ html{scroll-padding-top:80px}
   </div>
   <div class="fn-right">
     <button class="fn-theme" id="fn-theme">◑</button>
-    <button class="fn-cta" id="fn-cta">Begin Clarity →</button>
-    <button class="open-intake" style="padding:8px 16px;background:transparent;color:var(--c);border:1.5px solid var(--bd2);border-radius:100px;font-size:.7rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .22s var(--ease);margin-left:5px;white-space:nowrap;" onmouseover="this.style.background='var(--c2)';this.style.borderColor='var(--c)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--bd2)'">Intake →</button>
+    <button class="fn-cta open-intake" id="fn-cta">Begin Clarity →</button>
   </div>
 </nav>
 
@@ -2395,18 +2394,6 @@ html{scroll-padding-top:80px}
   <p class="form-q reveal d2">"Sometimes, the effort is already there. What's missing is clarity."</p>
   <br>
   <div class="input-box reveal d3">
-    <div style="text-align:center;margin-bottom:18px">
-      <button class="open-intake" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:transparent;color:var(--c);border:1.5px solid var(--bd2);border-radius:100px;font-size:.78rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .22s var(--ease);letter-spacing:.2px;" onmouseover="this.style.background='var(--c2)';this.style.borderColor='var(--c)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--bd2)'">
-        <svg width="14" height="14" viewBox="0 0 100 100" fill="none"><path d="M20 85Q35 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M80 85Q65 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 55L68 55" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
-        Begin Clarity Intake
-      </button>
-      <p style="font-size:.7rem;color:var(--t3);margin-top:8px;font-style:italic">A guided 7-step process · under 2 minutes</p>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <div style="flex:1;height:1px;background:var(--bd)"></div>
-      <span style="font-size:.68rem;color:var(--t3);letter-spacing:1px;white-space:nowrap">or analyze directly below</span>
-      <div style="flex:1;height:1px;background:var(--bd)"></div>
-    </div>
     <div class="cat-bar">
       <button class="cat-btn active" data-cat="career">Career</button>
       <button class="cat-btn" data-cat="freelance">Freelance</button>
@@ -2646,10 +2633,10 @@ html{scroll-padding-top:80px}
     <span class="pay-trust-icon">🛡</span>
     Payments are manually verified to ensure transparency and support.
     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--bd)">
-      <p style="font-size:.8rem;color:var(--t2);margin-bottom:12px;line-height:1.7">Complete the Clarity Intake before payment to ensure the session is relevant to what is needed.</p>
+      <p style="font-size:.8rem;color:var(--t2);margin-bottom:12px;line-height:1.7">Complete the clarity intake before payment to ensure the session is relevant to what is needed.</p>
       <button class="open-intake intake-trigger">
         <svg width="14" height="14" viewBox="0 0 100 100" fill="none"><path d="M20 85Q35 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M80 85Q65 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 55L68 55" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
-        Begin Clarity Intake
+        Begin Clarity
       </button>
     </div>
     After payment, continue via WhatsApp or Telegram for confirmation and next steps.
@@ -3078,7 +3065,7 @@ html{scroll-padding-top:80px}
         <a href="#begin" onclick="event.preventDefault();goTo('begin')">Analyze Clarity</a>
         <a href="#biz-clarity" onclick="event.preventDefault();goTo('biz-clarity')">Business Layer</a>
         <a href="#about" onclick="event.preventDefault();goTo('about')">Story</a>
-        <button class="open-intake" style="font-size:.83rem;color:var(--t2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;padding:0;display:flex;align-items:center;gap:5px;min-height:36px;transition:color .2s var(--ease);" onmouseover="this.style.color='var(--c)'" onmouseout="this.style.color='var(--t2)'">Clarity Intake</button>
+        <button class="open-intake" style="font-size:.83rem;color:var(--t2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;padding:0;display:flex;align-items:center;gap:5px;min-height:36px;transition:color .2s var(--ease);" onmouseover="this.style.color='var(--c)'" onmouseout="this.style.color='var(--t2)'">Begin Clarity</button>
       </div>
     </div>
 
@@ -3269,7 +3256,7 @@ document.querySelectorAll('.mob-tab[href]').forEach(tab=>{
 });
 
 document.getElementById('hero-cta').addEventListener('click',()=>goTo('begin'));
-document.getElementById('fn-cta').addEventListener('click',()=>goTo('begin'));
+document.getElementById('fn-cta').addEventListener('click',openIntake);
 
 const ro=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -4253,8 +4240,9 @@ function isubmit(){
   if(window.innerWidth<=768) setTimeout(()=>window.open(waUrl,'_blank'),1500);
 }
 
-// Wire all .open-intake triggers
+// Wire all .open-intake triggers (fn-cta is handled separately above)
 document.querySelectorAll('.open-intake').forEach(el=>{
+  if(el.id==='fn-cta') return; // already wired directly
   el.addEventListener('click',function(e){
     e.preventDefault();
     openIntake();
