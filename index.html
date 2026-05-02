@@ -1146,8 +1146,97 @@ html{scroll-padding-top:80px}
 }
 
 /* ══════════════════════════════════════════════════════
-   PERCEPTION MIRROR — CSS
+   SESSION MEMORY — RETURNING USER BANNER CSS
 ══════════════════════════════════════════════════════ */
+#ru-banner{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  z-index:3000;
+  width:calc(100% - 40px);max-width:440px;
+  background:var(--sf);
+  border:1px solid var(--bd2);
+  border-radius:18px;
+  box-shadow:var(--s3);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  padding:18px 20px;
+  display:none;
+  opacity:0;
+  transition:opacity .45s var(--ease),transform .45s var(--ease);
+  pointer-events:auto;
+}
+#ru-banner.ru-show{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+#ru-banner.ru-visible{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.ru-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ru-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--c);flex-shrink:0;margin-top:5px;
+  animation:blink 2.5s ease-in-out infinite;
+}
+.ru-text-wrap{flex:1}
+.ru-label{
+  font-size:.58rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--c);margin-bottom:3px;
+}
+.ru-text{font-size:.82rem;color:var(--t1);line-height:1.5;font-weight:400}
+.ru-dismiss{
+  background:none;border:none;cursor:pointer;
+  color:var(--t3);font-size:13px;padding:0;
+  flex-shrink:0;transition:color .2s;line-height:1;
+}
+.ru-dismiss:hover{color:var(--t1)}
+.ru-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ru-btn-primary{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;background:var(--c);color:#fff;
+  border:none;border-radius:100px;
+  font-size:.76rem;font-weight:600;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .22s var(--ease);
+  box-shadow:0 2px 10px rgba(120,1,21,.2);
+  -webkit-tap-highlight-color:transparent;
+}
+.ru-btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(120,1,21,.28)}
+.ru-btn-primary:active{transform:scale(.96)}
+[data-theme="dark"] .ru-btn-primary{color:#0b0909}
+.ru-btn-ghost{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 16px;background:transparent;
+  color:var(--t2);border:1px solid var(--bd2);border-radius:100px;
+  font-size:.74rem;font-weight:500;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .2s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.ru-btn-ghost:hover{border-color:var(--c);color:var(--c);background:var(--c2)}
+.ru-btn-ghost:active{transform:scale(.96)}
+
+/* Unlocked badge on page (shown if paymentStatus=true on load) */
+#ru-unlocked-badge{
+  display:none;
+  position:fixed;top:76px;right:16px;z-index:1999;
+  background:var(--c2);border:1px solid var(--bd2);
+  border-radius:100px;padding:5px 13px;
+  font-size:.66rem;font-weight:600;letter-spacing:.5px;
+  color:var(--c);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:var(--s1);
+  animation:up .6s var(--ease) .5s both;
+  cursor:default;
+}
+#ru-unlocked-badge.ru-badge-show{display:flex;align-items:center;gap:5px}
+
+@media(max-width:768px){
+  #ru-banner{bottom:72px;border-radius:14px;padding:15px 16px}
+  #ru-unlocked-badge{top:auto;bottom:72px;right:auto;left:16px}
+}
+
 #perception-mirror{
   background:var(--bg2);
   padding:120px 28px 110px;
@@ -2299,6 +2388,156 @@ html{scroll-padding-top:80px}
 }
 @media(prefers-reduced-motion:reduce){
   #pay-modal-panel,.pax-trigger,.pm-qr-ring{animation:none !important;transition:none !important}
+}
+
+/* ══════════════════════════════════════════════════════
+   PAYMENT UNLOCK STATE — CSS
+══════════════════════════════════════════════════════ */
+
+/* The default payment content fades out */
+#pm-payment-content{
+  transition:opacity .45s var(--ease,cubic-bezier(.22,1,.36,1)),
+             transform .45s var(--ease,cubic-bezier(.22,1,.36,1));
+  transform-origin:center top;
+}
+#pm-payment-content.pm-hiding{
+  opacity:0;
+  transform:scale(.97) translateY(-6px);
+  pointer-events:none;
+}
+
+/* Unlock state panel — hidden by default */
+#pm-unlock-state{
+  display:none;
+  opacity:0;
+  transform:scale(.96) translateY(10px);
+  transition:opacity .55s var(--ease,cubic-bezier(.22,1,.36,1)),
+             transform .55s var(--spring,cubic-bezier(.34,1.56,.64,1));
+  padding:28px 28px 32px;
+  text-align:center;
+}
+#pm-unlock-state.pm-unlocked{
+  display:block;
+  opacity:1;
+  transform:scale(1) translateY(0);
+}
+
+/* Checkmark ring */
+.pmu-ring{
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(120,1,21,.07);
+  border:1.5px solid rgba(120,1,21,.20);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 22px;
+  animation:pmuRingIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pmuRingIn{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.pmu-ring svg{color:#780115}
+
+/* Title */
+.pmu-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,5vw,2.4rem);
+  font-weight:300;color:#17040a;
+  line-height:1.1;margin-bottom:14px;
+  letter-spacing:-.01em;
+}
+.pmu-title em{font-style:italic;color:#780115}
+
+/* Primary text */
+.pmu-primary{
+  font-size:.88rem;color:rgba(23,4,10,.58);
+  line-height:1.82;max-width:340px;margin:0 auto 6px;
+}
+
+/* Sub text */
+.pmu-sub{
+  font-size:.78rem;color:rgba(23,4,10,.36);
+  line-height:1.7;margin-bottom:26px;
+  font-style:italic;
+}
+
+/* Three reveal points */
+.pmu-points{
+  display:flex;flex-direction:column;gap:9px;
+  margin-bottom:26px;text-align:left;
+  max-width:320px;margin-left:auto;margin-right:auto;
+}
+.pmu-point{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;
+  background:rgba(120,1,21,.05);
+  border:1px solid rgba(120,1,21,.10);
+  border-radius:12px;
+  opacity:0;
+  transform:translateX(-8px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+.pmu-point.pmu-point-vis{opacity:1;transform:translateX(0)}
+.pmu-point-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:#780115;flex-shrink:0;margin-top:5px;opacity:.6;
+}
+.pmu-point-txt{
+  font-size:.82rem;color:#17040a;line-height:1.5;
+}
+
+/* Action buttons */
+.pmu-actions{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+
+.pmu-btn-primary{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 22px;
+  background:#25D366;color:#fff;
+  border:none;border-radius:100px;
+  font-size:.86rem;font-weight:600;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .25s;
+  box-shadow:0 3px 14px rgba(37,211,102,.22);
+  text-decoration:none;min-height:50px;
+  -webkit-tap-highlight-color:transparent;
+}
+.pmu-btn-primary:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(37,211,102,.34)}
+.pmu-btn-primary:active{transform:scale(.97)}
+
+.pmu-btn-secondary{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 20px;
+  background:transparent;color:rgba(23,4,10,.5);
+  border:1.5px solid rgba(120,1,21,.15);border-radius:100px;
+  font-size:.82rem;font-weight:500;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .22s;min-height:46px;
+  -webkit-tap-highlight-color:transparent;
+}
+.pmu-btn-secondary:hover{border-color:#780115;color:#780115;background:rgba(120,1,21,.04)}
+.pmu-btn-secondary:active{transform:scale(.97)}
+
+/* Unlock trust note */
+.pmu-trust{
+  font-size:.7rem;color:rgba(23,4,10,.3);
+  font-style:italic;line-height:1.7;
+  padding-top:14px;
+  border-top:1px solid rgba(120,1,21,.07);
+}
+
+/* Overlay: subtle color shift when unlocked */
+#pay-modal-overlay.pm-state-unlocked{
+  background:rgba(23,4,10,.48);
+}
+#pay-modal-panel.pm-state-unlocked{
+  box-shadow:0 32px 90px rgba(120,1,21,.18),
+             0 0 0 1px rgba(120,1,21,.12);
+}
+
+/* Mobile adjustments */
+@media(max-width:768px){
+  #pm-unlock-state{padding:22px 20px 36px}
+  .pmu-points{max-width:100%}
+  .pmu-title{font-size:1.9rem}
 }
 </style>
 </head>
@@ -3497,13 +3736,150 @@ document.querySelectorAll('.cat-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');selCat=btn.dataset.cat;
+    ruSave('userType',selCat);
+    ruSave('lastStep','begin');
   });
 });
 
 /* ════════════════════════════════════════════════════════
-   CLARITY INDEX ENGINE — DETERMINISTIC, RULE-BASED
-   Same input → same output. Zero randomness.
+   SESSION MEMORY ENGINE — localStorage layer
+   Keys: aspira_userType · aspira_clarityInput
+         aspira_paymentStatus · aspira_lastStep
+   No sensitive data stored — only context clues.
 ════════════════════════════════════════════════════════ */
+const RU_NS = 'aspira_'; // namespace prefix
+
+function ruSave(key, val){
+  try{ localStorage.setItem(RU_NS+key, String(val)); }catch(e){}
+}
+function ruGet(key){
+  try{ return localStorage.getItem(RU_NS+key)||''; }catch(e){return '';}
+}
+function ruClear(){
+  ['userType','clarityInput','paymentStatus','lastStep'].forEach(k=>{
+    try{ localStorage.removeItem(RU_NS+k); }catch(e){}
+  });
+  // Keep theme pref
+}
+
+/* Show / hide banner */
+function ruShowBanner(label, text, actions){
+  const banner  = document.getElementById('ru-banner');
+  const lEl     = document.getElementById('ru-label');
+  const tEl     = document.getElementById('ru-text');
+  const actEl   = document.getElementById('ru-actions');
+  if(!banner) return;
+  lEl.textContent  = label;
+  tEl.textContent  = text;
+  actEl.innerHTML  = actions;
+  banner.classList.add('ru-show');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    banner.classList.add('ru-visible');
+  }));
+}
+
+function ruDismiss(){
+  const banner = document.getElementById('ru-banner');
+  if(!banner) return;
+  banner.classList.remove('ru-visible');
+  setTimeout(()=>banner.classList.remove('ru-show'),450);
+}
+
+/* ON PAGE LOAD — check stored state */
+(function ruOnLoad(){
+  const payDone  = ruGet('paymentStatus') === 'true';
+  const hasInput = ruGet('clarityInput').length > 0;
+  const lastStep = ruGet('lastStep') || 'begin';
+  const userType = ruGet('userType');
+
+  /* Also migrate sessionStorage unlock → localStorage */
+  try{
+    if(sessionStorage.getItem('aspira_pm_unlocked')==='1'){
+      ruSave('paymentStatus','true');
+    }
+  }catch(e){}
+
+  if(payDone){
+    /* CASE 1: payment completed — show unlocked badge + banner */
+    setTimeout(()=>{
+      /* Show unlocked badge */
+      const badge = document.getElementById('ru-unlocked-badge');
+      if(badge) badge.classList.add('ru-badge-show');
+
+      /* Banner */
+      const waUrl = 'https://wa.me/917550270450?text='+encodeURIComponent('Access Unlocked\nPayment completed via UPI\nRequesting next step');
+      ruShowBanner(
+        'Access Unlocked',
+        'Continue from where it was left.',
+        `<a class="ru-btn-primary" href="${waUrl}" target="_blank" rel="noopener">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+           Continue Now
+         </a>
+         <button class="ru-btn-ghost" onclick="ruDismiss()">Later</button>`
+      );
+    }, 1200);
+
+  } else if(hasInput){
+    /* CASE 2: has clarity input, no payment */
+    setTimeout(()=>{
+      ruShowBanner(
+        'Returning',
+        'Continue where things were left.',
+        `<button class="ru-btn-primary" onclick="ruContinue('${lastStep}')">Continue</button>
+         <button class="ru-btn-ghost" onclick="ruStartFresh()">Start fresh</button>`
+      );
+    }, 900);
+  }
+  /* CASE 3: no data — normal flow, no banner */
+})();
+
+function ruContinue(step){
+  ruDismiss();
+  /* Restore clarity input if on begin section */
+  const saved = ruGet('clarityInput');
+  const ta = document.getElementById('clarity-input');
+  if(ta && saved) ta.value = saved;
+  /* Restore category */
+  const userType = ruGet('userType');
+  if(userType){
+    const btn = document.querySelector('.cat-btn[data-cat="'+userType+'"]');
+    if(btn){
+      document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      selCat = userType;
+    }
+  }
+  /* Scroll to last section */
+  const sectionMap = {
+    begin:'begin', reflection:'reflection', gaps:'gaps',
+    'perception-mirror':'perception-mirror',
+    'clarity-pathways':'clarity-pathways',
+    connect:'connect'
+  };
+  const target = sectionMap[step] || 'begin';
+  const el = document.getElementById(target);
+  if(el){
+    if(el.style.display==='none') el.style.display='flex';
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  } else {
+    goTo('begin');
+  }
+}
+
+function ruStartFresh(){
+  ruClear();
+  ruDismiss();
+  /* Reset textarea */
+  const ta = document.getElementById('clarity-input');
+  if(ta) ta.value='';
+  /* Reset category to default */
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  const def = document.querySelector('.cat-btn[data-cat="career"]');
+  if(def) def.classList.add('active');
+  selCat='career';
+  /* Scroll to hero */
+  goTo('hero');
+}
 function ciWords(t){return t.trim().split(/\s+/).filter(w=>w.length>0)}
 function ciSentences(t){return t.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>4)}
 function ciParagraphs(t){return t.split(/\n\s*\n/).map(s=>s.trim()).filter(s=>s.length>0)}
@@ -3799,6 +4175,10 @@ function analyze(text,cat){
 document.getElementById('analyze-btn').addEventListener('click',()=>{
   const t=document.getElementById('clarity-input').value.trim();
   if(!t){document.getElementById('clarity-input').focus();return;}
+  /* SESSION: save a short version of the clarity input */
+  ruSave('clarityInput', t.slice(0,120));
+  ruSave('userType', selCat);
+  ruSave('lastStep', 'reflection');
   showResults(analyze(t,selCat));
 });
 document.getElementById('clarity-input').addEventListener('keydown',e=>{
@@ -4363,7 +4743,11 @@ function ipick(el,grpId,hidId){
   document.getElementById(grpId).querySelectorAll('.i-choice').forEach(c=>c.classList.remove('isel'));
   el.classList.add('isel');
   document.getElementById(hidId).value=el.dataset.val;
-  if(hidId==='i-path-val') iPath=el.dataset.val;
+  if(hidId==='i-path-val'){
+    iPath=el.dataset.val;
+    /* SESSION: save path from intake form too */
+    ruSave('userType', iPath);
+  }
   const ek='ie-'+hidId.replace('i-','').replace('-val','').replace('-grp','');
   const e=document.getElementById(ek);
   if(e) e.classList.remove('ishow');
@@ -4477,6 +4861,82 @@ document.querySelectorAll('.open-intake').forEach(el=>{
 // Wire footer logo scroll
 const footerLogo=document.querySelector('.footer-logo');
 if(footerLogo){footerLogo.addEventListener('click',e=>{e.preventDefault();goTo('hero');});}
+
+/* ════════════════════════════════════════════════════════
+   PAYMENT UNLOCK STATE — JS
+════════════════════════════════════════════════════════ */
+let pmUnlocked = false;
+
+function pmUnlock(){
+  if(pmUnlocked) return;
+  pmUnlocked = true;
+  try{ sessionStorage.setItem('aspira_pm_unlocked','1'); }catch(e){}
+  /* SESSION: persist payment status across visits */
+  ruSave('paymentStatus','true');
+  ruSave('lastStep','connect');
+
+  const content = document.getElementById('pm-payment-content');
+  const unlock  = document.getElementById('pm-unlock-state');
+  const overlay = document.getElementById('pay-modal-overlay');
+  const panel   = document.getElementById('pay-modal-panel');
+
+  /* Step 1: fade out existing payment content */
+  if(content) content.classList.add('pm-hiding');
+
+  /* Step 2: swap to unlock state after fade completes */
+  setTimeout(()=>{
+    if(content) content.style.display = 'none';
+    if(overlay) overlay.classList.add('pm-state-unlocked');
+    if(panel)   panel.classList.add('pm-state-unlocked');
+    if(unlock){
+      unlock.style.display = 'block';
+      unlock.offsetHeight; /* force reflow */
+      unlock.classList.add('pm-unlocked');
+      if(panel) panel.scrollTop = 0;
+      if(overlay) overlay.scrollTop = 0;
+      /* Stagger the three reveal points */
+      document.querySelectorAll('.pmu-point').forEach((pt,i)=>{
+        setTimeout(()=>pt.classList.add('pmu-point-vis'), 400 + i*180);
+      });
+    }
+  }, 440);
+}
+
+function pmSaveReturn(){
+  try{ sessionStorage.setItem('aspira_pm_unlocked','1'); }catch(e){}
+  closePayModal();
+  /* Show unlocked state on the section trigger button */
+  const trigger = document.querySelector('.pax-trigger');
+  if(trigger){
+    trigger.innerHTML = '✓ Access Unlocked';
+    trigger.style.cssText += ';background:transparent;color:var(--c);border:1.5px solid var(--bd2);box-shadow:none;cursor:default;pointer-events:none;';
+  }
+}
+
+/* On openPayModal: restore unlocked state if session has it */
+(function(){
+  const orig = window.openPayModal;
+  window.openPayModal = function(){
+    orig && orig();
+    try{
+      if(sessionStorage.getItem('aspira_pm_unlocked')==='1' && !pmUnlocked){
+        pmUnlocked = true;
+        const content = document.getElementById('pm-payment-content');
+        const unlock  = document.getElementById('pm-unlock-state');
+        const overlay = document.getElementById('pay-modal-overlay');
+        const panel   = document.getElementById('pay-modal-panel');
+        if(content) content.style.display='none';
+        if(overlay) overlay.classList.add('pm-state-unlocked');
+        if(panel)   panel.classList.add('pm-state-unlocked');
+        if(unlock){
+          unlock.style.display='block';
+          unlock.classList.add('pm-unlocked');
+          document.querySelectorAll('.pmu-point').forEach(pt=>pt.classList.add('pmu-point-vis'));
+        }
+      }
+    }catch(e){}
+  };
+})();
 
 /* ════════════════════════════════════════════════════════════
    INTERACTIVE SCROLL · 3D · ANIMATION ENGINE
@@ -5131,6 +5591,7 @@ document.getElementById('pay-modal-overlay').addEventListener('click',function(e
 
     <!-- Body -->
     <div class="pm-body">
+    <div id="pm-payment-content">
 
       <!-- DESKTOP: QR code -->
       <div class="pm-qr-section">
@@ -5166,10 +5627,10 @@ document.getElementById('pay-modal-overlay').addEventListener('click',function(e
 
       <!-- Post-payment actions -->
       <div class="pm-actions">
-        <a class="pm-wa-paid" href="https://wa.me/917550270450?text=Payment%20Completed%0APaid%20via%20UPI%0ARequesting%20next%20step" target="_blank" rel="noopener">
+        <button class="pm-wa-paid" onclick="pmUnlock()" type="button">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
           I have completed payment
-        </a>
+        </button>
         <a class="pm-wa-help" href="https://wa.me/917550270450?text=Need%20help%20with%20payment%20%E2%80%94%20ASPIRA" target="_blank" rel="noopener">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           Need help
@@ -5181,8 +5642,83 @@ document.getElementById('pay-modal-overlay').addEventListener('click',function(e
         Payment is verified manually to ensure clarity and support quality.
       </div>
 
+    </div><!-- /pm-payment-content -->
+
+    <!-- ── UNLOCK STATE — shown after payment confirmed ── -->
+    <div id="pm-unlock-state">
+      <!-- Check mark -->
+      <div class="pmu-ring">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <div class="pmu-title">Access<br><em>Unlocked.</em></div>
+
+      <!-- Primary + sub text -->
+      <p class="pmu-primary">What was not immediately visible can now be explored further.</p>
+      <p class="pmu-sub">This continues through direct clarity support.</p>
+
+      <!-- Three reveal points -->
+      <div class="pmu-points" id="pmu-points">
+        <div class="pmu-point">
+          <div class="pmu-point-dot"></div>
+          <span class="pmu-point-txt">Deeper clarity review</span>
+        </div>
+        <div class="pmu-point">
+          <div class="pmu-point-dot"></div>
+          <span class="pmu-point-txt">Structured next steps</span>
+        </div>
+        <div class="pmu-point">
+          <div class="pmu-point-dot"></div>
+          <span class="pmu-point-txt">Direct continuation</span>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pmu-actions">
+        <a class="pmu-btn-primary"
+           href="https://wa.me/917550270450?text=Access%20Unlocked%0APayment%20completed%20via%20UPI%0ARequesting%20next%20step"
+           target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Continue Now
+        </a>
+        <button class="pmu-btn-secondary" onclick="pmSaveReturn()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Save and Return
+        </button>
+      </div>
+
+      <!-- Trust note -->
+      <div class="pmu-trust">
+        Payment confirmation is reviewed to ensure continuity and context.
+      </div>
+    </div><!-- /pm-unlock-state -->
+
+    </div><!-- /pm-body -->
+  </div><!-- /pay-modal-panel -->
+</div><!-- /pay-modal-overlay -->
+
+<!-- ═══ RETURNING USER BANNER ═══ -->
+<div id="ru-banner" role="region" aria-label="Welcome back">
+  <div class="ru-top">
+    <div class="ru-dot"></div>
+    <div class="ru-text-wrap">
+      <div class="ru-label" id="ru-label">Returning</div>
+      <div class="ru-text" id="ru-text">Continue from where it was left.</div>
     </div>
+    <button class="ru-dismiss" onclick="ruDismiss()" aria-label="Dismiss">✕</button>
   </div>
+  <div class="ru-actions" id="ru-actions"></div>
+</div>
+
+<!-- Unlocked badge (top-right, shown when paymentStatus=true on load) -->
+<div id="ru-unlocked-badge">
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Access Unlocked
 </div>
 
 </body>
