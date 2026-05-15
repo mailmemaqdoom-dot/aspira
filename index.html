@@ -2107,6 +2107,322 @@ canvas#particle-canvas { pointer-events: none; position: absolute; inset: 0; opa
   .h-badge { margin-bottom: 24px; font-size: 0.58rem; padding: 4px 13px; }
 }
 
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE STABILIZATION v1
+   Steps 1–7: overflow, navbar, mobile UX, typography,
+   spacing, buttons, performance.
+   No redesign. No new visuals. Layout discipline only.
+══════════════════════════════════════════════════════════ */
+
+/* ── STEP 1: Global overflow containment ──────────────── */
+html { overflow-x: hidden; }
+
+/* Prevent flex/grid children from overflowing their container.
+   min-width:0 is the standard fix for flex overflow bugs. */
+*, *::before, *::after { min-width: 0; }
+
+/* All containers must stay within viewport */
+#fnav, .site-wrap, section, main, .modal-panel, .modal-inner,
+.input-box, .analyze-wrap, .results-box, .bcl-step, .intake-panel,
+#pay-modal-panel, #sfm-panel, #rwm-panel { max-width: 100%; }
+
+/* ── STEP 2: Navbar stabilization ────────────────────── */
+
+/* Always prevent nav from exceeding viewport */
+#fnav {
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
+  overflow: visible;
+}
+/* All nav link text must never wrap */
+.fn-links a, .fn-cta, .fn-word { white-space: nowrap; }
+
+/* Tablet range: compact the pill nav to prevent overflow */
+@media (min-width: 768px) and (max-width: 1100px) {
+  #fnav { padding: 8px 14px; gap: 4px; }
+  .fn-word { display: none; }
+  .fn-div  { display: none; }
+  .fn-links { gap: 0; }
+  .fn-links a {
+    padding: 5px 8px;
+    font-size: 0.70rem;
+    letter-spacing: 0;
+  }
+  .fn-cta {
+    padding: 7px 14px;
+    font-size: 0.70rem;
+    letter-spacing: 0;
+  }
+  .fn-theme { width: 30px; height: 30px; font-size: 0.85rem; margin-left: 2px; }
+}
+
+/* Narrow tablet: drop lowest-priority nav links */
+@media (min-width: 768px) and (max-width: 900px) {
+  .fn-links a[href="#about"],
+  .fn-links a[href="#payment-access"] { display: none; }
+}
+
+/* Mobile: hide desktop pill nav entirely — bottom tab bar takes over */
+@media (max-width: 767px) {
+  #fnav { display: none !important; }
+}
+
+/* ── STEP 2b: Mobile bottom nav polish ───────────────── */
+
+/* Fix: .mchip is also used as a category chip class elsewhere with
+   border + padding. Reset those styles when inside the bottom nav. */
+.mob-nav .mob-tab .mchip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
+  width: 22px;
+  height: 22px;
+  color: inherit;
+  font-size: 0;
+  transition: transform 0.25s var(--ease-spring);
+}
+.mob-tab.active .mchip { transform: scale(1.16); }
+
+/* Tab label */
+.mob-tab-label {
+  font-size: 0.60rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: inherit;
+}
+
+/* Bottom nav safe area (iOS home bar) */
+.mob-nav {
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+/* ── STEP 3: True mobile product experience ──────────── */
+
+/* Section padding: reduce to breathable mobile rhythm */
+@media (max-width: 767px) {
+  section { padding: clamp(2.75rem, 8vw, 4rem) 0; }
+  .site-wrap { padding: 0 clamp(1rem, 4.5vw, 1.5rem); }
+  .section-header { margin-bottom: clamp(1.75rem, 5vw, 2.5rem); }
+
+  /* Hero — mobile-first vertical rhythm */
+  #hero {
+    padding: clamp(4.5rem, 10svh, 6rem) 1.25rem
+             clamp(5rem, 10svh, 7rem);
+  }
+  .hero-inner {
+    padding: clamp(4.5rem, 10svh, 6rem) 1.25rem
+             clamp(5rem, 10svh, 7rem);
+    gap: 0;
+  }
+  .h-badge { margin-bottom: 22px; }
+  .h-mark  { margin-bottom: 10px; }
+  .h-tagline { font-size: clamp(0.9rem, 3.5vw, 1.15rem); margin-bottom: 10px; }
+  .h-promise { margin-bottom: 28px; font-size: 0.82rem; max-width: 100%; }
+  .h-stats   { margin-bottom: 24px; }
+  .h-ctas    { margin-bottom: 32px; gap: 10px; }
+  .h-scroll  { display: none; } /* save vertical space on mobile */
+
+  /* Cards: reduce inner padding for tighter mobile feel */
+  .card, .val-card, .feature-card, .proof-card, .result-card { padding: 1.25rem; }
+  .pricing-card { padding: 1.5rem 1.25rem; }
+  .cp-card      { padding: 1.25rem; }
+  .pax-card     { padding: 1.5rem 1.25rem; }
+  .process-step { padding: 0.875rem; }
+
+  /* Forms */
+  .input-box    { padding: 1.25rem 1.125rem; }
+  .intake-panel { padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 4vw, 1.25rem); }
+
+  /* Modals */
+  #sfm-panel, #rwm-panel { padding: 1.75rem 1.5rem; }
+  #pay-modal-panel { padding: 1.75rem 1.5rem; width: min(520px, 96vw); }
+
+  /* BCL inner panels */
+  .bcl-rec-header  { padding: 16px 14px; }
+  .bcl-connect-panel { padding: 18px 14px; }
+
+  /* Your Space slide panel */
+  #your-space-panel { width: min(380px, 100vw); }
+
+  /* Clarity score ring */
+  .ci-ring-svg  { width: 140px; height: 140px; }
+  .ci-score-label { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+  .ci-dim-label { width: 110px; font-size: 0.78rem; }
+
+  /* Marquee */
+  .marquee-item  { font-size: 1.3rem; }
+  .marquee-inner { gap: 1.75rem; }
+}
+
+/* Ensure mobile nav clearance for page content */
+@media (max-width: 767px) {
+  /* Last visible section gets extra bottom padding so content
+     doesn't hide behind the fixed tab bar (~64px) */
+  .site-footer {
+    padding-bottom: calc(44px + max(16px, env(safe-area-inset-bottom)) + 56px);
+  }
+
+  /* Floating elements must clear the tab bar */
+  #pwa-prompt {
+    bottom: calc(68px + max(12px, env(safe-area-inset-bottom)));
+  }
+  #ru-banner, #ru-fresh-banner {
+    bottom: calc(68px + max(12px, env(safe-area-inset-bottom)));
+  }
+  .ai-fab {
+    bottom: calc(68px + max(8px, env(safe-area-inset-bottom)));
+    right: 14px;
+  }
+
+  /* Chip scroll rows — horizontal scroll on small screens
+     instead of wrapping to 4+ lines */
+  .mob-ctr, .analyze-chips {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .mob-ctr::-webkit-scrollbar,
+  .analyze-chips::-webkit-scrollbar { display: none; }
+}
+
+/* ── STEP 4: Responsive typography ──────────────────── */
+
+@media (max-width: 767px) {
+  h1 { font-size: clamp(2rem, 7.5vw, 3rem); }
+  h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  h3 { font-size: clamp(1.25rem, 4.5vw, 1.8rem); }
+
+  .section-title { font-size: clamp(1.75rem, 6.5vw, 2.4rem); }
+  .s-title       { font-size: clamp(1.75rem, 6.5vw, 2.4rem); }
+  .display-1     { font-size: clamp(2.4rem, 9vw, 4rem); }
+  .display-2     { font-size: clamp(1.8rem, 7vw, 3rem); }
+
+  .manifesto-text { font-size: clamp(1.2rem, 4.5vw, 1.9rem); line-height: 1.55; }
+  .mfst-q         { font-size: clamp(1.25rem, 5vw, 1.9rem); }
+  .connect-title  { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  .analyze-label  { font-size: clamp(1.3rem, 5vw, 1.8rem); }
+  .pm-primary     { font-size: clamp(1.3rem, 5.5vw, 2.2rem); }
+  .cp-title       { font-size: clamp(1.6rem, 5.5vw, 2.4rem); }
+  .bcl-title      { font-size: clamp(1.6rem, 5.5vw, 2.4rem); }
+  .pax-title      { font-size: clamp(1.6rem, 5.5vw, 2.4rem); }
+  .abt-block-title { font-size: clamp(1.3rem, 5vw, 2rem); }
+  .price-amount   { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+  .proof-quote    { font-size: 1.05rem; }
+}
+
+/* Prevent long words from breaking layouts */
+.abt-body, .val-body, .cp-card-body, .cp-card-desc,
+.proof-quote, .faq-a p, .step-content p, .result-body,
+.bcl-sub, .pax-sub, .footer-brand-desc, .modal-sub,
+.sfm-sub, .rwm-sub, .ysp-row-val {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ── STEP 5: Responsive spacing normalization ─────── */
+
+/* Tighter section headers at mid-range */
+@media (max-width: 860px) {
+  section { padding: clamp(4rem, 9vw, 6.5rem) 0; }
+  .section-header { margin-bottom: clamp(2.5rem, 5.5vw, 4rem); }
+}
+
+@media (max-width: 767px) {
+  /* Stat counters */
+  .stat-num { font-size: clamp(2rem, 8vw, 3rem); }
+
+  /* Compact vertical rhythm inside cards */
+  .val-icon { width: 40px; height: 40px; font-size: 1.25rem; }
+  .val-title { font-size: 1.2rem; }
+  .footer-tagline { max-width: 100%; }
+
+  /* Step number */
+  .step-num { font-size: 2.2rem; width: 48px; }
+
+  /* Connect CTA section */
+  #connect-cta, .connect-section { padding: clamp(3rem, 8vw, 5rem) 0; }
+  .connect-sub { font-size: 0.9rem; }
+}
+
+/* ── STEP 6: Button sizing and overflow fixes ─────── */
+
+/* Never let button text wrap */
+.btn, .cta, .btn-primary, .btn-outline, .btn-ghost,
+.primary-btn, .secondary-btn, .ghost-btn,
+.btn-p, .btn-g, .sub-btn, .pax-trigger,
+.fn-cta, .bcl-next, .bcl-back, .sfm-btn,
+.rwm-btn-primary, .rwm-btn-ghost,
+.cp-btn, .cat-btn, .pwa-btn-install, .pwa-btn-later,
+.bcl-wa-btn, .bcl-tg-btn { white-space: nowrap; }
+
+/* Mobile button sizing */
+@media (max-width: 767px) {
+  /* Minimum touch target */
+  .btn-p, .sub-btn, .pax-trigger, .sfm-btn,
+  .rwm-btn-primary, .bcl-next { min-height: 48px; }
+  .btn-g, .bcl-back, .rwm-btn-ghost,
+  .cp-btn, .cat-btn { min-height: 44px; }
+
+  /* Hero CTAs full-width on mobile */
+  .h-ctas .btn-p, .h-ctas .btn-g { min-width: 200px; }
+
+  /* Reduce sub-btn font size slightly */
+  .sub-btn { font-size: 0.88rem; padding: 14px; }
+}
+
+/* Touch pointer targets */
+@media (pointer: coarse) {
+  .faq-q  { min-height: 52px; }
+  .cp-card, .biz-type-card, .prob-item { cursor: pointer; }
+  .cat-chip { min-height: 38px; min-width: 60px; }
+}
+
+/* ── STEP 7: Performance & scrolling smoothness ──── */
+
+/* Contain painting to improve scroll performance */
+.card, .val-card, .pricing-card, .cp-card,
+.biz-type-card, .proof-card, .result-card,
+.bcl-rec-header, .input-box {
+  contain: layout style;
+}
+
+/* GPU-promote animated elements to avoid layout shifts */
+.cursor, .cursor-ring, .cursor-dot,
+#scroll-progress, .ai-fab,
+.mob-nav, #fnav {
+  will-change: transform;
+}
+
+/* Reduce motion for non-essential animations on low-end devices */
+@media (max-width: 767px) {
+  /* Orb parallax too expensive on mobile — disable */
+  .orb-1, .orb-2, .orb-3 { transition: none !important; will-change: auto; }
+  /* Particle canvas — JS already disables on mobile, CSS safety net */
+  canvas#particle-canvas { display: none; }
+  /* Scan line purely decorative — remove on mobile */
+  .scan-line { display: none; }
+}
+
+/* ── Extra: tiny screen safety net (≤380px) ──────── */
+@media (max-width: 380px) {
+  .h-stat { padding: 0 8px; }
+  .h-stat:last-child, .h-vr:last-child { display: none; }
+  .h-stat-n { font-size: 1.35rem; }
+  .section-title, .s-title { font-size: clamp(1.5rem, 8vw, 1.9rem); }
+  .modal-title, .sfm-title, .rwm-greeting { font-size: 1.5rem; }
+  .btn-p, .btn-g { font-size: 0.82rem; padding: 13px 20px; }
+  .price-amount { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .h-badge { font-size: 0.55rem; padding: 4px 11px; }
+}
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
