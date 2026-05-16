@@ -2423,6 +2423,325 @@ html { overflow-x: hidden; }
   .h-badge { font-size: 0.55rem; padding: 4px 11px; }
 }
 
+/* ══════════════════════════════════════════════════════════
+   PREMIUM NAVIGATION SYSTEM
+   Pill-morph desktop nav + floating dock mobile nav.
+   Interaction micro-enhancements throughout.
+══════════════════════════════════════════════════════════ */
+
+/* ── Desktop nav: refined glass ─────────────────────── */
+#fnav {
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  padding: 8px 16px;
+  gap: 6px;
+}
+
+/* ── Pill morph link system ──────────────────────────── */
+.fn-links { gap: 2px; }
+
+/* Base: icon-only, collapsed */
+.fn-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 7px;
+  border-radius: 100px;
+  color: var(--text-2);
+  font-size: 0;            /* text comes from .fnl-lbl */
+  letter-spacing: 0;
+  overflow: hidden;
+  transition:
+    padding   0.26s var(--ease-out),
+    background 0.26s var(--ease-out),
+    color     0.24s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover & active: expand into labeled pill */
+.fn-links a:hover,
+.fn-links a.active {
+  padding: 7px 12px 7px 9px;
+  color: var(--crimson);
+  background: var(--crimson-2);
+}
+
+/* Icon container */
+.fnl-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fnl-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.26s var(--ease-spring);
+  display: block;
+}
+.fn-links a:hover .fnl-icon svg { transform: scale(1.12); }
+
+/* Label: hidden by default, slides in on hover/active */
+.fnl-lbl {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(-6px);
+  margin-left: 0;
+  transition:
+    max-width  0.28s var(--ease-out),
+    opacity    0.18s var(--ease-out) 0.04s,
+    transform  0.26s var(--ease-out),
+    margin-left 0.26s var(--ease-out);
+}
+.fn-links a:hover .fnl-lbl,
+.fn-links a.active .fnl-lbl {
+  max-width: 80px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-left: 6px;
+}
+
+/* Active indicator dot — subtle underline replaced by glow */
+.fn-links a.active .fnl-icon svg {
+  filter: drop-shadow(0 0 4px rgba(120,1,21,0.35));
+}
+
+/* Compact nav state (after scroll) */
+#fnav.compact {
+  padding: 7px 14px;
+  box-shadow: 0 2px 12px rgba(23,4,10,0.07), 0 0 0 1px var(--border);
+}
+
+/* Space button styling */
+#space-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--crimson-2);
+  border: 1px solid var(--border);
+  cursor: none;
+  transition: background 0.22s var(--ease-out), transform 0.22s var(--ease-spring);
+  font-size: 0.85rem;
+  color: var(--crimson);
+}
+@media (pointer: coarse) { #space-nav-btn { cursor: pointer; } }
+#space-nav-btn:hover { background: var(--crimson); color: #fff; transform: scale(1.08); }
+[data-theme="dark"] #space-nav-btn:hover { color: var(--bg); }
+#space-nav-btn:active { transform: scale(0.9); }
+
+/* ── Tablet: keep icon-only, reduce nav further ──────── */
+@media (min-width: 768px) and (max-width: 1100px) {
+  #fnav    { padding: 7px 12px; gap: 4px; }
+  .fn-word { display: none; }
+  .fn-div  { display: none; }
+  .fn-links { gap: 1px; }
+  .fn-links a { padding: 6px; }
+  .fn-links a:hover,
+  .fn-links a.active { padding: 6px 10px 6px 7px; }
+  .fnl-icon { width: 16px; height: 16px; }
+  .fnl-icon svg { width: 13px; height: 13px; }
+  .fn-cta { padding: 7px 13px; font-size: 0.70rem; letter-spacing: 0; }
+  .fn-theme { width: 30px; height: 30px; font-size: 0.82rem; }
+  #space-nav-btn { width: 28px; height: 28px; font-size: 0.78rem; }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  /* Drop lower-priority items on narrowest tablet */
+  .fn-links a[href="#about"] { display: none; }
+}
+
+/* ── Mobile: premium floating dock ──────────────────── */
+@media (max-width: 767px) {
+  .mob-nav {
+    /* Convert full-width bar → centered floating pill */
+    left: 50%;
+    right: auto;
+    width: auto;
+    min-width: 280px;
+    max-width: calc(100vw - 28px);
+    transform: translateX(-50%);
+    bottom: max(18px, env(safe-area-inset-bottom));
+    padding: 7px 8px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    border-top: 1px solid var(--border); /* reset border-top-only to all-sides */
+    box-shadow:
+      var(--shadow-xl),
+      0 0 0 0.5px var(--border);
+    backdrop-filter: blur(24px) saturate(2);
+    -webkit-backdrop-filter: blur(24px) saturate(2);
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Update floating element clearance for new dock position */
+  #pwa-prompt {
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 62px + 12px);
+  }
+  #ru-banner, #ru-fresh-banner {
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 62px + 12px);
+  }
+  .ai-fab {
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 62px + 8px);
+  }
+
+  /* Mobile tab: pill-shaped tap target */
+  .mob-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 11px;
+    border-radius: 100px;
+    min-width: 50px;
+    flex: 1;
+    max-flex: 1;
+    color: var(--text-3);
+    transition:
+      background 0.22s var(--ease-out),
+      color      0.22s var(--ease-out),
+      transform  0.18s var(--ease-spring);
+    -webkit-tap-highlight-color: transparent;
+    font-size: 0;  /* text in .mob-tab-label */
+  }
+  .mob-tab.active {
+    background: var(--crimson-2);
+    color: var(--crimson);
+  }
+  .mob-tab:active { transform: scale(0.88); }
+
+  /* Center action tab — slightly larger */
+  .mob-tab.mob-ctr {
+    background: var(--crimson);
+    color: #fff;
+    min-width: 54px;
+  }
+  .mob-tab.mob-ctr.active { background: var(--crimson); }
+  [data-theme="dark"] .mob-tab.mob-ctr { color: var(--bg); }
+
+  .mob-tab-label {
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    transition: opacity 0.22s;
+  }
+  /* Hide label on inactive tabs to keep dock compact, show on active */
+  .mob-tab .mob-tab-label { opacity: 0.75; }
+  .mob-tab.active .mob-tab-label { opacity: 1; }
+  .mob-tab.mob-ctr .mob-tab-label { opacity: 1; color: inherit; }
+
+  /* Icon reset for dock context */
+  .mob-nav .mob-tab .mchip {
+    width: 20px;
+    height: 20px;
+  }
+  .mob-nav .mob-tab.mob-ctr .mchip {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* ── Interaction micro-enhancements ─────────────────── */
+
+/* Smoother button ripple & hover across all CTAs */
+.btn-p, .sub-btn, .pax-trigger, .sfm-btn,
+.rwm-btn-primary, .bcl-next, .fn-cta {
+  transition:
+    transform      0.24s var(--ease-out),
+    box-shadow     0.24s var(--ease-out),
+    background     0.24s var(--ease-out);
+}
+
+/* Card hover: slightly more grounded depth */
+.card:hover, .val-card:hover, .feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+.cp-card:hover {
+  transform: translateY(-2px);
+  transition-duration: 0.22s;
+}
+
+/* FAQ smooth open/close */
+.faq-item { transition: box-shadow 0.25s var(--ease-out); }
+.faq-item.open { box-shadow: var(--shadow-sm); }
+.faq-q { transition: background 0.22s var(--ease-out); }
+
+/* Reveal animation: slightly faster, more natural stagger */
+.reveal {
+  transition:
+    opacity   0.72s var(--ease-out),
+    transform 0.72s var(--ease-out);
+}
+
+/* Process step hover: warmer micro-motion */
+.process-step { transition: background 0.18s var(--ease-out); }
+.process-step:hover { background: var(--crimson-3); }
+
+/* Proof/testimonial card: subtle border glow on hover */
+.proof-card:hover { border-color: rgba(120,1,21,0.12); }
+
+/* Input focus: slightly spring ring */
+input:focus, textarea:focus, select:focus {
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow   0.24s var(--ease-spring),
+    background   0.2s var(--ease-out);
+}
+
+/* Footer link hover: smooth underline */
+.footer-links a {
+  position: relative;
+  display: inline-block;
+}
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 0; height: 1px;
+  background: var(--crimson);
+  transition: width 0.22s var(--ease-out);
+}
+.footer-links a:hover::after { width: 100%; }
+.footer-links a:hover { color: var(--crimson); }
+
+/* ── Dark mode nav refinements ───────────────────────── */
+[data-theme="dark"] #fnav {
+  background: rgba(26,16,19,0.82);
+  border-color: rgba(248,245,240,0.06);
+}
+[data-theme="dark"] .fn-links a:hover,
+[data-theme="dark"] .fn-links a.active {
+  background: rgba(196,26,51,0.14);
+}
+[data-theme="dark"] .mob-nav {
+  background: rgba(26,16,19,0.90);
+  border-color: rgba(248,245,240,0.06);
+}
+[data-theme="dark"] .mob-tab.mob-ctr { color: var(--bg); }
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -2456,16 +2775,30 @@ html { overflow-x: hidden; }
   </a>
   <div class="fn-div"></div>
   <div class="fn-links">
-    <a href="#hero" class="active">Home</a>
-    <a href="#how">How It Works</a>
-    <a href="#begin">Analyze</a>
-    <a href="#biz-clarity">Business</a>
-    <a href="#about">Story</a>
-    <a href="#payment-access">Payment</a>
+    <a href="#hero" class="active">
+      <span class="fnl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></span>
+      <span class="fnl-lbl">Begin</span>
+    </a>
+    <a href="#how">
+      <span class="fnl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
+      <span class="fnl-lbl">Journey</span>
+    </a>
+    <a href="#begin">
+      <span class="fnl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <span class="fnl-lbl">Clarity</span>
+    </a>
+    <a href="#biz-clarity">
+      <span class="fnl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+      <span class="fnl-lbl">Presence</span>
+    </a>
+    <a href="#about">
+      <span class="fnl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <span class="fnl-lbl">Story</span>
+    </a>
   </div>
   <div class="fn-right">
     <button class="fn-theme" id="fn-theme" aria-label="Toggle theme">◑</button>
-    <button class="fn-cta open-intake" id="fn-cta">Begin Clarity →</button>
+    <button class="fn-cta open-intake" id="fn-cta">Begin →</button>
     <button id="space-nav-btn" aria-label="Your Space" onclick="openYourSpace()">
       <span class="snb-initial" id="snb-initial">◉</span>
     </button>
@@ -2478,25 +2811,25 @@ html { overflow-x: hidden; }
     <div class="mchip">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
     </div>
-    <span class="mob-tab-label">Home</span>
+    <span class="mob-tab-label">Begin</span>
   </a>
   <a class="mob-tab" href="#begin" id="mt-begin">
     <div class="mchip">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </div>
-    <span class="mob-tab-label">Analyze</span>
+    <span class="mob-tab-label">Clarity</span>
   </a>
   <a class="mob-tab mob-ctr" href="#" id="mob-ask" aria-label="Open Clarity Intake">
     <div class="mchip">
       <svg style="width:20px;height:20px" viewBox="0 0 100 100"><use href="#ia"/></svg>
     </div>
-    <span class="mob-tab-label">Ask</span>
+    <span class="mob-tab-label">Aspira</span>
   </a>
   <a class="mob-tab" href="#biz-clarity" id="mt-biz">
     <div class="mchip">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
     </div>
-    <span class="mob-tab-label">Business</span>
+    <span class="mob-tab-label">Presence</span>
   </a>
   <button class="mob-tab" id="mt-theme" aria-label="Toggle theme">
     <div class="mchip" id="mt-ti">
