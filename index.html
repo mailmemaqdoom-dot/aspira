@@ -1146,11 +1146,11 @@ textarea { resize: vertical; min-height: 120px; }
   position: fixed; inset: 0; z-index: 981;
   background: rgba(12,6,8,0.65);
   backdrop-filter: blur(8px);
-  opacity: 0; visibility: hidden;
+  opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity 0.4s, visibility 0.4s;
   animation: ysoIn 0.4s var(--ease-out) both;
 }
-#your-space-overlay.active { opacity: 1; visibility: visible; }
+#your-space-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
 #your-space-panel {
   position: fixed; right: 0; top: 0; bottom: 0;
   width: min(480px, 100vw);
@@ -1162,7 +1162,6 @@ textarea { resize: vertical; min-height: 120px; }
   overflow-y: auto;
   transform: translateX(100%);
   transition: transform 0.5s var(--ease-out);
-  animation: yspIn 0.5s var(--ease-out) both;
 }
 #your-space-panel.active { transform: translateX(0); }
 
@@ -2241,7 +2240,6 @@ html { overflow-x: clip; }
 /* Section padding: reduce to breathable mobile rhythm */
 @media (max-width: 767px) {
   section { padding: clamp(2.75rem, 8vw, 4rem) 0; }
-  .site-wrap { padding: 0 clamp(1rem, 4.5vw, 1.5rem); }
   .section-header { margin-bottom: clamp(1.75rem, 5vw, 2.5rem); }
 
   /* Hero — mobile-first vertical rhythm */
@@ -2281,8 +2279,7 @@ html { overflow-x: clip; }
   .bcl-rec-header  { padding: 16px 14px; }
   .bcl-connect-panel { padding: 18px 14px; }
 
-  /* Your Space slide panel */
-  #your-space-panel { width: min(380px, 100vw); }
+  /* Your Space slide panel — authoritative width in R-pass block below */
 
   /* Clarity score ring */
   .ci-ring-svg  { width: 140px; height: 140px; }
@@ -2803,10 +2800,6 @@ input:focus, textarea:focus, select:focus {
 
 @media (max-width: 767px) {
 
-  /* Core container — reduce horizontal padding for
-     more breathing room, still maintaining safe edges */
-  .site-wrap { padding: 0 0.9rem; }
-
   /* Release narrow max-widths that crush content on mobile */
   .how-wrap       { max-width: 100%; }
   .h-ctas         { max-width: min(400px, 100%); }
@@ -2868,7 +2861,6 @@ input:focus, textarea:focus, select:focus {
 /* Extra-small phones (≤ 380px) — full-width grids */
 @media (max-width: 380px) {
   .biz-type-grid { grid-template-columns: 1fr; }
-  .site-wrap { padding: 0 0.75rem; }
 }
 
 /* ── STEP 2: Mobile-first spacing normalization ───────
@@ -3013,11 +3005,11 @@ input:focus, textarea:focus, select:focus {
   .h-scroll  { display: none; }
 
   /* Manifesto — dark bg full width */
-  #manifesto { padding: 2.75rem 0; }
+  #manifesto { padding-top: 2.75rem; padding-bottom: 2.75rem; }
   .manifesto-text { text-align: center; padding: 0; }
 
   /* Value section */
-  #value { padding: 2.5rem 0; }
+  #value { padding-top: 2.5rem; padding-bottom: 2.5rem; }
 
   /* Clarity score — centered ring */
   .ci-score-wrap { padding: 2rem 0; }
@@ -4447,7 +4439,7 @@ section {
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.5) 60%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.5) 60%, transparent 100%);
   }
-  .s-img img { height: clamp(160px, 48vw, 230px); }
+  .s-img img { height: clamp(220px, 60vw, 300px); }
   .s-img--career    img,
   .s-img--guidance  img,
   .s-img--freelance img,
@@ -4562,24 +4554,24 @@ canvas#particle-canvas {
    Settles conflicts between STEP3/STEP5/MobileTx/R3/R5 rules.
    This block appears last → it wins the cascade.            */
 @media (max-width: 767px) {
-  /* Section vertical rhythm — immersive, not compressed */
+  /* Section vertical + horizontal rhythm — immersive, not compressed */
   section {
     padding-top:    clamp(3.5rem, 10vw, 5rem);
     padding-bottom: clamp(3.5rem, 10vw, 5rem);
-    padding-left:   0;
-    padding-right:  0;
+    padding-left:   clamp(1.125rem, 4vw, 1.5rem);
+    padding-right:  clamp(1.125rem, 4vw, 1.5rem);
   }
 
-  /* Site-wrap horizontal padding — consistent across all sections */
-  .site-wrap {
-    padding-left:  clamp(1.125rem, 4vw, 1.5rem);
-    padding-right: clamp(1.125rem, 4vw, 1.5rem);
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+  /* Service images break out of section padding to stay full-bleed */
+  .s-img {
+    margin-left:  calc(-1 * clamp(1.125rem, 4vw, 1.5rem));
+    margin-right: calc(-1 * clamp(1.125rem, 4vw, 1.5rem));
+    width:        calc(100% + 2 * clamp(1.125rem, 4vw, 1.5rem));
+    max-width:    calc(100% + 2 * clamp(1.125rem, 4vw, 1.5rem));
+    border-radius: 0;
   }
 
-  /* Hero: full-screen, generous breathing room */
+  /* Hero: full-screen, overrides section rule */
   #hero {
     padding-top:    clamp(5rem, 13svh, 7rem);
     padding-bottom: clamp(4rem, 10svh, 5.5rem);
@@ -6070,14 +6062,14 @@ function rwmOpen(name, isPaid, lastStep){
   /* Store lastStep for the continue button */
   contBtn.dataset.step = lastStep;
   modal.classList.add('rwm-open');
-  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
 }
 
 function rwmContinue(){
   const modal = document.getElementById('ru-welcome-modal');
   const contBtn = document.getElementById('rwm-continue-btn');
   if(modal) modal.classList.remove('rwm-open');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
   const step = contBtn&&contBtn.dataset.step ? contBtn.dataset.step : 'begin';
   ruContinue(step);
 }
@@ -6085,7 +6077,7 @@ function rwmContinue(){
 function rwmStartFresh(){
   const modal = document.getElementById('ru-welcome-modal');
   if(modal) modal.classList.remove('rwm-open');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
   ruStartFresh();
 }
 
@@ -6112,13 +6104,13 @@ function openYourSpace(){
   }
 
   overlay.classList.add('yso-open');
-  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
 }
 
 function closeYourSpace(){
   const overlay = document.getElementById('your-space-overlay');
   if(overlay) overlay.classList.remove('yso-open');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
 }
 
 function ysoClose(e){
@@ -6973,12 +6965,12 @@ function faqToggle(el){
 function openTnC(){
   const overlay=document.getElementById('tnc-overlay');
   overlay.classList.add('open');
-  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
 }
 function closeTnC(){
   const overlay=document.getElementById('tnc-overlay');
   overlay.classList.remove('open');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
 }
 function closeTnCOutside(e){
   if(e.target===document.getElementById('tnc-overlay')) closeTnC();
@@ -6997,7 +6989,7 @@ const ifd={};
 function openIntake(){
   const ov=document.getElementById('intake-overlay');
   ov.classList.add('open');
-  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
   /* Reset all state when reopening */
   document.getElementById('i-form-wrap').style.display='block';
   document.getElementById('i-dots').style.display='flex';
@@ -7013,7 +7005,7 @@ function openIntake(){
 
 function closeIntake(){
   document.getElementById('intake-overlay').classList.remove('open');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
 }
 
 // Escape key closes intake
@@ -7276,11 +7268,11 @@ function pmSaveReturn(){
 function openPayModal(){
   const ov=document.getElementById('pay-modal-overlay');
   ov.classList.add('pmopen');
-  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
 }
 function closePayModal(){
   document.getElementById('pay-modal-overlay').classList.remove('pmopen');
-  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
 }
 // Escape key
 document.addEventListener('keydown',function(e){
