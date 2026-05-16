@@ -2742,6 +2742,19 @@ input:focus, textarea:focus, select:focus {
 }
 [data-theme="dark"] .mob-tab.mob-ctr { color: var(--bg); }
 
+/* ── NAV CLICK-THROUGH FIX ────────────────────────────
+   Inner SVG and label spans must NOT intercept pointer
+   events — clicks must always land on the parent <a>.  */
+.fnl-icon,
+.fnl-icon svg,
+.fnl-lbl { pointer-events: none; }
+
+/* Same fix for mobile dock — icon divs and label spans
+   must pass clicks through to their parent .mob-tab.   */
+.mob-nav .mchip,
+.mob-nav .mchip svg,
+.mob-nav .mob-tab-label { pointer-events: none; }
+
 /* ══════════════════════════════════════════════════════════
    MOBILE TRANSFORMATION v2
    Steps 1–7: full-width layout, spacing, typography,
@@ -4392,15 +4405,22 @@ function syncNav(){
 }
 
 function goTo(id){
-  const el=document.getElementById(id);if(!el) return;
-  isSc=true;el.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{isSc=false;},1000);
+  const el=document.getElementById(id);if(!el)return;
+  isSc=true;
+  /* Offset for floating nav: ~76px on desktop, 0 on mobile
+     (mobile sections have no top-fixed nav obscuring them) */
+  const navOffset=window.innerWidth>767?76:0;
+  const top=el.getBoundingClientRect().top+window.scrollY-navOffset;
+  window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  setTimeout(()=>{isSc=false;},1200);
 }
 
 dLinks.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(a.getAttribute('href').replace('#',''));}));
 document.querySelectorAll('.mob-tab[href]').forEach(tab=>{
   tab.addEventListener('click',e=>{
-    if(tab.id==='mob-ask') return;
-    e.preventDefault();goTo(tab.getAttribute('href').replace('#',''));
+    e.preventDefault();
+    if(tab.id==='mob-ask'){openIntake();return;}
+    goTo(tab.getAttribute('href').replace('#',''));
   });
 });
 
@@ -4718,7 +4738,7 @@ function ruContinue(step){
   const el = document.getElementById(target);
   if(el){
     if(el.style.display==='none') el.style.display='flex';
-    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+    setTimeout(()=>goTo(target),100);
   } else {
     goTo('begin');
   }
@@ -5062,7 +5082,7 @@ function showResults(data){
   rD.innerHTML='';gD.innerHTML='';wa.innerHTML='';uc.innerHTML='';
   rL.classList.add('on');gL.classList.add('on');
   uc.innerHTML='<div class="r-card vis" style="text-align:left"><div class="r-lbl">Context</div><h3>'+data.wordCount+' words &middot; '+data.category.charAt(0).toUpperCase()+data.category.slice(1)+'</h3><p>Evaluated across five dimensions: length, structure, role definition, outcomes, and audience clarity.</p></div>';
-  isSc=true;document.getElementById('reflection').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{isSc=false;},1000);
+  goTo('reflection');
   const barsHTML=data.dimBars.map(d=>'<div class="ci-dim-row"><span class="ci-dim-label">'+d.label+'</span><div class="ci-dim-track"><div class="ci-dim-fill" data-val="'+d.val+'" style="width:0%"></div></div><span class="ci-dim-val">'+d.val+'</span></div>').join('');
   function liHTML(arr){return arr.map(s=>'<li>'+s+'</li>').join('')}
   const C=2*Math.PI*40;
@@ -5182,7 +5202,7 @@ function cpPopulate(data){
   /* Scroll gently to pathways section */
   setTimeout(()=>{
     const sec=document.getElementById('clarity-pathways');
-    if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+    if(sec) goTo('clarity-pathways');
   }, 500);
 }
 
@@ -5238,12 +5258,11 @@ function cpSelect(pathNum){
           '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' +
           'Continue on Telegram</a></div>';
       }
-      setTimeout(()=>connectSec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+      setTimeout(()=>goTo('connect'),200);
     }
   } else if(pathNum === 1){
     /* Path 1: scroll back to begin section with a gentle highlight on the textarea */
-    const beginSec = document.getElementById('begin');
-    if(beginSec) beginSec.scrollIntoView({behavior:'smooth',block:'start'});
+    if(document.getElementById('begin')) goTo('begin');
     setTimeout(()=>{
       const ta=document.getElementById('clarity-input');
       if(ta){
@@ -5255,8 +5274,7 @@ function cpSelect(pathNum){
     },700);
   } else if(pathNum === 2){
     /* Path 2: scroll to Business Clarity Layer which has tool guidance */
-    const bizSec = document.getElementById('biz-clarity');
-    if(bizSec) bizSec.scrollIntoView({behavior:'smooth',block:'start'});
+    if(document.getElementById('biz-clarity')) goTo('biz-clarity');
   }
 }
 
@@ -5319,7 +5337,7 @@ function bclGoStep(n){
   document.getElementById('bcl-s'+n).classList.add('active');
   bclStep=n;
   bclUpdateProgress(n-1);
-  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+  goTo('biz-clarity');
 }
 
 function bclUpdateProgress(active){
@@ -5402,7 +5420,7 @@ function bclShowOutput(){
   bclUpdateProgress(3);
   document.getElementById('bcl-output').classList.add('active');
   document.getElementById('bcl-progress').style.display='none';
-  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+  goTo('biz-clarity');
 
   // Populate header
   document.getElementById('bcl-out-summary').textContent=data.summary;
@@ -5464,7 +5482,7 @@ function bclReset(){
   document.getElementById('bcl-cards-wrap').innerHTML='';
   document.getElementById('bcl-edu-wrap').innerHTML='';
   bclUpdateProgress(0);
-  document.getElementById('biz-clarity').scrollIntoView({behavior:'smooth',block:'start'});
+  goTo('biz-clarity');
 }
 /* ────────────────────────────────────────
    FOOTER CONNECT — shows connect section
