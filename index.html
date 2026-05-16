@@ -3743,6 +3743,206 @@ section {
 
 /* ── END R4 ───────────────────────────────────────────────── */
 
+/* ============================================================
+   R5 — VIEWPORT BALANCE · HERO COMPOSITION
+   FORM FLOW INTEGRATION · CTA REFINEMENT
+   Corrects excessive empty space, disconnected hero, floating
+   form card, oversized CTA. Wires Begin → intake overlay.
+   ============================================================ */
+
+/* ── Hero padding: tighten navbar–hero relationship ─────────
+   Nav sits fixed at top:20px, height ~56px → bottom ~76px.
+   Old padding-top: clamp(6rem,12vw,10rem) = up to 160px.
+   New: clamp(4.5rem,6.5vw,6.5rem) = 72–104px — content
+   reads right below the nav, composed, intentional.
+   ─────────────────────────────────────────────────────────── */
+#hero {
+  padding-top: clamp(4.5rem, 6.5vw, 6.5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+/* ── Hero internal rhythm — trim compounded dead space ──────
+   Old combined explicit margins: 54+50+78 = 182px.
+   New combined: ≈ 60–100px across viewport — breathing,
+   not empty.
+   ─────────────────────────────────────────────────────────── */
+.h-promise {
+  margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.h-stats {
+  margin-bottom: clamp(1.75rem, 2.5vw, 2.5rem);
+}
+
+.h-ctas {
+  margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+/* ── Hero wordmark — preserve scale, tighten bottom gap ─────
+   Slight reduction at large viewports to prevent weight
+   imbalance against the sub-text below.
+   ─────────────────────────────────────────────────────────── */
+.h-wordmark {
+  font-size: clamp(3.8rem, 11vw, 9rem);
+  margin-bottom: 0.9rem;
+}
+
+/* ── CTA balance — guide attention, not dominate ────────────
+   Old: padding 16px 38px, font 0.9rem — reads too heavy
+   against the editorial type above it.
+   New: padding 13px 30px, font 0.87rem — proportional.
+   ─────────────────────────────────────────────────────────── */
+.btn-p {
+  padding: 13px 30px;
+  font-size: 0.87rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Begin section — contextual identity ────────────────────
+   Without bg, #begin blends invisibly into #how above it.
+   Subtle tint creates a distinct reading section.
+   ─────────────────────────────────────────────────────────── */
+#begin {
+  background: var(--bg-2);
+}
+
+/* ── Begin intake invitation card ───────────────────────────
+   Replaces the old attached textarea form as primary entry.
+   Opens the premium 7-step intake overlay on click.
+   Clean, anchored, integrated into section rhythm.
+   ─────────────────────────────────────────────────────────── */
+.begin-intake-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: clamp(2rem, 5vw, 2.75rem) clamp(1.5rem, 4vw, 2.25rem);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  text-align: center;
+  transition: box-shadow 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+}
+.begin-intake-card:hover {
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(120,1,21,0.14);
+}
+
+.bic-paths {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.bic-path {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  opacity: 0.75;
+}
+
+.bic-sep {
+  font-size: 0.62rem;
+  color: var(--text-3);
+}
+
+.bic-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  font-style: italic;
+  color: var(--text-1);
+  line-height: 1.65;
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+  letter-spacing: -0.005em;
+}
+
+.bic-rule {
+  width: 26px;
+  height: 1px;
+  background: var(--crimson);
+  opacity: 0.22;
+  margin: 0 auto clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.begin-open-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 24px;
+  background: var(--crimson);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: none;
+  transition: all 0.25s var(--ease-out);
+  box-shadow: 0 2px 12px rgba(120,1,21,0.20);
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 48px;
+}
+@media (pointer: coarse) { .begin-open-btn { cursor: pointer; } }
+.begin-open-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s var(--ease-out);
+}
+.begin-open-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(120,1,21,0.30);
+}
+.begin-open-btn:hover::before { transform: translateX(100%); }
+.begin-open-btn:active { transform: scale(0.97); }
+[data-theme="dark"] .begin-open-btn { color: var(--bg); }
+
+.bic-note {
+  font-size: 0.70rem;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+  line-height: 1.65;
+}
+
+/* ── Responsive recomposition ─────────────────────────────── */
+@media (max-width: 860px) {
+  #hero {
+    padding-top: clamp(4.25rem, 7vw, 5.75rem);
+    padding-bottom: clamp(3.25rem, 5vw, 4.75rem);
+  }
+}
+
+@media (max-width: 767px) {
+  #hero {
+    padding-top: clamp(4rem, 9vw, 5.5rem);
+    padding-bottom: clamp(3rem, 6vw, 4.25rem);
+  }
+  .h-promise { margin-bottom: clamp(1rem, 2.5vw, 1.5rem); }
+  .h-stats   { margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem); }
+  .h-ctas    { margin-bottom: clamp(1.25rem, 3vw, 2rem); }
+  .begin-intake-card { max-width: 100%; }
+  .btn-p { padding: 13px 26px; }
+}
+
+@media (max-width: 380px) {
+  #hero { padding-top: 3.75rem; padding-bottom: 3rem; }
+  .h-wordmark { font-size: clamp(3rem, 11vw, 4.5rem); }
+  .begin-intake-card { padding: 1.5rem 1.25rem; }
+}
+
+/* ── END R5 ───────────────────────────────────────────────── */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -4105,21 +4305,33 @@ section {
     </svg>
   </div>
 
-  <div class="s-eye reveal">Begin Your Analysis</div>
+  <div class="s-eye reveal">Begin Your Clarity</div>
   <h2 class="s-title reveal d1">Find Your Clarity</h2>
-  <p class="form-q reveal d2">&ldquo;Sometimes, the effort is already there. What&rsquo;s missing is clarity.&rdquo;</p>
-  <div class="input-box reveal d3">
+
+  <div class="begin-intake-card reveal d3">
+    <div class="bic-paths">
+      <span class="bic-path">Career</span>
+      <span class="bic-sep">&middot;</span>
+      <span class="bic-path">Freelance</span>
+      <span class="bic-sep">&middot;</span>
+      <span class="bic-path">Business</span>
+    </div>
+    <p class="bic-quote">&ldquo;The effort is already present.<br>What is needed is to be seen clearly.&rdquo;</p>
+    <div class="bic-rule"></div>
+    <button class="begin-open-btn open-intake">Begin Clarity Intake <span class="arr">→</span></button>
+    <p class="bic-note">Less than 2 minutes &nbsp;&middot;&nbsp; No signup &nbsp;&middot;&nbsp; Personal conversation</p>
+  </div>
+
+  <!-- Legacy analysis elements — hidden, kept for JS pipeline compatibility -->
+  <div aria-hidden="true" style="display:none;position:absolute;pointer-events:none;width:0;height:0;overflow:hidden">
     <div class="cat-bar">
       <button class="cat-btn active" data-cat="career">Career</button>
       <button class="cat-btn" data-cat="freelance">Freelance</button>
       <button class="cat-btn" data-cat="business">Business</button>
     </div>
-    <div class="ta-wrap">
-      <textarea id="clarity-input" placeholder="Paste your LinkedIn bio, resume summary, freelance service description, client pitch, or the way you introduce your business — whatever represents how you currently present yourself…"></textarea>
-      <span class="char-counter" id="char-counter">0</span>
-      <span class="ta-hint">Ctrl + Enter to analyze</span>
-    </div>
-    <button class="sub-btn" id="analyze-btn">Analyze Clarity →</button>
+    <textarea id="clarity-input" tabindex="-1" aria-hidden="true"></textarea>
+    <span id="char-counter"></span>
+    <button id="analyze-btn" tabindex="-1" aria-hidden="true"></button>
   </div>
 </section>
 
@@ -4965,7 +5177,7 @@ document.querySelectorAll('.mob-tab[href]').forEach(tab=>{
   });
 });
 
-document.getElementById('hero-cta').addEventListener('click',()=>goTo('begin'));
+document.getElementById('hero-cta').addEventListener('click',()=>openIntake());
 document.getElementById('fn-cta').addEventListener('click',openIntake);
 
 const ro=new IntersectionObserver(entries=>{
