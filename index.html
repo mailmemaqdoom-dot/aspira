@@ -3426,6 +3426,323 @@ body.modal-open { overflow: hidden; touch-action: none; }
   .cp-card, .biz-type-card { backface-visibility: hidden; }
 }
 
+/* ============================================================
+   R4 — LAYOUT ARCHITECTURE REBUILD
+   Senior product layout architect pass — composition engine,
+   content width system, visual grid, section pacing, footer
+   authority. Preserves existing design language entirely.
+   ============================================================ */
+
+/* ── STEP 1: Section composition engine ──────────────────────
+   Root fix: sections are currently raw block containers.
+   All child content defaults to left-aligned block layout
+   with no centering anchor. This makes every section look
+   empty, floating, and structurally weak.
+   Solution: flex column with center alignment + horizontal
+   padding so sections own their own breathing room.
+   ─────────────────────────────────────────────────────────── */
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-left: clamp(1.25rem, 5vw, 3rem);
+  padding-right: clamp(1.25rem, 5vw, 3rem);
+}
+
+/* ── STEP 2: Section heading + sub-copy architecture ─────────
+   Headings need explicit width:100% so they expand to fill
+   the flex column (flex children shrink to content by default).
+   s-sub bottom margin was 72px — reduced to breathing rhythm.
+   ─────────────────────────────────────────────────────────── */
+.s-title,
+.how-title,
+.s-eye,
+.pm-eyebrow,
+.pm-primary {
+  width: 100%;
+  max-width: var(--c-mid);
+}
+
+.s-sub {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+/* ── STEP 3: Visual + grid children get full width ───────────
+   Without width:100%, these collapse to auto width inside
+   the flex column, creating the "narrow/floating" symptom.
+   ─────────────────────────────────────────────────────────── */
+.how-visual,
+.how-wrap,
+.val-visual,
+.val-grid,
+.cp-visual,
+.cp-grid,
+.begin-visual,
+.bcl-visual,
+.pm-visual,
+.results-box,
+.analyze-wrap {
+  width: 100%;
+}
+
+.val-visual {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+/* ── STEP 4: Section-specific content architecture ───────────
+   Per-section overrides that require left-alignment or
+   specific max-width constraints differing from the
+   section-level center alignment.
+   ─────────────────────────────────────────────────────────── */
+
+/* Begin / input */
+#begin .form-q {
+  width: 100%;
+  max-width: var(--c-text);
+}
+
+/* Biz Clarity */
+.bcl-badge,
+.bcl-title {
+  width: 100%;
+  max-width: var(--c-mid);
+}
+.bcl-sub {
+  width: 100%;
+}
+.bcl-progress {
+  width: 100%;
+  max-width: var(--c-text);
+}
+.bcl-flow {
+  width: 100%;
+  max-width: var(--c-text);
+  text-align: left;
+}
+
+/* Perception Mirror */
+.pm-rule {
+  width: 100%;
+  max-width: var(--c-text);
+}
+.pm-lines {
+  width: 100%;
+  text-align: left;
+}
+.pm-note {
+  width: 100%;
+  max-width: var(--c-text);
+}
+
+/* Clarity Pathways */
+.cp-eyebrow,
+.cp-title,
+.cp-sub {
+  width: 100%;
+  max-width: var(--c-mid);
+}
+.cp-close-note {
+  width: 100%;
+  max-width: var(--c-text);
+}
+
+/* Payment Access */
+.pax-wrap {
+  width: 100%;
+}
+
+/* About — preserve editorial left-align */
+.abt-inner {
+  text-align: left;
+}
+
+/* FAQ — preserve left-aligned question/answer layout */
+.faq-inner {
+  text-align: left;
+}
+
+/* Manifesto — preserve centered prose */
+.manifesto-text,
+.mfst-q {
+  width: 100%;
+}
+
+/* ── STEP 5: Section pacing — manifesto band ─────────────────
+   Manifesto inherited full section padding (up to 9rem top/bottom).
+   It's a break section, not a full content section — compress it.
+   ─────────────────────────────────────────────────────────── */
+#manifesto {
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* ── STEP 6: Footer authority rebuild ────────────────────────
+   Footer horizontal padding was 28px — too tight at desktop.
+   footer-bottom needs its own max-width + centering so it
+   doesn't bleed wider than the grid above it.
+   ─────────────────────────────────────────────────────────── */
+.site-footer {
+  padding: clamp(4rem, 7vw, 6rem) clamp(1.25rem, 5vw, 3rem) clamp(2rem, 4vw, 3rem);
+}
+
+.footer-inner {
+  width: 100%;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  max-width: var(--c-mid);
+  margin: 0 auto;
+}
+
+.footer-copy {
+  font-size: 0.76rem;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.footer-bottom button {
+  background: none;
+  border: none;
+  font-size: 0.76rem;
+  color: var(--text-3);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out);
+  padding: 0;
+}
+
+.footer-bottom button:hover {
+  color: var(--crimson);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.footer-links a,
+.footer-links button {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  line-height: 1.5;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out);
+  display: block;
+}
+
+.footer-links a:hover,
+.footer-links button:hover {
+  color: var(--crimson);
+}
+
+.footer-brand-desc {
+  font-size: 0.82rem;
+  line-height: 1.78;
+  color: var(--text-3);
+  margin-bottom: 1.25rem;
+}
+
+.footer-col-title {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 1.25rem;
+  display: block;
+}
+
+/* ── STEP 7: Hero inner — remove redundant double padding ─────
+   #hero has its own clamp padding. .hero-inner adds another
+   120px/28px on top, creating compounded excess vertical space
+   and unnecessary horizontal re-padding. Neutralize inner padding
+   so #hero is the single source of truth for its own spacing.
+   ─────────────────────────────────────────────────────────── */
+.hero-inner {
+  padding: 0;
+  min-height: unset;
+}
+
+/* ── STEP 8: Responsive horizontal padding maintenance ───────
+   The base section rule uses padding shorthand which resets
+   left/right to 0 at each breakpoint. We re-declare them here
+   (appended last in cascade, so they always win) to maintain
+   breathing room at every viewport width.
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  section {
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+  }
+  .site-footer {
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+  }
+}
+
+@media (max-width: 767px) {
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .hero-inner {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .bcl-flow,
+  .pm-lines,
+  .faq-inner,
+  .abt-inner {
+    text-align: left;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .site-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  section {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .site-footer {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* ── END R4 ───────────────────────────────────────────────── */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
