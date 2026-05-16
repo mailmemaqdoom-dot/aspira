@@ -6789,9 +6789,10 @@ function closeIntake(){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && document.getElementById('intake-overlay').classList.contains('open')) closeIntake();
 });
-// Click outside panel closes
-document.getElementById('intake-overlay').addEventListener('click',function(e){
-  if(e.target===this) closeIntake();
+// Click outside panel closes — delegated so it works even though
+// #intake-overlay is rendered after this script block
+document.addEventListener('click',function(e){
+  if(e.target.id==='intake-overlay') closeIntake();
 });
 
 function iUpdateUI(){
@@ -7055,9 +7056,10 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Escape'&&document.getElementById('pay-modal-overlay').classList.contains('pmopen'))
     closePayModal();
 });
-// Click outside
-document.getElementById('pay-modal-overlay').addEventListener('click',function(e){
-  if(e.target===this) closePayModal();
+// Click outside — delegated so it works even though
+// #pay-modal-overlay is rendered after this script block
+document.addEventListener('click',function(e){
+  if(e.target.id==='pay-modal-overlay') closePayModal();
 });
 
 (function ASPIRA_FX(){
