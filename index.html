@@ -4390,6 +4390,105 @@ section {
 
 /* ── END R6 ─────────────────────────────────────────────── */
 
+/* ============================================================
+   R7 — IMAGE INTEGRATION + CURSOR VISIBILITY FIX
+   ─ Step 1: cursor fix — remove mix-blend-mode that made the
+     ring nearly invisible on cream backgrounds
+   ─ Step 2: hero ambient image — right-side atmospheric depth
+   ─ Step 3: section editorial images — premium crop, reveal
+   ============================================================ */
+
+/* ── Cursor fix ────────────────────────────────────────────── */
+/* mix-blend-mode:multiply on cream bg (#f8f5f0) renders a
+   1.5px crimson ring at 50% opacity essentially invisible.
+   Remove blend mode, increase opacity and border weight.       */
+.cursor-ring {
+  mix-blend-mode: normal;
+  border: 2px solid var(--crimson);
+  opacity: 0.72;
+}
+[data-theme="dark"] .cursor-ring {
+  mix-blend-mode: normal;
+  border-color: var(--rose);
+  opacity: 0.80;
+}
+.cursor-ring.cursor-hover {
+  opacity: 0.88;
+  background: var(--crimson-2);
+  border-color: var(--crimson);
+}
+.cursor-ring.cursor-press {
+  opacity: 1;
+  background: var(--crimson-3);
+}
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  opacity: 1;
+}
+
+/* ── Hero background image ─────────────────────────────────── */
+.hero-bg-img {
+  position: absolute;
+  top: 0; right: 0;
+  width: 58%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  opacity: 0.11;
+  pointer-events: none;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.7) 20%, transparent 75%);
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.7) 20%, transparent 75%);
+}
+[data-theme="dark"] .hero-bg-img { opacity: 0.07; }
+
+/* ── Section editorial images ──────────────────────────────── */
+.s-img {
+  width: 100%;
+  max-width: 860px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--bg-3);
+  flex-shrink: 0;
+  /* Removed from figure default margin */
+  margin: 0 0 clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.s-img img {
+  width: 100%;
+  height: clamp(200px, 33vw, 370px);
+  object-fit: cover;
+  display: block;
+}
+
+/* Crop positions — strip editorial text on image left, show 3D scenes */
+.s-img--career    img { object-position: 70% center; }
+.s-img--guidance  img { object-position: 65% center; }
+.s-img--freelance img { object-position: 66% center; }
+.s-img--business  img { object-position: 65% center; }
+
+/* BCL image sits closer to heading — tighter bottom margin */
+.s-img--business {
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+@media (max-width: 767px) {
+  .hero-bg-img {
+    width: 100%;
+    opacity: 0.07;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.5) 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.5) 60%, transparent 100%);
+  }
+  .s-img img { height: clamp(160px, 48vw, 230px); }
+  .s-img--career    img,
+  .s-img--guidance  img,
+  .s-img--freelance img,
+  .s-img--business  img { object-position: 78% center; }
+}
+
+/* ── END R7 ─────────────────────────────────────────────── */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -4491,6 +4590,7 @@ section {
 
 <!-- ═══ §0 HERO — PURE BRAND IDENTITY ═══ -->
 <section id="hero">
+<img class="hero-bg-img" src="Images/aspira_hero_background.png" alt="" aria-hidden="true" loading="eager">
 <!-- Hero ambient orbs — decorative -->
 <div class="hero-ambient" aria-hidden="true">
   <div class="orb orb-1"></div>
@@ -4629,6 +4729,10 @@ section {
   <h2 class="s-title reveal d1">What&rsquo;s Missing<br>Is <em>Clarity.</em></h2>
   <p class="s-sub reveal d2">ASPIRA analyses how you present yourself — as a job seeker, a freelancer, or a small business owner — and reveals where perception and intention don&rsquo;t match. Then shows you how to close that gap.</p>
 
+  <figure class="s-img s-img--career reveal d2" aria-hidden="true">
+    <img src="Images/career_clarity_editorial.png" alt="" loading="lazy">
+  </figure>
+
   <!-- Value section visual: two sides bridged by a line — intention vs perception closing -->
   <div class="val-visual reveal d2" aria-hidden="true">
     <svg viewBox="0 0 580 90" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -4696,6 +4800,10 @@ section {
   <div class="s-eye reveal">How It Works</div>
   <h2 class="s-title reveal d1">Three Steps to<br>Absolute <em>Clarity</em></h2>
   <p class="s-sub reveal d2">Paste your bio, resume summary, service pitch, or business description. ASPIRA analyses it across three dimensions and shows you what&rsquo;s unclear and why.</p>
+
+  <figure class="s-img s-img--guidance reveal d2" aria-hidden="true">
+    <img src="Images/website_guidance_ui.png" alt="" loading="lazy">
+  </figure>
 
   <!-- How visual: three nodes connected by flowing path -->
   <div class="how-visual reveal d1" aria-hidden="true">
@@ -4858,6 +4966,10 @@ section {
   <p class="cp-eyebrow" id="cp-eye">Clarity Pathways</p>
   <h2 class="cp-title" id="cp-title">Three ways to<br>move <em>forward.</em></h2>
   <p class="cp-sub" id="cp-sub">"Clarity opens before choice — not after."</p>
+
+  <figure class="s-img s-img--freelance reveal d1" aria-hidden="true">
+    <img src="Images/freelance_presence_cinematic.png" alt="" loading="lazy">
+  </figure>
 
   <!-- Pathways visual: single root diverging into three branches -->
   <div class="cp-visual" aria-hidden="true">
@@ -5052,6 +5164,10 @@ section {
   <div class="bcl-badge reveal"><span class="bcl-dot"></span>Business Clarity Layer</div>
   <h2 class="bcl-title reveal d1">Running a business<br>shouldn&rsquo;t feel <em>unclear.</em></h2>
   <p class="bcl-sub reveal d2">For local shops, freelancers, online sellers, and service providers — this helps you identify where your business visibility is breaking down, and suggests practical tools that actually fit your situation, not generic advice.</p>
+
+  <figure class="s-img s-img--business reveal d2" aria-hidden="true">
+    <img src="Images/business_clarity_enterprise.png" alt="" loading="lazy">
+  </figure>
 
   <!-- Progress dots -->
   <div class="bcl-progress" id="bcl-progress">
