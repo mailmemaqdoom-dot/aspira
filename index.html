@@ -3212,6 +3212,180 @@ html, body { -webkit-overflow-scrolling: touch; }
   .ai-fab svg { width: 20px; height: 20px; }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   R3 — VISUAL COMPOSITION & ALIGNMENT
+   Art-direction pass: grid discipline, typography unification,
+   container normalization, h-stat repair, section backgrounds,
+   premium finishing.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── R3.1 LAYOUT TOKENS ─────────────────────────────────────
+   Unified container width system replaces seven ad-hoc values.
+   --c-text : prose / single-col / forms (~680px)
+   --c-mid  : grids / structured blocks (~860px)
+   --c-page : full page wrap (~1160px)                        */
+:root {
+  --c-text:  680px;
+  --c-mid:   860px;
+  --c-page: 1160px;
+}
+
+/* ── R3.2 CONTAINER WIDTH NORMALIZATION ─────────────────────
+   Before: 7 different values with no mathematical relationship.
+   After:  3 tokens, consistently applied.                    */
+.site-wrap                         { max-width: var(--c-page); }
+
+.abt-inner,
+.faq-inner,
+.analyze-wrap,
+.results-box,
+.manifesto-text                    { max-width: var(--c-text); }
+
+.how-wrap,
+.cp-grid                           { max-width: var(--c-mid);  }
+
+.input-box,
+.pax-wrap                          { max-width: 540px; }
+
+.footer-inner                      { max-width: var(--c-mid); }
+.pm-lines                          { max-width: 560px; }
+
+/* ── R3.3 VAL-GRID — MISSING DEFINITION ─────────────────────
+   .val-grid had no CSS rule. Value cards were unstyled divs.  */
+.val-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  width: 100%;
+  max-width: var(--c-mid);
+  margin: 0 auto;
+  margin-top: 3rem;
+}
+
+/* ── R3.4 TYPOGRAPHY SCALE UNIFICATION ──────────────────────
+   Section headings used 4 divergent clamp() values:
+     .s-title    3.8rem  .bcl-title 3.4rem
+     .cp-title   3.2rem  .pax-title 3.0rem
+   Unified to one scale with consistent rhythm.               */
+.s-title,
+.bcl-title,
+.cp-title,
+.pax-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+
+/* Paragraph subtitles under section headings — constrain width
+   so line length stays readable regardless of screen width.  */
+.s-sub,
+.cp-sub,
+.bcl-sub,
+.pax-sub {
+  max-width: 54ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── R3.5 HERO STATS — TEXT LABEL REPAIR ────────────────────
+   .h-stat-n was designed for short symbols: "3", "AI", "∞".
+   Content is now words: "Career", "Freelance", "Business".
+   The display font at 1.85rem + padding:0 34px collapses on
+   mobile and looks mismatched on desktop.
+
+   Fix: treat as category badge row — body font, uppercase,
+   tight letter-spacing. The label becomes the dominant text;
+   "Clarity / Positioning / Visibility" stays as descriptor.  */
+.h-stat {
+  padding: 0 22px;
+  gap: 4px;
+}
+.h-stat-n {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  line-height: 1;
+  white-space: nowrap;
+  transition: opacity 0.25s var(--ease-out);
+}
+.h-stat:hover .h-stat-n {
+  transform: none;   /* scale-pop is designed for digits, not words */
+  opacity: 0.75;
+}
+.h-stat-l {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+}
+/* Scale the vr divider to match the new compact stat height */
+.h-vr { height: 24px; }
+
+/* ── R3.6 SECTION BACKGROUND FIX ────────────────────────────
+   #biz-clarity had no background set — it was inheriting the
+   body background, breaking the alternating section rhythm.
+   (CSS defined #bcl but the HTML uses id="biz-clarity".)     */
+#biz-clarity { background: var(--bg-2); }
+
+/* ── R3.7 CARD HOVER NORMALIZATION ─────────────────────────
+   translateY(-4px) on hover is too aggressive — the card
+   appears to jump rather than lift. Premium products use
+   -2px: subtle, deliberate, controlled.                      */
+.card:hover,
+.val-card:hover,
+.feature-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ── R3.8 MOBILE COMPOSITION ────────────────────────────────
+   Val-grid collapses gracefully on smaller viewports.
+   H-stats on narrow screens: wrap into 2×2, show all four,
+   remove brittle single-row overflow.                        */
+@media (max-width: 767px) {
+  .val-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 480px;
+  }
+  .h-stat { padding: 0 14px; }
+  .h-stat-n { font-size: 0.68rem; }
+  .h-vr { height: 20px; }
+}
+
+@media (max-width: 479px) {
+  .val-grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+  }
+  /* 2×2 badge grid for h-stats — avoids single-row overflow */
+  .h-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 1rem;
+  }
+  .h-stat {
+    flex: 0 0 44%;
+    padding: 0 8px;
+    text-align: center;
+  }
+  /* Show all 4 stats in the 2×2 grid (override hide rule)   */
+  .h-stat:last-child { display: flex !important; }
+  /* Hide vertical dividers — layout is now grid-based       */
+  .h-vr { display: none !important; }
+}
+
+/* ── R3.9 PREMIUM FINISHING ─────────────────────────────────
+   Typography rhythm consistency for section subheadings.    */
+.how-sub,
+.s-sub,
+.section-sub {
+  font-size: clamp(0.88rem, 2vw, 1.02rem);
+  line-height: 1.72;
+  color: var(--text-2);
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ── STEP 7: Performance and rendering stability ──────
    Eliminate layout shifts, mobile flicker, viewport jumps.  */
 
