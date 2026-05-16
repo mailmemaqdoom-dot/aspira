@@ -4498,6 +4498,112 @@ html, body {
 
 /* ── END R8 ─────────────────────────────────────────────── */
 
+/* ============================================================
+   R9 — ARCHITECTURAL REPAIR
+   Single source of truth for mobile layout system.
+   Supersedes competing rules from all previous STEP/R blocks.
+   ============================================================ */
+
+/* ── 1. Overscroll containment ──────────────────────────────
+   iOS rubber-band scroll triggers fixed-element repaint,
+   causing nav flicker/drift. Disable overscroll on the root
+   and contain it inside scrollable modal panels.            */
+html { overscroll-behavior: none; }
+#intake-overlay,
+#pay-modal-overlay,
+.modal-overlay,
+.modal-inner,
+.modal-panel,
+.ai-modal,
+#your-space-panel { overscroll-behavior: contain; }
+
+/* ── 2. Body-level orbs: hide on mobile ─────────────────────
+   .orb.o1/.o2/.o3 are position:absolute in <body> without a
+   containing ancestor. On iOS ≤15 (no overflow:clip support)
+   they can expand layout width. Hero-ambient orbs inside
+   #hero (overflow:hidden) provide the same visual effect.   */
+@media (max-width: 767px) {
+  body > .orb { display: none; }
+}
+
+/* ── 3. Particle canvas: viewport-fixed, not document-full ──
+   position:absolute;inset:0 on a body child = full doc height.
+   position:fixed anchors it to the viewport — matches the
+   canvas dimensions set by JS (window.innerWidth/Height).   */
+canvas#particle-canvas {
+  position: fixed;
+}
+
+/* ── 4. mob-nav: margin-based centering — eliminates transform
+   position:fixed + left:0 + right:0 + width:fit-content +
+   margin-inline:auto = perfect centering without translateX.
+   Avoids the transform-on-fixed iOS Safari instability path. */
+@media (max-width: 767px) {
+  .mob-nav {
+    left: 0;
+    right: 0;
+    width: fit-content;
+    min-width: 280px;
+    max-width: calc(100% - 28px);
+    margin-inline: auto;
+    transform: none;
+  }
+}
+
+/* ── 5. Remove hero transform on mobile ─────────────────────
+   translateZ(0) on #hero creates a new stacking context.
+   Not needed: hero overflow:hidden already contains the orbs.
+   Remove to prevent any fixed-descendant positioning issues. */
+@media (max-width: 767px) {
+  #hero { transform: none; }
+}
+
+/* ── 6. Canonical mobile spacing — definitive values ─────────
+   Settles conflicts between STEP3/STEP5/MobileTx/R3/R5 rules.
+   This block appears last → it wins the cascade.            */
+@media (max-width: 767px) {
+  /* Section vertical rhythm — immersive, not compressed */
+  section {
+    padding-top:    clamp(3.5rem, 10vw, 5rem);
+    padding-bottom: clamp(3.5rem, 10vw, 5rem);
+    padding-left:   0;
+    padding-right:  0;
+  }
+
+  /* Site-wrap horizontal padding — consistent across all sections */
+  .site-wrap {
+    padding-left:  clamp(1.125rem, 4vw, 1.5rem);
+    padding-right: clamp(1.125rem, 4vw, 1.5rem);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Hero: full-screen, generous breathing room */
+  #hero {
+    padding-top:    clamp(5rem, 13svh, 7rem);
+    padding-bottom: clamp(4rem, 10svh, 5.5rem);
+    padding-left:   clamp(1.125rem, 4vw, 1.5rem);
+    padding-right:  clamp(1.125rem, 4vw, 1.5rem);
+    min-height: 100svh;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ── 7. Reduce-motion: disable heavy hero transform on mobile ─
+   GPU compositing hints on static elements waste memory.    */
+@media (max-width: 767px) {
+  .hero-ambient .orb-1,
+  .hero-ambient .orb-2,
+  .hero-ambient .orb-3 {
+    will-change: auto;
+    animation-duration: 40s; /* slow to reduce GPU churn */
+  }
+}
+
+/* ── END R9 ─────────────────────────────────────────────── */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
