@@ -3943,6 +3943,453 @@ section {
 
 /* ── END R5 ───────────────────────────────────────────────── */
 
+/* ============================================================
+   R6 — INTAKE OVERLAY FUNCTIONAL FIX
+   Bug 1: CSS expected .active, JS adds .open → overlay invisible
+   Bug 2: CSS targeted .intake-panel (class), HTML is #intake-panel
+   Bug 3: Zero CSS for all i-prefixed form component classes
+   Full port of aspira-clarity-intake.html styles, adapted to
+   site design tokens and i-prefixed class namespace.
+   ============================================================ */
+
+/* ── Fix 1: show overlay when .open class is added by JS ─── */
+#intake-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Fix 2: panel sizing and layout (ID selector) ────────── */
+#intake-panel {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 5vw, 2.5rem) clamp(1.25rem, 4vw, 2rem) clamp(3rem, 6vw, 5rem);
+  position: relative;
+  min-height: 100%;
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+#intake-pb {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--crimson), var(--rose));
+  border-radius: 0 2px 2px 0;
+  z-index: 980;
+  transition: width 0.5s var(--ease-out);
+  pointer-events: none;
+}
+
+/* ── Close button ─────────────────────────────────────────── */
+#intake-close {
+  position: sticky;
+  top: 1.25rem;
+  float: right;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 0.88rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out),
+              border-color 0.2s var(--ease-out);
+  z-index: 10;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow-sm);
+  -webkit-tap-highlight-color: transparent;
+}
+#intake-close:hover {
+  background: var(--crimson-2);
+  color: var(--crimson);
+  border-color: rgba(120,1,21,0.22);
+}
+
+/* ── Shell + header ───────────────────────────────────────── */
+.i-shell { clear: both; }
+
+.i-header {
+  padding: 2rem 0 1.5rem;
+  text-align: center;
+}
+
+.i-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 2rem;
+  text-decoration: none; color: inherit;
+}
+.i-logo-svg {
+  width: 24px; height: 24px;
+  color: var(--crimson); flex-shrink: 0;
+}
+.i-logo-word {
+  font-family: var(--font-display);
+  font-weight: 600; letter-spacing: 4px;
+  font-size: 0.88rem; color: var(--text-1);
+}
+
+.i-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 300;
+  color: var(--text-1);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.i-title em { font-style: italic; color: var(--crimson); }
+
+.i-desc { }
+.i-desc p {
+  font-size: 0.87rem;
+  color: var(--text-2);
+  line-height: 1.85;
+  margin: 0;
+}
+.i-desc p + p { margin-top: 8px; }
+.i-time {
+  font-size: 0.74rem;
+  color: var(--text-3);
+  margin-top: 14px;
+  display: block;
+}
+
+.i-rule {
+  width: 26px; height: 1px;
+  background: var(--crimson); opacity: 0.28;
+  margin: 1.5rem auto 0;
+}
+
+/* ── Step dots ────────────────────────────────────────────── */
+#i-dots {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  padding: 1.75rem 0 0.5rem;
+}
+.isdot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(120,1,21,0.18);
+  transition: all 0.35s var(--ease-out);
+}
+.isdot.active {
+  background: var(--crimson);
+  width: 22px; border-radius: 3px;
+}
+.isdot.done {
+  background: var(--crimson);
+  opacity: 0.35;
+}
+
+/* ── Fix 3: Intake form component styles ─────────────────── */
+
+/* Card */
+.i-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2rem) clamp(1.25rem, 3.5vw, 1.75rem);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  margin-bottom: 10px;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out),
+              box-shadow 0.3s var(--ease-out);
+}
+.i-card.vis { opacity: 1; transform: translateY(0); }
+.i-card:hover { box-shadow: var(--shadow-md); }
+
+/* Card header elements */
+.i-eye {
+  font-size: 0.57rem; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--crimson);
+  margin-bottom: 10px; opacity: 0.75;
+}
+.i-stitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem; font-weight: 500;
+  color: var(--text-1); margin-bottom: 5px; line-height: 1.18;
+}
+.i-sep {
+  width: 20px; height: 1px;
+  background: var(--crimson); opacity: 0.2;
+  margin: 12px 0 18px;
+}
+
+/* Question block */
+.iq { margin-bottom: 22px; }
+.iq:last-child { margin-bottom: 0; }
+.iq-lbl {
+  font-size: 0.85rem; font-weight: 500; color: var(--text-1);
+  margin-bottom: 5px;
+  display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;
+}
+.iq-req { color: var(--crimson); font-size: 0.78rem; }
+.iq-opt { font-size: 0.68rem; color: var(--text-3); font-weight: 400; margin-left: 2px; }
+.iq-hint {
+  font-size: 0.73rem; color: var(--text-3);
+  font-style: italic; margin-bottom: 8px; line-height: 1.55;
+}
+
+/* Inputs inside intake */
+#intake-panel input[type="text"],
+#intake-panel input[type="tel"],
+#intake-panel textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid rgba(23,4,10,0.10);
+  background: var(--bg);
+  color: var(--text-1);
+  border-radius: var(--radius-md);
+  font-size: 0.87rem;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  transition: border-color 0.22s, box-shadow 0.22s;
+  outline: none;
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-appearance: none;
+  appearance: none;
+}
+#intake-panel input::placeholder,
+#intake-panel textarea::placeholder { color: var(--text-3); font-style: italic; }
+#intake-panel input:focus,
+#intake-panel textarea:focus {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px var(--crimson-2);
+}
+#intake-panel input.ierr,
+#intake-panel textarea.ierr {
+  border-color: rgba(192,57,43,0.55);
+}
+#intake-panel textarea {
+  height: 108px; resize: none;
+}
+#intake-panel textarea.tall { height: 132px; }
+
+/* Choices */
+.i-choices { display: flex; flex-direction: column; gap: 7px; }
+.i-choice {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 14px;
+  border: 1.5px solid rgba(23,4,10,0.10);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+.i-choice:hover { border-color: rgba(120,1,21,0.22); background: var(--crimson-2); }
+.i-choice.isel { border-color: var(--crimson); background: var(--crimson-2); }
+.icr {
+  width: 17px; height: 17px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(120,1,21,0.22);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s var(--ease-out);
+}
+.i-choice.isel .icr { border-color: var(--crimson); background: var(--crimson); }
+.icr::after {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #fff; opacity: 0;
+  transition: opacity 0.16s;
+}
+.i-choice.isel .icr::after { opacity: 1; }
+.iclbl { font-size: 0.84rem; color: var(--text-1); line-height: 1.4; }
+
+/* File zone — HTML uses .i-fzone / .i-fzone-ico / .i-fzone-lbl / .i-fzone-sub */
+.i-fzone {
+  border: 1.5px dashed rgba(120,1,21,0.22);
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.22s var(--ease-out);
+  background: var(--bg);
+  position: relative;
+}
+.i-fzone:hover { border-color: var(--crimson); background: var(--crimson-2); }
+.i-fzone input[type="file"] {
+  position: absolute; inset: 0; opacity: 0;
+  cursor: pointer; width: 100%; height: 100%;
+}
+.i-fzone-ico { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+.i-fzone-lbl { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; }
+.i-fzone-lbl strong { color: var(--crimson); font-weight: 600; }
+.i-fzone-sub { font-size: 0.70rem; color: var(--text-3); margin-top: 5px; }
+/* .i-fname has both class and id in HTML; target both */
+.i-fname, #i-fname { display: none; font-size: 0.77rem; color: var(--crimson); margin-top: 8px; font-weight: 500; }
+
+/* Error messages */
+.iferr {
+  font-size: 0.71rem;
+  color: rgba(180,40,30,0.85);
+  margin-top: 4px;
+  display: none;
+}
+.iferr.ishow { display: block; }
+
+/* Path sections (step 6 — career / freelance / business) */
+.i-path-sec { display: none; animation: iFadeIn 0.45s var(--ease-out) forwards; }
+.i-path-sec.ion { display: block; }
+@keyframes iFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nav buttons */
+.i-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-top: 16px;
+}
+.i-nav.iend { justify-content: flex-end; }
+
+.i-back {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 10px 18px;
+  background: transparent; color: var(--text-2);
+  border: 1.5px solid rgba(23,4,10,0.12);
+  border-radius: 100px;
+  font-size: 0.78rem; font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.i-back:hover { border-color: var(--crimson); color: var(--crimson); background: var(--crimson-2); }
+.i-back:active { transform: scale(0.96); }
+
+.i-next {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 12px 26px;
+  background: var(--crimson); color: #fff;
+  border: none; border-radius: 100px;
+  font-size: 0.84rem; font-weight: 600;
+  font-family: var(--font-body); letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+  box-shadow: 0 3px 14px rgba(120,1,21,0.22);
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.i-next:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(120,1,21,0.32); }
+.i-next:active { transform: scale(0.96); }
+[data-theme="dark"] .i-next { color: var(--bg); }
+
+.i-arr { display: inline-block; transition: transform 0.18s var(--ease-out); }
+.i-next:hover .i-arr { transform: translateX(3px); }
+
+/* Submit button — HTML uses class="i-submit" */
+.i-submit {
+  width: 100%; padding: 14px;
+  background: var(--crimson); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-size: 0.88rem; font-weight: 600;
+  font-family: var(--font-body); letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.28s var(--ease-out);
+  box-shadow: 0 4px 18px rgba(120,1,21,0.22);
+  min-height: 52px; margin-top: 6px;
+  position: relative; overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.i-submit::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.11) 0%, transparent 55%);
+  opacity: 0; transition: opacity 0.28s;
+}
+.i-submit:hover { transform: translateY(-2px); box-shadow: 0 9px 28px rgba(120,1,21,0.32); }
+.i-submit:hover::before { opacity: 1; }
+.i-submit:active { transform: scale(0.98); }
+[data-theme="dark"] .i-submit { color: var(--bg); }
+
+/* Confirmation screen — HTML: class="i-conf" id="i-conf" */
+.i-conf,
+#i-conf {
+  padding: 1.25rem 0 2.5rem;
+  text-align: center;
+}
+/* HTML uses .i-conf-chk (not .i-conf-check) */
+.i-conf-chk {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--crimson-2);
+  border: 1px solid rgba(120,1,21,0.18);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  animation: iconfPop 0.55s var(--ease-spring) 0.1s both;
+}
+@keyframes iconfPop {
+  from { transform: scale(0.2); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.i-conf-h {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 300; color: var(--text-1);
+  line-height: 1.1; margin-bottom: 1rem;
+}
+.i-conf-h em { font-style: italic; color: var(--crimson); }
+.i-conf-body {
+  font-size: 0.87rem; color: var(--text-2);
+  line-height: 1.85; max-width: 360px;
+  margin: 0 auto 1.75rem;
+}
+.i-conf-body p + p { margin-top: 10px; }
+.i-conf-acts {
+  display: flex; flex-direction: column;
+  gap: 9px; max-width: 290px; margin: 0 auto;
+}
+.i-cwa {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 22px;
+  background: #25D366; color: #fff; border-radius: 100px;
+  text-decoration: none; font-size: 0.84rem; font-weight: 600;
+  font-family: var(--font-body);
+  transition: all 0.25s var(--ease-out);
+  box-shadow: 0 3px 14px rgba(37,211,102,0.2);
+}
+.i-cwa:hover { transform: translateY(-2px); box-shadow: 0 7px 22px rgba(37,211,102,0.34); }
+.i-ctg {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px;
+  background: transparent; color: var(--text-2);
+  border: 1.5px solid rgba(23,4,10,0.12); border-radius: 100px;
+  text-decoration: none; font-size: 0.82rem; font-weight: 500;
+  font-family: var(--font-body);
+  transition: all 0.25s var(--ease-out);
+}
+.i-ctg:hover { border-color: #229ED9; color: #229ED9; background: rgba(34,158,217,0.05); }
+
+/* Footer note inside panel */
+.i-foot {
+  text-align: center;
+  padding: 2rem 0 0.5rem;
+  font-size: 0.70rem;
+  color: var(--text-3);
+  line-height: 1.8;
+}
+
+/* ── Intake responsive ────────────────────────────────────── */
+@media (max-width: 520px) {
+  #intake-panel { padding: 1rem 1rem 4rem; }
+  .i-card { padding: 1.25rem 1rem; border-radius: 18px; }
+  .i-header { padding: 1.5rem 0 1rem; }
+  .i-nav { flex-direction: column-reverse; }
+  .i-back, .i-next { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .i-card { transition: none; opacity: 1; transform: none; }
+  .i-conf-check { animation: none; }
+}
+
+/* ── END R6 ─────────────────────────────────────────────── */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
