@@ -6627,6 +6627,258 @@ body.aspira-composing #fnav .fn-cta {
 
 /* ═══ END PHASE 10 ════════════════════════════════════════════════ */
 
+/* ═══ PHASE 11 — STRUCTURAL INTEGRITY SYSTEM ══════════════════════
+   Senior frontend architect pass.
+   Preserve every visual decision. Stabilize the structure beneath it.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── P11.1  NAV TRANSITION — REPLACE transition:all ─────────────────
+   #fnav { transition: all } recalculates every CSS property on every
+   scroll tick, every theme change, and every compact-mode toggle.
+   On high-frequency scroll this generates layout thrashing.
+   Replace with the explicit set of properties that actually animate:
+   background and border-color (theme toggle), box-shadow (compact),
+   padding (compact), opacity (future states). */
+#fnav {
+  transition:
+    background   0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    box-shadow   0.4s var(--ease-out),
+    padding      0.4s var(--ease-out),
+    opacity      0.3s var(--ease-out);
+}
+
+/* ── P11.2  SECTION PADDING — NON-DESTRUCTIVE BASE ──────────────────
+   The base section rule at line 558 uses shorthand:
+     section { padding: clamp(5.5rem, 10vw, 9rem) 0; }
+   Shorthand resets padding-left and padding-right to 0.
+   Subsequent phases restore horizontal padding via individual
+   properties, but any rule that uses shorthand AGAIN resets them.
+   Replace the effective desktop values with non-destructive
+   individual properties. Vertical rhythm preserved exactly.
+   Left/right: clamp(1.5rem, 5vw, 3rem) = same as R4 baseline. */
+section {
+  padding-top:    clamp(5.5rem, 10vw, 9rem);
+  padding-bottom: clamp(5.5rem, 10vw, 9rem);
+  padding-left:   clamp(1.5rem, 5vw, 3rem);
+  padding-right:  clamp(1.5rem, 5vw, 3rem);
+}
+
+/* Manifesto exception: Phase 5 compression rhythm preserved */
+#manifesto {
+  padding-top:    clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* ── P11.3  TABLET — AUTHORITATIVE SECTION SPACING ─────────────────
+   Between 768px and 860px multiple rules compete.
+   This canonical block settles the conflict for that range. */
+@media (min-width: 768px) and (max-width: 860px) {
+  section {
+    padding-top:    clamp(4rem, 8vw, 6rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+    padding-left:   clamp(1.25rem, 4vw, 2rem);
+    padding-right:  clamp(1.25rem, 4vw, 2rem);
+  }
+  #manifesto {
+    padding-top:    clamp(2.75rem, 6vw, 4.5rem);
+    padding-bottom: clamp(2.75rem, 6vw, 4.5rem);
+  }
+}
+
+/* ── P11.4  MOBILE — CANONICAL FINAL VALUES ─────────────────────────
+   P5.1 established the authoritative mobile section rhythm.
+   P9, R9, R8 each added competing mobile section declarations.
+   The last rule in cascade wins — that is currently P5.1.
+   Re-declare P5.1 values here (after all phases) to make
+   the canonical status architecturally explicit. Any future
+   phase that adds competing rules will be neutralized by this. */
+@media (max-width: 767px) {
+  section {
+    padding-top:    clamp(4rem, 11vw, 6rem);
+    padding-bottom: clamp(4rem, 11vw, 6rem);
+    padding-left:   clamp(1.375rem, 5.5vw, 2rem);
+    padding-right:  clamp(1.375rem, 5.5vw, 2rem);
+    width:          100%;
+    box-sizing:     border-box;
+  }
+
+  /* Hero: full-screen with authority */
+  #hero {
+    padding-top:    clamp(5.5rem, 14svh, 7.5rem);
+    padding-bottom: clamp(5.5rem, 12svh, 8rem);
+    padding-left:   clamp(1.375rem, 5.5vw, 2rem);
+    padding-right:  clamp(1.375rem, 5.5vw, 2rem);
+    min-height:     100svh;
+  }
+
+  /* Manifesto: compressed band */
+  #manifesto {
+    padding-top:    clamp(3.75rem, 10vw, 5.5rem);
+    padding-bottom: clamp(3.75rem, 10vw, 5.5rem);
+  }
+
+  /* FAQ: dock clearance on mobile */
+  #faq {
+    padding-bottom: calc(clamp(4rem, 11vw, 6rem) + 5.5rem);
+  }
+}
+
+/* Micro-viewport — tightest gutters */
+@media (max-width: 380px) {
+  section {
+    padding-left:  0.875rem;
+    padding-right: 0.875rem;
+  }
+}
+
+/* ── P11.5  HOW-VISUAL NEGATIVE MARGIN ──────────────────────────────
+   .how-visual { margin: -10px auto 28px } creates 10px of unexpected
+   upward pull on the step SVG, collapsing space between the heading
+   and the visual. Remove the negative component. */
+.how-visual {
+  margin-top:    0;
+  margin-bottom: 28px;
+}
+
+/* ── P11.6  HERO INNER — NEUTRALIZE LEGACY DOUBLE-HEIGHT ───────────
+   .hero-inner base rule (Group B, line ~1589) declares:
+     min-height: 100svh; padding: 120px 28px 100px;
+   Combined with #hero { min-height: 100svh }, this doubled the
+   viewport-height requirement. R5 neutralizes it with padding:0;
+   min-height:unset. Reinforce here at higher specificity. */
+#hero .hero-inner {
+  padding:    0;
+  min-height: auto;
+}
+
+/* ── P11.7  MOTION LAYER ISOLATION ──────────────────────────────────
+   Decorative absolute layers (hero visual, manifesto watermark,
+   begin wave) must never be flex items and must never receive pointer
+   events. Their z-index must stay at 0 — below the z-index:1+ that
+   interactive content establishes. Reaffirm all three properties. */
+.hero-visual,
+.hero-ambient,
+.manifesto-visual,
+.begin-visual {
+  pointer-events: none;
+  z-index:        0;
+  flex-shrink:    0; /* prevents flex from collapsing decorative layers */
+}
+
+/* Body-level orb elements: reinforce pointer-event isolation at all
+   viewport widths. These are positioned absolute relative to the
+   initial containing block — they have no layout footprint.
+   Ensure they cannot intercept clicks on desktop. */
+body > .orb {
+  pointer-events: none;
+}
+
+/* ── P11.8  MAIN CONTAINMENT ────────────────────────────────────────
+   main { overflow-x: hidden } was only set inside @media (max-width:
+   767px). On desktop, any element that extends beyond the page width
+   can create horizontal scroll. Apply containment universally.
+   Using 'clip' (not 'hidden') preserves position:fixed children. */
+main {
+  display:    block;
+  width:      100%;
+  overflow-x: clip;
+}
+
+/* ── P11.9  PARTICLE CANVAS — LAYOUT INDEPENDENCE ──────────────────
+   R9 set position:fixed on the canvas. Reinforce here with explicit
+   dimensions to ensure the canvas never creates document height
+   or width even if JS hasn't initialized window.innerWidth/Height. */
+canvas#particle-canvas {
+  position:       fixed;
+  top:            0;
+  left:           0;
+  width:          100vw;
+  height:         100vh;
+  pointer-events: none;
+  z-index:        0;
+}
+
+/* ── P11.10  SCROLL REVEAL — WILL-CHANGE LIFECYCLE ─────────────────
+   .reveal elements hold { will-change: opacity, transform } during
+   the pre-animation phase. After the animation fires (class .vis or
+   .in-view added), the GPU layer hint should be released.
+   Keeping will-change active permanently wastes compositor memory
+   proportional to the number of reveal elements on the page. */
+.reveal {
+  will-change: opacity, transform;
+}
+.reveal.vis,
+.reveal.in-view {
+  will-change: auto;
+}
+
+/* ── P11.11  REDUCED MOTION — REVEAL VISIBILITY GUARD ──────────────
+   Without this rule, every .reveal element starts at opacity:0 and
+   transform:translateY(22px). Users with prefers-reduced-motion
+   who have JS disabled or slow JS will see a blank page.
+   Make all reveals immediately visible when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity:    1;
+    transform:  none;
+    transition: none;
+    will-change: auto;
+  }
+}
+
+/* ── P11.12  SCROLL MARGIN — SINGLE SOURCE OF TRUTH ────────────────
+   P4.5 set section[id] { scroll-margin-top: 92px }.
+   Reaffirm here as canonical: nav top(20px) + height(~56px) +
+   gap(16px) = 92px. Ensures anchor-scroll lands in the right place
+   at all viewport widths. */
+section[id] {
+  scroll-margin-top: 92px;
+}
+
+/* ── P11.13  OVERFLOW HARDENING — MOBILE ───────────────────────────
+   Belt-and-suspenders: ensure no child element creates horizontal
+   overflow at any mobile viewport. Clip (not hidden) preserves
+   position:fixed nav and modals. */
+@media (max-width: 767px) {
+  body {
+    overflow-x: clip;
+  }
+  section {
+    overflow-x: clip;
+  }
+}
+
+/* ── P11.14  SECTION CONTENT Z-INDEX INTEGRITY ──────────────────────
+   Phase 7 pseudo-element bridges (::before/::after) use z-index:0.
+   Sections with transform:translateZ(0) (set in R3 line ~3408 for
+   mobile compositing) create stacking contexts. Within those contexts,
+   z-index:0 pseudo-elements stay behind document-order content.
+   Reinforce: all section direct content children sit above
+   decorative layers without needing explicit z-index. */
+section > *:not(.hero-visual):not(.hero-ambient):not(.manifesto-visual):not(.begin-visual):not(.hero-bg-img) {
+  position: relative;
+  z-index:  1;
+}
+
+/* ── P11.15  PERFORMANCE — DISABLE GPU HINTS ON STATIC SECTIONS ─────
+   Sections that have been scrolled past and settled don't need
+   will-change or GPU promotion. The R3 rule sets will-change:auto
+   on #hero and .hero-ambient — reaffirm this for section backgrounds
+   that use background-image (Phase 7 ambient glows). These are
+   paint-layer composited and don't need compositor promotion. */
+#manifesto,
+#value,
+#clarity-pathways,
+#payment-access,
+#biz-clarity,
+#about,
+#faq {
+  will-change: auto;
+}
+
+/* ═══ END PHASE 11 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
