@@ -5052,6 +5052,237 @@ select:focus,
 
 /* ═══ END PHASE 2 ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 3 — PREMIUM MOBILE TACTILITY SYSTEM
+   Touch feedback · Ergonomics · Motion polish · Native feel
+   All rules scoped to ≤767px or (hover:none, pointer:coarse)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── P3.1  TAP HIGHLIGHT ELIMINATION ────────────────────────── */
+/* Browser default: rgba(51,181,229,0.4) cyan flash on every tap.*/
+/* Kills premium feel instantly. Remove globally on mobile;      */
+/* replaced by our custom :active states below.                  */
+@media (max-width: 767px) {
+  *, *::before, *::after {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ── P3.2  TOUCH-ACTION: MANIPULATION ───────────────────────── */
+/* Eliminates the 300ms tap delay on specific interactive        */
+/* elements. Scoped to avoid disrupting scroll containers.       */
+@media (max-width: 767px) {
+  button, a,
+  .mob-tab, .faq-q, .val-card, .cp-card,
+  .biz-type-card, .cat-chip, .mchip,
+  .begin-intake-card, .btn-p, .btn-g,
+  .fn-cta, .cp-btn-filled, .cp-btn-ghost {
+    touch-action: manipulation;
+  }
+}
+
+/* ── P3.3  PREMIUM ACTIVE STATES — tactile press feedback ────── */
+/* Custom active feedback replaces the eliminated system flash.  */
+/* Timings are asymmetric: fast in (press), slow out (release).  */
+@media (max-width: 767px) {
+
+  /* Primary CTA — firm downward press */
+  .btn-p:active {
+    transform: scale(0.955) translateY(1px);
+    opacity: 0.85;
+    transition: transform 0.07s ease, opacity 0.07s ease;
+  }
+  /* Ghost */
+  .btn-g:active {
+    transform: scale(0.965);
+    opacity: 0.80;
+    transition: transform 0.08s ease, opacity 0.08s ease;
+  }
+  /* Nav CTA */
+  .fn-cta:active {
+    transform: scale(0.96);
+    opacity: 0.88;
+    transition: transform 0.07s ease;
+  }
+  /* Pathway filled */
+  .cp-btn-filled:active, .cp-btn-ghost:active {
+    transform: scale(0.96);
+    opacity: 0.88;
+    transition: transform 0.08s ease;
+  }
+  /* Cards — premium squeeze feel */
+  .val-card:active {
+    transform: scale(0.984);
+    transition: transform 0.09s ease;
+  }
+  .cp-card:active {
+    transform: scale(0.98);
+    transition: transform 0.09s ease;
+  }
+  .biz-type-card:active {
+    transform: scale(0.977);
+    transition: transform 0.09s ease;
+  }
+  .begin-intake-card:active {
+    transform: scale(0.98);
+    transition: transform 0.09s ease;
+  }
+  /* FAQ row */
+  .faq-q:active {
+    background: var(--crimson-3);
+    transition: background 0.05s ease;
+  }
+  /* Chips */
+  .cat-chip:active, .mchip:active {
+    transform: scale(0.93);
+    background: var(--crimson-2);
+    transition: transform 0.07s ease, background 0.07s ease;
+  }
+  /* Mobile nav tab */
+  .mob-tab:active .tab-icon {
+    transform: scale(0.88);
+    transition: transform 0.07s ease;
+  }
+}
+
+/* ── P3.4  USER-SELECT: NONE on interactive surfaces ─────────── */
+@media (max-width: 767px) {
+  .mob-tab, .faq-q, .val-card, .cp-card,
+  .biz-type-card, .btn-p, .btn-g, .fn-cta,
+  .cat-chip, .mchip, .cp-btn-filled, .cp-btn-ghost {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* ── P3.5  SECTION SPACING RHYTHM ───────────────────────────── */
+/* #value and #manifesto have ID-specific padding overrides from */
+/* the R9 stabilisation pass (2.5rem/2.75rem). Restore them to   */
+/* match the mobile section rhythm (clamp 3.5rem → 5rem).        */
+@media (max-width: 767px) {
+  #value {
+    padding-top:    clamp(3.5rem, 10vw, 5rem);
+    padding-bottom: clamp(3.5rem, 10vw, 5rem);
+  }
+  #manifesto {
+    padding-top:    clamp(3.25rem, 9vw, 4.5rem);
+    padding-bottom: clamp(3.25rem, 9vw, 4.5rem);
+  }
+  /* Last section — extra clearance above fixed mobile nav (82px) */
+  #faq {
+    padding-bottom: calc(clamp(3.5rem, 10vw, 5rem) + 5.25rem);
+  }
+  /* Val card — more generous mobile padding */
+  .val-card {
+    padding: clamp(1.25rem, 5vw, 1.625rem);
+  }
+}
+
+/* ── P3.6  MOBILE NAV VISUAL REFINEMENT ─────────────────────── */
+/* Stronger blur, more defined separator, cleaner shadow.        */
+@media (max-width: 767px) {
+  #mob-nav, .mob-nav {
+    backdrop-filter:         blur(32px) saturate(2.2);
+    -webkit-backdrop-filter: blur(32px) saturate(2.2);
+    box-shadow:
+      0 -1px 0 var(--border),
+      0 -6px 32px rgba(23,4,10,0.07);
+  }
+  /* Active tab pip indicator */
+  .mob-tab {
+    position: relative;
+  }
+  .mob-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 50%;
+    transform: translateX(-50%);
+    width: 18px; height: 2px;
+    border-radius: 2px;
+    background: var(--crimson);
+    animation: mobPipIn 0.3s var(--ease-spring) both;
+  }
+  @keyframes mobPipIn {
+    from { width: 0; opacity: 0; }
+    to   { width: 18px; opacity: 1; }
+  }
+}
+
+/* ── P3.7  MOBILE TYPOGRAPHY COMFORT ────────────────────────── */
+@media (max-width: 767px) {
+  /* Slightly looser line-height for mobile reading              */
+  p { line-height: 1.82; }
+  .s-sub, .lede {
+    line-height: 1.82;
+  }
+  /* How-step separator rhythm */
+  .how-step {
+    padding-top:    1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-2);
+  }
+  .how-step:last-child { border-bottom: none; }
+}
+
+/* ── P3.8  PANEL / OVERLAY SCROLL SMOOTHNESS ────────────────── */
+/* iOS momentum scroll inside scrollable overlay panels.         */
+@media (max-width: 767px) {
+  #intake-panel,
+  #your-space-panel,
+  .ai-messages,
+  .modal-panel, .modal-inner {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ── P3.9  HOVER STATE SUPPRESSION ON TOUCH ─────────────────── */
+/* On touch devices :hover persists after tap ("sticky hover"),  */
+/* causing cards to stay elevated and colors to remain shifted.  */
+/* Suppress all hover transforms on coarse-pointer devices.      */
+@media (hover: none) and (pointer: coarse) {
+
+  .val-card:hover,
+  .cp-card:hover,
+  .biz-type-card:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-md);
+    border-color: var(--border);
+  }
+  .val-card:hover .val-icon {
+    transform: none;
+    box-shadow: none;
+    background: var(--crimson-2);
+  }
+  .val-card:hover::before,
+  .cp-card:hover::before,
+  .biz-type-card:hover::before { opacity: 0; }
+
+  .fn-links a:hover {
+    transform: none;
+    background: none;
+    color: var(--text-2);
+  }
+  .faq-item:hover:not(.open) {
+    transform: none;
+    border-color: var(--border);
+  }
+  /* Prevent button shimmer from triggering on touch */
+  .btn-p:hover::after,
+  .fn-cta:hover::after,
+  .cp-btn-filled:hover::after { left: -100%; }
+}
+
+/* ── P3.10  REDUCED MOTION GUARD ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mob-tab.active::after { animation: none; }
+  .btn-p:active, .btn-g:active, .fn-cta:active,
+  .val-card:active, .cp-card:active,
+  .biz-type-card:active, .cat-chip:active { transition-duration: 0.01s; }
+}
+
+/* ═══ END PHASE 3 ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
