@@ -6510,6 +6510,123 @@ body::after {
 
 /* ═══ END PHASE 9 ════════════════════════════════════════════════ */
 
+/* ═══ PHASE 10 — PRECISION AUDIT SYSTEM ══════════════════════════ */
+
+/* P10.1 MANIFESTO QUOTE — CRITICAL COLOR FIX
+   Previous: color: rgba(255,255,255,0.92) — white on cream bg-2.
+   Text was invisible in light mode. Semantic token adapts to theme.
+   Also: letter-spacing was 0.2px (absolute, not em-relative).
+   Line-height 1.42 too tight for italic display prose at this size. */
+.mfst-q {
+  color: var(--text-1);
+  letter-spacing: -0.012em;
+  line-height: 1.52;
+}
+[data-theme="dark"] .mfst-q { color: var(--text-1); }
+
+/* P10.2 MANIFESTO SHIMMER — JS/CSS ALIGNMENT
+   JS (line ~9387) adds .shimmer-on directly to .mfst-q.
+   Existing CSS: .manifesto-text .shimmer-on — targets children only.
+   .mfst-q is a sibling of .manifesto-text, not a child — shimmer
+   was silently never applied. Add direct selector. */
+.mfst-q.shimmer-on {
+  background: linear-gradient(90deg, var(--text-1) 0%, var(--crimson) 40%, var(--text-1) 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mfst-q.shimmer-on {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+  }
+}
+
+/* P10.3 COMPOSING STATE — SPECIFICITY FIX
+   P9.4: body.aspira-composing .fn-links a = [0,2,1]
+   P9.1: .fn-links:has(a.active) a:not(.active):not(:hover) = [0,3,0]
+   P9.1 was winning — nav links failed to dim during composing.
+   Adding #fnav raises specificity to [0,3,1]. Beats P9.1. */
+body.aspira-composing #fnav .fn-links a,
+body.aspira-composing #fnav .fn-cta {
+  opacity: 0.44;
+  transition:
+    color      0.50s var(--aspira-settle),
+    background 0.50s var(--aspira-settle),
+    opacity    1.0s  var(--aspira-settle),
+    padding    0.26s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.aspira-composing #fnav .fn-links a,
+  body.aspira-composing #fnav .fn-cta { opacity: 1; transition: none; }
+}
+
+/* P10.4 BUTTON SYSTEM — TRANSITION PRECISION
+   Generic .btn { transition: all } recalculates every CSS property on
+   every interaction frame, including inherited values that never change.
+   Replace with explicit properties that actually animate. */
+.btn, .cta, .btn-primary, .btn-outline, .btn-ghost, .btn-sm,
+.primary-btn, .secondary-btn, .ghost-btn {
+  transition:
+    background   0.25s var(--ease-out),
+    color        0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    box-shadow   0.25s var(--ease-out),
+    transform    0.25s var(--ease-out),
+    opacity      0.25s var(--ease-out);
+}
+
+/* P10.5 HERO STAT — HOVER SCALE REDUCTION
+   scale(1.2) translateY(-4px): too aggressive for ambient statistics.
+   Stats are informational context, not interactive affordances.
+   Reduce to scale(1.10) translateY(-2px) — present but composed. */
+.h-stat:hover .h-stat-n {
+  transform: scale(1.10) translateY(-2px);
+}
+
+/* P10.6 HOW STEP NUMBER — HOVER ANIMATION REDUCTION
+   scale(1.12) rotate(-5deg): exuberant, detracts from the step narrative.
+   Reduce: scale(1.06) rotate(-3deg) — acknowledgement, not spectacle. */
+.how-step:hover .how-num {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+/* P10.7 HOW DESCRIPTION — FONT SIZE CORRECTION
+   .how-desc { font-size: 0.8rem } falls below Phase 8's body copy system.
+   Phase 8 established 0.86–0.93rem as the card body range.
+   Uplift to 0.86rem. */
+.how-desc {
+  font-size: 0.86rem;
+}
+
+/* P10.8 STAT LABEL — RELATIVE TRACKING
+   .h-stat-l { letter-spacing: 1.2px } — absolute px at 0.6rem font-size
+   is disproportionate and doesn't scale with viewport.
+   Convert: 0.14em matches Phase 8's .stat-label token. */
+.h-stat-l {
+  letter-spacing: 0.14em;
+}
+
+/* P10.9 PARALLAX ORBS — TIMING REFINEMENT
+   .orb { transition: transform 0.12s linear } — abrupt, mechanical.
+   0.12s linear causes visible jitter during mouse move parallax.
+   0.18s var(--ease-out): smoother lag, more composed drift. */
+.orb {
+  transition: transform 0.18s var(--ease-out);
+}
+
+/* P10.10 MOBILE CALIBRATION */
+@media (max-width: 767px) {
+  .how-desc { font-size: 0.88rem; }
+  .h-stat:hover .h-stat-n { transform: none; } /* touch: no hover feedback needed */
+  .how-step:hover .how-num { transform: none; }
+}
+
+/* ═══ END PHASE 10 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
