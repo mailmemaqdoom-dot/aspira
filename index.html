@@ -6415,6 +6415,101 @@ label { letter-spacing: 0.07em; }
 
 /* ═══ END PHASE 8 ════════════════════════════════════════════════ */
 
+/* ═══ PHASE 9 — MEMORY IMPRINT SYSTEM ════════════════════════════
+   Subconscious emotional memory through interaction behavior.
+   "Clarity emerging from complexity" — felt, never consciously seen.
+   Users will not notice these effects. They will feel them.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── P9.1 NAV SECTION CONSCIOUSNESS ─────────────────────────────
+   The existing syncNav() already assigns .active to the current
+   section's nav link. Phase 9 builds on this: non-active links
+   softly recede. The user's position gains quiet presence.
+   "The interface organises itself around your attention."
+   Wrapped in hover: hover — touch devices see no dimming.       */
+.fn-links a {
+  transition:
+    color      0.50s var(--aspira-settle),
+    background 0.50s var(--aspira-settle),
+    opacity    0.50s var(--aspira-settle),
+    padding    0.26s var(--ease-out);
+}
+@media (hover: hover) {
+  .fn-links:has(a.active) a:not(.active):not(:hover) {
+    opacity: 0.60;
+  }
+  [data-theme="dark"] .fn-links:has(a.active) a:not(.active):not(:hover) {
+    opacity: 0.52;
+  }
+}
+
+/* ── P9.2 CTA MICRO-VITALITY ─────────────────────────────────────
+   The hero CTA breathes once — exactly once — 3.5s after page
+   load. A single barely-visible ring of light expands and fades.
+   The button never seeks attention. It simply proves it is alive. */
+@keyframes aspira-cta-breath {
+  0%   { box-shadow: 0 4px 20px rgba(120,1,21,0.22), 0 0 0 0px rgba(120,1,21,0.00); }
+  38%  { box-shadow: 0 6px 28px rgba(120,1,21,0.32), 0 0 0 7px  rgba(120,1,21,0.06); }
+  100% { box-shadow: 0 4px 20px rgba(120,1,21,0.22), 0 0 0 0px rgba(120,1,21,0.00); }
+}
+#hero .btn-p:not(:hover):not(:active) {
+  animation: aspira-cta-breath 3.2s var(--aspira-settle) 3.5s 1 both;
+}
+
+/* ── P9.3 FAQ OPEN ITEM MICRO-PRESENCE ──────────────────────────
+   The open FAQ item is 0.4% larger than its closed state.
+   This number is invisible to the eye — imperceptible as geometry.
+   Felt as the answer being elevated and truly present.
+   Phase 6 already has transform in .faq-item transition (0.28s). */
+.faq-item.open {
+  transform: scale(1.004);
+}
+
+/* ── P9.4 INPUT FOCUS — WORLD YIELDS ────────────────────────────
+   When the user begins composing in the analysis input, the nav
+   softly recedes. The interface steps back from its own presence.
+   "Noise softens. Space opens. The thought has room to emerge."
+   Slow in (1.0s): intentional. Fast out (0.50s): immediate return. */
+body.aspira-composing .fn-links a,
+body.aspira-composing .fn-cta {
+  opacity: 0.44;
+  transition:
+    color      0.50s var(--aspira-settle),
+    background 0.50s var(--aspira-settle),
+    opacity    1.0s  var(--aspira-settle),
+    padding    0.26s var(--ease-out);
+}
+
+/* ── P9.5 SCROLL-DEPTH NOISE REDUCTION ──────────────────────────
+   The CSS grain texture is controlled by --noise-depth (set by JS).
+   Opacity travels: 0.028 at page top → 0.018 at page bottom.
+   Environmental noise literally reduces as users descend into
+   ASPIRA's content. "The environment becomes calmer. Clearer."
+   No CSS transition — the value follows scroll position directly.
+   Fallback 0.028 preserves existing grain when JS hasn't run.   */
+body::after {
+  opacity: var(--noise-depth, 0.028);
+}
+
+/* ── P9.6 RESTRAINT + PERFORMANCE GUARDS ────────────────────────
+   Every Phase 9 behavior is disabled for prefers-reduced-motion.
+   The interface remains emotionally sophisticated with no motion. */
+@media (prefers-reduced-motion: reduce) {
+  #hero .btn-p { animation: none; }
+  .faq-item.open { transform: none; }
+  body::after { opacity: 0.028 !important; }
+  body.aspira-composing .fn-links a,
+  body.aspira-composing .fn-cta { opacity: 1; transition: none; }
+  .fn-links a {
+    transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out);
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .fn-links:has(a.active) a:not(.active):not(:hover) { opacity: 1; }
+}
+
+/* ═══ END PHASE 9 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -10446,6 +10541,42 @@ document.body.addEventListener('touchmove',function(e){
   window.addEventListener('scroll', function() {
     document.body.classList.add('aspira-resolved');
   }, { passive: true, once: true });
+})();
+
+/* ── PHASE 9 JS ─────────────────────────────────────────────── */
+
+/* 9. Input focus environmental response.                         */
+/*    .input-box focus → body.aspira-composing → nav softens.    */
+/*    blur → class removed → nav restores at 0.50s settle.       */
+/*    Only targets the main analysis input (.input-box children). */
+(function(){
+  function compose() { document.body.classList.add('aspira-composing'); }
+  function release() { document.body.classList.remove('aspira-composing'); }
+  document.querySelectorAll('.input-box input, .input-box textarea').forEach(function(el) {
+    el.addEventListener('focus', compose);
+    el.addEventListener('blur',  release);
+  });
+})();
+
+/* 10. Scroll-depth noise reduction.                              */
+/*     CSS grain texture: opacity 0.028 (top) → 0.018 (bottom). */
+/*     Sets --noise-depth on body via rAF-throttled scroll.      */
+/*     "Environmental noise reduces intelligently as you read."  */
+/*     Skipped entirely for prefers-reduced-motion.              */
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tick = false;
+  function updateNoise() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max > 0) {
+      var progress = Math.min(window.scrollY / max, 1);
+      document.body.style.setProperty('--noise-depth', (0.028 - progress * 0.010).toFixed(4));
+    }
+    tick = false;
+  }
+  window.addEventListener('scroll', function() {
+    if (!tick) { requestAnimationFrame(updateNoise); tick = true; }
+  }, { passive: true });
 })();
 
 /* ── PHASE 4 JS ─────────────────────────────────────────────── */
