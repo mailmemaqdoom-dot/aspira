@@ -5283,6 +5283,124 @@ select:focus,
 
 /* ═══ END PHASE 3 ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 4 — FINAL ART DIRECTION & SENSORY REFINEMENT LAYER
+   Cohesion · Typography · Atmosphere · Motion Unity · Silence
+   Restraint over addition — zero layout changes.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── P4.1  TYPOGRAPHY EMOTIONAL REFINEMENT ───────────────────── */
+/* Cormorant Garamond benefits from explicit kern / liga / calt.  */
+/* These OpenType features are "on" in modern fonts but require   */
+/* explicit activation in some browsers / rendering stacks.       */
+/* text-rendering: optimizeLegibility enables sub-pixel kerning   */
+/* pairs and ligatures — most visible on display-weight headings. */
+.h-wordmark,
+.s-title,
+.val-title,
+.cp-card-title {
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+.s-eye,
+.hero-eyebrow {
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+/* Antialiased body copy — crisper, lighter strokes on retina.    */
+/* The DM Sans weight distribution shifts slightly thinner,       */
+/* which reads as more premium on high-DPI screens.               */
+.s-sub, .lede, .val-body, .cp-card-body, .hero-sub {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── P4.2  SECTION TONAL PROGRESSION ────────────────────────── */
+/* Transparent sections all inherit --bg, creating a monotone     */
+/* band through the mid-page. background-color sub-property (not  */
+/* shorthand) preserves Phase 1 background-image ambient glows.   */
+#understand     { background-color: var(--bg-2); }
+#reflection     { background-color: var(--bg-2); }
+#connect        { background-color: var(--bg-2); }
+#payment-access { background-color: var(--bg-3); }
+
+/* #value — deepen cream glow slightly for richer atmosphere.     */
+/* Overrides P1 value (0.09 opacity → 0.13, slightly larger).     */
+#value {
+  background-image: radial-gradient(
+    ellipse 75% 58% at 84% 14%,
+    rgba(255,242,189,0.13) 0%,
+    transparent 62%
+  );
+}
+
+/* ── P4.3  IMAGE ATMOSPHERIC INTEGRATION ────────────────────── */
+/* Ground images into the page tone with a subtle base vignette.  */
+/* The gradient fades in only in the lower 48% of the image —     */
+/* completely invisible on screen but felt as "belonging."        */
+/* Clipped by .s-img { overflow: hidden }. Zero layout impact.    */
+.s-img { position: relative; }
+.s-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    transparent           0%,
+    transparent          52%,
+    rgba(23,4,10,0.028)  80%,
+    rgba(23,4,10,0.055) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── P4.4  MOTION UNIFICATION ────────────────────────────────── */
+/* val-card: 0.38s → 0.30s  (was sluggish vs cp-card's 0.30s).   */
+/* biz-type-card: transition:all 0.26s → explicit props 0.30s.   */
+/* All hover-capable cards now share the same temporal signature. */
+/* .val-icon spring (0.40s var(--ease-spring)) stays untouched.   */
+.val-card {
+  transition:
+    transform    0.30s var(--ease-out),
+    box-shadow   0.30s var(--ease-out),
+    border-color 0.30s var(--ease-out);
+}
+.biz-type-card {
+  transition:
+    transform    0.30s var(--ease-out),
+    box-shadow   0.30s var(--ease-out),
+    border-color 0.30s var(--ease-out),
+    background   0.30s var(--ease-out);
+}
+
+/* ── P4.5  PREMIUM SILENCE ───────────────────────────────────── */
+/* Anchor scroll lands below fixed nav pill (height ~68px + gap). */
+section[id] { scroll-margin-top: 92px; }
+
+/* Refined underline offset for any in-body text links.           */
+a { text-underline-offset: 0.2em; }
+
+/* ── P4.6  WILL-CHANGE CLEANUP ───────────────────────────────── */
+/* s-img bloom is fully settled once in-view class applies.       */
+/* Removing the GPU hint frees compositor memory for interactions.*/
+.s-img.reveal.in-view img { will-change: auto; }
+
+/* Orbs are static on mobile — release compositor promotion.      */
+@media (max-width: 767px) {
+  .orb { will-change: auto; }
+}
+
+/* ── P4.7  REDUCED MOTION GUARD ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .s-img::after { opacity: 0; }
+}
+
+/* ═══ END PHASE 4 ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -9262,6 +9380,22 @@ document.body.addEventListener('touchmove',function(e){
   }, { passive: true });
 
   update();
+})();
+
+/* ── PHASE 4 JS ─────────────────────────────────────────────── */
+
+/* 5. will-change cleanup — after .s-img img bloom transition     */
+/*    settles, remove the GPU compositor hint to free resources.  */
+/*    transitionend fires exactly once per image (once:true).     */
+(function(){
+  document.querySelectorAll('.s-img img').forEach(function(img) {
+    img.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName === 'transform') {
+        img.style.willChange = 'auto';
+        img.removeEventListener('transitionend', handler);
+      }
+    });
+  });
 })();
 </script>
 </body>
