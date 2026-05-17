@@ -6000,6 +6000,156 @@ body.aspira-resolved .h-wordmark {
 
 /* ═══ END PHASE 6 ════════════════════════════════════════════ */
 
+/* ═══ PHASE 7 — CINEMATIC ENVIRONMENTAL SYSTEM ═══════════════════
+   Transform from 'beautiful connected sections' into one continuous
+   emotionally intelligent environment. Editorial. Immersive. Calm.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── P7.1 PAGE ATMOSPHERIC CANVAS ────────────────────────────────
+   A barely-perceptible crimson luminance at the page crown —
+   the emotional north-star that threads the entire experience.   */
+body {
+  background-image:
+    radial-gradient(ellipse 110% 58% at 50% 0%,
+      rgba(120,1,21,0.018) 0%, transparent 52%);
+}
+[data-theme="dark"] body {
+  background-image:
+    radial-gradient(ellipse 110% 58% at 50% 0%,
+      rgba(196,26,51,0.032) 0%, transparent 52%);
+}
+
+/* ── P7.2 POSITION SCAFFOLD ──────────────────────────────────────
+   Sections requiring entry / exit bridge pseudo-elements.        */
+#manifesto,
+#perception-mirror,
+#clarity-pathways,
+#biz-clarity,
+#about,
+#faq { position: relative; }
+
+/* ── P7.3 ENTRY BRIDGES ──────────────────────────────────────────
+   Each ::before bleeds the previous section's tone in from the
+   top, dissolving hard seams into imperceptible tonal shifts.
+   CSS variables auto-adapt: dark-mode --bg values apply here.   */
+
+/* #hero / #value (bg) → #manifesto (bg-2) */
+#manifesto::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 110px;
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* #begin (bg-2) → #perception-mirror (bg) */
+#perception-mirror::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 88px;
+  background: linear-gradient(to bottom, var(--bg-2) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* #perception-mirror (bg) → #clarity-pathways (bg-3)
+   The widest tonal gap on the page — a two-step jump in warmth.  */
+#clarity-pathways::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 140px;
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* #payment-access (bg-3) → #biz-clarity (bg-2) */
+#biz-clarity::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 96px;
+  background: linear-gradient(to bottom, var(--bg-3) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* #biz-clarity (bg-2) → #about (bg) */
+#about::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 96px;
+  background: linear-gradient(to bottom, var(--bg-2) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── P7.4 EXIT THREADS ────────────────────────────────────────────
+   Sections whose floor meets a darker following section breathe
+   the next tone upward through a bottom exit gradient.          */
+
+/* #about (bg) → #faq (bg-2) */
+#about::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 96px;
+  background: linear-gradient(to top, var(--bg-2) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* #faq (bg-2) → footer (bg-3) */
+#faq::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 88px;
+  background: linear-gradient(to top, var(--bg-3) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── P7.5 ENHANCED AMBIENT DEPTH ─────────────────────────────────
+   Strengthen emotional luminance in the page's key narrative
+   zones. Manifesto gains editorial weight with a dual-axis glow;
+   clarity-pathways deepens into the warmest tonal chamber.
+   (Overrides Phase 1 single-gradient ambient on these sections.) */
+#manifesto {
+  background-image:
+    radial-gradient(ellipse 90% 50% at 50% 0%,
+      rgba(120,1,21,0.042) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 38% at 88% 82%,
+      rgba(120,1,21,0.018) 0%, transparent 58%);
+}
+#clarity-pathways {
+  background-image:
+    radial-gradient(ellipse 65% 45% at 22% 62%,
+      rgba(120,1,21,0.044) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 38% at 80% 20%,
+      rgba(120,1,21,0.020) 0%, transparent 58%);
+}
+#payment-access {
+  background-image:
+    radial-gradient(ellipse 88% 52% at 50% 0%,
+      rgba(120,1,21,0.028) 0%, transparent 62%);
+}
+
+/* ── P7.6 DARK-MODE AMBIENT DEPTH ────────────────────────────────*/
+[data-theme="dark"] #manifesto {
+  background-image:
+    radial-gradient(ellipse 90% 50% at 50% 0%,
+      rgba(196,26,51,0.080) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 38% at 88% 82%,
+      rgba(196,26,51,0.035) 0%, transparent 58%);
+}
+[data-theme="dark"] #clarity-pathways {
+  background-image:
+    radial-gradient(ellipse 65% 45% at 22% 62%,
+      rgba(196,26,51,0.065) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 38% at 80% 20%,
+      rgba(196,26,51,0.030) 0%, transparent 58%);
+}
+
+/* ── P7.7 MOBILE BRIDGE CALIBRATION ─────────────────────────────
+   Shorter bridges on mobile — the Phase 5 luxury padding is tall;
+   bridges must not swallow the increased spatial breathing room. */
+@media (max-width: 767px) {
+  #manifesto::before         { height: 72px; }
+  #perception-mirror::before { height: 60px; }
+  #clarity-pathways::before  { height: 88px; }
+  #biz-clarity::before       { height: 64px; }
+  #about::before             { height: 64px; }
+  #about::after              { height: 64px; }
+  #faq::after                { height: 60px; }
+}
+
+/* ═══ END PHASE 7 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
