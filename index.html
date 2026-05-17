@@ -6150,6 +6150,271 @@ body {
 
 /* ═══ END PHASE 7 ════════════════════════════════════════════════ */
 
+/* ═══ PHASE 8 — TYPOGRAPHY DIRECTION SYSTEM ══════════════════════
+   Typography as emotional interface. Editorial. Calm. Authored.
+   Every size, tracking, leading and silence decision is intentional.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── P8.1 RHYTHM TOKENS ──────────────────────────────────────────
+   Named leading values — the authored cadence of ASPIRA's voice.
+   Use these in future phases to maintain editorial consistency.  */
+:root {
+  --lead-display:   1.06;    /* Wordmark / hero display: gravitas   */
+  --lead-editorial: 1.14;    /* Section titles: composed authority  */
+  --lead-narrative: 1.74;    /* Flowing prose: comfortable reading  */
+  --lead-supportive: 1.86;   /* Card / supporting copy: air         */
+  --lead-expansive:  1.94;   /* Long-form narrative: editorial rest */
+  --track-display:  -0.022em;/* Large display tracking: tight       */
+  --track-title:    -0.018em;/* Section titles: firm                */
+  --track-eyebrow:   0.200em;/* Eyebrow labels: whispered air       */
+}
+
+/* ── P8.2 OPTICAL SIZING & BASE VOICE ────────────────────────────
+   font-optical-sizing: auto allows Cormorant and DM Sans to adapt
+   stroke contrast to display size — thinner at large, readable at
+   small. Body leading lifted for a calmer, more spacious page.   */
+h1, h2, h3, h4 {
+  font-optical-sizing: auto;
+}
+h1 {
+  line-height: var(--lead-display);
+  letter-spacing: var(--track-display);
+}
+h2 {
+  line-height: 1.13;
+  letter-spacing: -0.015em;
+}
+h3 { line-height: 1.20; }
+
+body { line-height: 1.72; }
+p    { line-height: var(--lead-supportive); }
+
+/* ── P8.3 SECTION TITLE AUTHORITY ────────────────────────────────
+   The s-title is ASPIRA's chapter marker — it should feel composed
+   and weighted, not simply large. Tighter tracking = more gravitas.
+   Bottom margin lifted from 18px → 22px for breathing room.      */
+.s-title {
+  line-height: var(--lead-editorial);
+  letter-spacing: var(--track-display);
+  margin-bottom: 22px;
+}
+.section-title {
+  line-height: var(--lead-editorial);
+  letter-spacing: var(--track-title);
+}
+
+/* Desktop-only font-size uplift for .s-title (max 3.8rem → 4rem).
+   Phase 5 mobile calibration (clamp 2.05–2.7rem) is preserved.   */
+@media (min-width: 768px) {
+  .s-title { font-size: clamp(2.25rem, 5.5vw, 4rem); }
+}
+
+/* ── P8.4 EYEBROW LABELS — WHISPERED AIR ────────────────────────
+   Eyebrow labels carry the quietest voice on the page. They should
+   feel like whispered context: airy tracking, restrained size.
+   2.5px fixed tracking → 0.20em relative = scales with font-size. */
+.s-eye {
+  letter-spacing: var(--track-eyebrow);
+  margin-bottom: 18px;
+}
+.eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: var(--track-eyebrow);
+  margin-bottom: 1.1rem;
+}
+.hero-eyebrow {
+  letter-spacing: 0.24em;
+  margin-bottom: 1.65rem;
+}
+.abt-block-eye {
+  letter-spacing: var(--track-eyebrow);
+  margin-bottom: 16px;
+}
+
+/* ── P8.5 HERO SUBTITLE — AN INVITATION ─────────────────────────
+   The first prose a visitor reads. Warmer leading, slightly more
+   room below before the CTA cluster.                             */
+.hero-sub {
+  line-height: var(--lead-narrative);
+  margin-bottom: 2.75rem;
+}
+
+/* ── P8.6 MANIFESTO — THE EMOTIONAL CENTRE ──────────────────────
+   The manifesto is the page's soul. Generous leading, refined
+   tracking. A hair of word-spacing adds editorial spaciousness
+   to the long display prose — barely visible, deeply felt.      */
+.manifesto-text {
+  line-height: 1.70;
+  letter-spacing: -0.016em;
+  word-spacing: 0.025em;
+  font-size: clamp(1.44rem, 3.5vw, 2.5rem);
+}
+
+/* ── P8.7 SUPPORTING TEXT SYSTEM ─────────────────────────────────
+   Each body-copy role has its own precise breathing room. Not all
+   supporting text is equal: card bodies scan; about-section prose
+   is read; FAQ answers are consulted.                            */
+.s-sub {
+  font-size: 0.95rem;
+  line-height: var(--lead-expansive);
+  margin: 0 auto 80px;
+}
+.lede {
+  font-size: clamp(1.01rem, 2vw, 1.18rem);
+  line-height: var(--lead-narrative);
+}
+.section-sub {
+  font-size: clamp(0.97rem, 1.8vw, 1.12rem);
+  line-height: var(--lead-narrative);
+}
+.val-body   { font-size: 0.93rem; line-height: var(--lead-supportive); }
+.cp-card-body { font-size: 0.90rem; line-height: var(--lead-supportive); }
+.step-content p { font-size: 0.91rem; line-height: var(--lead-narrative); }
+.faq-a p    { font-size: 0.92rem; line-height: 1.86; }
+.abt-body   { font-size: 0.91rem; line-height: var(--lead-expansive); }
+.bcl-sub    { font-size: 0.90rem; line-height: var(--lead-expansive); }
+.pax-sub    { font-size: 0.90rem; line-height: var(--lead-narrative); }
+.connect-sub { font-size: 1.02rem; line-height: var(--lead-narrative); }
+
+/* ── P8.8 CARD TITLE AUTHORITY ───────────────────────────────────
+   Card titles lacked explicit line-height — inherited values caused
+   inconsistent visual weight across the grid. Now authored.      */
+.val-title {
+  font-size: 1.48rem;
+  line-height: 1.38;
+  letter-spacing: -0.012em;
+  margin-bottom: 10px;
+}
+.cp-card-title {
+  font-size: 1.35rem;
+  line-height: 1.40;
+  letter-spacing: -0.008em;
+}
+.step-content h3 {
+  font-size: clamp(1.3rem, 2.5vw, 1.52rem);
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  margin-bottom: 10px;
+}
+
+/* ── P8.9 SECTION HEADER — COMPOSITIONAL SILENCE ────────────────
+   The distance between the section heading cluster and the content
+   below it is the page's deepest compositional silence.
+   Widened from clamp(3rem, 6vw, 5.5rem) → clamp(3.5rem, 7vw, 6rem).*/
+.section-header {
+  margin-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+
+/* ── P8.10 ABOUT SECTION — NARRATIVE DEPTH ──────────────────────
+   The about section is the page's only extended prose narrative.
+   Pull quote refined: slightly more presence, less opacity fade.
+   Block title tightened: more composed, less floaty.             */
+.abt-block-title {
+  line-height: 1.20;
+  letter-spacing: -0.020em;
+  margin-bottom: 20px;
+}
+.abt-pull {
+  font-size: clamp(1.12rem, 2.5vw, 1.52rem);
+  line-height: 1.58;
+  letter-spacing: -0.010em;
+  border-left-width: 3px;
+  padding-left: 24px;
+  margin: 32px 0;
+  opacity: 0.84;
+}
+
+/* ── P8.11 FAQ — DECISIVE QUIET ──────────────────────────────────
+   FAQ questions should feel authoritative and calm — not cramped.
+   Leading tightened slightly (1.55 → 1.46) for more confidence.  */
+.faq-q { line-height: 1.46; }
+
+/* ── P8.12 SECTION TITLES — VOICE DIFFERENTIATION ───────────────
+   bcl-title, pax-title, connect-title all currently resolve at the
+   same visual weight. Authored differentiation creates hierarchy.  */
+.pax-title {
+  line-height: 1.13;
+  letter-spacing: var(--track-display);
+}
+.bcl-title {
+  line-height: 1.15;
+  letter-spacing: var(--track-display);
+}
+.connect-title {
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+/* ── P8.13 LABEL PRECISION ───────────────────────────────────────
+   Small labels carry the quietest voice. Precise relative tracking
+   replaces fixed-pixel values so they scale correctly at any size. */
+label { letter-spacing: 0.07em; }
+.result-label { letter-spacing: var(--track-eyebrow); }
+.stat-label   { letter-spacing: 0.14em; }
+.proof-author { letter-spacing: 0.08em; }
+
+/* ── P8.14 TYPOGRAPHIC INTERACTION INTELLIGENCE ──────────────────
+   When siblings de-emphasise under Phase 6's clarity focus system,
+   card titles soften their color in parallel — the text participates
+   in the hover choreography, not just the card container.         */
+@media (hover: hover) {
+  .val-title,
+  .cp-card-title {
+    transition: color 0.45s var(--aspira-settle);
+  }
+  .val-grid:has(.val-card:hover) .val-card:not(:hover) .val-title,
+  .cp-grid:has(.cp-card:hover)   .cp-card:not(:hover)  .cp-card-title {
+    color: var(--text-2);
+  }
+}
+
+/* ── P8.15 MOBILE TYPOGRAPHY — NATIVE READING RHYTHM ────────────
+   Mobile reading is slower, more intimate. Leading should be more
+   generous. Prose slightly larger. Section silence recalibrated.  */
+@media (max-width: 767px) {
+  body { line-height: 1.78; }
+  p    { line-height: var(--lead-expansive); }
+
+  .s-sub        { font-size: 0.97rem; line-height: var(--lead-expansive); margin-bottom: 52px; }
+  .hero-sub     { line-height: 1.84; margin-bottom: 2.5rem; }
+  .manifesto-text { line-height: 1.62; word-spacing: 0; }
+
+  .val-body     { font-size: 0.95rem; line-height: var(--lead-expansive); }
+  .cp-card-body { font-size: 0.92rem; line-height: var(--lead-expansive); }
+  .faq-a p      { font-size: 0.94rem; line-height: 1.88; }
+  .abt-body     { font-size: 0.93rem; }
+  .bcl-sub      { font-size: 0.92rem; }
+  .pax-sub      { font-size: 0.93rem; }
+
+  .val-title    { font-size: 1.38rem; }
+  .cp-card-title{ font-size: 1.26rem; }
+
+  .section-header { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+
+  .abt-pull {
+    font-size: clamp(1.06rem, 4.5vw, 1.3rem);
+    line-height: 1.54;
+    padding-left: 18px;
+    margin: 24px 0;
+    border-left-width: 2.5px;
+  }
+  .faq-q { line-height: 1.50; }
+}
+
+/* ── P8.16 REDUCED MOTION GUARD ─────────────────────────────────
+   Typography interaction behavior (P8.14) suppressed for users
+   who prefer reduced motion.                                     */
+@media (prefers-reduced-motion: reduce) {
+  .val-title,
+  .cp-card-title { transition: none; }
+  .val-grid:has(.val-card:hover) .val-card:not(:hover) .val-title,
+  .cp-grid:has(.cp-card:hover)   .cp-card:not(:hover)  .cp-card-title {
+    color: inherit;
+  }
+}
+
+/* ═══ END PHASE 8 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
