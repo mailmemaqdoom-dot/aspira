@@ -4648,6 +4648,294 @@ canvas#particle-canvas {
 .pmu-trust { font-size:.7rem;color:var(--text-3);text-align:center;line-height:1.6; }
 /* END PAYMENT MODAL */
 
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 1 — EXPERIENCE FOUNDATION LAYER
+   Atmospheric depth · Micro-motion · Premium interaction · Breathing
+   Purely additive — zero layout changes, zero architecture impact
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── P1.1  SECTION AMBIENT LUMINANCE ─────────────────────────── */
+/* Soft radial glows layered via background-image over existing   */
+/* background-color. background-image sub-property overrides      */
+/* without touching background-color or any layout property.      */
+#manifesto {
+  background-image: radial-gradient(
+    ellipse 90% 50% at 50% 0%,
+    rgba(120,1,21,0.038) 0%, transparent 65%
+  );
+}
+#value {
+  background-image: radial-gradient(
+    ellipse 70% 45% at 82% 18%,
+    rgba(255,242,189,0.09) 0%, transparent 58%
+  );
+}
+#clarity-pathways {
+  background-image: radial-gradient(
+    ellipse 65% 45% at 22% 62%,
+    rgba(120,1,21,0.028) 0%, transparent 68%
+  );
+}
+#faq {
+  background-image: radial-gradient(
+    ellipse 80% 50% at 50% 100%,
+    rgba(120,1,21,0.036) 0%, transparent 60%
+  );
+}
+#biz-clarity {
+  background-image: radial-gradient(
+    ellipse 100% 55% at 50% 0%,
+    rgba(120,1,21,0.028) 0%, transparent 65%
+  );
+}
+#about {
+  background-image: radial-gradient(
+    ellipse 70% 55% at 74% 24%,
+    rgba(120,1,21,0.025) 0%, transparent 65%
+  );
+}
+#understand, #reflection {
+  background-image: radial-gradient(
+    ellipse 80% 40% at 50% 0%,
+    rgba(120,1,21,0.022) 0%, transparent 60%
+  );
+}
+
+/* Dark mode: warmer, deeper ambient */
+[data-theme="dark"] #manifesto,
+[data-theme="dark"] #faq {
+  background-image: radial-gradient(
+    ellipse 90% 50% at 50% 0%,
+    rgba(196,26,51,0.07) 0%, transparent 65%
+  );
+}
+[data-theme="dark"] #biz-clarity {
+  background-image: radial-gradient(
+    ellipse 100% 55% at 50% 0%,
+    rgba(196,26,51,0.06) 0%, transparent 65%
+  );
+}
+[data-theme="dark"] #about {
+  background-image: radial-gradient(
+    ellipse 70% 55% at 74% 24%,
+    rgba(196,26,51,0.05) 0%, transparent 65%
+  );
+}
+
+/* ── P1.2  CARD GLASS HIGHLIGHT ──────────────────────────────── */
+/* Internal catch-light — top-left luminance shimmer on hover.    */
+/* .val-card and .cp-card already have position:relative +        */
+/* overflow:hidden from base card rule.                           */
+.val-card::before,
+.cp-card::before,
+.biz-type-card::before,
+.pax-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.09) 0%,
+    rgba(255,255,255,0.03) 38%,
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+  z-index: 0;
+}
+.val-card:hover::before,
+.cp-card:hover::before,
+.biz-type-card:hover::before,
+.pax-card:hover::before { opacity: 1; }
+
+[data-theme="dark"] .val-card::before,
+[data-theme="dark"] .cp-card::before,
+[data-theme="dark"] .biz-type-card::before,
+[data-theme="dark"] .pax-card::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.055) 0%,
+    rgba(255,255,255,0.018) 38%,
+    transparent 60%
+  );
+}
+
+/* ── P1.3  CINEMATIC HERO DEPTH ───────────────────────────────── */
+/* Bottom ground vignette — anchors hero content vertically.      */
+/* .hero-ambient has position:absolute; inset:0; overflow:hidden. */
+.hero-ambient::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 32%;
+  background: linear-gradient(to top, rgba(23,4,10,0.08) 0%, transparent 100%);
+  pointer-events: none;
+}
+[data-theme="dark"] .hero-ambient::after {
+  background: linear-gradient(to top, rgba(0,0,0,0.18) 0%, transparent 100%);
+}
+
+/* ── P1.4  NAV MICRO-MOTION ──────────────────────────────────── */
+.fn-links a {
+  transition:
+    color       0.28s var(--ease-out),
+    background  0.28s var(--ease-out),
+    transform   0.28s var(--ease-out);
+}
+.fn-links a:hover  { transform: translateY(-1px); }
+.fn-links a:active { transform: translateY(0) scale(0.97); }
+
+.fn-theme {
+  transition:
+    background  0.28s var(--ease-out),
+    transform   0.42s var(--ease-spring),
+    box-shadow  0.28s var(--ease-out);
+}
+.fn-theme:hover { box-shadow: 0 0 0 4px var(--crimson-2); }
+
+/* ── P1.5  BUTTON PREMIUM SHIMMER ────────────────────────────── */
+/* Sweeping highlight sweep on hover — once across the surface.   */
+/* Actual HTML button classes: .btn-p, .fn-cta, .cp-btn-filled    */
+/* All three already have position:relative; overflow:hidden.     */
+.btn-p::after,
+.fn-cta::after,
+.cp-btn-filled::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: -100%;
+  width: 55%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.16) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s var(--ease-out);
+  pointer-events: none;
+}
+.btn-p:hover::after,
+.fn-cta:hover::after,
+.cp-btn-filled:hover::after { left: 160%; }
+
+/* Ghost button — subtle border glow */
+.btn-g:hover { box-shadow: 0 0 0 2px rgba(120,1,21,0.09); }
+
+/* ── P1.6  CARD MOMENTUM ─────────────────────────────────────── */
+/* Refine transition on cards that already have hover transforms. */
+.val-card {
+  transition:
+    transform    0.38s var(--ease-out),
+    box-shadow   0.38s var(--ease-out),
+    border-color 0.38s var(--ease-out);
+}
+.val-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(120,1,21,0.055);
+}
+
+/* Val icon — spring bounce on card hover */
+.val-icon {
+  transition:
+    transform   0.40s var(--ease-spring),
+    background  0.28s var(--ease-out),
+    box-shadow  0.28s var(--ease-out);
+}
+.val-card:hover .val-icon {
+  transform: scale(1.14) rotate(-5deg);
+  background: var(--crimson-2);
+  box-shadow: 0 4px 14px rgba(120,1,21,0.14);
+}
+
+/* biz-type-card — refined interaction */
+.biz-type-card {
+  transition:
+    all         0.26s var(--ease-out),
+    transform   0.26s var(--ease-out);
+}
+.biz-type-card:hover { transform: translateY(-3px); }
+
+/* ── P1.7  FAQ INTERACTION ───────────────────────────────────── */
+.faq-item {
+  transition:
+    box-shadow   0.30s var(--ease-out),
+    border-color 0.30s var(--ease-out),
+    transform    0.28s var(--ease-out);
+}
+.faq-item.open              { box-shadow: var(--shadow-md); border-color: rgba(120,1,21,0.10); }
+.faq-item:hover:not(.open)  { transform: translateX(2px); border-color: rgba(120,1,21,0.07); }
+
+/* ── P1.8  INPUT FOCUS REFINEMENT ────────────────────────────── */
+input:focus,
+textarea:focus,
+select:focus,
+#analysis-input:focus,
+.analyze-textarea:focus {
+  box-shadow:
+    0 0 0 3px rgba(120,1,21,0.09),
+    0 0 0 1px rgba(120,1,21,0.28),
+    0 4px 12px rgba(120,1,21,0.055);
+  background: var(--surface);
+}
+
+/* ── P1.9  SECTION TITLE BREATHING LINE ─────────────────────── */
+/* Thin crimson rule animates in below each section title when    */
+/* the existing enterObs fires and adds .s-in.                   */
+/* Uses absolute positioning so it doesn't push content down.    */
+.s-title { position: relative; }
+.s-title.s-in::after {
+  content: '';
+  position: absolute;
+  bottom: -0.6rem; left: 0;
+  height: 1px;
+  width: 0;
+  background: linear-gradient(90deg, var(--crimson), transparent);
+  animation: ph1TitleLine 1.4s var(--ease-out) 0.3s both;
+}
+@keyframes ph1TitleLine {
+  from { width: 0; opacity: 0; }
+  to   { width: 64px; opacity: 0.45; }
+}
+
+/* ── P1.10  EYEBROW LETTER-SPACING BLOOM ────────────────────── */
+/* .s-eye is the actual eyebrow class in the HTML (not .eyebrow). */
+.s-eye {
+  transition: letter-spacing 1.2s var(--ease-out);
+}
+.s-enter.s-in .s-eye,
+.reveal.in-view .s-eye,
+.s-eye.s-in {
+  letter-spacing: 0.245em;
+}
+
+/* ── P1.11  MOBILE NAV REFINEMENT ───────────────────────────── */
+.mob-tab {
+  transition:
+    color     0.25s var(--ease-out),
+    transform 0.22s var(--ease-spring);
+}
+.mob-tab:active { transform: scale(0.91); }
+
+/* ── P1.12  REDUCED MOTION GUARD ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .val-card::before, .cp-card::before,
+  .biz-type-card::before, .pax-card::before { display: none; }
+
+  .btn-p::after, .fn-cta::after,
+  .cp-btn-filled::after { display: none; }
+
+  .fn-links a, .val-icon, .faq-item,
+  .val-card, .biz-type-card { transition-duration: 0.1s; }
+
+  .faq-item:hover:not(.open) { transform: none; }
+  .val-card:hover .val-icon  { transform: none; }
+  .s-title.s-in::after       { animation: none; }
+  .s-eye                     { transition: none; }
+}
+
+/* ═══ END PHASE 1 ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -8524,5 +8812,58 @@ document.body.addEventListener('touchmove',function(e){
 })();
 </script>
 
+<script>
+/* ── PHASE 1 JS ─────────────────────────────────────────────── */
+
+/* 1. Card micro-tilt — gentle perspective tilt tracking cursor.
+      Desktop / hover-capable devices only.
+      Actual card classes: .val-card, .cp-card, .biz-type-card   */
+(function(){
+  if (window.matchMedia('(hover: none)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.val-card, .cp-card, .biz-type-card').forEach(function(card) {
+    var bounds;
+    card.addEventListener('mouseenter', function() {
+      bounds = card.getBoundingClientRect();
+    });
+    card.addEventListener('mousemove', function(e) {
+      if (!bounds) bounds = card.getBoundingClientRect();
+      var cx = bounds.left + bounds.width  / 2;
+      var cy = bounds.top  + bounds.height / 2;
+      var rx = ((e.clientY - cy) / bounds.height) * -5;
+      var ry = ((e.clientX - cx) / bounds.width)  *  5;
+      var lift = card.classList.contains('val-card') ? '-5px' : '-3px';
+      card.style.transform =
+        'translateY(' + lift + ') perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transform  = '';
+      card.style.transition =
+        'transform 0.52s var(--ease-out), box-shadow 0.38s var(--ease-out), border-color 0.38s var(--ease-out)';
+      setTimeout(function() { card.style.transition = ''; }, 530);
+    });
+  });
+})();
+
+/* 2. s-eye letter-spacing bloom on scroll enter.
+      The existing enterObs adds .s-in to .s-title etc.
+      .s-eye elements get .s-enter + .s-in via the same observer.
+      CSS transition does the rest — this just ensures the class
+      is watched even if enterObs didn't pick up .s-eye directly. */
+(function(){
+  if (!window.IntersectionObserver) return;
+  var eyes = document.querySelectorAll('.s-eye:not(.s-enter)');
+  if (!eyes.length) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('s-in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5, rootMargin: '0px 0px -40px 0px' });
+  eyes.forEach(function(el) { obs.observe(el); });
+})();
+</script>
 </body>
 </html>
