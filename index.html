@@ -5759,6 +5759,247 @@ a { text-underline-offset: 0.2em; }
 
 /* ═══ END PHASE 5 ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 6 — ASPIRA SIGNATURE INTERACTION LANGUAGE
+   Behavioral identity · Clarity focus · Motion physics
+   Environmental intelligence · "Clarity emerging from complexity"
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── P6.1  ASPIRA SIGNATURE PHYSICS TOKENS ───────────────────── */
+/* Three distinct motion signatures that define ASPIRA's feel.    */
+/* --aspira-settle : steady, no drama — elements finding rest     */
+/* --aspira-lift   : gentle spring — upward presence, confidence  */
+/* --aspira-unfurl : slow start, fast middle, long tail — cinematic*/
+/* These replace generic --ease-out on all deliberate interactions.*/
+:root {
+  --aspira-settle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --aspira-lift:   cubic-bezier(0.34, 1.12, 0.64, 1);
+  --aspira-unfurl: cubic-bezier(0.08, 0.82, 0.17, 1.00);
+}
+
+/* ── P6.2  CLARITY FOCUS SYSTEM ──────────────────────────────── */
+/* ASPIRA's core interaction concept: when attention lands on one */
+/* element, the surrounding field softens. This is the "clarity  */
+/* emerging" principle made tactile — the interface intelligently */
+/* organizes visual weight around what the user is exploring.    */
+/* Built on CSS :has() — supported Chrome 105+, Safari 15.4+.   */
+/* Wrapped in @media(hover:hover) — touch devices unaffected.    */
+
+@media (hover: hover) {
+
+  /* ── Card base: extend transition to include opacity + filter  */
+  /* Enables smooth re-entry when focus leaves the grid.         */
+  .val-card {
+    transition:
+      transform    0.30s var(--aspira-settle),
+      box-shadow   0.30s var(--aspira-settle),
+      border-color 0.30s var(--aspira-settle),
+      opacity      0.55s var(--aspira-settle),
+      filter       0.55s var(--aspira-settle);
+  }
+  .cp-card {
+    transition:
+      transform    0.30s var(--aspira-settle),
+      box-shadow   0.30s var(--aspira-settle),
+      border-color 0.30s var(--aspira-settle),
+      background   0.30s var(--aspira-settle),
+      opacity      0.55s var(--aspira-settle),
+      filter       0.55s var(--aspira-settle);
+  }
+  .biz-type-card {
+    transition:
+      transform    0.30s var(--aspira-settle),
+      box-shadow   0.30s var(--aspira-settle),
+      border-color 0.30s var(--aspira-settle),
+      background   0.30s var(--aspira-settle),
+      opacity      0.55s var(--aspira-settle),
+      filter       0.55s var(--aspira-settle);
+  }
+
+  /* ── Val-card grid: sibling de-emphasis on hover              */
+  .val-grid:has(.val-card:hover) .val-card:not(:hover) {
+    opacity: 0.68;
+    filter:  saturate(0.60);
+  }
+
+  /* ── CP card grid: sibling de-emphasis on hover               */
+  .cp-grid:has(.cp-card:hover) .cp-card:not(:hover) {
+    opacity: 0.68;
+    filter:  saturate(0.60);
+  }
+
+  /* ── Biz type card grid: sibling de-emphasis on hover         */
+  .biz-type-grid:has(.biz-type-card:hover) .biz-type-card:not(:hover) {
+    opacity: 0.68;
+    filter:  saturate(0.60);
+  }
+}
+
+/* ── P6.3  FAQ FOCUS INTELLIGENCE ────────────────────────────── */
+/* When a FAQ item opens, the others recede — drawing full        */
+/* attention to the open answer. The hierarchy clarifies.         */
+/* Works via JS adding .open class (existing behavior) + :has().  */
+
+.faq-item {
+  transition:
+    box-shadow   0.30s var(--aspira-settle),
+    border-color 0.30s var(--aspira-settle),
+    transform    0.28s var(--aspira-settle),
+    opacity      0.50s var(--aspira-settle);
+}
+
+.faq-inner:has(.faq-item.open) .faq-item:not(.open) {
+  opacity: 0.70;
+}
+
+/* ── P6.4  NAV SIGNATURE TRANSITION SYSTEM ───────────────────── */
+/* Replace Phase 2's generic ease-out with ASPIRA signature       */
+/* physics. Every nav state change now uses the settle curve.    */
+/* Added: transform + opacity for the kinetic system below.       */
+#fnav {
+  transition:
+    padding         0.40s var(--aspira-settle),
+    background      0.60s var(--aspira-unfurl),
+    box-shadow      0.60s var(--aspira-unfurl),
+    border-color    0.50s var(--aspira-settle),
+    backdrop-filter 0.60s var(--aspira-unfurl),
+    transform       0.50s var(--aspira-settle),
+    opacity         0.40s var(--aspira-settle);
+}
+
+/* ── P6.5  NAV DEEP-SCROLL STATE ─────────────────────────────── */
+/* A second nav state fires at 600px — well into content.         */
+/* The nav becomes more defined, more grounded, more present.    */
+/* It has "settled" at this point — it knows where it is.        */
+#fnav.deep {
+  background:  color-mix(in srgb, var(--surface) 98%, transparent);
+  box-shadow:
+    0  4px 20px rgba(23,4,10,0.09),
+    0 10px 44px rgba(23,4,10,0.07),
+    0  1px  0   rgba(23,4,10,0.05);
+  border-color:    rgba(23,4,10,0.14);
+  backdrop-filter: blur(32px) saturate(2.2);
+  -webkit-backdrop-filter: blur(32px) saturate(2.2);
+}
+[data-theme="dark"] #fnav.deep {
+  background:  color-mix(in srgb, var(--surface) 98%, transparent);
+  box-shadow:
+    0  4px 20px rgba(0,0,0,0.30),
+    0 10px 44px rgba(0,0,0,0.22),
+    0  1px  0   rgba(248,245,240,0.06);
+  border-color: rgba(248,245,240,0.14);
+  backdrop-filter: blur(32px) saturate(1.9);
+  -webkit-backdrop-filter: blur(32px) saturate(1.9);
+}
+
+/* ── P6.6  NAV KINETIC BREATHING ─────────────────────────────── */
+/* When scrolling fast, the nav shadow lifts slightly — as if the */
+/* nav is "flying" above the page during motion.                  */
+/* JS adds .kinetic class on velocity > 6px per frame.            */
+/* Shadow becomes lighter (nav floats up into motion).            */
+#fnav.kinetic {
+  box-shadow:
+    0 2px  6px rgba(23,4,10,0.03),
+    0 4px 16px rgba(23,4,10,0.04);
+}
+
+/* ── P6.7  INPUT ALIGNMENT BEHAVIOR ──────────────────────────── */
+/* When an input gains focus, the container itself responds —     */
+/* rises by 1px, clarifies its boundary, projects outward glow.  */
+/* The form "aligns to meet" the user's attention.               */
+.input-box {
+  transition:
+    box-shadow   0.38s var(--aspira-settle),
+    border-color 0.38s var(--aspira-settle),
+    transform    0.32s var(--aspira-lift);
+}
+.input-box:focus-within {
+  border-color: rgba(120,1,21,0.25);
+  transform:    translateY(-1px);
+  box-shadow:
+    0 0 0 2px  rgba(120,1,21,0.14),
+    0 0 0 5px  rgba(120,1,21,0.05),
+    0 8px 28px rgba(23,4,10,0.09);
+}
+
+/* ── P6.8  HERO WORDMARK CLARITY RESOLUTION ──────────────────── */
+/* ASPIRA's signature moment: the wordmark's letter-spacing       */
+/* tightens on first scroll — "clarity emerging" made literal.   */
+/* From 0.12em (desktop) / 0.16em (mobile) → resolved states.    */
+/* The transition uses --aspira-unfurl: slow start, lingers long. */
+.h-wordmark {
+  transition:
+    letter-spacing 1.6s var(--aspira-unfurl),
+    font-size      0.6s var(--aspira-settle);
+}
+/* Desktop resolution */
+body.aspira-resolved .h-wordmark {
+  letter-spacing: 0.09em;
+}
+/* Mobile resolution — less aggressive (starts at 0.16em)        */
+@media (max-width: 767px) {
+  body.aspira-resolved .h-wordmark {
+    letter-spacing: 0.11em;
+  }
+}
+
+/* ── P6.9  GLOBAL INTERACTION REFINEMENT ─────────────────────── */
+/* Apply ASPIRA signature easing to key interactive elements      */
+/* that were previously using generic --ease-out.                 */
+
+/* Primary buttons: settle easing instead of generic              */
+.btn-p {
+  transition:
+    transform    0.24s var(--aspira-settle),
+    box-shadow   0.24s var(--aspira-settle),
+    background   0.24s var(--aspira-settle),
+    opacity      0.24s var(--aspira-settle);
+}
+.btn-p:hover { transition-duration: 0.18s; }  /* fast in, slow out */
+
+/* Section title breathing line (P1.9): signature unfurl          */
+@keyframes ph1TitleLine {
+  from { width: 0;    opacity: 0;    }
+  to   { width: 64px; opacity: 0.45; }
+}
+.s-title.s-in::after {
+  animation-timing-function: var(--aspira-unfurl);
+}
+
+/* Val icon spring: use aspira-lift instead of generic spring     */
+.val-icon {
+  transition:
+    transform   0.42s var(--aspira-lift),
+    background  0.28s var(--aspira-settle),
+    box-shadow  0.28s var(--aspira-settle);
+}
+
+/* Mob-tab center button: aspira-lift                             */
+@media (max-width: 767px) {
+  .mob-tab.mob-ctr {
+    transition:
+      transform   0.20s var(--aspira-lift),
+      box-shadow  0.22s var(--aspira-settle),
+      background  0.22s var(--aspira-settle);
+  }
+}
+
+/* ── P6.10  REDUCED MOTION GUARD ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .h-wordmark { transition: none; }
+  .faq-inner:has(.faq-item.open) .faq-item:not(.open) { opacity: 1; }
+  .val-grid:has(.val-card:hover) .val-card:not(:hover),
+  .cp-grid:has(.cp-card:hover) .cp-card:not(:hover),
+  .biz-type-grid:has(.biz-type-card:hover) .biz-type-card:not(:hover) {
+    opacity: 1;
+    filter: none;
+  }
+  .input-box:focus-within { transform: none; }
+  #fnav.kinetic { box-shadow: inherit; }
+}
+
+/* ═══ END PHASE 6 ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -9738,6 +9979,58 @@ document.body.addEventListener('touchmove',function(e){
   }, { passive: true });
 
   update();
+})();
+
+/* ── PHASE 6 JS ─────────────────────────────────────────────── */
+
+/* 6. Nav .deep state — fires at 600px, well into content.        */
+/*    Adds a more grounded, defined nav presence when the user    */
+/*    has committed to reading. Works alongside Phase 2 .scrolled */
+(function(){
+  var fnav = document.getElementById('fnav');
+  if (!fnav) return;
+  var tick = false;
+  function updateDeep() {
+    fnav.classList.toggle('deep', window.scrollY > 600);
+    tick = false;
+  }
+  window.addEventListener('scroll', function() {
+    if (!tick) { requestAnimationFrame(updateDeep); tick = true; }
+  }, { passive: true });
+  updateDeep();
+})();
+
+/* 7. Nav kinetic breathing — velocity-sensitive shadow lift.     */
+/*    Tracks px delta per scroll event. speed > 6 → .kinetic.    */
+/*    Shadow lifts (nav "flies" in motion), settles 200ms after. */
+(function(){
+  var fnav = document.getElementById('fnav');
+  if (!fnav) return;
+  var lastY = window.scrollY;
+  var velTimer;
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    var speed = Math.abs(y - lastY);
+    lastY = y;
+    if (speed > 6) {
+      fnav.classList.add('kinetic');
+      clearTimeout(velTimer);
+      velTimer = setTimeout(function() {
+        fnav.classList.remove('kinetic');
+      }, 200);
+    }
+  }, { passive: true });
+})();
+
+/* 8. Hero wordmark clarity resolution.                           */
+/*    On first scroll, letter-spacing transitions inward.         */
+/*    "Clarity emerging" made literal in the ASPIRA wordmark.    */
+/*    Fires once only. Skipped for prefers-reduced-motion.        */
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  window.addEventListener('scroll', function() {
+    document.body.classList.add('aspira-resolved');
+  }, { passive: true, once: true });
 })();
 
 /* ── PHASE 4 JS ─────────────────────────────────────────────── */
