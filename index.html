@@ -4936,6 +4936,122 @@ select:focus,
 
 /* ═══ END PHASE 1 ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 2 — SCROLL CHOREOGRAPHY & CONTENT PACING
+   Stagger delays · Element-type timing · Image bloom · Nav polish
+   Purely additive — all existing observers remain untouched
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── P2.1  STAGGER DELAY SYSTEM ──────────────────────────────── */
+/* d1–d5 already exist in the HTML but had no CSS delay values.  */
+/* Values create a reading cascade: eyebrow → title → body → CTA */
+.reveal.d1, .s-enter.d1 { transition-delay: 0.08s; }
+.reveal.d2, .s-enter.d2 { transition-delay: 0.20s; }
+.reveal.d3, .s-enter.d3 { transition-delay: 0.34s; }
+.reveal.d4, .s-enter.d4 { transition-delay: 0.50s; }
+.reveal.d5, .s-enter.d5 { transition-delay: 0.66s; }
+
+/* ── P2.2  CONTENT HIERARCHY TIMING ─────────────────────────── */
+/* Uses transition-duration + transition-timing-function only —  */
+/* NOT the transition shorthand — so that the d-class delays     */
+/* from P2.1 are never overridden. The transition-property was   */
+/* already set by base .reveal { transition: opacity, transform } */
+
+/* Eyebrow — lightest, fastest */
+.s-eye.reveal, .s-eye.s-enter {
+  transform: translateY(10px);
+  transition-duration:         0.72s, 0.72s;
+  transition-timing-function:  var(--ease-out), var(--ease-out);
+}
+/* Title — stately, anchoring */
+.s-title.reveal, .s-title.s-enter {
+  transform: translateY(18px);
+  transition-duration:         1.0s, 1.0s;
+  transition-timing-function:  var(--ease-out), var(--ease-out);
+}
+/* Sub / body — soft drift */
+.s-sub.reveal, .s-sub.s-enter {
+  transform: translateY(14px);
+  transition-duration:         0.92s, 0.92s;
+  transition-timing-function:  var(--ease-out), var(--ease-out);
+}
+
+/* ── P2.3  IMAGE ATMOSPHERIC REVEAL ─────────────────────────── */
+/* The figure (s-img) fades + slides via existing .reveal.       */
+/* The inner img blooms from scale(1.04) → scale(1.0),           */
+/* clipped cleanly by s-img { overflow: hidden }.                */
+/* Result: atmospheric "settling into frame" as image enters.    */
+.s-img {
+  /* Sub-properties only — preserves d-class transition-delay */
+  transition-duration:        1.15s, 1.15s;
+  transition-timing-function: var(--ease-out), var(--ease-out);
+}
+.s-img img {
+  transform: scale(1.04);
+  transition: transform 1.5s var(--ease-out) 0.15s;
+  will-change: transform;
+}
+.s-img.reveal.in-view img {
+  transform: scale(1.0);
+}
+/* Clean up will-change after animation completes               */
+.s-img.reveal.in-view img {
+  transition: transform 1.5s var(--ease-out) 0.15s;
+}
+
+/* ── P2.4  SECTION ENTRANCE REFINEMENT ──────────────────────── */
+/* Slightly longer duration on s-enter for section-level items.  */
+.s-enter {
+  transition: opacity 0.95s var(--ease-out), transform 0.95s var(--ease-out);
+}
+
+/* ── P2.5  NAVBAR SCROLL SOPHISTICATION ─────────────────────── */
+/* Transition already on #fnav (0.4s all). Add .scrolled state   */
+/* for when user moves past the hero into body content.          */
+#fnav {
+  transition:
+    padding         0.4s  var(--ease-out),
+    background      0.55s var(--ease-out),
+    box-shadow      0.55s var(--ease-out),
+    border-color    0.45s var(--ease-out),
+    backdrop-filter 0.55s var(--ease-out);
+}
+#fnav.scrolled {
+  background: color-mix(in srgb, var(--surface) 97%, transparent);
+  box-shadow:
+    0 2px 12px rgba(23,4,10,0.07),
+    0 6px 28px rgba(23,4,10,0.05),
+    0 1px 0   rgba(23,4,10,0.04);
+  border-color: rgba(23,4,10,0.12);
+  backdrop-filter: blur(28px) saturate(2.1);
+  -webkit-backdrop-filter: blur(28px) saturate(2.1);
+}
+[data-theme="dark"] #fnav.scrolled {
+  background: color-mix(in srgb, var(--surface) 97%, transparent);
+  box-shadow:
+    0 2px 12px rgba(0,0,0,0.22),
+    0 6px 28px rgba(0,0,0,0.18),
+    0 1px 0   rgba(248,245,240,0.05);
+  border-color: rgba(248,245,240,0.12);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+}
+
+/* ── P2.6  REDUCED MOTION GUARD ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal.d1, .reveal.d2, .reveal.d3,
+  .reveal.d4, .reveal.d5,
+  .s-enter.d1, .s-enter.d2, .s-enter.d3 { transition-delay: 0s; }
+
+  .s-eye.reveal, .s-eye.s-enter,
+  .s-title.reveal, .s-title.s-enter,
+  .s-sub.reveal, .s-sub.s-enter { transform: none; }
+
+  .s-img img { transform: none; transition: none; }
+}
+
+/* ═══ END PHASE 2 ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -8863,6 +8979,58 @@ document.body.addEventListener('touchmove',function(e){
     });
   }, { threshold: 0.5, rootMargin: '0px 0px -40px 0px' });
   eyes.forEach(function(el) { obs.observe(el); });
+})();
+
+/* ── PHASE 2 JS ─────────────────────────────────────────────── */
+
+/* 3. Content stagger choreographer — at page load, assign inline
+      transition-delay to .reveal elements inside each section
+      that have no explicit d-class.
+      Skips: .s-eye, .s-title, .s-sub (already d-classed or 0s).
+      Cards and content blocks cascade in vertical order.        */
+(function(){
+  var D_CLASSES = ['d1','d2','d3','d4','d5'];
+  var SKIP      = ['s-eye','s-title','s-sub','s-img'];
+
+  document.querySelectorAll('section').forEach(function(section) {
+    var targets = Array.from(
+      section.querySelectorAll('.reveal')
+    ).filter(function(el) {
+      var hasD = D_CLASSES.some(function(d){ return el.classList.contains(d); });
+      var isSkipped = SKIP.some(function(s){ return el.classList.contains(s); });
+      return !hasD && !isSkipped;
+    });
+
+    /* Sort top-to-bottom within section */
+    targets.sort(function(a, b) {
+      return (a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+    });
+
+    targets.forEach(function(el, i) {
+      /* Cap at 3 steps — beyond that, feel is same */
+      var delay = Math.min(i, 3) * 0.13;
+      el.style.transitionDelay = delay + 's';
+    });
+  });
+})();
+
+/* 4. Nav .scrolled state — fires on rAF-throttled scroll.
+      Adds .scrolled when user has scrolled past hero (~120px).  */
+(function(){
+  var fnav   = document.getElementById('fnav');
+  if (!fnav) return;
+  var tick   = false;
+
+  function update() {
+    fnav.classList.toggle('scrolled', window.scrollY > 120);
+    tick = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!tick) { requestAnimationFrame(update); tick = true; }
+  }, { passive: true });
+
+  update();
 })();
 </script>
 </body>
