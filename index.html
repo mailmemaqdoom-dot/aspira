@@ -6879,6 +6879,231 @@ section > *:not(.hero-visual):not(.hero-ambient):not(.manifesto-visual):not(.beg
 
 /* ═══ END PHASE 11 ════════════════════════════════════════════════ */
 
+/* ═══ PHASE 12 — INTERACTION SYSTEMS & SENSORY POLISH ════════════
+   Role: senior interaction systems engineer + luxury mobile UX architect
+   Scope: scroll bug fix · touch behavior · motion refinement · sensory polish
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── P12.0  RETURNING USER MODAL — CSS/JS ALIGNMENT ─────────────
+   THE SCROLL BUG ROOT CAUSE:
+   rwmOpen() sets document.documentElement.style.overflow='hidden'.
+   Escape handler (line 8313) removed the class but never cleared overflow.
+   Modal was also INVISIBLE — JS adds .rwm-open, CSS targeted #rwm-overlay.
+   Fix: proper CSS for #ru-welcome-modal + .rwm-open, JS escape fix above. */
+#ru-welcome-modal {
+  position: fixed; inset: 0; z-index: 985;
+  background: rgba(12,6,8,0.65);
+  backdrop-filter: blur(8px) saturate(1.4);
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.4s var(--ease-out), visibility 0.4s;
+}
+#ru-welcome-modal.rwm-open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+}
+#ru-welcome-panel {
+  background: var(--surface);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 2.5rem 2rem;
+  width: min(440px, 92vw);
+  opacity: 0;
+  transform: scale(0.95) translateY(14px);
+  transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+}
+#ru-welcome-modal.rwm-open #ru-welcome-panel {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* ── P12.1  YOUR SPACE OVERLAY — CSS/JS ALIGNMENT ───────────────
+   openYourSpace() adds .yso-open. CSS targeted .active. Mismatch
+   meant panel never slid in, but overflow was still locked.
+   Fix: add .yso-open selectors to match JS output. */
+#your-space-overlay.yso-open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+}
+#your-space-overlay.yso-open #your-space-panel {
+  transform: translateX(0);
+}
+
+/* ── P12.2  TOUCH ACTION — ELIMINATE 300ms CLICK DELAY ──────────
+   touch-action:manipulation removes the 300ms synthetic click delay
+   on iOS Safari. -webkit-tap-highlight-color:transparent removes the
+   grey flash on tap. Applied universally to all interactive elements. */
+a, button,
+[role="button"],
+.fn-links a, .fn-cta, .fn-theme,
+.mob-tab, .faq-q, .i-choice,
+.bcl-step, .val-card, .how-step,
+.cp-card, .s-img, .i-card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── P12.3  SCROLL BEHAVIOR ON TOUCH DEVICES ─────────────────────
+   scroll-behavior:smooth on html bypasses native iOS momentum.
+   On hover:none (touch-primary) devices, native scroll is superior.
+   JS goTo() uses explicit {behavior:'smooth'} — not affected. */
+@media (hover: none) {
+  html { scroll-behavior: auto; }
+}
+
+/* ── P12.4  FOCUS STATES — BRANDED, ACCESSIBLE, CLEAN ───────────
+   Show crimson ring only for keyboard/focus-visible users.
+   Touch and mouse users see no outline flash. */
+:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── P12.5  MOBILE ACTIVE STATES — TACTILE DEPTH ────────────────
+   Touch devices don't fire :hover. Explicit :active transforms give
+   the physical feedback that makes mobile feel native and premium. */
+@media (hover: none) {
+  .fn-cta:active,
+  .btn-p:active,
+  .sub-btn:active,
+  .bcl-next:active,
+  .rwm-btn-primary:active,
+  .wa-btn:active,
+  .wa-btn-c:active {
+    transform: scale(0.96);
+    opacity: 0.88;
+  }
+  .fn-links a:active   { background: var(--crimson-2); transform: scale(0.95); }
+  .val-card:active     { transform: scale(0.98) translateY(1px); }
+  .i-choice:active     { transform: scale(0.97); }
+  .faq-q:active        { background: var(--crimson-3); }
+  .how-step:active     { transform: scale(0.99); }
+  .mob-tab:active      { opacity: 0.70; transform: scale(0.93); }
+}
+
+/* ── P12.6  ORB ANIMATION — LUXURY RESTRAINT ────────────────────
+   18/22/26s loops were slightly too fast: movement was perceptible.
+   Premium ambient motion should be barely noticed, only felt.
+   32/44/56s: atmosphere only. Disabled on mobile (GPU pressure). */
+.hero-ambient .orb-1 { animation-duration: 32s; }
+.hero-ambient .orb-2 { animation-duration: 44s; }
+.hero-ambient .orb-3 { animation-duration: 56s; }
+
+@media (max-width: 767px) {
+  .hero-ambient .orb-1,
+  .hero-ambient .orb-2,
+  .hero-ambient .orb-3 { animation: none; }
+}
+
+/* ── P12.7  NOISE TEXTURE — CSS VARIABLE RESPONSIVE ─────────────
+   Phase 10 JS already sets --noise-depth as user scrolls deeper.
+   Wire body::after to respond to the variable. Fallback = 0.028. */
+body::after {
+  opacity: var(--noise-depth, 0.028);
+}
+
+/* ── P12.8  INTAKE CLOSE BUTTON — TAP ZONE EXPANSION ────────────
+   The ✕ button needs 44px minimum (Apple HIG). Flex centering
+   ensures tap target is generous while icon stays visually small. */
+#intake-close {
+  min-width:  44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s var(--ease-out), transform 0.15s var(--ease-out);
+}
+#intake-close:hover   { background: var(--crimson-2); }
+#intake-close:active  { transform: scale(0.88); }
+
+/* ── P12.9  CARD HOVER DEPTH — PREMIUM RESTRAINT ────────────────
+   Consolidate card transition. Subtle rise (3px) with shadow
+   promotes depth without bouncing. Apple-level restraint. */
+.val-card {
+  transition:
+    transform    0.35s var(--ease-out),
+    box-shadow   0.35s var(--ease-out),
+    background   0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
+}
+.val-card:hover {
+  transform:  translateY(-3px) scale(1.006);
+  box-shadow: var(--shadow-lg);
+}
+@media (hover: none) {
+  .val-card:hover { transform: none; box-shadow: var(--shadow-sm); }
+}
+
+/* ── P12.10  SCROLL PROGRESS BAR — COMPOSITOR HINT ──────────────
+   will-change:width prevents compositor from repainting other layers
+   on every width change. Smoother updates at high scroll velocity. */
+#scroll-progress {
+  will-change: width;
+  transition: width 0.08s linear;
+}
+
+/* ── P12.11  MOBILE: CANVAS SUPPRESSION ─────────────────────────
+   Particle JS already checks isMobile() and skips. Canvas is empty
+   but still a compositor layer on mobile. Hide = reclaim GPU memory. */
+@media (max-width: 767px) {
+  canvas#particle-canvas { display: none; }
+}
+
+/* ── P12.12  MOBILE BOTTOM NAV TAP TARGETS ───────────────────────
+   48px minimum ensures comfortable one-thumb interaction. */
+@media (max-width: 767px) {
+  .mob-tab { min-height: 48px; }
+}
+
+/* ── P12.13  EASING VOCABULARY ───────────────────────────────────
+   Supplementary named tokens. --aspira-enter for element entrances,
+   --aspira-exit for closes, --aspira-micro for micro-interactions. */
+:root {
+  --aspira-enter: cubic-bezier(0.16, 1,   0.3,  1);
+  --aspira-exit:  cubic-bezier(0.4,  0,   0.8,  1);
+  --aspira-micro: cubic-bezier(0.34, 1.1, 0.64, 1);
+}
+
+/* ── P12.14  HERO STATS — WHOLE-CARD LIFT ────────────────────────
+   P10.5 applied scale(1.10) to the number inside — visually abrupt.
+   Whole-stat translateY lift is coherent and GPU-smooth.
+   P10.5's .h-stat-n transform neutralised here. */
+.h-stat {
+  transition: transform 0.3s var(--ease-out);
+}
+.h-stat:hover              { transform: translateY(-3px); }
+.h-stat:hover .h-stat-n   { transform: none; }
+
+@media (hover: none) {
+  .h-stat:hover { transform: none; }
+}
+
+/* ── P12.15  SCROLL INDICATOR — CALMER PULSE ─────────────────────
+   Reduced amplitude and opacity swing. The indicator guides without
+   demanding. Pure translateY for GPU-compositable animation. */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.40; transform: translateY(0) scale(1); }
+  50%       { opacity: 0.72; transform: translateY(-4px) scale(1.06); }
+}
+
+/* ── P12.16  MOBILE: NAV MINIMUM TAP TARGET ─────────────────────
+   fn-links anchor tags on desktop need a generous click zone.
+   On the rare case #fnav is visible on a wide mobile viewport,
+   min-height:44px protects usability. */
+.fn-links a {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ═══ END PHASE 12 ════════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -8310,7 +8535,18 @@ document.addEventListener('keydown',e=>{
     const yso = document.getElementById('your-space-overlay');
     if(yso&&yso.classList.contains('yso-open')) closeYourSpace();
     const rwm = document.getElementById('ru-welcome-modal');
-    if(rwm&&rwm.classList.contains('rwm-open')) rwm.classList.remove('rwm-open');
+    if(rwm&&rwm.classList.contains('rwm-open')){
+      rwm.classList.remove('rwm-open');
+      document.documentElement.style.overflow=''; /* P12.0 — overflow leak fix */
+    }
+  }
+});
+
+/* P12.0 — Click-outside to close rwm welcome modal */
+document.addEventListener('click',function(e){
+  if(e.target.id==='ru-welcome-modal'){
+    e.target.classList.remove('rwm-open');
+    document.documentElement.style.overflow='';
   }
 });
 
