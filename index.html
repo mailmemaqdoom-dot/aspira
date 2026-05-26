@@ -8030,6 +8030,232 @@ main, section, article { will-change: auto; }
 }
 /* ═══ END DEPTH ENGINE ══════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA GESTURE INTELLIGENCE SYSTEM
+   Physically believable luxury mobile interaction.
+   Philosophy: tactile, momentum-aware, physically inevitable.
+   Interactions are felt, not noticed.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Ph.1  Unified Interaction Physics Vocabulary ─────────────────── */
+:root {
+  /* Press: instant compression — 70ms, no hesitation                 */
+  --asp-press-dur:     70ms;
+  --asp-press-ease:    cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Settle: spring-back with ~8% overshoot — physical, not cartoon   */
+  --asp-settle-dur:    420ms;
+  --asp-settle-ease:   cubic-bezier(0.22, 1.08, 0.36, 1);
+
+  /* Dismiss: momentum-matched exit — fast, confident                 */
+  --asp-dismiss-dur:   260ms;
+  --asp-dismiss-ease:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Card press: gentler than buttons — 2% compression                */
+  --asp-card-press-scale: 0.979;
+  --asp-card-press-dur:   75ms;
+}
+
+/* ── Ph.9  Global touch optimisation ─────────────────────────────── */
+/* Eliminate 300ms click delay. Remove grey flash on tap.              */
+button, a, label, [role="button"],
+.btn-p, .btn-g, .sub-btn, .pax-trigger,
+.btn-primary, .btn-outline, .btn-ghost,
+.primary-btn, .secondary-btn, .ghost-btn,
+.mob-tab, .dock-link, .fn-links a,
+.val-card, .cp-card, .biz-type-card, .proof-card,
+.faq-item .faq-q,
+.asp-connect-action, .asp-faq-q,
+.asp-sheet__handle {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Ph.7  Primary CTA — deepest tactile press ───────────────────── */
+/* Press state: JS adds .asp-pressing on touchstart                   */
+.btn-p.asp-pressing {
+  transform: scale(0.952) translateY(1px) !important;
+  box-shadow:
+    0 1px 4px rgba(120, 1, 21, 0.26),
+    0 0 0 1px rgba(120, 1, 21, 0.12) !important;
+  transition:
+    transform  var(--asp-press-dur) var(--asp-press-ease),
+    box-shadow var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+/* Release state: JS adds .asp-releasing on touchend — spring-back    */
+.btn-p.asp-releasing {
+  transform: scale(1) translateY(0) !important;
+  transition:
+    transform  var(--asp-settle-dur) var(--asp-settle-ease),
+    box-shadow var(--asp-settle-dur) var(--asp-press-ease) !important;
+}
+
+/* ── Ph.7  Secondary / Ghost buttons ─────────────────────────────── */
+.btn-g.asp-pressing,
+.btn-outline.asp-pressing, .secondary-btn.asp-pressing,
+.btn-ghost.asp-pressing, .ghost-btn.asp-pressing,
+.sub-btn.asp-pressing {
+  transform: scale(0.964) !important;
+  transition: transform var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.btn-g.asp-releasing,
+.btn-outline.asp-releasing, .secondary-btn.asp-releasing,
+.btn-ghost.asp-releasing, .ghost-btn.asp-releasing,
+.sub-btn.asp-releasing {
+  transform: scale(1) !important;
+  transition: transform var(--asp-settle-dur) var(--asp-settle-ease) !important;
+}
+
+/* ── Ph.4  Dock tab — tactile spring feel ────────────────────────── */
+/* Supersede the existing mobPillTap animation and legacy :active rules */
+@media (max-width: 767px) {
+  /* Kill the overshoot-bounce animation — replace with restrained physics */
+  .mob-tab:active { animation: none !important; }
+
+  .mob-tab.asp-pressing {
+    transform: scale(0.86) !important;
+    opacity: 0.72 !important;
+    transition:
+      transform var(--asp-press-dur) var(--asp-press-ease),
+      opacity   var(--asp-press-dur) var(--asp-press-ease) !important;
+  }
+  .mob-tab.asp-releasing {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    transition:
+      transform var(--asp-settle-dur) var(--asp-settle-ease),
+      opacity   280ms var(--asp-press-ease) !important;
+  }
+
+  /* Centre action: deeper compression — more physical mass           */
+  .mob-tab.mob-ctr.asp-pressing {
+    transform: scale(0.88) translateY(1px) !important;
+    opacity: 0.80 !important;
+  }
+  .mob-tab.mob-ctr.asp-releasing {
+    transform: scale(1) translateY(0) !important;
+    opacity: 1 !important;
+    transition: transform var(--asp-settle-dur) var(--asp-settle-ease) !important;
+  }
+
+  /* Active (current section) indicator: stays warm, not compressed   */
+  .mob-tab.active.asp-pressing  { color: var(--crimson); }
+  .mob-tab.active.asp-releasing { color: var(--crimson); }
+}
+
+/* ── Ph.5  Card touch micro-response — upgraded ──────────────────── */
+/* Previous depth engine added :active states. Refine with press/release. */
+@media (max-width: 767px) {
+  .val-card, .cp-card, .biz-type-card, .proof-card {
+    transition:
+      transform  var(--asp-card-press-dur) var(--asp-press-ease),
+      box-shadow var(--asp-card-press-dur) var(--asp-press-ease);
+  }
+
+  /* Press — JS adds .asp-pressing */
+  .val-card.asp-pressing, .proof-card.asp-pressing {
+    transform: scale(var(--asp-card-press-scale)) !important;
+    box-shadow: 0 1px 6px rgba(23, 4, 10, 0.07) !important;
+    transition-duration: var(--asp-card-press-dur) !important;
+  }
+  .cp-card.asp-pressing {
+    transform: translateY(0) scale(var(--asp-card-press-scale)) !important;
+    transition-duration: var(--asp-card-press-dur) !important;
+  }
+  .biz-type-card.asp-pressing {
+    transform: translateY(0) scale(var(--asp-card-press-scale)) !important;
+    transition-duration: var(--asp-card-press-dur) !important;
+  }
+
+  /* Release — JS adds .asp-releasing */
+  .val-card.asp-releasing, .proof-card.asp-releasing {
+    transform: scale(1) !important;
+    transition: transform var(--asp-settle-dur) var(--asp-settle-ease) !important;
+  }
+  .cp-card.asp-releasing, .biz-type-card.asp-releasing {
+    transform: translateY(0) scale(1) !important;
+    transition: transform var(--asp-settle-dur) var(--asp-settle-ease) !important;
+  }
+}
+
+/* ── Ph.3  Sheet handle — drag state refinement ──────────────────── */
+/* Handle pill blooms to crimson during drag (already implemented).   */
+/* Align transition to gesture timing vocabulary.                     */
+.asp-sheet__handle {
+  transition:
+    background var(--asp-press-dur) var(--asp-press-ease),
+    width      220ms var(--asp-settle-ease);
+}
+.asp-sheet.asp-dragging .asp-sheet__handle {
+  transition:
+    background var(--asp-press-dur) var(--asp-press-ease),
+    width      160ms var(--asp-press-ease);
+}
+
+/* ── Ph.3  Sheet spring-back — restrained settle ─────────────────── */
+/* When sheets snap back from partial drag, use refined spring curve   */
+/* asp-settling is added by AspiraGesture JS on touchcancel recovery  */
+.asp-sheet.asp-settling {
+  transition: transform 420ms cubic-bezier(0.22, 1.08, 0.36, 1) !important;
+}
+
+/* ── Ph.8  Interruption-aware: button mid-press cancel ───────────── */
+/* When press is cancelled (e.g. scroll begins), release cleanly       */
+.btn-p:not(.asp-pressing):not(.asp-releasing),
+.btn-g:not(.asp-pressing):not(.asp-releasing) {
+  transition:
+    transform  var(--asp-settle-dur) var(--asp-settle-ease),
+    box-shadow 280ms var(--asp-press-ease),
+    background 280ms var(--asp-press-ease),
+    color      280ms var(--asp-press-ease);
+}
+
+/* ── Ph.6  Scroll — interaction continuity ───────────────────────── */
+/* Sheets: ensure no scroll bleeds to page when sheet is scrollable   */
+.asp-sheet__bd,
+.asp-faq-body,
+.asp-connect-actions {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Ph.11  Performance: compositor hints ────────────────────────── */
+/* Only elements actively animated in gesture sequences get hints     */
+.mob-tab { will-change: transform, opacity; }
+.btn-p, .btn-g { will-change: transform; }
+/* Release will-change after interaction via JS (handled in IIFE) */
+
+/* ── Ph.12  Audit: kill legacy bounce animation ──────────────────── */
+/* mobPillTap had 0→0.92→1.06→1 bounce — cartoon-grade overshoot.   */
+/* Our asp-pressing/asp-releasing system replaces it entirely.        */
+@keyframes mobPillTap {
+  /* Redefined: instant compress → hold → release. No overshoot.      */
+  0%   { transform: scale(1);    }
+  15%  { transform: scale(0.86); }
+  100% { transform: scale(1);    }
+}
+
+/* ── Gesture Intelligence: Reduced Motion Guard ──────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --asp-press-dur:    0.001ms;
+    --asp-settle-dur:   0.001ms;
+    --asp-dismiss-dur:  0.001ms;
+  }
+  .btn-p.asp-pressing,  .btn-p.asp-releasing,
+  .btn-g.asp-pressing,  .btn-g.asp-releasing,
+  .mob-tab.asp-pressing, .mob-tab.asp-releasing,
+  .val-card.asp-pressing, .val-card.asp-releasing,
+  .cp-card.asp-pressing, .cp-card.asp-releasing,
+  .biz-type-card.asp-pressing, .biz-type-card.asp-releasing,
+  .proof-card.asp-pressing, .proof-card.asp-releasing {
+    transform: none !important;
+    opacity: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+/* ═══ END GESTURE INTELLIGENCE SYSTEM ══════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -12715,6 +12941,132 @@ document.body.addEventListener('touchmove',function(e){
   window.addEventListener('scroll', onScroll, { passive: true });
 
 })(); /* end AspiraDepth */
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ASPIRA GESTURE INTELLIGENCE SYSTEM — Touch Physics Engine
+   ══════════════════════════════════════════════════════════════════
+   Delivers physically inevitable interaction response across all
+   interactive surfaces. Core mechanism:
+
+   touchstart → asp-pressing (instant compress via CSS)
+   touchend   → asp-releasing (spring-back via CSS settle curve)
+   touchcancel → immediate clean reset
+
+   Zero layout reads inside handlers. All animation in CSS.
+   rAF not needed — transitions are declarative.
+   ══════════════════════════════════════════════════════════════════ */
+(function AspiraGesture() {
+  'use strict';
+
+  const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (noMotion) return;
+
+  const SETTLE_MS  = 440;  /* matches --asp-settle-dur                 */
+  const isMobile   = () => window.innerWidth <= 767;
+
+  /* ── Core tactile press ──────────────────────────────────────── */
+  /* Adds press/release class pair. Cleans up after settle.         */
+  function makeTactile(el) {
+    let releaseTimer  = null;
+    let scrollBlocked = false; /* prevent press if user is scrolling  */
+
+    el.addEventListener('touchstart', e => {
+      clearTimeout(releaseTimer);
+      scrollBlocked = false;
+      el.classList.remove('asp-releasing');
+      el.classList.add('asp-pressing');
+    }, { passive: true });
+
+    /* If touch moves significantly (scroll intent), cancel press    */
+    let startY = 0;
+    el.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', e => {
+      if (Math.abs(e.touches[0].clientY - startY) > 6) {
+        scrollBlocked = true;
+        el.classList.remove('asp-pressing');
+        el.classList.add('asp-releasing');
+        clearTimeout(releaseTimer);
+        releaseTimer = setTimeout(() => {
+          el.classList.remove('asp-releasing');
+        }, SETTLE_MS);
+      }
+    }, { passive: true });
+
+    function release() {
+      if (scrollBlocked) return;
+      el.classList.remove('asp-pressing');
+      el.classList.add('asp-releasing');
+      clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => {
+        el.classList.remove('asp-releasing');
+      }, SETTLE_MS);
+    }
+
+    function cancel() {
+      clearTimeout(releaseTimer);
+      el.classList.remove('asp-pressing', 'asp-releasing');
+    }
+
+    el.addEventListener('touchend',    release, { passive: true });
+    el.addEventListener('touchcancel', cancel,  { passive: true });
+  }
+
+  /* ── Apply tactile press to all interactive surfaces ─────────── */
+  const TACTILE = [
+    '.btn-p', '.btn-g', '.sub-btn',
+    '.btn-primary', '.primary-btn',
+    '.btn-outline', '.secondary-btn',
+    '.btn-ghost', '.ghost-btn',
+    '.mob-tab',
+    '.val-card', '.cp-card', '.biz-type-card', '.proof-card',
+    '.asp-connect-action',
+  ].join(', ');
+
+  document.querySelectorAll(TACTILE).forEach(makeTactile);
+
+  /* ── Sheet touchcancel recovery ──────────────────────────────── */
+  /* If system interrupts a sheet drag (call, swipe home indicator),  */
+  /* springs the panel back cleanly instead of leaving it mid-air.    */
+  function addSheetRecovery(panelEl) {
+    if (!panelEl) return;
+    panelEl.addEventListener('touchcancel', () => {
+      if (!panelEl.classList.contains('asp-dragging')) return;
+      panelEl.classList.remove('asp-dragging');
+      panelEl.classList.add('asp-settling');
+      panelEl.style.transform  = 'translateY(0)';
+      /* asp-settling CSS transition handles the spring-back          */
+      setTimeout(() => {
+        panelEl.classList.remove('asp-settling');
+        panelEl.style.transform = '';
+      }, 440);
+    }, { passive: true });
+  }
+
+  addSheetRecovery(document.getElementById('asp-connect-sheet'));
+  addSheetRecovery(document.getElementById('asp-faq-sheet'));
+  addSheetRecovery(document.getElementById('intake-panel'));
+  addSheetRecovery(document.getElementById('pay-modal-panel'));
+
+  /* ── Dock tab: release will-change after settle ──────────────── */
+  /* Prevents compositor layer from being held permanently on tabs    */
+  /* that are never actually animated after the dock has settled.     */
+  if (isMobile()) {
+    const tabs = document.querySelectorAll('.mob-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('touchend', () => {
+        setTimeout(() => {
+          tab.style.willChange = '';
+        }, SETTLE_MS + 100);
+      }, { passive: true });
+    });
+  }
+
+})(); /* end AspiraGesture */
 </script>
 </body>
 </html>
