@@ -7104,6 +7104,345 @@ body::after {
 
 /* ═══ END PHASE 12 ════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA LUXURY MOBILE DOCK — Premium Operating Layer
+   ───────────────────────────────────────────────────────────────────
+   Architecture: floating glass island that rises from the thumb zone,
+   condenses on downward scroll, and responds to touch with physical
+   precision. Every value here is intentional — not template-copied.
+
+   Philosophy:
+   • Glass that feels warm, not clinical — rgba(248,245,240) not white
+   • Shadow that diffuses like candlelight, not drops like CSS defaults
+   • Motion that feels physical — spring release, not linear bounce
+   • Center action as brand anchor — elevated without being loud
+   • Labels emerge on active — silence is the default, meaning appears
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── DOCK: MOBILE-ONLY GATE ──────────────────────────────────────── */
+#mob-nav, .mob-nav { display: none; }
+
+@media (max-width: 767px) {
+
+/* ── DOCK ISLAND CONTAINER ───────────────────────────────────────── */
+#mob-nav, .mob-nav {
+  /* Floating anchor — centered, never overflows viewport */
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom, 18px));
+  transform: translateX(-50%);
+  width: auto;
+  max-width: calc(100vw - 28px);
+
+  /* ASPIRA warm glass — not cold clinic white */
+  background: rgba(248, 245, 240, 0.86);
+  backdrop-filter: blur(40px) saturate(2.1) brightness(1.03);
+  -webkit-backdrop-filter: blur(40px) saturate(2.1) brightness(1.03);
+
+  /* Refined border: bright top (lifted glass), quiet bottom (depth) */
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-bottom-color: rgba(210, 198, 186, 0.28);
+  border-top: none; /* override old border-top-only pattern */
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-bottom-color: rgba(210, 198, 186, 0.28);
+  border-radius: 30px;
+
+  /* Cinematic five-layer shadow — near → mid → deep → bloom → haze */
+  box-shadow:
+    0 0   0  0.5px rgba(23, 4, 10, 0.06),   /* hairline ring        */
+    0 2px  6px    rgba(23, 4, 10, 0.05),    /* close sharp          */
+    0 6px 22px    rgba(23, 4, 10, 0.09),    /* mid diffusion        */
+    0 18px 50px   rgba(23, 4, 10, 0.08),    /* deep bloom           */
+    0 36px 88px   rgba(23, 4, 10, 0.05),    /* atmospheric haze     */
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.82), /* top glass light   */
+    inset 0 -1px  0 rgba(23, 4, 10, 0.025);   /* inner bottom depth */
+
+  /* Layout: tabs in a row, content-fitting */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 9px;
+
+  /* Stacking */
+  z-index: 800;
+
+  /* GPU layer — prevents paint during scroll */
+  will-change: transform;
+
+  /* Spring entrance: rises from below as page loads */
+  animation: aspiraDockRise 0.76s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both;
+
+  /* Scroll-aware transitions — gentle settling */
+  transition:
+    transform   320ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow  320ms cubic-bezier(0.16, 1, 0.3, 1),
+    padding     280ms cubic-bezier(0.16, 1, 0.3, 1),
+    gap         280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dock entrance: rises from 30px below, slight scale, spring easing */
+@keyframes aspiraDockRise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px) scale(0.91);
+  }
+  60% { opacity: 1; }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* ── SCROLL-CONDENSED STATE (JS adds .dock-condensed) ────────────── */
+/* When user scrolls down: dock gently settles 8px — "aware, not     */
+/* reactive." Feels like a breathing organism, not a reactive widget. */
+#mob-nav.dock-condensed, .mob-nav.dock-condensed {
+  transform: translateX(-50%) translateY(8px);
+  padding: 5px 8px;
+  gap: 2px;
+  box-shadow:
+    0 0   0  0.5px rgba(23, 4, 10, 0.04),
+    0 2px  6px    rgba(23, 4, 10, 0.04),
+    0 5px 18px    rgba(23, 4, 10, 0.06),
+    0 12px 36px   rgba(23, 4, 10, 0.06),
+    inset 0 1px  0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(23, 4, 10, 0.02);
+}
+
+/* ── TAB ITEMS ────────────────────────────────────────────────────── */
+/* Each tab is a self-contained tactile target.                       */
+/* 44px minimum height maintains thumb confidence at all densities.  */
+.mob-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 9px 13px;
+  border-radius: 23px;
+  min-height: 48px;
+  min-width: 46px;
+  color: var(--text-3);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0;        /* typography via .mob-tab-label */
+  position: relative;
+  flex-shrink: 0;
+
+  /* Motion: color/bg on ease-out, transform on spring */
+  transition:
+    color      200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform  240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+/* Tactile press: physical compression with fast attack, spring release */
+.mob-tab:active {
+  transform: scale(0.84);
+  transition:
+    transform 70ms cubic-bezier(0.76, 0, 0.24, 1),  /* compress fast */
+    color     70ms,
+    background 70ms;
+}
+
+/* Active state: warm crimson fill */
+.mob-tab.active {
+  color: var(--crimson);
+  background: var(--crimson-2);
+}
+
+/* Active with condensed dock: slightly smaller to preserve room */
+.dock-condensed .mob-tab {
+  padding: 7px 10px;
+}
+
+/* ── ICON WRAPPER (mchip) ────────────────────────────────────────── */
+.mob-nav .mob-tab .mchip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  pointer-events: none;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Icon springs up very gently on active */
+.mob-tab.active .mchip {
+  transform: scale(1.10) translateY(-0.5px);
+}
+.mob-tab.mob-ctr .mchip {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── TAB LABELS ─────────────────────────────────────────────────── */
+/* Silence by default. Meaning emerges when a tab is chosen.         */
+.mob-tab-label {
+  font-family: var(--font-body);
+  font-size: 0.50rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1;
+  pointer-events: none;
+
+  /* Hidden on inactive — slides down and fades */
+  opacity: 0;
+  transform: translateY(3px);
+  transition:
+    opacity   180ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Label surfaces on active: slides up, blooms in */
+.mob-tab.active .mob-tab-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Center action: label always visible — it is the call */
+.mob-tab.mob-ctr .mob-tab-label {
+  opacity: 1;
+  transform: translateY(0);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.47rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+/* Labels in condensed dock: stay hidden to save space */
+.dock-condensed .mob-tab .mob-tab-label {
+  opacity: 0;
+  transform: translateY(3px);
+}
+/* Center action label: also hides in condensed state */
+.dock-condensed .mob-tab.mob-ctr .mob-tab-label {
+  opacity: 0;
+}
+
+/* ── CENTER ACTION — PRIMARY BRAND ANCHOR ───────────────────────── */
+/* Elevated with intent: crimson, shadow depth, inset highlight.     */
+/* NOT oversized. NOT loud. Elevated through depth, not size.        */
+.mob-tab.mob-ctr {
+  background: var(--crimson);
+  color: #fff;
+  border-radius: 22px;
+  padding: 10px 15px;
+  min-width: 68px;
+  gap: 4px;
+
+  /* Physical depth: two inset layers + three outer layers */
+  box-shadow:
+    0 2px  5px  rgba(120, 1, 21, 0.22),  /* close shadow    */
+    0 5px 16px  rgba(120, 1, 21, 0.24),  /* mid shadow      */
+    0 10px 32px rgba(120, 1, 21, 0.16),  /* deep shadow     */
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.24),  /* top glass light */
+    inset 0 -1px  0 rgba(0,   0,   0,   0.14);  /* bottom depth    */
+
+  transition:
+    transform  220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms;
+}
+
+/* Center press: deeper compress + shadow collapse = physical button */
+.mob-tab.mob-ctr:active {
+  transform: scale(0.88) translateY(1px);
+  box-shadow:
+    0 1px  3px  rgba(120, 1, 21, 0.20),
+    0 2px  8px  rgba(120, 1, 21, 0.18),
+    inset 0 1px  0 rgba(255, 255, 255, 0.14),
+    inset 0 2px  5px rgba(0, 0, 0, 0.10);
+  transition-duration: 70ms, 70ms, 70ms;
+}
+
+/* Center stays crimson on active (it IS the action, not a nav dest) */
+.mob-tab.mob-ctr.active,
+.mob-tab.mob-ctr.active:hover {
+  background: var(--crimson);
+  color: #fff;
+}
+
+/* Center in condensed: still visible, slightly tighter */
+.dock-condensed .mob-tab.mob-ctr {
+  padding: 8px 12px;
+  min-width: 56px;
+}
+
+/* ── DARK MODE ────────────────────────────────────────────────────── */
+/* Warm dark: deep burgundy-tinted surface, not cold black           */
+[data-theme="dark"] #mob-nav,
+[data-theme="dark"] .mob-nav {
+  background: rgba(18, 10, 13, 0.92);
+  border-color: rgba(248, 245, 240, 0.09);
+  border-bottom-color: rgba(248, 245, 240, 0.05);
+  box-shadow:
+    0 0   0  0.5px rgba(0, 0, 0, 0.50),
+    0 2px  6px    rgba(0, 0, 0, 0.45),
+    0 6px 22px    rgba(0, 0, 0, 0.52),
+    0 18px 50px   rgba(0, 0, 0, 0.42),
+    0 36px 88px   rgba(0, 0, 0, 0.26),
+    inset 0 1.5px 0 rgba(248, 245, 240, 0.07),
+    inset 0 -1px  0 rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .mob-tab {
+  color: rgba(248, 245, 240, 0.32);
+}
+[data-theme="dark"] .mob-tab.active {
+  color: var(--crimson);
+  background: var(--crimson-2);
+}
+[data-theme="dark"] .mob-tab.mob-ctr {
+  color: #fff;
+}
+[data-theme="dark"] #mob-nav.dock-condensed,
+[data-theme="dark"] .mob-nav.dock-condensed {
+  box-shadow:
+    0 0   0  0.5px rgba(0, 0, 0, 0.40),
+    0 2px  6px    rgba(0, 0, 0, 0.36),
+    0 5px 18px    rgba(0, 0, 0, 0.40),
+    0 12px 36px   rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(248, 245, 240, 0.05);
+}
+
+/* ── FLOATING ELEMENTS: CLEAR THE DOCK ──────────────────────────── */
+/* PWA prompt, return banner, and AI FAB all float above the dock.   */
+/* Offset = dock height (~64px) + bottom margin (18px) + gap (12px) */
+#pwa-prompt {
+  bottom: calc(max(18px, env(safe-area-inset-bottom, 18px)) + 64px + 14px);
+}
+#ru-banner, #ru-fresh-banner {
+  bottom: calc(max(18px, env(safe-area-inset-bottom, 18px)) + 64px + 14px);
+}
+.ai-fab {
+  bottom: calc(max(18px, env(safe-area-inset-bottom, 18px)) + 64px + 10px);
+}
+
+/* ── PRINT GUARD ────────────────────────────────────────────────── */
+@media print { #mob-nav, .mob-nav { display: none !important; } }
+
+} /* end @media (max-width: 767px) */
+
+/* ── REDUCED MOTION GUARD ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  #mob-nav, .mob-nav {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+  }
+  .mob-tab, .mob-tab .mchip, .mob-tab-label {
+    transition-duration: 0.001ms !important;
+    animation-duration:  0.001ms !important;
+  }
+}
+/* ═══ END LUXURY MOBILE DOCK ══════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -7167,38 +7506,77 @@ body::after {
   </div>
 </nav>
 
-<!-- MOBILE BOTTOM TAB BAR -->
-<nav class="mob-nav" id="mob-nav">
-  <a class="mob-tab active" href="#hero" id="mt-home">
-    <div class="mchip">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+<!-- ── ASPIRA LUXURY MOBILE DOCK ────────────────────────────────
+     Five navigation anchors: Home, Clarity, [Begin Clarity], Services, Connect.
+     Center "Begin Clarity" opens the intake — it is the primary system action.
+     Labels emerge only on active state; silence is the default.
+     Theme toggle is in the top floating nav (fn-theme) — always reachable.     -->
+<nav class="mob-nav" id="mob-nav" role="navigation" aria-label="Primary mobile navigation">
+
+  <!-- 1. Home → hero section -->
+  <a class="mob-tab active" href="#hero" id="mt-home" aria-label="Home">
+    <div class="mchip" aria-hidden="true">
+      <!-- Home: clean house — familiar, grounding -->
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9,22 9,12 15,12 15,22"/>
+      </svg>
     </div>
-    <span class="mob-tab-label">Begin</span>
+    <span class="mob-tab-label">Home</span>
   </a>
-  <a class="mob-tab" href="#begin" id="mt-begin">
-    <div class="mchip">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+
+  <!-- 2. Clarity → analysis & reflection sections -->
+  <a class="mob-tab" href="#begin" id="mt-begin" aria-label="Clarity analysis">
+    <div class="mchip" aria-hidden="true">
+      <!-- Clarity: a single lens — precision, focus -->
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7.5"/>
+        <line x1="20.5" y1="20.5" x2="16.2" y2="16.2"/>
+      </svg>
     </div>
     <span class="mob-tab-label">Clarity</span>
   </a>
-  <a class="mob-tab mob-ctr" href="#" id="mob-ask" aria-label="Open Clarity Intake">
-    <div class="mchip">
+
+  <!-- 3. Begin Clarity — CENTER, elevated, primary action -->
+  <a class="mob-tab mob-ctr" href="#" id="mob-ask" aria-label="Begin your clarity analysis">
+    <div class="mchip" aria-hidden="true">
+      <!-- ASPIRA A mark — the brand as the action -->
       <svg style="width:20px;height:20px" viewBox="0 0 100 100"><use href="#ia"/></svg>
     </div>
-    <span class="mob-tab-label">Aspira</span>
+    <span class="mob-tab-label">Begin</span>
   </a>
-  <a class="mob-tab" href="#biz-clarity" id="mt-biz">
-    <div class="mchip">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+
+  <!-- 4. Services → business clarity & how-it-works sections -->
+  <a class="mob-tab" href="#biz-clarity" id="mt-biz" aria-label="Services">
+    <div class="mchip" aria-hidden="true">
+      <!-- Services: briefcase — grounded, professional -->
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2"/>
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+      </svg>
     </div>
-    <span class="mob-tab-label">Presence</span>
+    <span class="mob-tab-label">Services</span>
   </a>
-  <button class="mob-tab" id="mt-theme" aria-label="Toggle theme">
-    <div class="mchip" id="mt-ti">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="mt-theme-icon-svg"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+
+  <!-- 5. Connect → about & faq sections -->
+  <!-- mt-theme ID preserved to avoid breaking existing theme handler JS -->
+  <a class="mob-tab" href="#about" id="mt-theme" aria-label="Connect — About ASPIRA">
+    <div class="mchip" aria-hidden="true">
+      <!-- Connect: two nodes joined — relationship, reach -->
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5"  r="3"/>
+        <circle cx="6"  cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <line x1="8.59"  y1="13.51" x2="15.42" y2="17.49"/>
+        <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"/>
+      </svg>
     </div>
-    <span class="mob-tab-label">Theme</span>
-  </button>
+    <span class="mob-tab-label">Connect</span>
+  </a>
+
+  <!-- Theme icon SVG stub — kept for JS theme-sync compatibility -->
+  <svg id="mt-theme-icon-svg" style="display:none" aria-hidden="true"></svg>
+
 </nav>
 
 <main>
@@ -8309,7 +8687,12 @@ function applyTheme(t,save=true){
   }
 }
 document.getElementById('fn-theme').addEventListener('click',()=>applyTheme(B.getAttribute('data-theme')==='light'?'dark':'light'));
-document.getElementById('mt-theme').addEventListener('click',()=>applyTheme(B.getAttribute('data-theme')==='light'?'dark':'light'));
+/* mt-theme is now the Connect dock tab — navigates to #about.
+   Theme toggle is in the desktop floating nav (fn-theme), always reachable. */
+const mtThemeEl = document.getElementById('mt-theme');
+if (mtThemeEl && mtThemeEl.tagName !== 'BUTTON') {
+  mtThemeEl.addEventListener('click', e => { e.preventDefault(); goTo('about'); });
+}
 
 const fnav=document.getElementById('fnav');
 let isSc=false;
@@ -8330,7 +8713,8 @@ function syncNav(){
     const mapped={hero:['hero'],how:['how'],begin:['begin','understand','reflection','gaps'],connect:['connect'],'biz-clarity':['biz-clarity'],about:['about','value','manifesto'],faq:['faq']};
     Object.entries(mapped).forEach(([key,ids])=>{if(ids.includes(cur)&&h===key) a.classList.add('active');});
   });
-  const tmap={hero:'mt-home',value:'mt-home',manifesto:'mt-home',how:'mt-begin',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin','biz-clarity':'mt-biz',about:'mt-home',faq:'mt-home','perception-mirror':'mt-begin','clarity-pathways':'mt-begin','payment-access':'mt-home'};
+  /* tmap: section-id → dock tab-id. 'mt-theme' is now the Connect tab. */
+  const tmap={hero:'mt-home',value:'mt-home',manifesto:'mt-home',how:'mt-begin',begin:'mt-begin',understand:'mt-begin',reflection:'mt-begin',gaps:'mt-begin',connect:'mt-begin','biz-clarity':'mt-biz',about:'mt-theme',faq:'mt-theme','perception-mirror':'mt-begin','clarity-pathways':'mt-begin','payment-access':'mt-biz'};
   document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
   const tid=tmap[cur];if(tid){const t=document.getElementById(tid);if(t)t.classList.add('active');}
 }
@@ -11198,6 +11582,64 @@ document.body.addEventListener('touchmove',function(e){
       }
     });
   });
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ASPIRA LUXURY DOCK — Scroll-Aware Behavior
+   ══════════════════════════════════════════════════════════════════
+   Condenses the dock gently on downward scroll (user is consuming
+   content — give them more screen). Restores on upward intent
+   (user is navigating — bring the dock back into full presence).
+
+   Philosophy: the dock should feel "aware" of the user's intent,
+   not reactive to every micro-scroll. Three guards prevent noise:
+   1. Only activates after scrollY > 90 (page load doesn't trigger)
+   2. Restores when near page bottom (dock needed for navigation)
+   3. rAF-batched: never blocks the paint thread
+   ══════════════════════════════════════════════════════════════════ */
+(function aspiraDockBehavior() {
+  const dock     = document.getElementById('mob-nav');
+  if (!dock) return;
+
+  const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+  const CONDENSE_THRESHOLD = 90;    /* px scrolled before condensing starts */
+  const RESTORE_MARGIN     = 240;   /* px from bottom: always restore       */
+
+  let lastY   = window.scrollY;
+  let ticking = false;
+
+  function update() {
+    const y          = window.scrollY;
+    const goingDown  = y > lastY;
+    const pastThresh = y > CONDENSE_THRESHOLD;
+    const nearBottom = (window.innerHeight + y) >=
+                       (document.documentElement.scrollHeight - RESTORE_MARGIN);
+
+    if (isMobile()) {
+      const shouldCondense = goingDown && pastThresh && !nearBottom;
+      dock.classList.toggle('dock-condensed', shouldCondense);
+    } else {
+      /* On desktop the dock is hidden — remove class so it enters
+         clean if viewport is resized back to mobile.               */
+      dock.classList.remove('dock-condensed');
+    }
+
+    lastY   = y;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, { passive: true });
+
+  /* On resize: re-evaluate without waiting for next scroll */
+  window.addEventListener('resize', () => {
+    requestAnimationFrame(update);
+  }, { passive: true });
 })();
 </script>
 </body>
