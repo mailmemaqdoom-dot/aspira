@@ -7443,6 +7443,455 @@ body::after {
 }
 /* ═══ END LUXURY MOBILE DOCK ══════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA NATIVE SHEET SYSTEM — Layered Mobile Interaction Architecture
+   ───────────────────────────────────────────────────────────────────
+   Philosophy:
+   Sheets are not modals. They are contextual surfaces that emerge
+   from the bottom of the hand — grounded, not imposed. They carry
+   depth behind them, and release cleanly when dismissed.
+
+   Architecture:
+   • .asp-sheet-backdrop — environmental depth when any sheet is open
+   • .asp-sheet — shared sheet geometry (new Connect + FAQ sheets)
+   • Mobile overrides for intake-overlay + pay-modal-overlay
+   • Dock adaptation during sheet presence
+   • Physics handled entirely in JS — CSS provides the spring targets
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── ENVIRONMENTAL BACKDROP ───────────────────────────────────────── */
+/* Shared depth layer — sits between page content and open sheet.    */
+/* Warm dark tint + soft blur creates "atmospheric focus" not a wall. */
+.asp-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 6, 8, 0.44);
+  backdrop-filter: blur(5px) saturate(0.88);
+  -webkit-backdrop-filter: blur(5px) saturate(0.88);
+  z-index: 820;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 380ms cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 380ms,
+              backdrop-filter 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+.asp-sheet-backdrop.asp-open {
+  opacity: 1;
+  visibility: visible;
+}
+[data-theme="dark"] .asp-sheet-backdrop {
+  background: rgba(4, 2, 3, 0.62);
+  backdrop-filter: blur(6px) saturate(0.80);
+  -webkit-backdrop-filter: blur(6px) saturate(0.80);
+}
+
+/* ── SHARED SHEET PANEL GEOMETRY ─────────────────────────────────── */
+/* The base for Connect and FAQ sheets.                               */
+/* Intake and pay-modal have their own mobile overrides below.        */
+.asp-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 830;
+  background: var(--surface);
+  backdrop-filter: blur(32px) saturate(1.9);
+  -webkit-backdrop-filter: blur(32px) saturate(1.9);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+    0 -2px  8px  rgba(23, 4, 10, 0.06),
+    0 -8px  32px rgba(23, 4, 10, 0.08),
+    0 -20px 60px rgba(23, 4, 10, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  padding: 0 0 max(24px, env(safe-area-inset-bottom, 24px));
+  max-height: 88svh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  overflow: hidden;
+}
+.asp-sheet.asp-open {
+  transform: translateY(0);
+}
+/* Drag in progress: no transition (raw tracking) */
+.asp-sheet.asp-dragging {
+  transition: none;
+}
+[data-theme="dark"] .asp-sheet {
+  border-color: rgba(248, 245, 240, 0.08);
+  box-shadow:
+    0 -2px  8px  rgba(0, 0, 0, 0.35),
+    0 -8px  32px rgba(0, 0, 0, 0.45),
+    0 -20px 60px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(248, 245, 240, 0.06);
+}
+
+/* ── SHARED DRAG HANDLE ──────────────────────────────────────────── */
+/* The handle is the invitation to dismiss — visible, tactile, calm. */
+.asp-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 200ms, width 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.asp-sheet__handle:active,
+.asp-sheet.asp-dragging .asp-sheet__handle {
+  width: 48px;
+  background: var(--crimson);
+  cursor: grabbing;
+}
+
+/* ── SHEET HEADER ─────────────────────────────────────────────────── */
+.asp-sheet__hd {
+  padding: 14px 22px 12px;
+  flex-shrink: 0;
+}
+.asp-sheet__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.asp-sheet__sub {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  letter-spacing: 0.03em;
+}
+.asp-sheet__hd-rule {
+  height: 1px;
+  background: var(--border-2);
+  margin: 0 22px;
+  flex-shrink: 0;
+}
+
+/* ── SHEET BODY ───────────────────────────────────────────────────── */
+.asp-sheet__bd {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  padding: 20px 22px 8px;
+}
+
+/* ── CONNECT SHEET ────────────────────────────────────────────────── */
+/* Three contact actions + one knowledge action. Minimal, intentional.*/
+#asp-connect-sheet .asp-sheet__bd {
+  padding: 16px 18px 8px;
+}
+.asp-connect-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+.asp-connect-action {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  text-decoration: none;
+  color: var(--text-1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms,
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+.asp-connect-action:active {
+  transform: scale(0.97);
+  background: var(--crimson-3);
+  transition-duration: 80ms;
+}
+.asp-connect-action.asp-wa  { border-color: rgba(37, 211, 102, 0.20); }
+.asp-connect-action.asp-tg  { border-color: rgba(42, 171, 238, 0.20); }
+.asp-connect-action.asp-faq { border-color: rgba(120, 1, 21, 0.14); }
+
+.asp-connect-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.15rem;
+}
+.asp-wa  .asp-connect-icon { background: rgba(37, 211, 102, 0.12); }
+.asp-tg  .asp-connect-icon { background: rgba(42, 171, 238, 0.12); }
+.asp-faq .asp-connect-icon { background: var(--crimson-2); }
+
+.asp-connect-text { flex: 1; min-width: 0; }
+.asp-connect-name {
+  font-size: 0.90rem;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.3;
+}
+.asp-connect-hint {
+  font-size: 0.72rem;
+  color: var(--text-3);
+  margin-top: 1px;
+}
+.asp-connect-arrow {
+  color: var(--text-3);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.asp-connect-brand {
+  text-align: center;
+  padding: 10px 0 4px;
+}
+.asp-connect-brand p {
+  font-size: 0.70rem;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+/* ── FAQ SHEET ────────────────────────────────────────────────────── */
+#asp-faq-sheet .asp-sheet__bd {
+  padding: 12px 18px 8px;
+}
+.asp-faq-list { display: flex; flex-direction: column; gap: 0; }
+.asp-faq-item {
+  border-bottom: 1px solid var(--border-2);
+}
+.asp-faq-item:last-child { border-bottom: none; }
+.asp-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 4px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.45;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+.asp-faq-q .asp-faq-chev {
+  color: var(--text-3);
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.asp-faq-item.asp-open .asp-faq-chev {
+  transform: rotate(180deg);
+  color: var(--crimson);
+}
+.asp-faq-a {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 360ms cubic-bezier(0.16, 1, 0.3, 1),
+              padding    280ms cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0 4px;
+}
+.asp-faq-item.asp-open .asp-faq-a {
+  max-height: 280px;
+  padding: 0 4px 14px;
+}
+.asp-faq-a p {
+  font-size: 0.83rem;
+  color: var(--text-2);
+  line-height: 1.72;
+}
+.asp-faq-see-all {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  padding: 11px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--crimson);
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(120,1,21,0.18);
+  border-radius: 10px;
+  background: var(--crimson-3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 180ms, border-color 180ms;
+}
+.asp-faq-see-all:active { background: var(--crimson-2); }
+
+/* ── DOCK ADAPTATION DURING SHEET PRESENCE ───────────────────────── */
+/* When a sheet is open, the dock recedes — sheet has focus, dock   */
+/* is contextually dimmed. Returns to full presence on close.        */
+.asp-sheet-active #mob-nav,
+.asp-sheet-active .mob-nav {
+  opacity: 0.38;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(6px);
+  transition:
+    opacity   320ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── INTAKE OVERLAY — MOBILE SHEET UPGRADE ───────────────────────── */
+/* On mobile (≤767px): converts from full-screen opaque to a         */
+/* bottom sheet with depth backdrop. Desktop: unchanged.             */
+@media (max-width: 767px) {
+  #intake-overlay {
+    background: transparent;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  /* The depth backdrop effect for intake is handled via .asp-sheet-backdrop */
+
+  #intake-panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92svh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    border-radius: 24px 24px 0 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    box-shadow:
+      0 -2px  8px  rgba(23, 4, 10, 0.06),
+      0 -8px  32px rgba(23, 4, 10, 0.09),
+      inset 0 1px 0 rgba(255, 255, 255, 0.50);
+    padding: 0 0 max(28px, env(safe-area-inset-bottom, 28px));
+    margin: 0;
+    min-height: 0;
+
+    /* Enters from below — spring rise */
+    transform: translateY(100%);
+    transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+  }
+  #intake-overlay.open #intake-panel {
+    transform: translateY(0);
+  }
+
+  /* Drag-in-progress: no transition */
+  #intake-panel.asp-dragging {
+    transition: none;
+  }
+
+  /* Drag handle via pseudo — sits above the progress bar */
+  #intake-panel::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 12px auto 0;
+    transition: width 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 200ms;
+  }
+  #intake-panel.asp-dragging::before {
+    width: 48px;
+    background: var(--crimson);
+  }
+
+  /* Progress bar: sits inside panel now, not fixed top */
+  #intake-pb {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    border-radius: 0;
+    margin-top: 8px;
+  }
+
+  /* Close button: slightly tighter on mobile sheet */
+  #intake-close {
+    top: 0.75rem;
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
+  }
+
+  [data-theme="dark"] #intake-panel {
+    border-color: rgba(248, 245, 240, 0.08);
+    box-shadow:
+      0 -2px  8px  rgba(0, 0, 0, 0.40),
+      0 -8px  32px rgba(0, 0, 0, 0.50),
+      inset 0 1px 0 rgba(248, 245, 240, 0.06);
+  }
+}
+
+/* ── PAY MODAL — MOBILE SHEET UPGRADE ───────────────────────────── */
+/* On mobile: centered dialog → bottom sheet (more natural for UPI). */
+@media (max-width: 767px) {
+  #pay-modal-overlay {
+    align-items: flex-end;
+    justify-content: stretch;
+    padding: 0;
+  }
+  #pay-modal-panel {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+    padding: 0 1.5rem max(28px, env(safe-area-inset-bottom, 28px));
+    margin: 0;
+    animation: none; /* replaced by CSS class-based transition */
+    transform: translateY(100%);
+    transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+  }
+  #pay-modal-panel::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 12px auto 8px;
+    transition: width 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 200ms;
+  }
+  #pay-modal-panel.asp-dragging::before {
+    width: 48px;
+    background: var(--crimson);
+  }
+  #pay-modal-overlay.pmopen #pay-modal-panel {
+    transform: translateY(0);
+  }
+  #pay-modal-panel.asp-dragging {
+    transition: none;
+  }
+}
+
+/* ── REDUCED MOTION — SHEET SYSTEM ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .asp-sheet, .asp-sheet-backdrop,
+  #intake-panel, #pay-modal-panel,
+  .asp-faq-a, .asp-connect-action {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+/* ═══ END NATIVE SHEET SYSTEM ══════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -11585,6 +12034,163 @@ document.body.addEventListener('touchmove',function(e){
 })();
 </script>
 
+<!-- ════════════════════════════════════════════════════════════════
+     ASPIRA NATIVE SHEETS — Connect + FAQ
+     Shared depth backdrop, then the two new sheet panels.
+     All other sheets (intake, pay-modal) are existing elements
+     upgraded via CSS + JS physics engine.
+     ════════════════════════════════════════════════════════════════ -->
+
+<!-- Shared depth backdrop — one instance, shared by all sheets -->
+<div id="asp-backdrop" class="asp-sheet-backdrop" aria-hidden="true"></div>
+
+<!-- ── CONNECT SHEET ────────────────────────────────────────────── -->
+<!-- Opens when the Connect dock tab is tapped.                     -->
+<!-- Three direct contact paths + one knowledge path.               -->
+<div id="asp-connect-sheet"
+     class="asp-sheet"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Connect with ASPIRA">
+
+  <div class="asp-sheet__handle" id="asp-connect-handle" aria-hidden="true"></div>
+
+  <div class="asp-sheet__hd">
+    <p class="asp-sheet__title">Connect</p>
+    <p class="asp-sheet__sub">Reach us directly — we respond personally.</p>
+  </div>
+  <div class="asp-sheet__hd-rule"></div>
+
+  <div class="asp-sheet__bd">
+    <div class="asp-connect-actions">
+
+      <!-- WhatsApp -->
+      <a class="asp-connect-action asp-wa"
+         href="https://wa.me/260761495873?text=Hello%2C%20I%27m%20reaching%20out%20from%20ASPIRA"
+         target="_blank" rel="noopener" aria-label="Message on WhatsApp">
+        <div class="asp-connect-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </div>
+        <div class="asp-connect-text">
+          <p class="asp-connect-name">WhatsApp</p>
+          <p class="asp-connect-hint">Fastest response — usually within hours</p>
+        </div>
+        <span class="asp-connect-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <!-- Telegram -->
+      <a class="asp-connect-action asp-tg"
+         href="https://t.me/+260761495873"
+         target="_blank" rel="noopener" aria-label="Message on Telegram">
+        <div class="asp-connect-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#2AABEE"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="asp-connect-text">
+          <p class="asp-connect-name">Telegram</p>
+          <p class="asp-connect-hint">Detailed questions and file sharing</p>
+        </div>
+        <span class="asp-connect-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <!-- FAQ / Quick Answers -->
+      <button class="asp-connect-action asp-faq"
+              id="asp-connect-faq-btn"
+              type="button"
+              aria-label="View quick answers">
+        <div class="asp-connect-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="asp-connect-text">
+          <p class="asp-connect-name">Quick Answers</p>
+          <p class="asp-connect-hint">Common questions about ASPIRA</p>
+        </div>
+        <span class="asp-connect-arrow" aria-hidden="true">›</span>
+      </button>
+
+    </div>
+    <div class="asp-connect-brand">
+      <p>ASPIRA — Clarity for how you come across</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FAQ KNOWLEDGE SHEET ──────────────────────────────────────── -->
+<!-- Curated quick-answer surface. Full FAQ section remains on page. -->
+<div id="asp-faq-sheet"
+     class="asp-sheet"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Quick answers from ASPIRA">
+
+  <div class="asp-sheet__handle" id="asp-faq-handle" aria-hidden="true"></div>
+
+  <div class="asp-sheet__hd">
+    <p class="asp-sheet__title">Quick Answers</p>
+    <p class="asp-sheet__sub">The questions we hear most often.</p>
+  </div>
+  <div class="asp-sheet__hd-rule"></div>
+
+  <div class="asp-sheet__bd">
+    <div class="asp-faq-list">
+
+      <div class="asp-faq-item">
+        <button class="asp-faq-q" aria-expanded="false">
+          What exactly does ASPIRA analyse?
+          <span class="asp-faq-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="asp-faq-a">
+          <p>ASPIRA reads your career narrative, freelance pitch, or business description and identifies what is unclear, what is missing, and how an outside reader actually perceives you — compared to how you intend to come across.</p>
+        </div>
+      </div>
+
+      <div class="asp-faq-item">
+        <button class="asp-faq-q" aria-expanded="false">
+          Is ASPIRA free to use?
+          <span class="asp-faq-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="asp-faq-a">
+          <p>The core clarity analysis is free. A small access fee applies for the full Perception Mirror and personalised recommendations — covering the AI processing cost and the time we spend reviewing results with you directly.</p>
+        </div>
+      </div>
+
+      <div class="asp-faq-item">
+        <button class="asp-faq-q" aria-expanded="false">
+          Who is ASPIRA for?
+          <span class="asp-faq-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="asp-faq-a">
+          <p>Job seekers preparing for applications or interviews, freelancers who want their pitch to convert better, and small business owners who want to communicate their value more clearly — without sounding like a marketing template.</p>
+        </div>
+      </div>
+
+      <div class="asp-faq-item">
+        <button class="asp-faq-q" aria-expanded="false">
+          How is this different from ChatGPT?
+          <span class="asp-faq-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="asp-faq-a">
+          <p>ChatGPT rewrites on request. ASPIRA analyses how you are already perceived and tells you specifically what is unclear and why — so you understand the gap, not just get a polished draft. The insight is the product.</p>
+        </div>
+      </div>
+
+      <div class="asp-faq-item">
+        <button class="asp-faq-q" aria-expanded="false">
+          What happens after I submit?
+          <span class="asp-faq-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="asp-faq-a">
+          <p>You receive your Clarity Score and dimension analysis immediately. The full Perception Mirror — which shows how a hiring manager, client, or customer would likely read you — is available with access.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="asp-faq-see-all" id="asp-faq-see-all-btn">
+      See all questions ↓
+    </button>
+  </div>
+</div>
+
 <script>
 /* ══════════════════════════════════════════════════════════════════
    ASPIRA LUXURY DOCK — Scroll-Aware Behavior
@@ -11641,6 +12247,285 @@ document.body.addEventListener('touchmove',function(e){
     requestAnimationFrame(update);
   }, { passive: true });
 })();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ASPIRA NATIVE SHEET SYSTEM — Physics Engine & Controllers
+   ══════════════════════════════════════════════════════════════════
+   One physics engine. Multiple sheet instances.
+   Each sheet registers with SheetManager for depth + body state.
+   ══════════════════════════════════════════════════════════════════ */
+
+(function AspiraSheets() {
+  'use strict';
+
+  const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = () => window.innerWidth <= 767;
+
+  /* ── Sheet Manager: depth layer + body state ────────────────── */
+  const SheetManager = {
+    stack: [],
+    bd: document.getElementById('asp-backdrop'),
+
+    open(ref) {
+      if (!this.stack.includes(ref)) this.stack.push(ref);
+      document.body.classList.add('asp-sheet-active');
+      document.documentElement.style.overflow = 'hidden';
+      if (this.bd) this.bd.classList.add('asp-open');
+    },
+
+    close(ref) {
+      this.stack = this.stack.filter(s => s !== ref);
+      if (this.stack.length === 0) {
+        document.body.classList.remove('asp-sheet-active');
+        document.documentElement.style.overflow = '';
+        if (this.bd) this.bd.classList.remove('asp-open');
+      }
+    }
+  };
+
+  /* Backdrop tap → close topmost sheet */
+  if (SheetManager.bd) {
+    SheetManager.bd.addEventListener('click', () => {
+      const top = SheetManager.stack[SheetManager.stack.length - 1];
+      if (top && top.close) top.close();
+    });
+  }
+
+  /* ── Physics engine: drag-to-dismiss on a panel ─────────────── */
+  /* Attached to handleEl only — no scroll conflicts.              */
+  function attachPhysics(panel, handleEl, onDismiss) {
+    if (!panel || !handleEl || noMotion) return;
+
+    const DISMISS_DIST = 100;   /* px downward */
+    const DISMISS_VEL  = 0.40;  /* px/ms       */
+
+    let startY = 0, lastY = 0, lastT = 0, vel = 0, dragging = false;
+
+    function onStart(e) {
+      if (!isMobile()) return;
+      startY = lastY = e.touches[0].clientY;
+      lastT = Date.now(); vel = 0; dragging = false;
+    }
+
+    function onMove(e) {
+      if (!isMobile()) return;
+      const y = e.touches[0].clientY, delta = y - startY;
+      if (!dragging && Math.abs(delta) < 8) return;
+      dragging = true;
+      if (delta > 0) e.preventDefault();
+      const now = Date.now();
+      vel = (y - lastY) / Math.max(1, now - lastT);
+      lastY = y; lastT = now;
+      panel.classList.add('asp-dragging');
+      panel.style.transform = `translateY(${Math.max(delta, -10)}px)`;
+    }
+
+    function onEnd() {
+      if (!dragging) return;
+      dragging = false;
+      panel.classList.remove('asp-dragging');
+      const dist = lastY - startY;
+      if (dist > DISMISS_DIST || vel > DISMISS_VEL) {
+        panel.style.transition = 'transform 300ms cubic-bezier(0.16,1,0.3,1)';
+        panel.style.transform  = 'translateY(110%)';
+        setTimeout(() => { panel.style.transform = ''; panel.style.transition = ''; onDismiss(); }, 300);
+      } else {
+        panel.style.transition = 'transform 440ms cubic-bezier(0.34,1.56,0.64,1)';
+        panel.style.transform  = 'translateY(0)';
+        setTimeout(() => { panel.style.transition = ''; }, 440);
+      }
+    }
+
+    handleEl.addEventListener('touchstart', onStart, { passive: true });
+    handleEl.addEventListener('touchmove',  onMove,  { passive: false });
+    handleEl.addEventListener('touchend',   onEnd,   { passive: true });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') onDismiss(); });
+  }
+
+  /* ── Sheet factory: open/close + physics + ARIA ─────────────── */
+  function createSheet(sheetEl, handleEl) {
+    if (!sheetEl) return { open() {}, close() {} };
+    sheetEl.setAttribute('aria-hidden', 'true');
+    const ref = {
+      open()  { sheetEl.classList.add('asp-open');    sheetEl.setAttribute('aria-hidden','false'); SheetManager.open(ref);  },
+      close() { sheetEl.classList.remove('asp-open'); sheetEl.setAttribute('aria-hidden','true');  SheetManager.close(ref); }
+    };
+    attachPhysics(sheetEl, handleEl, () => ref.close());
+    return ref;
+  }
+
+  /* ── CONNECT SHEET ───────────────────────────────────────────── */
+  const connectSheet = createSheet(
+    document.getElementById('asp-connect-sheet'),
+    document.getElementById('asp-connect-handle')
+  );
+
+  /* Override the Connect dock tab — open sheet instead of navigate */
+  const connectTab = document.getElementById('mt-theme');
+  if (connectTab) {
+    /* Use capture to run before the earlier goTo listener */
+    connectTab.addEventListener('click', e => {
+      if (!isMobile()) return; /* desktop: allow normal nav */
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      connectSheet.open();
+    }, true);
+  }
+
+  /* "Quick Answers" inside Connect sheet → open FAQ sheet */
+  const faqTrigger = document.getElementById('asp-connect-faq-btn');
+  if (faqTrigger) {
+    faqTrigger.addEventListener('click', () => {
+      connectSheet.close();
+      setTimeout(() => faqSheet.open(), 160);
+    });
+  }
+
+  /* ── FAQ KNOWLEDGE SHEET ─────────────────────────────────────── */
+  const faqSheet = createSheet(
+    document.getElementById('asp-faq-sheet'),
+    document.getElementById('asp-faq-handle')
+  );
+
+  /* Accordion within FAQ sheet */
+  document.querySelectorAll('#asp-faq-sheet .asp-faq-item').forEach(item => {
+    const q = item.querySelector('.asp-faq-q');
+    if (!q) return;
+    q.addEventListener('click', () => {
+      const opening = !item.classList.contains('asp-open');
+      document.querySelectorAll('#asp-faq-sheet .asp-faq-item.asp-open').forEach(el => {
+        el.classList.remove('asp-open');
+        el.querySelector('.asp-faq-q')?.setAttribute('aria-expanded', 'false');
+      });
+      if (opening) { item.classList.add('asp-open'); q.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+
+  /* "See all" → close sheet, scroll to on-page FAQ section */
+  const seeAll = document.getElementById('asp-faq-see-all-btn');
+  if (seeAll) {
+    seeAll.addEventListener('click', () => {
+      faqSheet.close();
+      setTimeout(() => {
+        const faqSection = document.getElementById('faq');
+        if (faqSection) faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    });
+  }
+
+  /* ── INTAKE OVERLAY — drag-to-dismiss via top 48px handle zone ── */
+  const intakePanel = document.getElementById('intake-panel');
+  if (intakePanel) {
+    let iDragging = false, iStartY = 0, iLastY = 0, iLastT = 0, iVel = 0;
+
+    intakePanel.addEventListener('touchstart', e => {
+      if (!isMobile() || noMotion) return;
+      const touch  = e.touches[0].clientY;
+      const panTop = intakePanel.getBoundingClientRect().top;
+      if (touch - panTop > 48) return; /* top handle zone only */
+      iStartY = iLastY = touch; iLastT = Date.now(); iVel = 0; iDragging = false;
+    }, { passive: true });
+
+    intakePanel.addEventListener('touchmove', e => {
+      if (!isMobile() || noMotion) return;
+      const y = e.touches[0].clientY, delta = y - iStartY;
+      if (!iDragging && Math.abs(delta) < 8) return;
+      if (delta <= 0) return;
+      iDragging = true; e.preventDefault();
+      const now = Date.now(); iVel = (y - iLastY) / Math.max(1, now - iLastT);
+      iLastY = y; iLastT = now;
+      intakePanel.classList.add('asp-dragging');
+      intakePanel.style.transform = `translateY(${delta}px)`;
+    }, { passive: false });
+
+    intakePanel.addEventListener('touchend', () => {
+      if (!iDragging) return;
+      iDragging = false; intakePanel.classList.remove('asp-dragging');
+      const dist = iLastY - iStartY;
+      if (dist > 100 || iVel > 0.40) {
+        intakePanel.style.transition = 'transform 300ms cubic-bezier(0.16,1,0.3,1)';
+        intakePanel.style.transform  = 'translateY(110%)';
+        setTimeout(() => {
+          intakePanel.style.transform = ''; intakePanel.style.transition = '';
+          if (typeof closeIntake === 'function') closeIntake();
+          SheetManager.close({ close(){} });
+          document.body.classList.remove('asp-sheet-active');
+          if (SheetManager.bd) SheetManager.bd.classList.remove('asp-open');
+        }, 300);
+      } else {
+        intakePanel.style.transition = 'transform 440ms cubic-bezier(0.34,1.56,0.64,1)';
+        intakePanel.style.transform  = 'translateY(0)';
+        setTimeout(() => { intakePanel.style.transition = ''; }, 440);
+      }
+    }, { passive: true });
+  }
+
+  /* Hook into openIntake/closeIntake so SheetManager tracks depth state */
+  const _openI  = window.openIntake;
+  const _closeI = window.closeIntake;
+  const intakeRef = { close() { if (_closeI) _closeI(); SheetManager.close(intakeRef); } };
+  if (_openI) window.openIntake = function() {
+    _openI(); SheetManager.open(intakeRef);
+  };
+
+  /* ── PAY MODAL — drag-to-dismiss via top 48px handle zone ────── */
+  const payPanel = document.getElementById('pay-modal-panel');
+  if (payPanel) {
+    let pDragging = false, pStartY = 0, pLastY = 0, pLastT = 0, pVel = 0;
+
+    payPanel.addEventListener('touchstart', e => {
+      if (!isMobile() || noMotion) return;
+      const touch  = e.touches[0].clientY;
+      const panTop = payPanel.getBoundingClientRect().top;
+      if (touch - panTop > 48) return;
+      pStartY = pLastY = touch; pLastT = Date.now(); pVel = 0; pDragging = false;
+    }, { passive: true });
+
+    payPanel.addEventListener('touchmove', e => {
+      if (!isMobile() || noMotion) return;
+      const y = e.touches[0].clientY, delta = y - pStartY;
+      if (!pDragging && Math.abs(delta) < 8) return;
+      if (delta <= 0) return;
+      pDragging = true; e.preventDefault();
+      const now = Date.now(); pVel = (y - pLastY) / Math.max(1, now - pLastT);
+      pLastY = y; pLastT = now;
+      payPanel.classList.add('asp-dragging');
+      payPanel.style.transform = `translateY(${delta}px)`;
+    }, { passive: false });
+
+    payPanel.addEventListener('touchend', () => {
+      if (!pDragging) return;
+      pDragging = false; payPanel.classList.remove('asp-dragging');
+      const dist = pLastY - pStartY;
+      if (dist > 100 || pVel > 0.40) {
+        payPanel.style.transition = 'transform 300ms cubic-bezier(0.16,1,0.3,1)';
+        payPanel.style.transform  = 'translateY(110%)';
+        setTimeout(() => {
+          payPanel.style.transform = ''; payPanel.style.transition = '';
+          if (typeof closePayModal === 'function') closePayModal();
+          SheetManager.close({ close(){} });
+          document.body.classList.remove('asp-sheet-active');
+          if (SheetManager.bd) SheetManager.bd.classList.remove('asp-open');
+        }, 300);
+      } else {
+        payPanel.style.transition = 'transform 440ms cubic-bezier(0.34,1.56,0.64,1)';
+        payPanel.style.transform  = 'translateY(0)';
+        setTimeout(() => { payPanel.style.transition = ''; }, 440);
+      }
+    }, { passive: true });
+  }
+
+  /* Hook into openPayModal/closePayModal */
+  const _openP  = window.openPayModal;
+  const _closeP = window.closePayModal;
+  const payRef = { close() { if (_closeP) _closeP(); SheetManager.close(payRef); } };
+  if (_openP) window.openPayModal = function() {
+    _openP(); SheetManager.open(payRef);
+  };
+
+})(); /* end AspiraSheets */
 </script>
 </body>
 </html>
