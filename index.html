@@ -8497,6 +8497,192 @@ body.asp-env-deep::after { opacity: 0.015; }
 }
 /* ═══ END LIVING ENVIRONMENT SYSTEM ═════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA GESTURE INTELLIGENCE — Phase 16 Surface Extension
+   Tactile physics for the core user flow: intake + entry CTAs.
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: every deliberate tap should feel crafted.
+   Previously covered: buttons, dock tabs, cards, connect actions.
+   New surfaces: intake step navigation, choice cards, begin CTA,
+                 hero CTA, FAQ see-all, sheet entry actions.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Ph.16.1  Intake Step Directional Entry Animation ────────────── */
+/* When iShowStep(n) fires, the incoming step slides in with          */
+/* direction awareness: forward = enters from right, back = from left. */
+/* Amplitude: 20px. Duration: 340ms. Curve: cinematic ease-out.      */
+/* Works on both desktop (with card sub-animations) and mobile        */
+/* (where i-card transitions are disabled — this becomes the sole     */
+/* animation, which is the correct behavior).                         */
+@keyframes asp-step-fwd {
+  from { opacity: 0; transform: translateX(20px) scale(0.991); }
+  to   { opacity: 1; transform: translateX(0)    scale(1);     }
+}
+@keyframes asp-step-back {
+  from { opacity: 0; transform: translateX(-20px) scale(0.991); }
+  to   { opacity: 1; transform: translateX(0)     scale(1);     }
+}
+.i-fstep.asp-step-entering {
+  animation: asp-step-fwd  340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.i-fstep.asp-step-entering-back {
+  animation: asp-step-back 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Ph.16.2  Choice Selection Spring ───────────────────────────── */
+/* When a choice receives .isel (user taps), the radio dot springs   */
+/* into the selected state — a 380ms physical pop. Sub-threshold but */
+/* deeply satisfying. Below 120ms: felt, not seen.                   */
+.i-choice.isel .icr {
+  animation: asp-radio-pop 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes asp-radio-pop {
+  0%   { transform: scale(0.55); }
+  52%  { transform: scale(1.18); }
+  100% { transform: scale(1);    }
+}
+
+/* ── Ph.16.3  Intake Choice Card Touch Physics ───────────────────── */
+/* 3.4% compression — enough to feel physical without being cartoon. */
+/* Existing :active rule superseded by asp-pressing (higher spec).   */
+.i-choice {
+  transition:
+    transform    var(--asp-card-press-dur) var(--asp-press-ease),
+    border-color 140ms var(--asp-press-ease),
+    background   140ms var(--asp-press-ease);
+}
+.i-choice.asp-pressing {
+  transform:    scale(0.966) !important;
+  border-color: rgba(120, 1, 21, 0.28) !important;
+  transition:
+    transform    var(--asp-press-dur) var(--asp-press-ease),
+    border-color 100ms               var(--asp-press-ease) !important;
+}
+.i-choice.asp-releasing {
+  transform: scale(1) !important;
+  transition: transform var(--asp-settle-dur) var(--asp-settle-ease) !important;
+}
+
+/* ── Ph.16.4  Intake Step Navigation Touch Physics ───────────────── */
+/* Continue button: primary CTA depth — same vocabulary as .btn-p   */
+.i-next.asp-pressing {
+  transform: scale(0.952) translateY(1px) !important;
+  box-shadow:
+    0 1px 4px rgba(23, 4, 10, 0.09),
+    0 0 0 1px rgba(23, 4, 10, 0.05) !important;
+  transition:
+    transform  var(--asp-press-dur) var(--asp-press-ease),
+    box-shadow var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.i-next.asp-releasing {
+  transform: scale(1) translateY(0) !important;
+  transition:
+    transform  var(--asp-settle-dur) var(--asp-settle-ease),
+    box-shadow 280ms                 var(--asp-press-ease) !important;
+}
+/* Back button: ghost vocabulary — opacity shift, minimal compression */
+.i-back.asp-pressing {
+  transform: scale(0.970) !important;
+  opacity:   0.65         !important;
+  transition:
+    transform var(--asp-press-dur) var(--asp-press-ease),
+    opacity   var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.i-back.asp-releasing {
+  transform: scale(1) !important;
+  opacity:   1        !important;
+  transition:
+    transform var(--asp-settle-dur) var(--asp-settle-ease),
+    opacity   280ms                 var(--asp-press-ease) !important;
+}
+
+/* ── Ph.16.5  Begin Section Entry CTA Physics ───────────────────── */
+/* begin-open-btn is the gateway to the core flow.                    */
+/* Crimson primary CTA: same depth vocabulary as .btn-p.             */
+.begin-open-btn.asp-pressing {
+  transform: scale(0.952) translateY(1px) !important;
+  box-shadow:
+    0 1px 4px  rgba(120, 1, 21, 0.26),
+    0 0   0 1px rgba(120, 1, 21, 0.12) !important;
+  transition:
+    transform  var(--asp-press-dur) var(--asp-press-ease),
+    box-shadow var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.begin-open-btn.asp-releasing {
+  transform: scale(1) translateY(0) !important;
+  transition:
+    transform  var(--asp-settle-dur) var(--asp-settle-ease),
+    box-shadow 280ms                 var(--asp-press-ease) !important;
+}
+
+/* ── Ph.16.6  Hero Nav CTA Touch Physics ────────────────────────── */
+/* fn-cta: floating nav primary action.                               */
+.fn-cta.asp-pressing {
+  transform: scale(0.952) translateY(0) !important;
+  box-shadow: 0 1px 6px rgba(120, 1, 21, 0.22) !important;
+  transition:
+    transform  var(--asp-press-dur) var(--asp-press-ease),
+    box-shadow var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.fn-cta.asp-releasing {
+  transform: scale(1) !important;
+  transition:
+    transform  var(--asp-settle-dur) var(--asp-settle-ease),
+    box-shadow 280ms                 var(--asp-press-ease) !important;
+}
+
+/* ── Ph.16.7  See-All + Sheet Entry Action Physics ───────────────── */
+.asp-faq-see-all.asp-pressing,
+#asp-faq-see-all-btn.asp-pressing {
+  transform: scale(0.964) !important;
+  opacity:   0.78         !important;
+  transition:
+    transform var(--asp-press-dur) var(--asp-press-ease),
+    opacity   var(--asp-press-dur) var(--asp-press-ease) !important;
+}
+.asp-faq-see-all.asp-releasing,
+#asp-faq-see-all-btn.asp-releasing {
+  transform: scale(1) !important;
+  opacity:   1        !important;
+  transition:
+    transform var(--asp-settle-dur) var(--asp-settle-ease),
+    opacity   280ms                 var(--asp-press-ease) !important;
+}
+
+/* ── Ph.16.8  Global touch-action extension ─────────────────────── */
+/* Add to all newly-covered interactive elements.                     */
+.i-choice, .i-next, .i-back,
+.begin-open-btn, .fn-cta,
+.asp-faq-see-all, #asp-faq-see-all-btn,
+.bcl-cta, .bcl-back {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Ph.16  Reduced Motion Guard ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .i-fstep.asp-step-entering,
+  .i-fstep.asp-step-entering-back {
+    animation: none !important;
+  }
+  .i-choice.isel .icr {
+    animation: none !important;
+  }
+  .i-choice.asp-pressing,      .i-choice.asp-releasing,
+  .i-next.asp-pressing,        .i-next.asp-releasing,
+  .i-back.asp-pressing,        .i-back.asp-releasing,
+  .begin-open-btn.asp-pressing, .begin-open-btn.asp-releasing,
+  .fn-cta.asp-pressing,        .fn-cta.asp-releasing,
+  .asp-faq-see-all.asp-pressing, .asp-faq-see-all.asp-releasing,
+  #asp-faq-see-all-btn.asp-pressing, #asp-faq-see-all-btn.asp-releasing {
+    transform: none    !important;
+    opacity:   1       !important;
+    box-shadow: unset  !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+/* ═══ END GESTURE INTELLIGENCE EXTENSION ════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -13308,6 +13494,139 @@ document.body.addEventListener('touchmove',function(e){
   }
 
 })(); /* end AspiraGesture */
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ASPIRA GESTURE INTELLIGENCE — Phase 16 Surface Extension
+   ──────────────────────────────────────────────────────────────────
+   Part A — Directional intake step transitions
+   Part B — Tactile physics for intake + entry surfaces
+
+   Isolated in own script block so it can wrap globals declared
+   in earlier blocks (openIntake, iShowStep) without hoisting issues.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Part A: Directional Intake Step Transitions ────────────────── */
+/* Wraps iShowStep (global function) to layer a directional slide    */
+/* animation on the entering step. The original function handles all  */
+/* display logic, iCur update, dot sync, and card vis animations.    */
+/* This wrapper adds ONE animation class post-call. Non-invasive.    */
+(function aspiraIntakeTransitions() {
+  'use strict';
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const orig = window.iShowStep;
+  if (typeof orig !== 'function') return;
+
+  window.iShowStep = function(n) {
+    /* Detect the currently-visible step from DOM —                  */
+    /* iCur is a let in outer scope, not accessible from here.       */
+    const vis = document.querySelector(
+      '.i-fstep[style*="display: block"], .i-fstep[style*="display:block"]'
+    );
+    const curNum  = vis ? (parseInt(vis.id.replace('is', ''), 10) || 1) : 0;
+    const goingFwd = n >= curNum;
+
+    /* Invoke original: sets display:none/block, triggers i-card vis */
+    orig(n);
+
+    /* Skip entry animation when opening intake (no previous step)   */
+    if (curNum === 0) return;
+
+    const el = document.getElementById('is' + n);
+    if (!el) return;
+
+    /* Remove both classes first — resets any mid-flight animation   */
+    el.classList.remove('asp-step-entering', 'asp-step-entering-back');
+    void el.offsetHeight;                   /* force reflow          */
+    el.classList.add(goingFwd ? 'asp-step-entering' : 'asp-step-entering-back');
+
+    /* Clean up after animation completes (340ms + buffer)           */
+    setTimeout(() => {
+      el.classList.remove('asp-step-entering', 'asp-step-entering-back');
+    }, 400);
+  };
+})();
+
+/* ── Part B: Tactile Physics for New Surfaces ───────────────────── */
+/* Applies the same makeTactile engine as Phase 14 AspiraGesture,    */
+/* but to elements not covered in the original TACTILE selector list. */
+/* Guard: el._aspTactile flag prevents double-binding.               */
+(function aspiraGestureExtension() {
+  'use strict';
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const SETTLE_MS = 440;
+
+  function makeTactile(el) {
+    if (!el || el._aspTactile) return;
+    el._aspTactile = true;
+
+    let releaseTimer  = null;
+    let scrollBlocked = false;
+    let startY        = 0;
+
+    el.addEventListener('touchstart', e => {
+      clearTimeout(releaseTimer);
+      scrollBlocked = false;
+      startY = e.touches[0].clientY;
+      el.classList.remove('asp-releasing');
+      el.classList.add('asp-pressing');
+    }, { passive: true });
+
+    el.addEventListener('touchmove', e => {
+      if (Math.abs(e.touches[0].clientY - startY) > 6) {
+        scrollBlocked = true;
+        el.classList.remove('asp-pressing');
+        el.classList.add('asp-releasing');
+        clearTimeout(releaseTimer);
+        releaseTimer = setTimeout(() => el.classList.remove('asp-releasing'), SETTLE_MS);
+      }
+    }, { passive: true });
+
+    function release() {
+      if (scrollBlocked) return;
+      el.classList.remove('asp-pressing');
+      el.classList.add('asp-releasing');
+      clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => el.classList.remove('asp-releasing'), SETTLE_MS);
+    }
+
+    function cancel() {
+      clearTimeout(releaseTimer);
+      el.classList.remove('asp-pressing', 'asp-releasing');
+    }
+
+    el.addEventListener('touchend',    release, { passive: true });
+    el.addEventListener('touchcancel', cancel,  { passive: true });
+  }
+
+  /* Apply to all new interactive surfaces ─────────────────────── */
+  const NEW_SURFACES = [
+    /* Intake flow */
+    '.i-choice',           /* step 1: path selection cards        */
+    '.i-next',             /* step navigation: continue           */
+    '.i-back',             /* step navigation: back               */
+    /* Begin section */
+    '.begin-open-btn',     /* "Begin Clarity Intake" primary CTA  */
+    /* Nav CTA */
+    '.fn-cta',             /* floating pill nav CTA               */
+    /* Sheet surfaces */
+    '#asp-faq-see-all-btn', /* FAQ sheet: "See all questions"     */
+    '.asp-faq-see-all',
+    /* BCL section */
+    '.bcl-cta',
+    '.bcl-back',
+  ];
+
+  NEW_SURFACES.forEach(sel => {
+    document.querySelectorAll(sel).forEach(makeTactile);
+  });
+
+})(); /* end aspiraGestureExtension */
 </script>
 </body>
 </html>
