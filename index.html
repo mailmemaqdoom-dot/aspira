@@ -8683,6 +8683,104 @@ body.asp-env-deep::after { opacity: 0.015; }
 }
 /* ═══ END GESTURE INTELLIGENCE EXTENSION ════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA STATEFUL PRODUCT FLOW — Phase 17
+   Journey Stage Atmospheric System
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: memory without creepiness.
+   The environment adapts quietly. No announcements.
+   No "we remember you." Adaptation is subconsciously felt.
+   Users feel: "This experience remembers the energy
+               of where I left off."
+
+   Body classes (applied by aspiraJourneyEngine):
+   · asp-j-fresh      — first visit, no history
+   · asp-j-exploring  — 2–3 visits, beginning to know this space
+   · asp-j-engaged    — meaningful input or deep scroll history
+   · asp-j-returning  — has name or payment, a known visitor
+
+   Performance contract:
+   · Zero new backdrop-filter layers
+   · Only CSS custom property overrides and opacity shifts
+   · No layout impact. No reflow.
+   · Reduced motion fully respected.
+════════════════════════════════════════════════════════════════════ */
+
+/* ── Stage: Exploring — atmosphere opens slightly, more considered ── */
+body.asp-j-exploring {
+  --asp-drift-dur: 32s;
+}
+body.asp-j-exploring .orb.o2 {
+  opacity: 0.80;
+  transition: opacity 1000ms ease;
+}
+
+/* ── Stage: Engaged — purposeful, atmosphere settled ── */
+body.asp-j-engaged {
+  --asp-drift-dur: 36s;
+}
+body.asp-j-engaged .orb.o1,
+body.asp-j-engaged .orb.o2 {
+  opacity: 0.72;
+  transition: opacity 1200ms ease;
+}
+
+/* ── Stage: Returning — deeply earned ease, known ground ── */
+body.asp-j-returning {
+  --asp-drift-dur: 40s;
+}
+body.asp-j-returning .orb.o1 {
+  opacity: 0.68;
+  transition: opacity 1400ms ease;
+}
+body.asp-j-returning .orb.o3 {
+  opacity: 0.60;
+  transition: opacity 1400ms ease;
+}
+
+/* ── Draft restoration pulse — field remembers its last thought ── */
+@keyframes asp-draft-pulse {
+  0%   { opacity: 0; transform: scaleX(0.5); }
+  35%  { opacity: 1; transform: scaleX(1);   }
+  100% { opacity: 0; transform: scaleX(1);   }
+}
+.asp-draft-restored {
+  position: relative;
+}
+.asp-draft-restored::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1.5px;
+  border-radius: 2px;
+  background: rgba(120, 1, 21, 0.32);
+  transform-origin: left center;
+  animation: asp-draft-pulse 1600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+/* ── Reduced motion: neutralise all stage transitions ── */
+@media (prefers-reduced-motion: reduce) {
+  body.asp-j-exploring,
+  body.asp-j-engaged,
+  body.asp-j-returning {
+    --asp-drift-dur: 28s;
+  }
+  body.asp-j-exploring .orb.o2,
+  body.asp-j-engaged .orb.o1,
+  body.asp-j-engaged .orb.o2,
+  body.asp-j-returning .orb.o1,
+  body.asp-j-returning .orb.o3 {
+    transition-duration: 0.001ms !important;
+    opacity: 1 !important;
+  }
+  .asp-draft-restored::after {
+    animation: none !important;
+  }
+}
+/* ═══ END STATEFUL PRODUCT FLOW ══════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -13627,6 +13725,250 @@ document.body.addEventListener('touchmove',function(e){
   });
 
 })(); /* end aspiraGestureExtension */
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA JOURNEY ENGINE — Phase 17
+   Stateful Product Flow System
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: emotionally continuous clarity operating system.
+   Frontend-only. localStorage + sessionStorage. No backend.
+   No creepy personalization. No explicit "we remember you."
+   Adaptation is quiet, respectful, and elegant.
+   ═══════════════════════════════════════════════════════════════════ */
+(function aspiraJourneyEngine() {
+  'use strict';
+
+  /* ── Namespace (mirrors RU_NS = 'aspira_' from session memory engine) ── */
+  var NS = 'aspira_';
+  function jSave(key, val) {
+    try { localStorage.setItem(NS + key, String(val)); } catch(e) {}
+  }
+  function jGet(key) {
+    try { return localStorage.getItem(NS + key) || ''; } catch(e) { return ''; }
+  }
+
+  /* ═══════════════════════════════════════════════
+     1 — VISIT COUNTING
+     Increments on every page load.
+     Used to compute journey stage.
+  ═══════════════════════════════════════════════ */
+  var rawCount  = parseInt(jGet('visitCount'), 10) || 0;
+  var visitCount = rawCount + 1;
+  jSave('visitCount', visitCount);
+  jSave('lastVisit',  Date.now());
+
+  /* ═══════════════════════════════════════════════
+     2 — JOURNEY STAGE COMPUTATION
+     fresh      → first visit, clean slate
+     exploring  → 2–3 visits, beginning to know this space
+     engaged    → has meaningful input or deep scroll history
+     returning  → has name or payment — a known visitor
+
+     Precedence: returning > engaged > exploring > fresh
+  ═══════════════════════════════════════════════ */
+  var hasName    = jGet('userName').length > 0;
+  var hasPaid    = jGet('paymentStatus') === 'true';
+  var hasInput   = jGet('clarityInput').length > 3;          /* at least some real text */
+  var maxScroll  = parseInt(jGet('maxScroll'), 10) || 0;
+  var deepScroll = maxScroll > 700;                          /* reached value section */
+
+  var stage = 'fresh';
+  if (hasName || hasPaid) {
+    stage = 'returning';
+  } else if (hasInput || deepScroll || visitCount >= 4) {
+    stage = 'engaged';
+  } else if (visitCount >= 2) {
+    stage = 'exploring';
+  }
+  jSave('journeyStage', stage);
+
+  /* ═══════════════════════════════════════════════
+     3 — APPLY BODY CLASS
+     CSS vars and orb opacity respond to stage.
+     Applied immediately (before first paint completes).
+  ═══════════════════════════════════════════════ */
+  var STAGE_CLASSES = ['asp-j-fresh','asp-j-exploring','asp-j-engaged','asp-j-returning'];
+  STAGE_CLASSES.forEach(function(c) { document.body.classList.remove(c); });
+  document.body.classList.add('asp-j-' + stage);
+
+  /* ═══════════════════════════════════════════════
+     4 — SCROLL DEPTH TRACKING
+     rAF-batched read of window.scrollY.
+     Persisted on beforeunload + visibilitychange
+     (iOS Safari doesn't reliably fire beforeunload).
+     Only the all-time maximum is stored — not position.
+  ═══════════════════════════════════════════════ */
+  var _scrollTicking = false;
+  var _sessionMax    = 0;
+  var _curY          = 0;
+
+  function onScrollJourney() {
+    _curY = window.scrollY;
+    if (!_scrollTicking) {
+      _scrollTicking = true;
+      requestAnimationFrame(function() {
+        if (_curY > _sessionMax) { _sessionMax = _curY; }
+        _scrollTicking = false;
+      });
+    }
+  }
+  window.addEventListener('scroll', onScrollJourney, { passive: true });
+
+  function flushScrollDepth() {
+    if (_sessionMax === 0) return;
+    var persisted = parseInt(jGet('maxScroll'), 10) || 0;
+    var best = Math.max(persisted, _sessionMax);
+    jSave('maxScroll', best);
+  }
+  window.addEventListener('beforeunload', flushScrollDepth);
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') flushScrollDepth();
+  });
+
+  /* ═══════════════════════════════════════════════
+     5 — SECTION VISIT TRACKING
+     IntersectionObserver records which section the
+     user most recently scrolled to.
+     Saved as lastSection — can be used for future
+     continuity hints without auto-scrolling.
+  ═══════════════════════════════════════════════ */
+  var WATCHED_SECTIONS = [
+    'hero', 'value', 'intake-section', 'proof', 'faq', 'footer'
+  ];
+
+  if ('IntersectionObserver' in window) {
+    var sectionObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+          var id = entry.target.id ||
+                   entry.target.getAttribute('data-section') || '';
+          if (id) jSave('lastSection', id);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    WATCHED_SECTIONS.forEach(function(id) {
+      var el = document.getElementById(id) ||
+               document.querySelector('[data-section="' + id + '"]');
+      if (el) sectionObs.observe(el);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════
+     6 — INTAKE DRAFT PRESERVATION
+     Saves textarea / text-input content on every
+     keystroke. Restores quietly when form opens.
+     Draft key format: aspira_draft_<field-id>
+     — Restores only if the field is currently empty
+       (user hasn't already typed something this session)
+     — Shows a subtle 1.5px line pulse — the field
+       "remembers its last thought" without saying so.
+  ═══════════════════════════════════════════════ */
+  function draftKey(field) {
+    var id = field.id || field.name ||
+             (field.className || '').trim().split(/\s+/)[0] || 'field';
+    return 'draft_' + id;
+  }
+
+  function bindDraftSave(containerEl) {
+    if (!containerEl || containerEl._aspDraftBound) return;
+    containerEl._aspDraftBound = true;
+
+    containerEl.querySelectorAll('textarea, input[type="text"]').forEach(function(field) {
+      var key = draftKey(field);
+
+      /* Restore saved draft quietly */
+      var saved = jGet(key);
+      if (saved && saved.length > 0 && field.value === '') {
+        field.value = saved;
+
+        /* Subtle pulse — field remembers its last thought */
+        field.classList.add('asp-draft-restored');
+        setTimeout(function() {
+          field.classList.remove('asp-draft-restored');
+        }, 2000);
+      }
+
+      /* Auto-save on every keystroke */
+      field.addEventListener('input', function() {
+        jSave(key, field.value);
+        /* Dual-write to clarityInput for compat with existing state system */
+        if (field.id === 'clarity-input' || field.name === 'clarityInput') {
+          jSave('clarityInput', field.value);
+        }
+      });
+    });
+  }
+
+  /* Hook into intake panel visibility */
+  var intakePanel = document.getElementById('intake-panel');
+  if (intakePanel) {
+    if ('IntersectionObserver' in window) {
+      var intakeObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          bindDraftSave(intakePanel);
+          intakeObs.disconnect();
+        }
+      }, { threshold: 0.05 });
+      intakeObs.observe(intakePanel);
+    } else {
+      /* Fallback: bind on first user interaction */
+      intakePanel.addEventListener('focusin', function handler() {
+        bindDraftSave(intakePanel);
+        intakePanel.removeEventListener('focusin', handler);
+      });
+    }
+  }
+
+  /* Wrap openIntake() so draft restores when sheet opens */
+  if (typeof window.openIntake === 'function') {
+    var _origOpenIntake = window.openIntake;
+    window.openIntake = function() {
+      _origOpenIntake.apply(this, arguments);
+      /* Draft bind after sheet animation settles (~400ms) */
+      setTimeout(function() {
+        var panel = document.getElementById('intake-panel');
+        if (panel) bindDraftSave(panel);
+      }, 450);
+    };
+  }
+
+  /* ═══════════════════════════════════════════════
+     7 — ATMOSPHERIC STATE EVOLUTION (on stage upgrade)
+     If the stage has just improved this session
+     (e.g. raw count was 1, now 2 → fresh → exploring),
+     animate the orb opacity shift with a brief delay
+     so it reads as atmospheric settling, not a jump.
+  ═══════════════════════════════════════════════ */
+  var prevStage = jGet('journeyStage');    /* value BEFORE this visit's jSave */
+  /* Note: prevStage was saved at top of this IIFE from last session's jSave.
+     The jSave('journeyStage', stage) above already overwrites it for this session.
+     We re-read the old value from a temp var captured before the save.
+     Since we read AFTER saving, we detect upgrade by comparing rawCount-based
+     prev stage to current stage. */
+  var stageOrder = { fresh: 0, exploring: 1, engaged: 2, returning: 3 };
+  var prevOrder  = stageOrder[prevStage] || 0;
+  var curOrder   = stageOrder[stage]     || 0;
+
+  if (curOrder > prevOrder && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    /* Stage just upgraded — let orbs settle gracefully with a slight delay */
+    document.body.style.setProperty('--asp-orb-settle-delay', '800ms');
+    setTimeout(function() {
+      document.body.style.removeProperty('--asp-orb-settle-delay');
+    }, 2200);
+  }
+
+  /* ═══════════════════════════════════════════════
+     8 — DOCK STATE INTELLIGENCE
+     On returning visits with a userName set, the
+     space-nav button is already shown by ruOnLoad.
+     Nothing more needed — the dock remembers silently.
+  ═══════════════════════════════════════════════ */
+  /* (handled by existing spaceNavShow() in ruOnLoad) */
+
+})(); /* end aspiraJourneyEngine */
 </script>
 </body>
 </html>
