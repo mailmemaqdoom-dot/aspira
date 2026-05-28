@@ -8781,6 +8781,230 @@ body.asp-j-returning .orb.o3 {
 }
 /* ═══ END STATEFUL PRODUCT FLOW ══════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA MICRO SENSORY POLISH — Phase 18
+   Timing Precision · Interaction Softness · Motion Harmony
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: invisible refinement.
+   Users do not notice. They feel.
+   Every timing is now inevitable. Every curve is physically credible.
+
+   This phase:
+   · Introduces a unified duration scale and two new easing curves
+   · Corrects specificity gap on floating nav (Phase 15 wasn't applying)
+   · Replaces all catch-all `transition: all` with specific properties
+   · Replaces over-bouncy spring (1.56) with restrained soft spring (1.28)
+     on UI surfaces — keeps full spring only for confirm/selection pulses
+   · Settles sheets and overlays with natural deceleration curve
+   · Reduces overlay backdrop darkness from 0.65 → 0.58 (premium-airy)
+   · Softens FAQ accordion + intake progress with settle curve
+   · Calms orb parallax: replaces `linear` with `ease-settle`
+   · Refines reveal animation with gentle deceleration
+   · Corrects --ease-in-out from (0.76,0,0.24,1) → (0.65,0,0.35,1)
+
+   Performance contract: unchanged.
+   Zero new compositing contexts. Zero new animation layers.
+   Reduced motion fully covered by existing global rule (line ~1507).
+════════════════════════════════════════════════════════════════════ */
+
+/* ── § 1  Duration Scale + Easing Augmentation ──────────────────── */
+/* These tokens give every layer a shared timing vocabulary.        */
+:root {
+  /* Duration scale */
+  --dur-instant:      120ms;   /* active/selected indicator flicker          */
+  --dur-fast:         200ms;   /* hover feedback — color, opacity, border    */
+  --dur-base:         300ms;   /* standard interaction response               */
+  --dur-slow:         520ms;   /* sheet / overlay entrance                   */
+  --dur-ambient:      900ms;   /* environmental + atmospheric shifts          */
+
+  /* Settle — smooth natural deceleration for large-surface motion.  */
+  /* More organic than ease-out (0.16,1,0.3,1): the surface         */
+  /* decelerates as if placing itself, not snapping into position.   */
+  --ease-settle:      cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Soft spring — restrained overshoot for interactive confirmation. */
+  /* Replaces full spring (1.56) on most UI surfaces.               */
+  /* Full spring (1.56) is still used for radio pop + ripple.       */
+  --ease-soft-spring: cubic-bezier(0.34, 1.28, 0.64, 1);
+
+  /* Correct overly aggressive ease-in-out (0.76,0 felt mechanical) */
+  --ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ── § 2  Floating Nav — Fix specificity gap + specific properties ─ */
+/* Phase 15 targeted .fnav (class) but element has id="fnav" —      */
+/* id specificity won, keeping `transition: all 0.4s` in effect.    */
+/* This corrects it and replaces the lazy `all` with specific props. */
+#fnav {
+  transition:
+    background    260ms var(--ease-out),
+    box-shadow    260ms var(--ease-out),
+    border-color  260ms var(--ease-out),
+    opacity       var(--asp-atm-dur-snap) var(--ease-settle),
+    padding       220ms var(--ease-out);
+}
+
+/* ── § 3  Nav Links — Tighten hover feedback ────────────────────── */
+.fn-links a {
+  transition:
+    color       var(--dur-fast) var(--ease-out),
+    background  var(--dur-fast) var(--ease-out);
+}
+
+/* ── § 4  Theme Toggle — Restrain spring (luxury ≠ bouncy UI) ───── */
+/* Was: transform 0.2s var(--ease-spring) = 1.56 overshoot          */
+.fn-theme {
+  transition:
+    background  var(--dur-fast)  var(--ease-out),
+    transform   var(--dur-base)  var(--ease-soft-spring);
+}
+
+/* ── § 5  Buttons + CTAs — Replace lazy `transition: all` ──────── */
+/* Specific props = no accidental layout/paint transitions.         */
+.btn, .cta, .btn-primary, .btn-outline, .btn-ghost, .btn-sm,
+.primary-btn, .secondary-btn, .ghost-btn, .cta-primary, .cta-secondary {
+  transition:
+    background    var(--dur-fast) var(--ease-out),
+    color         var(--dur-fast) var(--ease-out),
+    border-color  var(--dur-fast) var(--ease-out),
+    box-shadow    var(--dur-base) var(--ease-out),
+    transform     var(--dur-base) var(--ease-out),
+    opacity       var(--dur-fast) var(--ease-out);
+}
+
+/* ── § 6  Mag Button — Calm to soft spring ──────────────────────── */
+.mag {
+  transition: transform 280ms var(--ease-soft-spring);
+}
+
+/* ── § 7  Cards — Specific props + harmonise hover timing ────────── */
+/* Card hover translateY(-4px) felt slightly fast at 0.35s.         */
+/* 380ms reads as the card having more considered weight.            */
+.card, .val-card, .feature-card, .proof-card, .pricing-card,
+.r-card, .ci-level-card, .ci-truth-card, .bcl-rec-card {
+  transition:
+    transform     380ms var(--ease-out),
+    box-shadow    380ms var(--ease-out),
+    border-color  var(--dur-fast) var(--ease-out);
+}
+
+/* ── § 8  Sheet / Modal Panels — Settle curve, more mass ─────────── */
+/* Was: 0.45s ease-out — felt clipped at arrival.                   */
+/* Now: 0.52s ease-settle — surface lands as if placed.             */
+.modal-panel, .modal-inner {
+  transform: translateY(44px);
+  opacity: 0;
+  transition:
+    transform var(--dur-slow) var(--ease-settle),
+    opacity   var(--dur-slow) var(--ease-settle);
+}
+.modal-overlay.open  .modal-panel,
+.overlay.open        .modal-inner,
+.modal-overlay.active .modal-panel,
+.overlay.active       .modal-inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── § 9  Modal Overlays — Airier backdrop + smoother fade ───────── */
+/* 0.65 alpha felt slightly heavy — premium prefers editorial airiness. */
+.modal-overlay, .overlay {
+  background: rgba(12, 6, 8, 0.58);
+  transition:
+    opacity    380ms var(--ease-out),
+    visibility 380ms;
+}
+#pay-modal-overlay {
+  background: rgba(12, 6, 8, 0.60);
+  transition:
+    opacity    380ms var(--ease-out),
+    visibility 380ms;
+}
+
+/* ── § 10  FAQ Accordion — Natural settle + calmer icon rotation ─── */
+/* max-height ease-out felt mechanical at fully-open position.       */
+/* Settle curve decelerates smoothly — accordion breathes open.     */
+.faq-a {
+  transition:
+    max-height  480ms var(--ease-settle),
+    padding     300ms var(--ease-out);
+}
+.faq-q .faq-icon {
+  transition: transform 300ms var(--ease-settle);
+}
+
+/* ── § 11  Intake Progress Fill — Smoother step advance ─────────── */
+.intake-progress-fill {
+  transition: width 480ms var(--ease-settle);
+}
+
+/* ── § 12  Mobile Dock Tabs — Soften spring ─────────────────────── */
+/* Was: 0.25s var(--ease-spring) = 1.56 overshoot.                  */
+/* Now: 0.28s soft-spring = composed, unhurried confirmation.        */
+.mob-tab {
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.mob-tab .tab-icon {
+  transition: transform 280ms var(--ease-soft-spring);
+}
+
+/* ── § 13  Orb Parallax — Replace `linear` with settle ──────────── */
+/* Was: transform 0.12s linear — mechanical trailing on fast scroll. */
+/* Now: transform 130ms ease-settle — natural organic lag.           */
+/* Opacity long-fade kept from Phase 15 (asp-atm-dur-long).         */
+.orb {
+  transition:
+    transform 130ms var(--ease-settle),
+    opacity   var(--asp-atm-dur-long) ease;
+}
+
+/* ── § 14  Scroll Reveal — Gentle settle deceleration ───────────── */
+/* Was: 0.85s ease-out — text arrived with sharp deceleration.      */
+/* Now: 900ms settle — text arrives as if placed, not flicked.      */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);    /* reduced from 22px — subtler lift     */
+  transition:
+    opacity   900ms var(--ease-settle),
+    transform 900ms var(--ease-settle);
+}
+.reveal.vis, .reveal.in-view {
+  opacity:   1;
+  transform: translateY(0);
+}
+
+/* ── § 15  Body Theme Transition — Slightly crisper ─────────────── */
+/* 0.5s felt leisurely for a mode switch; 0.4s is decisive.         */
+body {
+  transition:
+    background  400ms var(--ease-out),
+    color       400ms var(--ease-out);
+}
+
+/* ── § 16  Clarity Score Ring — Smoother arc draw ───────────────── */
+/* Was: 1.5s ease-out — settle curve feels more organic for a ring. */
+.ci-ring-fill {
+  transition:
+    stroke-dashoffset 1.6s var(--ease-settle) 0.3s;
+}
+
+/* ── § 17  Category + Marker Chips — Specific hover props ───────── */
+.cat-chip, .mchip {
+  transition:
+    background    var(--dur-fast) var(--ease-out),
+    color         var(--dur-fast) var(--ease-out),
+    border-color  var(--dur-fast) var(--ease-out);
+}
+
+/* ── § 18  Result / Clarity-In Cards — Harmonise reveal speed ───── */
+.r-card, .ci-level-card, .ci-truth-card, .bcl-rec-card {
+  transition:
+    opacity    540ms var(--ease-settle),
+    transform  540ms var(--ease-settle);
+}
+
+/* ═══ END MICRO SENSORY POLISH ═══════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
