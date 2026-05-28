@@ -49,8 +49,12 @@
   }
   </script>
   <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="/icon.svg" sizes="any">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="mask-icon" href="/icon.svg" color="#780115">
+  <meta name="apple-mobile-web-app-title" content="ASPIRA">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
@@ -9005,6 +9009,240 @@ body {
 
 /* ═══ END MICRO SENSORY POLISH ═══════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA SIGNATURE HERO + NATIVE PWA — Phase 19
+   Cinematic Hero Refinement · Install Experience · Standalone Mode
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: an installable luxury clarity operating environment.
+   Not a website being installed. A product designed to live on the
+   user's device with earned permanence.
+
+   Covers:
+   · Hero signature clarity moment (#hero::before atmospheric vignette)
+   · Standalone (installed) mode refinements (body.asp-installed)
+   · Suppression of old generic prompt (#pwa-prompt)
+   · ASPIRA-authored bottom-sheet install invitation (.asp-pwa-prompt)
+
+   Performance contract: unchanged.
+   · #hero::before is a single gradient — one compositor layer
+   · Install prompt uses already-established backdrop-filter budget
+   · All transitions guarded by existing global reduced motion rule
+════════════════════════════════════════════════════════════════════ */
+
+/* ── § 1  Suppress generic PWA prompt — replaced by Phase 19 ─────── */
+#pwa-prompt { display: none !important; }
+
+/* ── § 2  Hero Signature Clarity Moment ──────────────────────────── */
+/* A radial vignette that softly arrives ~2.5s after page load.      */
+/* Edges darken imperceptibly — the hero "clarifies" around its      */
+/* content. Alpha 6% light / 8% dark — subconsciously felt only.    */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;                          /* above hero-visual (0), below hero-inner (2) */
+  background: radial-gradient(
+    ellipse 82% 72% at 50% 46%,
+    transparent 42%,
+    rgba(23, 4, 10, 0.06) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  animation: asp-hero-clarity 5s var(--ease-settle) 2.5s forwards;
+}
+[data-theme="dark"] #hero::before {
+  background: radial-gradient(
+    ellipse 82% 72% at 50% 46%,
+    transparent 42%,
+    rgba(0, 0, 0, 0.09) 100%
+  );
+}
+@keyframes asp-hero-clarity {
+  to { opacity: 1; }
+}
+
+/* ── § 3  Hero Mobile Immersion — safe-area breathing ────────────── */
+/* Ensures the hero breathes correctly on all notched/dynamic-island */
+/* devices, both browser and standalone modes.                       */
+@media (max-width: 767px) {
+  #hero {
+    padding-top:    max(4.5rem, calc(env(safe-area-inset-top,    0px) + 3.5rem));
+    padding-bottom: max(7rem,   calc(env(safe-area-inset-bottom, 0px) + 6rem));
+  }
+  .hero-inner {
+    padding-top:    max(4rem,  calc(env(safe-area-inset-top, 0px) + 3rem));
+    padding-bottom: max(5rem,  calc(env(safe-area-inset-bottom, 0px) + 5rem));
+  }
+}
+
+/* ── § 4  Installed (standalone) mode — native product feel ──────── */
+/* Applied via body.asp-installed class by JS on display-mode check. */
+
+/* Dock: stronger surface in standalone (no browser chrome below it) */
+@media (max-width: 767px) {
+  body.asp-installed .mob-nav,
+  body.asp-installed #mobile-nav {
+    background: rgba(249, 246, 241, 0.97) !important;
+    backdrop-filter: blur(32px) saturate(2.1) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(2.1) !important;
+    box-shadow: 0 -2px 16px rgba(23, 4, 10, 0.07), 0 -1px 0 rgba(23, 4, 10, 0.05) !important;
+  }
+  [data-theme="dark"] body.asp-installed .mob-nav,
+  [data-theme="dark"] body.asp-installed #mobile-nav {
+    background: rgba(15, 7, 10, 0.98) !important;
+  }
+  /* Floating nav recedes in standalone — dock is navigation */
+  body.asp-installed #fnav {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms var(--ease-out);
+  }
+}
+
+/* Desktop standalone: hero top spacing accounts for no browser chrome */
+@media (min-width: 768px) {
+  body.asp-installed #hero {
+    padding-top: max(5rem, calc(env(safe-area-inset-top, 0px) + 4.5rem));
+  }
+}
+
+/* ── § 5  ASPIRA Install Prompt — luxury bottom-sheet invitation ─── */
+/* Positioned above dock on mobile. Slides up from below.           */
+/* Shows only after meaningful engagement (90s) — never immediately. */
+
+.asp-pwa-prompt {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1500;
+  padding: 0 0 max(16px, env(safe-area-inset-bottom, 16px));
+  transform: translateY(calc(100% + 16px));
+  transition: transform 560ms var(--ease-settle);
+  pointer-events: none;
+  will-change: transform;
+}
+.asp-pwa-prompt.asp-pwa-visible {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.asp-pwa-inner {
+  margin: 0 14px;
+  background: var(--surface);
+  backdrop-filter: blur(32px) saturate(2.0);
+  -webkit-backdrop-filter: blur(32px) saturate(2.0);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 1.35rem 1.5rem 1.3rem;
+  box-shadow: var(--shadow-xl), 0 0 0 0.5px var(--border-2);
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.asp-pwa-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.asp-pwa-icon-wrap {
+  width: 50px; height: 50px;
+  border-radius: 11px;
+  background: linear-gradient(160deg, #8d011a 0%, #600010 100%);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 14px rgba(120, 1, 21, 0.24);
+}
+.asp-pwa-icon-wrap svg {
+  width: 30px; height: 30px;
+}
+
+.asp-pwa-titles {
+  flex: 1;
+  padding-top: 2px;
+}
+.asp-pwa-name {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 500;
+  color: var(--text-1);
+  letter-spacing: 0.08em;
+  margin: 0 0 3px;
+  line-height: 1.2;
+}
+.asp-pwa-desc {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-2);
+  line-height: 1.55;
+  font-weight: 400;
+  margin: 0;
+}
+
+.asp-pwa-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.asp-pwa-btn-add {
+  flex: 1;
+  height: 44px;
+  background: var(--crimson);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(120, 1, 21, 0.20);
+  transition:
+    background    var(--dur-fast) var(--ease-out),
+    box-shadow    var(--dur-base) var(--ease-out),
+    transform     var(--dur-base) var(--ease-out);
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+}
+.asp-pwa-btn-add:hover  { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(120,1,21,0.28); }
+.asp-pwa-btn-add:active { transform: scale(0.97); }
+[data-theme="dark"] .asp-pwa-btn-add { color: var(--bg); }
+
+.asp-pwa-btn-later {
+  height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.80rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color         var(--dur-fast) var(--ease-out),
+    border-color  var(--dur-fast) var(--ease-out),
+    background    var(--dur-fast) var(--ease-out);
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+}
+.asp-pwa-btn-later:hover { color: var(--text-2); border-color: rgba(23,4,10,0.12); background: var(--bg-2); }
+
+/* On mobile, position above the dock height (~78px) */
+@media (max-width: 767px) {
+  .asp-pwa-prompt {
+    padding-bottom: max(calc(78px + 14px), calc(env(safe-area-inset-bottom, 0px) + 78px + 14px));
+  }
+}
+
+/* ── § 6  Reduced motion guard ── */
+@media (prefers-reduced-motion: reduce) {
+  #hero::before      { animation: none; opacity: 1; }
+  .asp-pwa-prompt    { transition-duration: 0.001ms; }
+}
+/* ═══ END SIGNATURE HERO + NATIVE PWA ════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -12738,25 +12976,47 @@ document.body.addEventListener('touchmove',function(e){
 </div>
 
 
-<!-- ═══ PWA INSTALL PROMPT ═══ -->
-<div id="pwa-prompt">
-  <div class="pwa-top">
-    <div class="pwa-icon">
-      <svg viewBox="0 0 100 100" fill="none">
-        <path d="M20 85Q35 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M80 85Q65 50 50 15" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M32 55L68 55" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      </svg>
+<!-- ═══ ASPIRA INSTALL INVITE — Phase 19 ═══════════════════════════
+     Replaces the generic #pwa-prompt with an ASPIRA-authored
+     bottom-sheet install invitation. Shown only after meaningful
+     engagement. Never immediately. Luxury invites quietly.
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="asp-pwa-prompt" class="asp-pwa-prompt" hidden
+     role="dialog" aria-label="Install ASPIRA" aria-hidden="true">
+  <div class="asp-pwa-inner">
+
+    <div class="asp-pwa-header">
+      <!-- Mini ASPIRA lettermark — mirrors icon.svg proportions -->
+      <div class="asp-pwa-icon-wrap" aria-hidden="true">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left leg -->
+          <line x1="7"  y1="27" x2="15" y2="3"  stroke="#f2ede6" stroke-width="2.8" stroke-linecap="butt"/>
+          <!-- Right leg -->
+          <line x1="23" y1="27" x2="15" y2="3"  stroke="#f2ede6" stroke-width="2.8" stroke-linecap="butt"/>
+          <!-- Crossbar -->
+          <line x1="10" y1="17.5" x2="20" y2="17.5" stroke="#f2ede6" stroke-width="1.9" stroke-linecap="butt"/>
+          <!-- Left serif -->
+          <line x1="4.5" y1="27" x2="9.5"  y2="27" stroke="#f2ede6" stroke-width="1.7" stroke-linecap="round"/>
+          <!-- Right serif -->
+          <line x1="20.5" y1="27" x2="25.5" y2="27" stroke="#f2ede6" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="asp-pwa-titles">
+        <p class="asp-pwa-name">ASPIRA</p>
+        <p class="asp-pwa-desc">Install for a calmer,&nbsp;uninterrupted clarity experience.</p>
+      </div>
     </div>
-    <div class="pwa-text">
-      <h4>ASPIRA</h4>
-      <p>Install for a better experience — works offline too.</p>
+
+    <div class="asp-pwa-actions">
+      <button class="asp-pwa-btn-add" id="asp-pwa-accept">
+        Add to Home Screen
+      </button>
+      <button class="asp-pwa-btn-later" id="asp-pwa-dismiss">
+        Not now
+      </button>
     </div>
-    <button class="pwa-close" onclick="pwaDismiss()" aria-label="Dismiss">✕</button>
-  </div>
-  <div class="pwa-actions">
-    <button class="pwa-btn-install" onclick="pwaInstall()">Install Now</button>
-    <button class="pwa-btn-later" onclick="pwaDismiss()">Not Now</button>
+
   </div>
 </div>
 
@@ -14194,5 +14454,159 @@ document.body.addEventListener('touchmove',function(e){
 
 })(); /* end aspiraJourneyEngine */
 </script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ASPIRA PWA ENGINE — Phase 19
+   Signature Hero + Native PWA Experience System
+   ─────────────────────────────────────────────────────────────────
+   Covers:
+   · Service worker registration (offline shell + cache strategy)
+   · Standalone mode detection → body.asp-installed class
+   · ASPIRA-authored install prompt (intelligent engagement timing)
+   · Neutralise legacy pwaShowPrompt / pwaInstall to prevent conflicts
+   ═══════════════════════════════════════════════════════════════════ */
+(function aspiraPWA() {
+  'use strict';
+
+  /* ── 1  Neutralise legacy generic prompt system ─────────────────── */
+  /* The old pwaShowPrompt fires after 8s with sessionStorage.         */
+  /* Override to no-ops so Phase 19 owns all install logic.           */
+  window.pwaShowPrompt = function() {};
+  window.pwaDismiss    = function() {};
+  window.pwaInstall    = function() {};
+
+  /* ── 2  Service Worker Registration ─────────────────────────────── */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .catch(function() { /* SW is enhancement — silent on fail */ });
+    });
+  }
+
+  /* ── 3  Standalone (installed) mode detection ────────────────────── */
+  function checkInstalled() {
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
+  }
+
+  if (checkInstalled()) {
+    document.body.classList.add('asp-installed');
+  }
+
+  /* React if user installs during session (Chrome on Android) */
+  var mql = window.matchMedia('(display-mode: standalone)');
+  if (mql.addEventListener) {
+    mql.addEventListener('change', function(e) {
+      if (e.matches) document.body.classList.add('asp-installed');
+    });
+  }
+
+  /* ── 4  ASPIRA Install Prompt ────────────────────────────────────── */
+  var _deferred    = null;
+  var DISMISS_KEY  = 'aspira_pwa_dismissed_at';
+  var COOLDOWN_MS  = 14 * 24 * 60 * 60 * 1000;  /* 14 days */
+  var ENGAGE_DELAY = 90 * 1000;                  /* 90 seconds */
+  var _timer       = null;
+
+  /* Gate: should the prompt appear? */
+  function canPrompt() {
+    if (checkInstalled()) return false;
+    try {
+      var val = localStorage.getItem(DISMISS_KEY);
+      if (!val) return true;
+      if (val === 'installed') return false;
+      return (Date.now() - parseInt(val, 10)) > COOLDOWN_MS;
+    } catch(e) { return false; }
+  }
+
+  /* Gate: has the user shown genuine interest? */
+  function hasEngaged() {
+    try {
+      var vc  = parseInt(localStorage.getItem('aspira_visitCount'),   10) || 0;
+      var sc  = parseInt(localStorage.getItem('aspira_maxScroll'),    10) || 0;
+      var inp = (localStorage.getItem('aspira_clarityInput') || '').length > 3;
+      var stg = localStorage.getItem('aspira_journeyStage') || 'fresh';
+      return vc >= 2 || sc > 450 || inp || stg === 'engaged' || stg === 'returning';
+    } catch(e) { return false; }
+  }
+
+  /* Capture browser's native install event — suppress generic banner */
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _deferred = e;
+    if (!canPrompt()) return;
+    clearTimeout(_timer);
+    _timer = setTimeout(function() {
+      if (_deferred && hasEngaged()) showPrompt();
+    }, ENGAGE_DELAY);
+  });
+
+  function showPrompt() {
+    var el = document.getElementById('asp-pwa-prompt');
+    if (!el) return;
+    el.removeAttribute('hidden');
+    el.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        el.classList.add('asp-pwa-visible');
+      });
+    });
+  }
+
+  function hidePrompt(saveDismissTime) {
+    var el = document.getElementById('asp-pwa-prompt');
+    if (!el) return;
+    el.classList.remove('asp-pwa-visible');
+    el.setAttribute('aria-hidden', 'true');
+    setTimeout(function() { el.setAttribute('hidden', ''); }, 600);
+    if (saveDismissTime) {
+      try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch(ex) {}
+    }
+  }
+
+  /* Button handlers via event delegation */
+  document.addEventListener('click', function(e) {
+    var tgt = e.target;
+
+    if (tgt.id === 'asp-pwa-accept' || (tgt.closest && tgt.closest('#asp-pwa-accept'))) {
+      clearTimeout(_timer);
+      if (_deferred) {
+        _deferred.prompt();
+        _deferred.userChoice.then(function(choice) {
+          _deferred = null;
+          if (choice.outcome === 'accepted') {
+            hidePrompt(false);
+            try { localStorage.setItem(DISMISS_KEY, 'installed'); } catch(ex) {}
+          } else {
+            hidePrompt(true);
+          }
+        });
+      } else {
+        /* iOS: no beforeinstallprompt — user finds Add to Home Screen in Share menu */
+        hidePrompt(false);
+      }
+    }
+
+    if (tgt.id === 'asp-pwa-dismiss' || (tgt.closest && tgt.closest('#asp-pwa-dismiss'))) {
+      clearTimeout(_timer);
+      hidePrompt(true);
+    }
+  });
+
+  /* Mark installed on appinstalled event */
+  window.addEventListener('appinstalled', function() {
+    clearTimeout(_timer);
+    _deferred = null;
+    hidePrompt(false);
+    document.body.classList.add('asp-installed');
+    try { localStorage.setItem(DISMISS_KEY, 'installed'); } catch(ex) {}
+  });
+
+})(); /* end aspiraPWA */
+</script>
+
 </body>
 </html>

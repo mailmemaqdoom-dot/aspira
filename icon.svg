@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background gradient — rich crimson depth -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#8d011a"/>
+      <stop offset="100%" stop-color="#600010"/>
+    </linearGradient>
+    <!-- Subtle top-center luminance — like a calm light source -->
+    <radialGradient id="glow" cx="50%" cy="28%" r="52%">
+      <stop offset="0%"   stop-color="#a81428" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#600010" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Clip to the rounded-rect shape for all overlays -->
+    <clipPath id="rr">
+      <rect width="512" height="512" rx="114"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="114" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="114" fill="url(#glow)"/>
+
+  <!-- Inner border — premium detail at 2× renders -->
+  <rect x="2" y="2" width="508" height="508" rx="113"
+        fill="none" stroke="rgba(255,255,255,0.055)" stroke-width="1.5"/>
+
+  <!-- Atmospheric structure lines — extremely low opacity, clipped -->
+  <g clip-path="url(#rr)" opacity=".035" stroke="#f2ede6" stroke-width=".8">
+    <line x1="0"   y1="256" x2="512" y2="256"/>
+    <line x1="256" y1="0"   x2="256" y2="512"/>
+  </g>
+
+  <!--
+    ASPIRA Lettermark — thin serif 'A'
+    Proportions:
+      Apex       : (256, 148)
+      Left base  : (162, 372)
+      Right base : (350, 372)
+      Crossbar   : (196, 290) → (316, 290)
+      Left serif : x 140–184,  y 372
+      Right serif: x 328–372,  y 372
+    Stroke: legs 25px · crossbar 16px · serifs 13px
+  -->
+  <g clip-path="url(#rr)">
+    <!-- Left diagonal leg -->
+    <line x1="162" y1="372" x2="256" y2="148"
+          stroke="#f2ede6" stroke-width="25" stroke-linecap="butt"/>
+    <!-- Right diagonal leg -->
+    <line x1="350" y1="372" x2="256" y2="148"
+          stroke="#f2ede6" stroke-width="25" stroke-linecap="butt"/>
+    <!-- Crossbar — thinner for serif elegance -->
+    <line x1="196" y1="290" x2="316" y2="290"
+          stroke="#f2ede6" stroke-width="16" stroke-linecap="butt"/>
+    <!-- Left base serif -->
+    <line x1="140" y1="372" x2="185" y2="372"
+          stroke="#f2ede6" stroke-width="13" stroke-linecap="round"/>
+    <!-- Right base serif -->
+    <line x1="327" y1="372" x2="372" y2="372"
+          stroke="#f2ede6" stroke-width="13" stroke-linecap="round"/>
+  </g>
+</svg>
