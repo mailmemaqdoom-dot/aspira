@@ -10113,6 +10113,160 @@ hr.section-rule {
 
 /* ═══ END PHASE 22 CSS ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 23 — LAYOUT INTEGRITY AUDIT
+   ─────────────────────────────────────────────────────────────────
+   Engineering consistency pass. Zero visual changes.
+   All fixes are structural: width, centering, safe-area, overflow.
+   Root causes fixed — no one-off patches.
+   ─────────────────────────────────────────────────────────────────
+   A  FAQ / About centering — missing margin:auto in block context
+   B  Phase 22 sections — width:100% missing on layout containers
+   C  Phase 22 max-widths — normalize to --c-text / --c-mid tokens
+   D  how-wrap mobile — 320px cap too narrow for 375px+ devices
+   E  pax-trigger — white-space guard against text-change wrapping
+   F  pax-card-label — overflow-wrap for long label strings
+   G  ai-fab safe-area — bottom must clear dock + home-bar inset
+   H  space-fab safe-area — same home-bar alignment fix
+   I  320px grid collapse — all multi-column grids → single column
+   J  overflow guard — new wide sections inherit body clip
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A  FAQ / ABOUT CENTERING ─────────────────────────────────────
+   #faq and #about have style="display:block" inline overrides.
+   This kills the flex centering from the section base rule.
+   With display:block, max-width containers need margin:auto to
+   center themselves — the missing declaration causing left drift.
+   ─────────────────────────────────────────────────────────────── */
+.faq-inner,
+.abt-inner {
+  margin-left:  auto;
+  margin-right: auto;
+}
+
+/* ── B  PHASE 22 WIDTH REGISTRATION ──────────────────────────────
+   Inside a flex column (display:flex; flex-direction:column),
+   children shrink to content width without explicit width:100%.
+   Register every Phase 22 layout container in the Step 3 system.
+   ─────────────────────────────────────────────────────────────── */
+.signals-grid,
+.insight-preview,
+.review-grid,
+.recognition-grid,
+.reveals-grid,
+.not-list,
+.review-cta {
+  width: 100%;
+}
+
+/* ── C  PHASE 22 MAX-WIDTH TOKEN NORMALIZATION ────────────────────
+   Replace ad-hoc pixel values with the established container
+   token system: --c-mid (860px) for grids, --c-text (680px)
+   for prose/lists, 560px for card-format previews.
+   ─────────────────────────────────────────────────────────────── */
+.signals-grid,
+.review-grid,
+.reveals-grid {
+  max-width: var(--c-mid);
+}
+
+.recognition-grid,
+.not-list {
+  max-width: var(--c-text);
+}
+
+.insight-preview {
+  max-width: 560px; /* narrower than c-text — card container */
+}
+
+/* ── D  HOW-WRAP MOBILE WIDTH FIX ─────────────────────────────────
+   An earlier rule sets max-width:320px for the how-wrap on mobile.
+   At 375px+ (all modern phones), this creates a cramped, misaligned
+   How It Works section. Remove the cap — let it fill properly.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .how-wrap {
+    max-width: 100%;
+  }
+}
+
+/* ── E  PAX-TRIGGER TEXT-CHANGE PROTECTION ────────────────────────
+   JS changes button text from "Continue Forward →" to
+   "✓ Access Unlocked" via innerHTML. Without white-space:nowrap,
+   the new text can wrap inside the button, collapsing its height
+   and shifting surrounding layout elements.
+   ─────────────────────────────────────────────────────────────── */
+.pax-trigger {
+  white-space: nowrap;
+}
+
+/* ── F  PAX-CARD-LABEL OVERFLOW FIX ──────────────────────────────
+   "UPI · Any Payment App · Any Payment App" with letter-spacing:2px
+   overflows on 320–375px screens where card padding is ~20px/side.
+   overflow-wrap allows safe breaking at word boundaries.
+   ─────────────────────────────────────────────────────────────── */
+.pax-card-label {
+  overflow-wrap: break-word;
+  word-break:    break-word;
+}
+
+/* ── G  AI-FAB SAFE-AREA BOTTOM ───────────────────────────────────
+   bottom:76px does not account for env(safe-area-inset-bottom).
+   On iPhone X+ (home-bar devices) safe-area is ~34px, pushing the
+   dock to ~112px from the physical bottom. The fab at 76px falls
+   inside the dock. Use max() to guarantee clearance on all devices.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .ai-fab {
+    bottom: max(
+      76px,
+      calc(78px + env(safe-area-inset-bottom, 0px) + 8px)
+    );
+  }
+}
+
+/* ── H  SPACE-FAB SAFE-AREA BOTTOM ────────────────────────────────
+   .space-fab uses clamp(80px, 12vh, 100px). On 667px-height devices
+   12vh = 80px which clips the dock on home-bar phones. Align with
+   the same safe-area pattern used for ai-fab.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .space-fab {
+    bottom: max(
+      80px,
+      calc(78px + env(safe-area-inset-bottom, 0px) + 12px)
+    );
+  }
+}
+
+/* ── I  320PX GRID COLLAPSE ───────────────────────────────────────
+   At 320px (smallest common viewport) multi-column grids must
+   collapse to single column. signals-grid (5-col) and reveals-grid
+   (3-col) are not covered by their existing breakpoints at 320px.
+   recognition-grid and review-grid also need single-column at 320px.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .signals-grid,
+  .reveals-grid,
+  .recognition-grid,
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── J  OVERFLOW GUARD FOR NEW SECTIONS ──────────────────────────
+   body already has overflow-x:clip (line 179). New sections with
+   5-column grids could produce sub-pixel overflow at edge cases.
+   Apply clip directly on the widest new sections as a safety net.
+   ─────────────────────────────────────────────────────────────── */
+#clarity-signals,
+#what-aspira-reviews,
+#what-clarity-reveals {
+  overflow-x: clip;
+}
+
+/* ═══ END LAYOUT INTEGRITY AUDIT ══════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
