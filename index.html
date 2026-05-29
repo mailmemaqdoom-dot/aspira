@@ -10211,33 +10211,22 @@ hr.section-rule {
 }
 
 /* ── G  AI-FAB SAFE-AREA BOTTOM ───────────────────────────────────
-   bottom:76px does not account for env(safe-area-inset-bottom).
-   On iPhone X+ (home-bar devices) safe-area is ~34px, pushing the
-   dock to ~112px from the physical bottom. The fab at 76px falls
-   inside the dock. Use max() to guarantee clearance on all devices.
+   Verified via live DOM audit:
+     mob-nav: bottom 18px, height 79px → dock top = 97px from bottom
+     Previous formula gave bottom:86px — 11px inside dock. Wrong.
+   Correct clearance = dock_offset(18) + dock_height(79) + gap(12)
+   = 109px baseline, plus env(safe-area-inset-bottom) for home-bar.
    ─────────────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
   .ai-fab {
-    bottom: max(
-      76px,
-      calc(78px + env(safe-area-inset-bottom, 0px) + 8px)
-    );
+    bottom: calc(109px + env(safe-area-inset-bottom, 0px));
   }
 }
 
-/* ── H  SPACE-FAB SAFE-AREA BOTTOM ────────────────────────────────
-   .space-fab uses clamp(80px, 12vh, 100px). On 667px-height devices
-   12vh = 80px which clips the dock on home-bar phones. Align with
-   the same safe-area pattern used for ai-fab.
+/* ── H  DEAD RULE REMOVED ─────────────────────────────────────────
+   .space-fab does not exist in the DOM (verified live audit).
+   No fix needed — rule removed.
    ─────────────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  .space-fab {
-    bottom: max(
-      80px,
-      calc(78px + env(safe-area-inset-bottom, 0px) + 12px)
-    );
-  }
-}
 
 /* ── I  320PX GRID COLLAPSE ───────────────────────────────────────
    At 320px (smallest common viewport) multi-column grids must
