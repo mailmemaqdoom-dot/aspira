@@ -9243,6 +9243,658 @@ body {
 }
 /* ═══ END SIGNATURE HERO + NATIVE PWA ════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 20 — CINEMATIC HERO ENVIRONMENT SYSTEM
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: noise resolving into clarity.
+   The hero is a single spatial environment — not layered decorations.
+   Motion is environmental, not animated. Typography breathes.
+   Focus converges on what matters. Everything else recedes.
+   ─────────────────────────────────────────────────────────────────
+   §1  Single Environmental Canvas
+   §2  Clarity Emergence Atmosphere
+   §3  Cinematic Gradient Physics
+   §4  Editorial Typography Composition
+   §5  Focus Hierarchy Discipline
+   §6  Atmospheric Motion Restraint
+   §7  Hero as Product Surface
+   §8  Mobile Native Immersion
+   §9  Floating Navigation Calmness
+   §10 Signature ASPIRA Moment
+   §11 Remove Generic Premium Tropes
+   §12 Performance + Immersion
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── §1  SINGLE ENVIRONMENTAL CANVAS ──────────────────────────────
+   Slow the hero-visual entrance to cinematic pacing.
+   Clarity emerges from ambient noise — not a decorative fade-in.
+   ─────────────────────────────────────────────────────────────── */
+.hero-visual svg {
+  /* Override Phase 3 (2.4s ease-out 0.4s) — slower, more cinematic */
+  animation: heroVisualIn 4.8s var(--ease-settle) 0.8s forwards;
+}
+
+/* ── §2  CLARITY EMERGENCE ATMOSPHERE ─────────────────────────────
+   A soft luminance field at the hero centre slowly diffuses inward —
+   the ambient environment settling into stillness.
+   .hero-ambient::before is unused; claim it as the luminance layer.
+   ─────────────────────────────────────────────────────────────── */
+.hero-ambient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 68% 58% at 50% 40%,
+      rgba(248, 245, 240, 0.046) 0%,
+      transparent 100%
+    );
+  opacity: 0;
+  animation: asp-luminance-emerge 7s var(--ease-settle) 2.2s forwards;
+  will-change: opacity;
+}
+[data-theme="dark"] .hero-ambient::before {
+  background:
+    radial-gradient(
+      ellipse 68% 58% at 50% 40%,
+      rgba(120, 1, 21, 0.052) 0%,
+      transparent 100%
+    );
+}
+@keyframes asp-luminance-emerge { to { opacity: 1; } }
+
+/* ── §3  CINEMATIC GRADIENT PHYSICS ───────────────────────────────
+   An edge-darkening frame creates spatial depth — the hero feels
+   like you're looking into a physical environment, not at a screen.
+   #hero::after is free (Phase 19 owns ::before). z-index: 1 places
+   it above the visual field, below the content.
+   ─────────────────────────────────────────────────────────────── */
+#hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 110% 100% at 50% 50%,
+      transparent 48%,
+      rgba(23, 4, 10, 0.048) 100%
+    );
+  opacity: 0;
+  animation: asp-hero-frame 9s var(--ease-settle) 3.5s forwards;
+  will-change: opacity;
+}
+[data-theme="dark"] #hero::after {
+  background:
+    radial-gradient(
+      ellipse 110% 100% at 50% 50%,
+      transparent 44%,
+      rgba(8, 2, 4, 0.10) 100%
+    );
+}
+@keyframes asp-hero-frame { to { opacity: 1; } }
+
+/* ── §4  EDITORIAL TYPOGRAPHY COMPOSITION ─────────────────────────
+   Reduce marketing density. Introduce breathing rhythm.
+   Hero reads like a journal cover — quiet authority, not SaaS energy.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Badge: quieter presence, more editorial than product pill */
+.h-badge {
+  margin-bottom: 26px;          /* was 44px — breathes above wordmark */
+  border-color: rgba(120, 1, 21, 0.12); /* was --border — softer threshold */
+  letter-spacing: 1.6px;        /* was 2px — restrained, not shouting */
+  padding: 5px 15px;            /* was 5px 16px — marginal refinement */
+}
+
+/* Mark: grounded closer to wordmark */
+.h-mark {
+  margin-bottom: 14px;          /* was 18px */
+}
+
+/* Rule: slightly elongated — editorial weight, not decorative divider */
+.h-rule {
+  width: clamp(96px, 13vw, 196px);  /* was clamp(80px,12vw,180px) */
+  margin: 10px auto 20px;            /* was 16px auto 26px */
+}
+
+/* Tagline: fractionally tighter to promise copy */
+.h-tagline {
+  margin-bottom: 10px;          /* was 14px */
+}
+
+/* Promise: deeper breathing, more editorial copy weight */
+.h-promise {
+  line-height: 1.96;            /* was 1.85 — editorial page rhythm */
+  margin-bottom: 38px;          /* was 54px — tighter, less funnel */
+}
+
+/* Stats: editorial footnote register, not dashboard metrics */
+.h-stats {
+  margin-bottom: 30px;          /* was 50px */
+}
+.h-stat {
+  padding: 0 22px;              /* was 34px — tighter column */
+}
+.h-stat-n {
+  font-size: 1.62rem;           /* was 1.85rem — quieter numeral */
+}
+.h-stat-l {
+  opacity: 0.70;                /* gentle de-emphasis */
+}
+.h-vr {
+  height: 26px;                 /* was 36px — refined divider */
+}
+
+/* CTA cluster: less vertical pressure, more considered spacing */
+.h-ctas {
+  margin-bottom: 52px;          /* was 78px */
+  gap: 12px;                    /* was 14px */
+}
+
+/* ── §5  FOCUS HIERARCHY DISCIPLINE ───────────────────────────────
+   The wordmark + tagline are the single dominant focal zone.
+   Mark shadow: reduced spread — less decorative, more integral.
+   ─────────────────────────────────────────────────────────────── */
+.h-mark {
+  filter: drop-shadow(0 4px 16px rgba(120, 1, 21, 0.15));
+}
+[data-theme="dark"] .h-mark {
+  filter: drop-shadow(0 6px 20px rgba(196, 26, 51, 0.18));
+}
+
+/* ── §6  ATMOSPHERIC MOTION RESTRAINT ─────────────────────────────
+   Hero orbs become tonal environmental breathing, not floating orbs.
+   Extend Phase 15's 32s/44s/56s to 48s/64s/82s.
+   Reduce size and opacity — more presence-as-atmosphere.
+   ─────────────────────────────────────────────────────────────── */
+.hero-ambient .orb-1 {
+  width: 520px;
+  height: 520px;                /* was 600px */
+  animation-duration: 48s;     /* was 32s (Phase 15) */
+  opacity: 0.78;
+}
+.hero-ambient .orb-2 {
+  width: 440px;
+  height: 440px;                /* was 500px */
+  animation-duration: 66s;     /* was 44s */
+  opacity: 0.70;
+}
+.hero-ambient .orb-3 {
+  width: 360px;
+  height: 360px;                /* was 400px */
+  animation-duration: 84s;     /* was 56s */
+  opacity: 0.54;
+}
+
+/* Orb parallax easing: settle curve for organic atmospheric trailing */
+.hero-ambient .orb-1,
+.hero-ambient .orb-2,
+.hero-ambient .orb-3 {
+  transition: transform 160ms var(--ease-settle), opacity 1400ms ease;
+}
+
+/* ── §7  HERO AS PRODUCT SURFACE ──────────────────────────────────
+   Bottom atmospheric seal: deeper gradient grounds the CTA layer.
+   Creates spatial floor for the hero environment.
+   ─────────────────────────────────────────────────────────────── */
+.hero-ambient::after {
+  height: 42%;                  /* was 32% — deeper atmospheric seal */
+  background: linear-gradient(to top, rgba(23, 4, 10, 0.09) 0%, transparent 100%);
+}
+[data-theme="dark"] .hero-ambient::after {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.20) 0%, transparent 100%);
+}
+
+/* ── §8  MOBILE NATIVE IMMERSION ──────────────────────────────────
+   Viewport fills completely. CTAs sit above the dock naturally.
+   Safe-area insets give physical device edge continuity.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .hero-inner {
+    /* Tighter top, dock-aware bottom — one-hand zone respected */
+    padding-top: 96px;
+    padding-bottom: max(84px, calc(env(safe-area-inset-bottom, 0px) + 84px));
+  }
+
+  /* Wordmark: slightly tighter gap below on small viewport */
+  .h-wordmark {
+    margin-bottom: 0.88rem;     /* was 1.2rem */
+  }
+
+  /* Badge: compact on mobile — occupies less vertical real estate */
+  .h-badge {
+    margin-bottom: 18px;
+    font-size: 0.60rem;
+  }
+
+  /* Stats: compressed horizontal rhythm on mobile */
+  .h-stat {
+    padding: 0 14px;
+  }
+  .h-stats {
+    margin-bottom: 20px;
+  }
+
+  /* Promise: keep editorial breathing but conserve vertical space */
+  .h-promise {
+    margin-bottom: 30px;
+  }
+}
+
+/* ── §9  FLOATING NAVIGATION CALMNESS ─────────────────────────────
+   In hero context (body.asp-env-shallow), the fnav materialises
+   as an almost-invisible ghost — orientation without intrusion.
+   It solidifies as the user scrolls into content.
+   Note: asp-env-shallow is set from first paint by AspiraDepth tick().
+   ─────────────────────────────────────────────────────────────── */
+body.asp-env-shallow #fnav {
+  background: rgba(248, 245, 240, 0.70);
+  box-shadow: none;
+  border-color: rgba(120, 1, 21, 0.06);
+}
+[data-theme="dark"] body.asp-env-shallow #fnav {
+  background: rgba(18, 8, 12, 0.60);
+  border-color: rgba(248, 245, 240, 0.06);
+}
+
+/* ── §10  SIGNATURE ASPIRA MOMENT ─────────────────────────────────
+   body.aspira-resolved fires on first scroll (set by ~line 13093).
+   The environment gently converges: orbs settle lower, luminance
+   tightens to centre — spatial alignment emerging from motion.
+   ─────────────────────────────────────────────────────────────── */
+body.aspira-resolved .hero-ambient .orb-1 {
+  opacity: 0.64;
+  transition:
+    opacity  1800ms var(--ease-settle),
+    transform 160ms var(--ease-settle);
+}
+body.aspira-resolved .hero-ambient .orb-2 {
+  opacity: 0.56;
+  transition:
+    opacity  1800ms var(--ease-settle),
+    transform 160ms var(--ease-settle);
+}
+body.aspira-resolved .hero-ambient .orb-3 {
+  opacity: 0.40;
+  transition:
+    opacity  1800ms var(--ease-settle),
+    transform 160ms var(--ease-settle);
+}
+
+/* Luminance field contracts towards centre — convergence signal */
+body.aspira-resolved .hero-ambient::before {
+  background:
+    radial-gradient(
+      ellipse 54% 48% at 50% 40%,
+      rgba(248, 245, 240, 0.058) 0%,
+      transparent 100%
+    );
+  transition: background 2600ms ease;
+}
+[data-theme="dark"] body.aspira-resolved .hero-ambient::before {
+  background:
+    radial-gradient(
+      ellipse 54% 48% at 50% 40%,
+      rgba(120, 1, 21, 0.068) 0%,
+      transparent 100%
+    );
+}
+
+/* ── §11  REMOVE GENERIC PREMIUM TROPES ───────────────────────────
+   Audit: startup badge energy, aggressive stat bounce, shimmer glare.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Badge blinking dot: replace anxious blink with slow environmental breath */
+.h-dot {
+  animation: hdotBreath 6s ease-in-out infinite;
+  opacity: 0.48;
+}
+@keyframes hdotBreath {
+  0%, 100% { opacity: 0.48; }
+  50%       { opacity: 0.14; }
+}
+
+/* Stat number hover: refined lift — not a pop. Precision over energy. */
+.h-stat:hover .h-stat-n {
+  transform: scale(1.08) translateY(-2px);  /* was scale(1.2) translateY(-4px) */
+  transition: transform 0.44s var(--ease-settle);
+}
+
+/* CTA primary shimmer: quieter — editorial confidence, not conversion urgency */
+.btn-p::before {
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.10) 50%,
+    transparent 65%
+  );  /* was 0.18 — less casino, more composed */
+}
+
+/* ── §12  PERFORMANCE + IMMERSION ─────────────────────────────────
+   All animated hero layers on GPU-composited properties only.
+   will-change declared only where active animation runs.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Reduced motion: collapse all Phase 20 hero atmosphere */
+@media (prefers-reduced-motion: reduce) {
+  #hero::after                 { animation: none; opacity: 1; }
+  .hero-ambient::before        { animation: none; opacity: 1; }
+  .hero-visual svg             { animation: none; opacity: 0.88; transform: none; }
+  .h-dot                       { animation: none; opacity: 0.48; }
+  .hero-ambient .orb-1,
+  .hero-ambient .orb-2,
+  .hero-ambient .orb-3         { animation: none; }
+  body.aspira-resolved .hero-ambient .orb-1,
+  body.aspira-resolved .hero-ambient .orb-2,
+  body.aspira-resolved .hero-ambient .orb-3 { transition: none; }
+}
+
+/* ═══ END CINEMATIC HERO ENVIRONMENT ══════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 21 — ELITE REFINEMENT GAP RESOLUTION SYSTEM
+   ─────────────────────────────────────────────────────────────────
+   Philosophy: subtraction, silence, focus, emotional inevitability.
+   Luxury sophistication comes from what is removed, softened,
+   and stabilized — not from what is added.
+   ─────────────────────────────────────────────────────────────────
+   §1   Hero Dominance Refinement
+   §2   Background Grid + Line Softening
+   §3   Typography Confidence Through Silence
+   §4   Compositional Center of Gravity
+   §5   Product Surface Consistency
+   §6   Environmental Transition Continuity
+   §7   Remove Designerly Details
+   §8   Atmospheric Stabilization
+   §9   Mobile Immersion Refinement
+   §10  Motion Quieting System
+   §11  Final Subtraction Pass
+   §12  Performance + Stability
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── §1  HERO DOMINANCE REFINEMENT ────────────────────────────────
+   Reduce the entire SVG visual field proportionally — scattered dots,
+   resolving lines, and the fine grid all soften by ~24%.
+   Establish a clear opacity hierarchy: wordmark and tagline are the
+   only full-opacity elements. Everything else recedes into register.
+   ─────────────────────────────────────────────────────────────── */
+
+/* All SVG internals dim together — one atmospheric gesture */
+.hero-visual {
+  opacity: 0.76;
+}
+
+/* Graduated entrance opacities — hero focus hierarchy via keyframes.
+   Wordmark/tagline/CTAs arrive at 1.0 (dominant focal layer).
+   Badge/promise arrive at 0.70 (supporting editorial layer).
+   Stats/scroll arrive at 0.54 (ambient footnote layer). */
+@keyframes heroRevealSoft {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 0.70; transform: translateY(0); }
+}
+@keyframes heroRevealDim {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 0.54; transform: translateY(0); }
+}
+
+/* Badge: editorial presence, not announcement */
+.h-badge {
+  animation: heroRevealSoft 0.9s var(--ease-out) 0.05s forwards;
+}
+/* Promise: supporting context — tagline is the dominant line */
+.h-promise {
+  animation: heroRevealSoft 0.9s var(--ease-out) 0.4s forwards;
+}
+/* Stats row: footnote register — orienting, not competing */
+.h-stats {
+  animation: heroRevealDim 0.9s var(--ease-out) 0.5s forwards;
+}
+/* Scroll indicator: barely present — ambient orientation only */
+.h-scroll {
+  animation: heroRevealDim 0.8s var(--ease-out) 1.4s forwards;
+}
+
+/* ── §2  BACKGROUND GRID + LINE SOFTENING ─────────────────────────
+   Hero SVG internals already soft via .hero-visual opacity above.
+   Section decorative SVG diagrams: reduced to subliminal presence.
+   These should structure atmosphere — not attract the eye.
+   ─────────────────────────────────────────────────────────────── */
+
+/* How-section three-node connector: structure, not diagram */
+.how-visual.vis {
+  opacity: 0.38;
+}
+
+/* Perception mirror visual: atmospheric illustration, not focal */
+.pm-visual.vis {
+  opacity: 0.26;
+}
+
+/* Clarity pathways visual: recedes fully behind the copy layer */
+.cp-visual.vis {
+  opacity: 0.30;
+}
+
+/* ── §3  TYPOGRAPHY CONFIDENCE THROUGH SILENCE ────────────────────
+   Tighter promise column: narrower max-width = stronger line breaks,
+   more authoritative prose rhythm.
+   Fewer pixels of text sprawl = more editorial confidence.
+   ─────────────────────────────────────────────────────────────── */
+.h-promise {
+  max-width: 430px;   /* was 500px → tighter, more decisive copy column */
+}
+
+/* ── §4  COMPOSITIONAL CENTER OF GRAVITY ──────────────────────────
+   Desktop hero-inner: additional bottom breathing grounds the content
+   cluster toward true vertical center rather than upper third.
+   Only applies on desktop — mobile safe-area logic handles mobile.
+   ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .hero-inner {
+    padding-bottom: clamp(5.5rem, 10vw, 8rem);  /* was 100px constant */
+  }
+}
+
+/* ── §5  PRODUCT SURFACE CONSISTENCY ─────────────────────────────
+   Cards: native surfaces settle, not bounce. Lift: -4px → -2px.
+   Shadow: xl → lg on hover. Resting: md → sm.
+   Section vertical rhythm: tighter on desktop — one continuum.
+   Section header: slightly tighter below-heading gap.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Card resting state: quieter — surface presence without elevation */
+.card, .val-card, .feature-card, .proof-card, .result-card,
+.r-card, .ci-level-card, .ci-truth-card, .bcl-rec-card {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Card hover: refined settle — product-native, not portfolio bounce */
+.card:hover, .val-card:hover, .feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  transition:
+    transform     380ms var(--ease-settle),
+    box-shadow    380ms var(--ease-settle),
+    border-color  260ms var(--ease-out);
+}
+
+/* Section vertical rhythm: ~15% tighter — sections feel connected */
+@media (min-width: 768px) {
+  section {
+    padding: clamp(4.5rem, 9vw, 7.5rem) 0;  /* was clamp(5.5rem, 10vw, 9rem) */
+  }
+}
+
+/* Section header: tighter below-headline margin */
+.section-header {
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);  /* was clamp(3rem, 6vw, 5.5rem) */
+}
+
+/* ── §6  ENVIRONMENTAL TRANSITION CONTINUITY ──────────────────────
+   Section entrances emerge from atmosphere — not slide up from below.
+   .s-enter displacement: 40px → 12px. Curve: ease-settle.
+   .section-enter: same.
+   .reveal: 20px → 8px. All transitions lengthen to 1000ms.
+   ─────────────────────────────────────────────────────────────── */
+
+.s-enter {
+  transform: translateY(12px);   /* was 40px — environmental, not performative */
+  transition:
+    opacity   1000ms var(--ease-settle),
+    transform 1000ms var(--ease-settle);
+}
+
+.section-enter {
+  transform: translateY(12px);   /* was 40px */
+  transition:
+    opacity   900ms var(--ease-settle),
+    transform 900ms var(--ease-settle);
+}
+
+/* Reveal: minimal vertical drift — elements emerge from the field */
+.reveal {
+  transform: translateY(8px);    /* was 20px (Phase 18) */
+  transition:
+    opacity   1000ms var(--ease-settle),
+    transform 1000ms var(--ease-settle);
+}
+.reveal.vis, .reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── §7  REMOVE DESIGNERLY DETAILS ───────────────────────────────
+   How-num hover: remove rotation — luxury doesn't spin.
+   Scale: 1.06 → 1.05. Transition: settle curve.
+   Rule-line: 48px → 30px — editorial, not brand-badge.
+   Form-q cue: reduce — the input is the cue.
+   ─────────────────────────────────────────────────────────────── */
+
+.how-step:hover .how-num {
+  transform: scale(1.05);                /* was scale(1.06) rotate(-3deg) */
+  transition: transform 400ms var(--ease-settle),
+              background 300ms var(--ease-out),
+              color       300ms var(--ease-out),
+              box-shadow  300ms var(--ease-out);
+}
+
+.rule-line {
+  width: 30px;   /* was 48px */
+}
+
+.form-q {
+  opacity: 0.46;
+}
+
+/* ── §8  ATMOSPHERIC STABILIZATION ───────────────────────────────
+   Card float: 5s 6px → 9s 3px — breathing, not floating.
+   Manifesto shimmer: 3s → 7s — subconscious, not visible.
+   Section rule: 1.4s → 2.2s settle — environmental expansion.
+   ─────────────────────────────────────────────────────────────── */
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }  /* was -6px */
+}
+.card-float {
+  animation: cardFloat 9s ease-in-out infinite;  /* was 5s */
+}
+
+/* Shimmer: slow enough to cross from effect into atmosphere */
+.manifesto-text .shimmer-on {
+  animation: shimmer 7s linear infinite;  /* was 3s */
+}
+
+/* Section rule: environmental expansion, not decorative reveal */
+hr.section-rule {
+  animation: ruleIn 2.2s var(--ease-settle) both;  /* was 1.4s ease-out */
+}
+
+/* ── §9  MOBILE IMMERSION REFINEMENT ─────────────────────────────
+   On touch: displacement near zero — native apps don't slide content in.
+   Card hover: lifted state removed — physical feedback is the OS.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .s-enter {
+    transform: translateY(6px);
+    transition-duration: 800ms;
+  }
+  .reveal {
+    transform: translateY(4px);
+    transition-duration: 800ms;
+  }
+  /* No lift on touch — tap feedback is native, not CSS elevation */
+  .card:hover, .val-card:hover, .feature-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* ── §10  MOTION QUIETING SYSTEM ─────────────────────────────────
+   Step-dot active scale: 1.3 → 1.15 — quieter state indicator.
+   How-num hover shadow: 22px → 14px blur — less glow, more surface.
+   Anim-line: 1.2s → 2s — environmental expansion, not click reveal.
+   ─────────────────────────────────────────────────────────────── */
+
+.step-dot.active {
+  transform: scale(1.15);  /* was scale(1.3) */
+}
+
+/* How-num hover: quieter luminance — already quieted transform above */
+.how-step:hover .how-num {
+  box-shadow: 0 4px 14px rgba(120, 1, 21, 0.18);  /* was 0 8px 22px */
+}
+
+/* Animated divider: environmental, not theatrical */
+.anim-line {
+  transition: width 2s var(--ease-settle);  /* was 1.2s ease-out */
+}
+
+/* ── §11  FINAL SUBTRACTION PASS ─────────────────────────────────
+   Val-icon: 48px → 42px — editorial proportion, not landing-page badge.
+   Section-sub: 0.80 opacity — lede recedes beneath the section title.
+   Val-title: line-height open — display type breathes at rest.
+   ─────────────────────────────────────────────────────────────── */
+
+.val-icon {
+  width: 42px;
+  height: 42px;   /* was 48px */
+}
+
+.section-sub {
+  opacity: 0.80;
+}
+
+/* Val-title: fractionally more open — editorial display register */
+.val-title {
+  line-height: 1.22;
+}
+
+/* ── §12  PERFORMANCE + STABILITY ────────────────────────────────
+   Reduced motion: all Phase 21 additions collapsed to static states.
+   ─────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .s-enter, .section-enter  { transform: none; transition-duration: 0.001ms; }
+  .s-enter.s-in,
+  .section-enter.active      { transform: none; }
+  .reveal                    { transform: none; }
+  .reveal.vis, .reveal.in-view { transform: none; }
+  .card-float                { animation: none; }
+  .manifesto-text .shimmer-on {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--text-1);
+    color: var(--text-1);
+  }
+  hr.section-rule            { animation: none; opacity: 1; transform: none; }
+  .anim-line                 { transition-duration: 0.001ms; }
+}
+
+/* ═══ END ELITE REFINEMENT GAP RESOLUTION ════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
