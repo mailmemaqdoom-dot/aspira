@@ -9895,6 +9895,224 @@ hr.section-rule {
 
 /* ═══ END ELITE REFINEMENT GAP RESOLUTION ════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 22 — OFFER CLARITY & CONVERSION ARCHITECTURE
+   New section CSS using existing design tokens throughout.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Clarity Signals grid ─────────────────────────────────────── */
+.signals-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  max-width: 900px;
+  width: 100%;
+  margin: 44px auto 0;
+}
+.signal-item {
+  padding: 26px 18px 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 280ms var(--ease-out), background 280ms var(--ease-out);
+}
+.signal-item:hover { border-color: rgba(120,1,21,0.18); }
+.signal-n {
+  font-family: var(--font-display);
+  font-size: 0.7rem; font-weight: 500;
+  color: var(--crimson); letter-spacing: 1px;
+  margin-bottom: 10px; opacity: 0.6;
+}
+.signal-name {
+  font-family: var(--font-display);
+  font-size: 1.02rem; font-weight: 500;
+  color: var(--text-1); margin-bottom: 9px;
+  line-height: 1.25;
+}
+.signal-desc {
+  font-size: 0.79rem; color: var(--text-3); line-height: 1.72;
+}
+@media (max-width: 860px) { .signals-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; } }
+@media (max-width: 600px) { .signals-grid { grid-template-columns: 1fr 1fr; gap: 6px; } }
+@media (max-width: 400px) { .signals-grid { grid-template-columns: 1fr; } }
+
+/* ── Sample Insight preview ───────────────────────────────────── */
+.insight-preview {
+  max-width: 600px; width: 100%;
+  margin: 44px auto 0;
+}
+.ip-eyebrow {
+  font-size: 0.63rem; font-weight: 700;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--text-3); margin-bottom: 16px;
+}
+.ip-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 34px 38px;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+  position: relative; overflow: hidden;
+}
+.ip-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 18%; bottom: 18%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(120,1,21,0.30) 40%, rgba(120,1,21,0.30) 60%, transparent);
+  border-radius: 2px;
+}
+.ip-signal {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--crimson); margin-bottom: 18px; opacity: 0.72;
+}
+.ip-body {
+  font-family: var(--font-display);
+  font-size: clamp(1.0rem, 2.1vw, 1.16rem);
+  font-weight: 300; font-style: italic;
+  color: var(--text-1); line-height: 1.74;
+  margin-bottom: 22px;
+}
+.ip-footer { display: flex; gap: 8px; flex-wrap: wrap; }
+.ip-tag {
+  font-size: 0.60rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--crimson); background: var(--crimson-2);
+  padding: 4px 11px; border-radius: 100px;
+}
+.ip-note {
+  font-size: 0.74rem; color: var(--text-3);
+  text-align: center; margin-top: 18px;
+  font-style: italic; line-height: 1.6;
+}
+
+/* ── What ASPIRA Reviews list ─────────────────────────────────── */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: 8px;
+  max-width: 780px; width: 100%;
+  margin: 40px auto 36px;
+}
+.review-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.83rem; font-weight: 500;
+  color: var(--text-2);
+  background: var(--surface);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: border-color 260ms var(--ease-out),
+              color 260ms var(--ease-out),
+              background 260ms var(--ease-out);
+  cursor: default;
+}
+.review-item:hover {
+  border-color: rgba(120,1,21,0.22);
+  color: var(--text-1); background: var(--bg-2);
+}
+.review-cta { text-align: center; }
+
+/* ── What Clarity Often Reveals ──────────────────────────────── */
+.reveals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: 880px; width: 100%;
+  margin: 44px auto 0;
+}
+.reveal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px 22px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.rc-accent {
+  width: 18px; height: 1.5px;
+  background: var(--crimson); opacity: 0.40;
+  margin-bottom: 14px; border-radius: 2px;
+}
+.rc-title {
+  font-family: var(--font-display);
+  font-size: 1.08rem; font-weight: 500;
+  color: var(--text-1); margin-bottom: 9px;
+  line-height: 1.22;
+}
+.rc-desc {
+  font-size: 0.81rem; color: var(--text-3); line-height: 1.76;
+}
+@media (max-width: 767px) { .reveals-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .reveals-grid { grid-template-columns: 1fr; } }
+
+/* ── Why People Seek Clarity ──────────────────────────────────── */
+.recognition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  max-width: 680px; width: 100%;
+  margin: 40px auto 0;
+}
+.recog-item {
+  padding: 16px 20px;
+  border-left: 2px solid rgba(120,1,21,0.16);
+  font-size: 0.87rem; color: var(--text-2);
+  line-height: 1.55; background: var(--bg-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.recog-note {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.98rem, 2.1vw, 1.2rem);
+  color: var(--text-2); text-align: center;
+  max-width: 480px; margin: 40px auto 0;
+  line-height: 1.65;
+}
+@media (max-width: 520px) { .recognition-grid { grid-template-columns: 1fr; } }
+
+/* ── What ASPIRA Is Not ───────────────────────────────────────── */
+#aspira-not { background: var(--bg-2); }
+.not-list {
+  max-width: 640px; width: 100%;
+  margin: 44px auto 0;
+}
+.not-item {
+  padding: 26px 0;
+  border-bottom: 1px solid var(--border);
+}
+.not-item:first-child { border-top: 1px solid var(--border); }
+.not-label {
+  font-family: var(--font-display);
+  font-size: 1.12rem; font-weight: 500;
+  color: var(--text-1); margin-bottom: 8px;
+  line-height: 1.3;
+}
+.not-desc {
+  font-size: 0.85rem; color: var(--text-3);
+  line-height: 1.78; max-width: 540px;
+}
+.not-pull {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  font-weight: 300; font-style: italic;
+  color: var(--text-2); text-align: center;
+  max-width: 560px; margin: 44px auto 0;
+  line-height: 1.62; padding: 0;
+}
+
+/* ── Mobile adjustments for Phase 22 sections ────────────────── */
+@media (max-width: 767px) {
+  .ip-card { padding: 24px 22px; }
+  .signals-grid { margin-top: 32px; }
+  .insight-preview { margin-top: 32px; }
+  .not-list { margin-top: 32px; }
+}
+
+/* ═══ END PHASE 22 CSS ════════════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -10135,14 +10353,14 @@ hr.section-rule {
   <svg class="h-mark" viewBox="0 0 100 100"><use href="#ia"/></svg>
 
   <h1 class="h-wordmark" id="hero-wordmark-el">ASPIRA</h1>
-  <p class="sr-only">Career clarity, freelance positioning, and small business visibility — understand how you come across professionally</p>
+  <p class="sr-only">Professional clarity analysis — understand how your career narrative, freelance pitch, or business presence actually comes across to others</p>
   <div class="h-rule"></div>
-  <p class="h-tagline">Clarity Connects.</p>
+  <p class="h-tagline">See How You Come Across.</p>
 
   <p class="h-promise">
-    Whether you&rsquo;re navigating a job search, building freelance work,<br>
-    or running a small business — ASPIRA helps you understand how you<br>
-    come across, and how to communicate your value more clearly.
+    ASPIRA reveals the gap between how you communicate your value<br>
+    and how it actually lands &mdash; for your career, freelance work,<br>
+    or business presence.
   </p>
 
   <div class="h-stats">
@@ -10151,13 +10369,11 @@ hr.section-rule {
     <div class="h-stat"><span class="h-stat-n">Freelance</span><span class="h-stat-l">Positioning</span></div>
     <div class="h-vr"></div>
     <div class="h-stat"><span class="h-stat-n">Business</span><span class="h-stat-l">Visibility</span></div>
-    <div class="h-vr"></div>
-    <div class="h-stat"><span class="h-stat-n">1</span><span class="h-stat-l">Clear Path</span></div>
   </div>
 
   <div class="h-ctas">
-    <button class="btn-p mag" id="hero-cta">Analyze My Clarity <span class="arr">→</span></button>
-    <a class="btn-g" href="#value">How It Works <span class="arr">↓</span></a>
+    <button class="btn-p mag" id="hero-cta">Begin Clarity <span class="arr">→</span></button>
+    <a class="btn-g" href="#how">Explore How It Works <span class="arr">↓</span></a>
   </div>
 
   <div class="h-scroll">
@@ -10172,7 +10388,7 @@ hr.section-rule {
 <section id="value">
   <div class="s-eye reveal">Professional Clarity</div>
   <h2 class="s-title reveal d1">What&rsquo;s Missing<br>Is <em>Clarity.</em></h2>
-  <p class="s-sub reveal d2">ASPIRA analyses how you present yourself — as a job seeker, a freelancer, or a small business owner — and reveals where perception and intention don&rsquo;t match. Then shows you how to close that gap.</p>
+  <p class="s-sub reveal d2">ASPIRA analyses your professional presence — career, freelance, or business — and reveals where the gap between intention and perception is quietly costing you opportunities.</p>
 
   <figure class="s-img s-img--career reveal d2" aria-hidden="true">
     <img src="Images/career_clarity_editorial.png" alt="" loading="lazy">
@@ -10213,18 +10429,18 @@ hr.section-rule {
   <div class="val-grid">
     <div class="val-card reveal tilt3">
       <span class="val-icon">🔍</span>
-      <div class="val-ttl">Perception Analysis</div>
-      <p class="val-desc">ASPIRA reads your resume summary, LinkedIn bio, service pitch, or business description — and scores how clearly your message actually lands to an outside reader, not how it feels to you.</p>
+      <div class="val-ttl">How You&rsquo;re Perceived</div>
+      <p class="val-desc">ASPIRA reads your career narrative, LinkedIn bio, freelance pitch, or business description — and reflects back how an outside reader is likely to understand it, not how it feels from within.</p>
     </div>
     <div class="val-card reveal d1 tilt3">
       <span class="val-icon">⚡</span>
-      <div class="val-ttl">Gap Identification</div>
-      <p class="val-desc">See the specific places where your career narrative, freelance pitch, or business description loses clarity — the gaps between what you mean and what others actually receive.</p>
+      <div class="val-ttl">Where Clarity Breaks Down</div>
+      <p class="val-desc">See the specific points where your message loses precision — where what you intend to communicate and what actually lands begin to diverge.</p>
     </div>
     <div class="val-card reveal d2 tilt3">
       <span class="val-icon">🧭</span>
-      <div class="val-ttl">Clear Pathways</div>
-      <p class="val-desc">Get specific guidance for improving how you communicate — whether for a job application, a client pitch, a LinkedIn profile, a website description, or a business introduction.</p>
+      <div class="val-ttl">A Direction Forward</div>
+      <p class="val-desc">Receive specific next steps for your situation — whether refining a career summary, strengthening a freelance pitch, or making a business description easier to trust and remember.</p>
     </div>
   </div>
 </section>
@@ -10243,8 +10459,8 @@ hr.section-rule {
 <!-- ═══ §2 HOW IT WORKS ═══ -->
 <section id="how">
   <div class="s-eye reveal">How It Works</div>
-  <h2 class="s-title reveal d1">Three Steps to<br>Absolute <em>Clarity</em></h2>
-  <p class="s-sub reveal d2">Paste your bio, resume summary, service pitch, or business description. ASPIRA analyses it across three dimensions and shows you what&rsquo;s unclear and why.</p>
+  <h2 class="s-title reveal d1">Simple process.<br>Real <em>clarity.</em></h2>
+  <p class="s-sub reveal d2">Share what you have. Receive an honest reflection of how it lands — and where it may be losing clarity.</p>
 
   <figure class="s-img s-img--guidance reveal d2" aria-hidden="true">
     <img src="Images/website_guidance_ui.png" alt="" loading="lazy">
@@ -10280,17 +10496,183 @@ hr.section-rule {
   <div class="how-wrap">
     <div class="how-step reveal">
       <div class="how-num">01</div>
-      <div><div class="how-ttl">Share Your Narrative</div><p class="how-desc">Paste your LinkedIn bio, resume summary, freelance service description, client proposal, or business introduction. Choose your context — career, freelance, or business.</p></div>
+      <div><div class="how-ttl">Share What Exists</div><p class="how-desc">Paste your LinkedIn bio, resume summary, freelance pitch, service description, or business profile — as it exists today. Choose your context: career, freelance, or business.</p></div>
     </div>
     <div class="how-step reveal d1">
       <div class="how-num">02</div>
-      <div><div class="how-ttl">Receive Your Score</div><p class="how-desc">ASPIRA scores your text across three dimensions — clarity of language, how you&rsquo;re likely perceived by others, and the overall impact of your message — with specific insights on each.</p></div>
+      <div><div class="how-ttl">Receive Clarity Signals</div><p class="how-desc">ASPIRA analyses how your text communicates across five signal dimensions — reflecting back what an outside reader is likely to understand, and where clarity may be missing.</p></div>
     </div>
     <div class="how-step reveal d2">
       <div class="how-num">03</div>
-      <div><div class="how-ttl">Close the Gap</div><p class="how-desc">Receive specific guidance for your situation — refining a professional summary, improving how your services are described, or building a clearer presence online or in person.</p></div>
+      <div><div class="how-ttl">Recognize the Pattern</div><p class="how-desc">See where your value comes through clearly, where it may be getting lost, and what adjustments tend to shift how you&rsquo;re understood — without rebuilding everything from scratch.</p></div>
     </div>
   </div>
+</section>
+
+<!-- ═══ §2a CLARITY SIGNALS ═══ -->
+<section id="clarity-signals">
+  <div class="s-eye reveal">The ASPIRA Method</div>
+  <h2 class="s-title reveal d1">Five signals.<br>One <em>direction.</em></h2>
+  <p class="s-sub reveal d2">ASPIRA reads across five dimensions to understand how your professional presence communicates — and where it may be losing clarity.</p>
+
+  <div class="signals-grid reveal d3">
+    <div class="signal-item">
+      <div class="signal-n">01</div>
+      <div class="signal-name">Identity Signal</div>
+      <p class="signal-desc">How clearly you communicate who you are and what makes your experience distinct from others in the same space.</p>
+    </div>
+    <div class="signal-item">
+      <div class="signal-n">02</div>
+      <div class="signal-name">Expression Signal</div>
+      <p class="signal-desc">How confidently your language carries the weight of what you actually do — and whether it creates trust or hesitation.</p>
+    </div>
+    <div class="signal-item">
+      <div class="signal-n">03</div>
+      <div class="signal-name">Alignment Signal</div>
+      <p class="signal-desc">How well what you say matches what an outside reader is likely to understand — the gap between intent and reception.</p>
+    </div>
+    <div class="signal-item">
+      <div class="signal-n">04</div>
+      <div class="signal-name">Presence Signal</div>
+      <p class="signal-desc">How visible and findable your value is to the right audience — and what may be reducing your reach before a decision is made.</p>
+    </div>
+    <div class="signal-item">
+      <div class="signal-n">05</div>
+      <div class="signal-name">Momentum Signal</div>
+      <p class="signal-desc">Whether your current direction is building clarity over time — or accumulating the kind of noise that gradually obscures your value.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §2b SAMPLE INSIGHT ═══ -->
+<section id="sample-insight">
+  <div class="s-eye reveal">What You Receive</div>
+  <h2 class="s-title reveal d1">A clarity reflection,<br>not a <em>performance review.</em></h2>
+  <p class="s-sub reveal d2">Insights are specific, honest, and grounded in what was actually shared — not generated from templates.</p>
+
+  <div class="insight-preview reveal d3">
+    <div class="ip-eyebrow">Sample Insight &mdash; Career Clarity</div>
+    <div class="ip-card">
+      <div class="ip-signal">Identity Signal</div>
+      <p class="ip-body">&ldquo;Your expertise appears stronger internally than externally. The depth of experience is present, but the language used to describe it defaults to role titles rather than outcomes. Someone reading this quickly would understand what you have done — but not why it matters, or what it made possible.&rdquo;</p>
+      <div class="ip-footer">
+        <span class="ip-tag">Expression gap identified</span>
+        <span class="ip-tag">Reframing opportunity</span>
+      </div>
+    </div>
+    <p class="ip-note">Real insights name specific patterns. Not generalised observations.</p>
+  </div>
+</section>
+
+<!-- ═══ §2c WHAT ASPIRA REVIEWS ═══ -->
+<section id="what-aspira-reviews">
+  <div class="s-eye reveal">Scope</div>
+  <h2 class="s-title reveal d1">What ASPIRA<br>Can <em>Review</em></h2>
+  <p class="s-sub reveal d2">Share any professional text — ASPIRA reads how clearly it communicates your value to the people who matter.</p>
+
+  <div class="review-grid reveal d3">
+    <div class="review-item">Resume &amp; Career Summary</div>
+    <div class="review-item">LinkedIn Profile</div>
+    <div class="review-item">Portfolio Description</div>
+    <div class="review-item">Personal Website</div>
+    <div class="review-item">Freelance Presence</div>
+    <div class="review-item">Business Website</div>
+    <div class="review-item">Business Positioning</div>
+    <div class="review-item">Service Presentation</div>
+    <div class="review-item">Career Direction</div>
+    <div class="review-item">Communication Materials</div>
+  </div>
+
+  <div class="review-cta reveal d4">
+    <button class="btn-p open-intake">Begin Clarity <span class="arr">→</span></button>
+  </div>
+</section>
+
+<!-- ═══ §2d WHY PEOPLE SEEK CLARITY ═══ -->
+<section id="why-clarity">
+  <div class="s-eye reveal">Recognition</div>
+  <h2 class="s-title reveal d1">The moment something<br>feels <em>unclear.</em></h2>
+  <p class="s-sub reveal d2">ASPIRA is designed for moments like these.</p>
+
+  <div class="recognition-grid reveal d3">
+    <div class="recog-item">A career transition that&rsquo;s harder to explain than expected</div>
+    <div class="recog-item">A job search that feels stuck despite strong experience</div>
+    <div class="recog-item">A freelance business that isn&rsquo;t converting the way it should</div>
+    <div class="recog-item">A website that doesn&rsquo;t seem to be doing what it should</div>
+    <div class="recog-item">Difficulty explaining what makes the work genuinely different</div>
+    <div class="recog-item">A business that exists but isn&rsquo;t being found</div>
+    <div class="recog-item">Proposals that go unanswered without obvious reason</div>
+    <div class="recog-item">A sense that the right people aren&rsquo;t seeing this clearly</div>
+  </div>
+
+  <p class="recog-note reveal d4">&ldquo;If any of these feel familiar &mdash; that&rsquo;s the clarity signal.&rdquo;</p>
+</section>
+
+<!-- ═══ §2e WHAT CLARITY OFTEN REVEALS ═══ -->
+<section id="what-clarity-reveals">
+  <div class="s-eye reveal">Discoveries</div>
+  <h2 class="s-title reveal d1">What clarity<br>often <em>surfaces.</em></h2>
+  <p class="s-sub reveal d2">Most clarity work reveals something already present — but not yet visible from the inside.</p>
+
+  <div class="reveals-grid">
+    <div class="reveal-card reveal">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Hidden Strengths</div>
+      <p class="rc-desc">Capabilities that exist clearly in your work — but haven&rsquo;t yet found their way into how you describe yourself to others.</p>
+    </div>
+    <div class="reveal-card reveal d1">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Communication Gaps</div>
+      <p class="rc-desc">The specific points where your message loses precision between what you mean and what others actually receive.</p>
+    </div>
+    <div class="reveal-card reveal d2">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Positioning Opportunities</div>
+      <p class="rc-desc">Natural advantages in how you could be understood — that current language hasn&rsquo;t yet found a way to capture.</p>
+    </div>
+    <div class="reveal-card reveal d1">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Trust Barriers</div>
+      <p class="rc-desc">Subtle signals that create hesitation — often invisible from the inside, but consistently felt from the outside.</p>
+    </div>
+    <div class="reveal-card reveal d2">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Directional Alignment</div>
+      <p class="rc-desc">Whether what you communicate is actually pointing toward where you are trying to go — or pulling in another direction.</p>
+    </div>
+    <div class="reveal-card reveal d3">
+      <div class="rc-accent"></div>
+      <div class="rc-title">Momentum Opportunities</div>
+      <p class="rc-desc">What already has natural clarity — and can be moved forward with far less friction than you may currently expect.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §2f WHAT ASPIRA IS NOT ═══ -->
+<section id="aspira-not">
+  <div class="s-eye reveal">Honesty</div>
+  <h2 class="s-title reveal d1">What ASPIRA<br>Does <em>Not</em> Do</h2>
+
+  <div class="not-list reveal d2">
+    <div class="not-item">
+      <div class="not-label">Does not predict success.</div>
+      <p class="not-desc">No clarity analysis — however thorough — can guarantee outcomes. Too many variables exist outside what any tool can see or measure.</p>
+    </div>
+    <div class="not-item">
+      <div class="not-label">Does not replace experience.</div>
+      <p class="not-desc">ASPIRA surfaces what is already present. It does not manufacture skills, credentials, or depth that haven&rsquo;t been built yet.</p>
+    </div>
+    <div class="not-item">
+      <div class="not-label">Does not promise instant results.</div>
+      <p class="not-desc">Clarity takes root gradually. Some changes shift things quickly. Others surface over months. No shortcuts are being offered here.</p>
+    </div>
+    <div class="not-item">
+      <div class="not-label">Does not generate generic motivation.</div>
+      <p class="not-desc">What is offered is specific, honest, and sometimes uncomfortable. This is not a space for affirmations or optimistic vagueness.</p>
+    </div>
+  </div>
+
+  <p class="not-pull reveal d3">&ldquo;ASPIRA helps reveal the signals already present in your direction &mdash; and what may be quietly obscuring them.&rdquo;</p>
 </section>
 
 <!-- ═══ §3 BEGIN — FORM (after brand context is established) ═══ -->
@@ -10305,8 +10687,8 @@ hr.section-rule {
     </svg>
   </div>
 
-  <div class="s-eye reveal">Begin Your Clarity</div>
-  <h2 class="s-title reveal d1">Find Your Clarity</h2>
+  <div class="s-eye reveal">Begin</div>
+  <h2 class="s-title reveal d1">Ready to see how<br>you come <em>across?</em></h2>
 
   <div class="begin-intake-card reveal d3">
     <div class="bic-paths">
@@ -10318,8 +10700,8 @@ hr.section-rule {
     </div>
     <p class="bic-quote">&ldquo;The effort is already present.<br>What is needed is to be seen clearly.&rdquo;</p>
     <div class="bic-rule"></div>
-    <button class="begin-open-btn open-intake">Begin Clarity Intake <span class="arr">→</span></button>
-    <p class="bic-note">Less than 2 minutes &nbsp;&middot;&nbsp; No signup &nbsp;&middot;&nbsp; Personal conversation</p>
+    <button class="begin-open-btn open-intake">Reveal My Clarity Signals <span class="arr">→</span></button>
+    <p class="bic-note">Less than 2 minutes &nbsp;&middot;&nbsp; No signup &nbsp;&middot;&nbsp; Honest reflection</p>
   </div>
 
   <!-- Legacy analysis elements — hidden, kept for JS pipeline compatibility -->
@@ -10608,7 +10990,7 @@ hr.section-rule {
   <!-- Header -->
   <div class="bcl-badge reveal"><span class="bcl-dot"></span>Business Clarity Layer</div>
   <h2 class="bcl-title reveal d1">Running a business<br>shouldn&rsquo;t feel <em>unclear.</em></h2>
-  <p class="bcl-sub reveal d2">For local shops, freelancers, online sellers, and service providers — this helps you identify where your business visibility is breaking down, and suggests practical tools that actually fit your situation, not generic advice.</p>
+  <p class="bcl-sub reveal d2">Understand how your business appears to customers before they decide. For local shops, freelancers, online sellers, and service providers — this identifies where visibility is breaking down and suggests practical tools that fit your situation, not generic advice.</p>
 
   <figure class="s-img s-img--business reveal d2" aria-hidden="true">
     <img src="Images/business_clarity_enterprise.png" alt="" loading="lazy">
