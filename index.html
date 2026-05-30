@@ -10507,6 +10507,169 @@ hr.section-rule {
 
 /* ═══ END NARRATIVE JOURNEY CONTINUITY ═══════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 26 — REVIEW TRACKS SYSTEM
+   Three-signal-source layout: Career / Freelance / Business.
+   Replaces the stacked review-grid with a parallel track structure
+   that communicates convergence rather than listing.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.review-tracks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  max-width: var(--c-mid);
+  width: 100%;
+  margin: 0 auto 20px;
+}
+
+.review-track {
+  padding: 18px 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.track-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.track-label {
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  opacity: 0.68;
+  flex-shrink: 0;
+}
+
+.track-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.track-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.80rem;
+  font-weight: 500;
+  color: var(--text-2);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition:
+    background   200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color        200ms var(--ease-out),
+    transform    200ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.4;
+  min-height: 36px;
+}
+
+@media (pointer: coarse) { .track-item { cursor: default; } }
+
+.track-item:hover {
+  background: var(--crimson-3);
+  border-color: rgba(120,1,21,0.10);
+  color: var(--text-1);
+}
+
+.track-item.rtrack-active {
+  background: var(--crimson-2);
+  border-color: rgba(120,1,21,0.22);
+  color: var(--crimson);
+  transform: translateX(3px);
+}
+
+/* ── Context panel — slides open on item activation ────────────── */
+.review-ctx {
+  max-width: var(--c-mid);
+  width: 100%;
+  margin: 0 auto;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 440ms var(--ease-settle),
+    opacity    320ms var(--ease-out),
+    margin-bottom 320ms var(--ease-out);
+  margin-bottom: 0;
+}
+
+.review-ctx.rctx-visible {
+  max-height: 120px;
+  opacity: 1;
+  margin-bottom: 28px;
+}
+
+.review-ctx-inner {
+  padding: 14px 18px;
+  border-left: 2px solid rgba(120,1,21,0.22);
+  background: var(--bg-3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.review-ctx-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  opacity: 0.62;
+  margin-bottom: 6px;
+}
+
+.review-ctx-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.86rem, 1.8vw, 1.0rem);
+  color: var(--text-2);
+  line-height: 1.62;
+  margin: 0;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .review-tracks {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .review-track {
+    padding: 14px 14px 16px;
+  }
+  .track-items { gap: 2px; }
+  .track-item {
+    font-size: 0.84rem;
+    padding: 10px 10px;
+    min-height: 40px;
+  }
+  .track-item.rtrack-active { transform: translateX(2px); }
+  .review-ctx-inner { padding: 12px 14px; }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .track-item     { transition: none; }
+  .review-ctx     { transition: none; }
+}
+
+/* ═══ END REVIEW TRACKS SYSTEM ════════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -10964,17 +11127,51 @@ hr.section-rule {
   <h2 class="s-title reveal d1">What ASPIRA<br>Can <em>Review</em></h2>
   <p class="s-sub reveal d2">Share any professional text — ASPIRA reads how clearly it communicates your value to the people who matter.</p>
 
-  <div class="review-grid reveal d3">
-    <div class="review-item">Resume &amp; Career Summary</div>
-    <div class="review-item">LinkedIn Profile</div>
-    <div class="review-item">Portfolio Description</div>
-    <div class="review-item">Personal Website</div>
-    <div class="review-item">Freelance Presence</div>
-    <div class="review-item">Business Website</div>
-    <div class="review-item">Business Positioning</div>
-    <div class="review-item">Service Presentation</div>
-    <div class="review-item">Career Direction</div>
-    <div class="review-item">Communication Materials</div>
+  <!-- Three signal-source tracks: inputs that converge into clarity -->
+  <div class="review-tracks reveal d3">
+
+    <div class="review-track" data-track="career">
+      <div class="track-header">
+        <span class="track-label">Career</span>
+      </div>
+      <div class="track-items">
+        <button class="track-item" data-ctx="How your professional story lands before the conversation begins — the first signal a reader receives." data-track-label="Career">Resume &amp; Career Summary</button>
+        <button class="track-item" data-ctx="How you appear to someone who finds your profile before you find them." data-track-label="Career">LinkedIn Profile</button>
+        <button class="track-item" data-ctx="Whether your work communicates its value when you are not there to explain it." data-track-label="Career">Portfolio Description</button>
+        <button class="track-item" data-ctx="How clearly your current direction reads to someone who does not yet know your story." data-track-label="Career">Career Direction</button>
+      </div>
+    </div>
+
+    <div class="review-track" data-track="freelance">
+      <div class="track-header">
+        <span class="track-label">Freelance</span>
+      </div>
+      <div class="track-items">
+        <button class="track-item" data-ctx="Whether a potential client can trust your expertise before they reach out." data-track-label="Freelance">Freelance Presence</button>
+        <button class="track-item" data-ctx="How clearly what you offer reads to someone encountering it for the first time." data-track-label="Freelance">Service Presentation</button>
+        <button class="track-item" data-ctx="What your site communicates about you — beyond what the words say." data-track-label="Freelance">Personal Website</button>
+      </div>
+    </div>
+
+    <div class="review-track" data-track="business">
+      <div class="track-header">
+        <span class="track-label">Business</span>
+      </div>
+      <div class="track-items">
+        <button class="track-item" data-ctx="How your business appears to customers in the moment before they decide." data-track-label="Business">Business Website</button>
+        <button class="track-item" data-ctx="Whether your market understands what makes your offering genuinely different." data-track-label="Business">Business Positioning</button>
+        <button class="track-item" data-ctx="How clearly your materials carry your message to the people who matter." data-track-label="Business">Communication Materials</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Context panel: reveals on item activation, hidden by default -->
+  <div class="review-ctx" id="review-ctx" aria-live="polite" aria-atomic="true">
+    <div class="review-ctx-inner">
+      <div class="review-ctx-label" id="review-ctx-label">Signal</div>
+      <p class="review-ctx-text" id="review-ctx-text"></p>
+    </div>
   </div>
 
   <div class="review-cta reveal d4">
@@ -16034,6 +16231,42 @@ document.body.addEventListener('touchmove',function(e){
   });
 
 })(); /* end aspiraPWA */
+</script>
+
+<script>
+/* ═══ REVIEW TRACKS INTERACTION ════════════════════════════════════
+   Signal source tracks in #what-aspira-reviews.
+   Tap/click any item to reveal its clarity context.
+   Tap again to dismiss. Only one active at a time.
+   ═══════════════════════════════════════════════════════════════════ */
+(function initReviewTracks() {
+  'use strict';
+  var items   = document.querySelectorAll('.track-item');
+  var ctxEl   = document.getElementById('review-ctx');
+  var ctxText = document.getElementById('review-ctx-text');
+  var ctxLbl  = document.getElementById('review-ctx-label');
+  if (!items.length || !ctxEl || !ctxText) return;
+
+  items.forEach(function(item) {
+    item.addEventListener('click', function() {
+      var wasActive = item.classList.contains('rtrack-active');
+
+      /* Clear all items */
+      items.forEach(function(i) { i.classList.remove('rtrack-active'); });
+
+      if (!wasActive) {
+        item.classList.add('rtrack-active');
+        /* Update context panel */
+        ctxText.textContent = item.dataset.ctx || '';
+        if (ctxLbl) ctxLbl.textContent = item.dataset.trackLabel || 'Signal';
+        ctxEl.classList.add('rctx-visible');
+      } else {
+        /* Toggle off — hide panel */
+        ctxEl.classList.remove('rctx-visible');
+      }
+    });
+  });
+})(); /* end initReviewTracks */
 </script>
 
 </body>
