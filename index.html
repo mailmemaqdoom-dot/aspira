@@ -10670,6 +10670,37 @@ hr.section-rule {
 
 /* ═══ END REVIEW TRACKS SYSTEM ════════════════════════════════════ */
 
+/* ── Perception Mirror — pre-analysis default state ──────────────
+   Shown to first-time visitors before any analysis is run.
+   Hides automatically when #pm-primary receives content via JS.
+   ─────────────────────────────────────────────────────────────── */
+.pm-default {
+  max-width: var(--c-text);
+  width: 100%;
+  text-align: center;
+  padding: 16px 0 4px;
+}
+.pm-default-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 2.2vw, 1.18rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-2);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.pm-default-sub {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  line-height: 1.72;
+  max-width: 42ch;
+  margin: 0 auto;
+}
+/* Hide default when analysis has populated pm-primary */
+#perception-mirror:has(#pm-primary:not(:empty)) .pm-default {
+  display: none;
+}
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
@@ -11373,6 +11404,13 @@ hr.section-rule {
   </div>
 
   <p class="pm-eyebrow" id="pm-eye">Perception Mirror</p>
+
+  <!-- Default state: visible before analysis runs, hidden by :has() CSS once pm-primary has content -->
+  <div class="pm-default" id="pm-default">
+    <p class="pm-default-title">Your perception reflection.</p>
+    <p class="pm-default-sub">After you share your text, ASPIRA&rsquo;s read of how it lands &mdash; and where clarity may be missing &mdash; will appear here.</p>
+  </div>
+
   <p class="pm-primary" id="pm-primary"></p>
   <div class="pm-rule" id="pm-rule"></div>
   <div class="pm-lines" id="pm-lines"></div>
@@ -11484,45 +11522,6 @@ hr.section-rule {
     <p style="color:var(--t2);font-size:.87rem">Take the next step towards absolute clarity.</p>
     <div id="wa-container"></div>
   </div>
-</section>
-
-<!-- ═══ PAYMENT & ACCESS ═══ -->
-<section id="payment-access">
-
-  <div class="pax-wrap reveal">
-    <!-- Eye + heading -->
-    <p class="s-eye">Payment &amp; Access</p>
-    <h2 class="pax-title">When ready,<br>access <em>continues.</em></h2>
-    <p class="pax-sub">Payment is a step — not a gate. Complete it when the clarity process feels right.</p>
-
-    <!-- Trigger card -->
-    <div class="pax-card">
-      <!-- Soft icon -->
-      <div class="pax-icon-wrap" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
-          <path d="M20 85Q35 50 50 15" stroke="#780115" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M80 85Q65 50 50 15" stroke="#780115" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M32 55L68 55" stroke="#780115" stroke-width="5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="pax-card-label">UPI · Any Payment App · Any Payment App</div>
-      <div class="pax-card-note">Scan or tap to pay · Verified manually</div>
-
-      <!-- Continue Forward trigger -->
-      <button class="pax-trigger" onclick="openPayModal()" aria-haspopup="dialog">
-        Continue Forward
-        <span class="pax-arr">→</span>
-      </button>
-      <p class="pax-trigger-sub">Opens a simple payment step</p>
-    </div>
-
-    <!-- "Begin Clarity" intake link preserved -->
-    <div class="pax-intake-nudge">
-      <span>Haven&rsquo;t started yet?</span>
-      <button class="open-intake" style="color:var(--c);background:none;border:none;font-size:.8rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent;">Begin Clarity</button>
-    </div>
-  </div>
-
 </section>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -11913,6 +11912,45 @@ hr.section-rule {
 
     </div>
   </div>
+</section>
+
+<!-- ═══ PAYMENT & ACCESS ═══ -->
+<section id="payment-access">
+
+  <div class="pax-wrap reveal">
+    <!-- Eye + heading -->
+    <p class="s-eye">Payment &amp; Access</p>
+    <h2 class="pax-title">When ready,<br>access <em>continues.</em></h2>
+    <p class="pax-sub">Payment is a step — not a gate. Complete it when the clarity process feels right.</p>
+
+    <!-- Trigger card -->
+    <div class="pax-card">
+      <!-- Soft icon -->
+      <div class="pax-icon-wrap" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+          <path d="M20 85Q35 50 50 15" stroke="#780115" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M80 85Q65 50 50 15" stroke="#780115" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 55L68 55" stroke="#780115" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="pax-card-label">UPI · Any Payment App · Any Payment App</div>
+      <div class="pax-card-note">Scan or tap to pay · Verified manually</div>
+
+      <!-- Continue Forward trigger -->
+      <button class="pax-trigger" onclick="openPayModal()" aria-haspopup="dialog">
+        Continue Forward
+        <span class="pax-arr">→</span>
+      </button>
+      <p class="pax-trigger-sub">Opens a simple payment step</p>
+    </div>
+
+    <!-- "Begin Clarity" intake link preserved -->
+    <div class="pax-intake-nudge">
+      <span>Haven&rsquo;t started yet?</span>
+      <button class="open-intake" style="color:var(--c);background:none;border:none;font-size:.8rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent;">Begin Clarity</button>
+    </div>
+  </div>
+
 </section>
 
 </main>
