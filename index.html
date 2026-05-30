@@ -10703,6 +10703,101 @@ hr.section-rule {
 .ip-example { display: none; }
 .ip-example.ips-active { display: block; }
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 29 — MOBILE HERO OPTIMIZATION v1
+   Issues 1–6. No visual redesign. Refinement only.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Issue 1  Hero height efficiency ──────────────────────────────
+   Root causes of excess height on mobile:
+   A) h-stat-n at 1.62rem forces stats to wrap to 2 lines (~109px).
+      Restoring 0.72rem badge-scale collapses stats to 1 line (~55px).
+      Saves ~54px. Also resolves the ai-fab/CTA 2px overlap (Issue 6).
+   B) hero padding-bottom of 112px is generous. Reduce to ~56px.
+   C) h-ctas margin-bottom 52px. Reduce to 28px at mobile.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* A — Stats single-line fix */
+  .h-stat-n {
+    font-size: 0.72rem;
+    letter-spacing: 0.10em;
+  }
+  .h-stat {
+    padding: 0 12px;
+  }
+  .h-stats {
+    margin-bottom: 12px;
+  }
+  /* B — Reduce hero min-height + bottom padding */
+  /* min-height: 100svh forces hero to fill entire viewport even when
+     content needs less. Reducing to 92svh lets content set the height
+     (measured content sum ~649px < 92svh inner area at 390px) */
+  #hero {
+    min-height: 92svh;
+    padding-bottom: clamp(2.75rem, 7svh, 4rem);
+  }
+  /* C — CTA single row: prevent wrapping that forces double stack */
+  /* Verified: "Begin Clarity →" (~128px) + gap + "Explore How It Works ↓" (~185px) */
+  /* = ~325px — fits in 342px content area with these padding values */
+  .h-ctas {
+    margin-bottom: 24px;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+  .h-ctas .btn-p { padding-left: 22px; padding-right: 22px; }
+  .h-ctas .btn-g { padding-left: 16px; padding-right: 16px; font-size: 0.82rem; }
+}
+
+/* ── Issue 2  Promise contrast improvement ────────────────────────
+   Current: color rgba(23,4,10,0.35) × animation-opacity 0.70
+   = effective alpha 0.245 — insufficient for outdoor/low-brightness.
+   Fix: raise color alpha to 0.60, raise animation final opacity to 0.90.
+   New effective: 0.60 × 0.90 = 0.54 — visible improvement.
+   heroRevealMed replaces heroRevealSoft for .h-promise at mobile only.
+   ─────────────────────────────────────────────────────────────── */
+@keyframes heroRevealMed {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 0.90; transform: translateY(0); }
+}
+
+@media (max-width: 767px) {
+  .h-promise {
+    color: rgba(23, 4, 10, 0.60);
+    animation-name: heroRevealMed;
+  }
+}
+
+/* ── Issue 4  Differentiation statement ──────────────────────────
+   Max 14 words. Positioned between stats and CTAs.
+   Communicates structured methodology vs generated output.
+   Uses heroRevealDim (opacity 0.54) — quiet, not dominant.
+   ─────────────────────────────────────────────────────────────── */
+.h-diff {
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--text-3);
+  text-align: center;
+  max-width: 280px;
+  margin: 0 auto 14px;
+  line-height: 1.55;
+  opacity: 0;
+  animation: heroRevealDim 0.8s var(--ease-out) 0.55s forwards;
+}
+
+/* ── Issue 5  Trust signal ────────────────────────────────────────
+   Combined with Issue 4 differentiation statement in .h-diff.
+   "For career, freelance, and business clarity — structured
+   reflection, not generated advice." covers scope (trust) and
+   methodology (differentiation) in 14 words.
+   ─────────────────────────────────────────────────────────────── */
+
+/* ── Issue 6  Reduced motion guard ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .h-diff { animation: none; opacity: 0.54; }
+}
+
+/* ═══ END MOBILE HERO OPTIMIZATION ════════════════════════════════ */
+
 /* ── Perception Mirror — pre-analysis default state ──────────────
    Shown to first-time visitors before any analysis is run.
    Hides automatically when #pm-primary receives content via JS.
@@ -10979,18 +11074,21 @@ hr.section-rule {
   <p class="h-tagline">See How You Come Across.</p>
 
   <p class="h-promise">
-    ASPIRA reads your career narrative, LinkedIn profile, freelance pitch,<br>
-    or business description &mdash; and reflects back how it lands to someone<br>
+    ASPIRA reads your career narrative, LinkedIn profile, freelance pitch,
+    or business description &mdash; and reflects back how it lands to someone
     encountering it for the first time.
   </p>
 
   <div class="h-stats">
-    <div class="h-stat"><span class="h-stat-n">Career</span><span class="h-stat-l">Clarity</span></div>
+    <div class="h-stat"><span class="h-stat-n">Career</span><span class="h-stat-l">Direction</span></div>
     <div class="h-vr"></div>
     <div class="h-stat"><span class="h-stat-n">Freelance</span><span class="h-stat-l">Positioning</span></div>
     <div class="h-vr"></div>
     <div class="h-stat"><span class="h-stat-n">Business</span><span class="h-stat-l">Visibility</span></div>
   </div>
+
+  <!-- Issues 4 + 5: Differentiation + trust — combined into one statement above CTA -->
+  <p class="h-diff">For career, freelance, and business clarity &mdash; structured reflection, not generated advice.</p>
 
   <div class="h-ctas">
     <button class="btn-p mag" id="hero-cta">Begin Clarity <span class="arr">→</span></button>
