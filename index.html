@@ -10256,6 +10256,95 @@ hr.section-rule {
 
 /* ═══ END LAYOUT INTEGRITY AUDIT ══════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 24 — VERTICAL SPACE RECOVERY
+   ─────────────────────────────────────────────────────────────────
+   Measured at 1280×720 desktop. Root causes only — no patches.
+
+   Root cause 1: section padding 115px/side → 230px/section × 16
+     = 3,680px of padding. Source: Phase 21 @media (min-width:768px).
+   Root cause 2: .s-sub margin-bottom 80px × 16 sections = 1,280px.
+     Source: Phase 8 line 6264 global rule overrides all earlier fixes.
+   Root cause 3: #manifesto flagged (51% pad ratio) because Phase 21
+     section-level rule overwrote Phase 7's specific manifesto override.
+   Root cause 4: .val-grid margin-top 48px, .s-img margin-bottom 44px
+     accumulate across every section.
+
+   Target savings at 1280px: ~2,200px ≈ 3 viewport heights recovered.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1  SECTION PADDING — DESKTOP REDUCTION ───────────────────────
+   Overrides Phase 21's clamp(4.5rem, 9vw, 7.5rem) = 115px at 1280px.
+   New value: clamp(3rem, 6vw, 4.5rem) = 76.8px at 1280px.
+   72px at 1440px. 48px at 768px.
+   Saves: 38px × 2 sides × 16 sections = 1,216px at desktop.
+   ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  section {
+    padding-top:    clamp(3rem, 6vw, 4.5rem);
+    padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+}
+
+/* ── 2  S-SUB MARGIN — GLOBAL OVERRIDE ────────────────────────────
+   Phase 8 set .s-sub { margin: 0 auto 80px } globally.
+   This fires at desktop regardless of the Phase 5/18 clamp rules.
+   Reduce to 44px at desktop. Mobile Phase 5 (≤767px) retains its
+   own value and is not affected by this @media (min-width: 768px).
+   Saves: 36px × 16 sections = 576px at desktop.
+   ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .s-sub {
+    margin-bottom: 44px;
+  }
+}
+
+/* ── 3  MANIFESTO PADDING RESTORE ─────────────────────────────────
+   Phase 7 set #manifesto padding to clamp(3rem, 6vw, 5rem).
+   Phase 21's section-level rule (later cascade) overwrote it.
+   Restore specific manifesto rhythm — it's a break band, not a
+   full content section. 77px → 48px per side at 1280px.
+   ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  #manifesto {
+    padding-top:    clamp(2.5rem, 4.5vw, 3.5rem);
+    padding-bottom: clamp(2.5rem, 4.5vw, 3.5rem);
+  }
+}
+
+/* ── 4  PERCEPTION MIRROR PADDING ─────────────────────────────────
+   37.2% padding ratio (near 40% threshold). This section has sparse
+   visible content by default — dynamic elements empty pre-analysis.
+   Give it tighter padding so it doesn't create a void on first load.
+   ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  #perception-mirror {
+    padding-top:    clamp(2.5rem, 4.5vw, 3.5rem);
+    padding-bottom: clamp(2.5rem, 4.5vw, 3.5rem);
+  }
+}
+
+/* ── 5  VAL-GRID MARGIN-TOP ────────────────────────────────────────
+   48px above the value card grid creates a visible gap between
+   the subtitle and the first card. Reduces to 24px.
+   Saves: 24px in #value section.
+   ─────────────────────────────────────────────────────────────── */
+.val-grid {
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* ── 6  S-IMG MARGIN-BOTTOM ────────────────────────────────────────
+   44px below every section image (8+ instances). Reduce to 24px.
+   Saves: 20px × ~8 images = 160px across the page.
+   ─────────────────────────────────────────────────────────────── */
+.s-img {
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+/* ── Reduced motion: no impact (padding/margin changes only) ──── */
+
+/* ═══ END VERTICAL SPACE RECOVERY ════════════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
