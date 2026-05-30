@@ -10345,6 +10345,168 @@ hr.section-rule {
 
 /* ═══ END VERTICAL SPACE RECOVERY ════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 25 — NARRATIVE JOURNEY CONTINUITY
+   ─────────────────────────────────────────────────────────────────
+   Measured at 390×844 mobile. Two flagged sections.
+   Root cause: background discontinuity between #how and #clarity-signals
+   breaks the explanation zone. Empty dynamic elements in
+   #perception-mirror create 40px phantom height.
+
+   Phase 1 — Dead space repair (2 flagged sections)
+   Phase 3 — Tonal continuity (background zone alignment)
+   Phase 4 — Composition continuity (continuation padding)
+   Phase 6 — Scroll rhythm (mobile s-sub gap)
+   Phase 7 — Mobile audit (320/375/390/414)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Phase 1 · Dead space: #manifesto ─────────────────────────────
+   Flagged at 65% waste. 120px padding wrapping ~66px of text.
+   The manifesto is a brief editorial break — its padding should
+   breathe, not dominate. Reduce mobile padding.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  #manifesto {
+    padding-top:    clamp(1.75rem, 5vw, 2.5rem);
+    padding-bottom: clamp(1.75rem, 5vw, 2.5rem);
+  }
+}
+
+/* ── Phase 1 · Dead space: #perception-mirror ─────────────────────
+   Flagged at 56% waste on mobile. Three sources:
+   1) pm-rule: empty innerHTML but 40px rendered height (CSS height)
+   2) pm-primary, pm-lines: empty with no height but flex gap still
+   3) .pm-visual { margin-bottom: ~40px } — large exit margin when
+      the element below (pm-primary) is the only remaining child.
+   Fix: hide empty dynamic elements via :empty, reduce padding,
+   reduce pm-visual margin when its siblings are hidden.
+   ─────────────────────────────────────────────────────────────── */
+#pm-primary:empty,
+#pm-rule:empty,
+#pm-lines:empty {
+  display: none;
+}
+
+/* When pm-primary is hidden, pm-visual's 40px margin-bottom creates
+   dead space directly above pm-note. Tighten at mobile. */
+@media (max-width: 767px) {
+  #perception-mirror {
+    padding-top:    clamp(1.5rem, 4vw, 2rem);
+    padding-bottom: clamp(1.5rem, 4vw, 2rem);
+  }
+  .pm-visual {
+    margin-bottom: 10px;
+  }
+}
+
+/* ── Phase 1 · Mobile s-sub gap ───────────────────────────────────
+   Phase 8 global rule sets .s-sub { margin-bottom: 80px } and its
+   mobile override sets 52px. Both create visible restart space
+   before every section's main content. Reduce to 36px on mobile.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .s-sub {
+    margin-bottom: 36px;
+  }
+}
+
+/* ── Phase 3 · Tonal continuity — extend the Method zone ──────────
+   #how sits in bg-2 (warm tan). #clarity-signals and #sample-insight
+   are transparent — they describe the same process (how it works,
+   what the signals are, what you receive). This creates an abrupt
+   visual break mid-explanation as the background lifts to cream.
+   Assigning bg-2 merges them into one continuous warm-tone zone:
+   manifesto → how → clarity-signals → sample-insight (all bg-2).
+   ─────────────────────────────────────────────────────────────── */
+#clarity-signals,
+#sample-insight {
+  background-color: var(--bg-2);
+}
+
+/* ── Phase 4 · Composition continuity — continuation padding ──────
+   Sections that continue from the previous section within the
+   same tonal zone should have tighter top entry. This signals
+   to the reader: "this continues" rather than "this begins."
+   The padding-bottom of the preceding section remains intact —
+   breathing room is preserved but not doubled.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Mobile: sections that continue a zone */
+@media (max-width: 767px) {
+  /* Explanation zone continuation (all bg-2 after #how) */
+  #clarity-signals,
+  #sample-insight,
+  /* Recognition zone continuation (transparent after #what-aspira-reviews) */
+  #why-clarity,
+  #what-clarity-reveals,
+  /* Trust zone continuation (#begin follows #aspira-not, both bg-2) */
+  #begin {
+    padding-top: clamp(1.5rem, 4vw, 2.5rem); /* ~24px at 390px, vs 64px */
+  }
+}
+
+/* Desktop: same logic, larger values */
+@media (min-width: 768px) {
+  #clarity-signals,
+  #sample-insight,
+  #why-clarity,
+  #what-clarity-reveals,
+  #begin {
+    padding-top: clamp(2rem, 4vw, 3rem); /* ~51px at 1280px, vs 72px */
+  }
+}
+
+/* ── Phase 6 · Section gap smoothing ──────────────────────────────
+   Same-zone boundaries (same background, section follows section)
+   should have reduced combined gap. The sections that now share
+   bg-2 (how → clarity-signals → sample-insight) need padding-bottom
+   reduction on the preceding section to prevent double-padding.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* #how no longer needs full exit padding since clarity-signals
+     is now in the same zone — reduce to continuation rhythm */
+  #how {
+    padding-bottom: clamp(1.5rem, 4vw, 2.5rem); /* ~24px, vs 64px */
+  }
+  /* #aspira-not into #begin — same bg-2 zone, ease the boundary */
+  #aspira-not {
+    padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  /* #what-aspira-reviews into #why-clarity — same transparent zone */
+  #what-aspira-reviews {
+    padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+@media (min-width: 768px) {
+  #how,
+  #aspira-not,
+  #what-aspira-reviews {
+    padding-bottom: clamp(2rem, 4vw, 3rem); /* ~51px vs 72px */
+  }
+}
+
+/* ── Phase 7 · 320px micro-viewport guard ─────────────────────────
+   At 320px all clamp() values floor to their min — verify no
+   section creates dead space at the absolute minimum width.
+   These are safety caps only — values already handle 320px.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  section {
+    padding-left:  1rem;
+    padding-right: 1rem;
+  }
+  .signals-grid,
+  .reveals-grid,
+  .recognition-grid,
+  .review-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ═══ END NARRATIVE JOURNEY CONTINUITY ═══════════════════════════ */
+
 </style>
 <body>
 <div class="cursor" id="cursor" aria-hidden="true">
