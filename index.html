@@ -10798,6 +10798,151 @@ hr.section-rule {
 
 /* ═══ END MOBILE HERO OPTIMIZATION ════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 30 — PILL MORPH NAVIGATION
+   ─────────────────────────────────────────────────────────────────
+   Desktop: spring-like pill expansion, -8px label entry, GPU layers,
+            asymmetric enter (240ms spring) / exit (180ms ease-in).
+   Mobile:  active-only label reveal, anchored selection state,
+            zero CLS — labels always occupy layout space.
+   ─────────────────────────────────────────────────────────────────
+   Easing: cubic-bezier(0.26, 1.12, 0.54, 1)
+   — 12% natural overshoot, settles cleanly. No overcorrection.
+   Duration: 240ms enter / 180ms exit
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Desktop: link container spring ──────────────────────────────
+   Replaces ease-out on padding with spring-like overshoot.
+   background and color keep ease-out (visual fills don't spring).
+   ─────────────────────────────────────────────────────────────── */
+.fn-links a {
+  transition:
+    padding    240ms cubic-bezier(0.26, 1.12, 0.54, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color      180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Desktop: icon — GPU-composited, restrained scale ────────────
+   was scale(1.12) — reduced to 1.07 for editorial restraint.
+   ─────────────────────────────────────────────────────────────── */
+.fnl-icon {
+  will-change: transform;
+}
+.fnl-icon svg {
+  transition:
+    transform 240ms cubic-bezier(0.26, 1.12, 0.54, 1),
+    filter    220ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.fn-links a:hover .fnl-icon svg,
+.fn-links a.active .fnl-icon svg {
+  transform: scale(1.07);
+}
+
+/* ── Desktop: label — spring enter from -8px ─────────────────────
+   Spec: "label slides from -8px to 0px".
+   was translateX(-6px). GPU layer via will-change.
+   ─────────────────────────────────────────────────────────────── */
+.fnl-lbl {
+  transform: translateX(-8px);
+  will-change: transform, opacity;
+  transition:
+    max-width   240ms cubic-bezier(0.26, 1.12, 0.54, 1),
+    opacity     160ms cubic-bezier(0.16, 1, 0.3, 1) 40ms,
+    transform   240ms cubic-bezier(0.26, 1.12, 0.54, 1),
+    margin-left 240ms cubic-bezier(0.26, 1.12, 0.54, 1);
+}
+.fn-links a:hover .fnl-lbl,
+.fn-links a.active .fnl-lbl {
+  transform: translateX(0);
+}
+
+/* ── Desktop: exit — crisp collapse, no overshoot ────────────────
+   Spring overshoot on collapse looks wrong (label briefly overshoots
+   into negative space). Use fast ease-in for clean exit.
+   ─────────────────────────────────────────────────────────────── */
+.fn-links a:not(:hover):not(.active) .fnl-lbl {
+  transition:
+    max-width   180ms cubic-bezier(0.4, 0, 1, 1),
+    opacity     120ms cubic-bezier(0.4, 0, 1, 1),
+    transform   180ms cubic-bezier(0.4, 0, 1, 1),
+    margin-left 180ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ── Mobile: active-only pill morph ──────────────────────────────
+   Core mechanism: labels are ALWAYS in the DOM at full font-size
+   and occupy their layout height (no CLS when they appear).
+   Visibility is controlled by opacity + transform ONLY — GPU path.
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+  /* All inactive labels: invisible, shifted down, fixed layout height */
+  .mob-nav .mob-tab .mob-tab-label {
+    opacity: 0;
+    transform: translateY(3px) scale(0.82);
+    display: block;
+    height: 9px;
+    line-height: 9px;
+    overflow: hidden;
+    transition:
+      opacity   160ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 240ms cubic-bezier(0.26, 1.12, 0.54, 1);
+  }
+
+  /* Active non-center: label springs up into view */
+  .mob-nav .mob-tab.active:not(.mob-ctr) .mob-tab-label {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Center CTA (.mob-ctr): label always fully visible — it IS the action */
+  .mob-nav .mob-tab.mob-ctr .mob-tab-label {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: none;
+  }
+
+  /* Tab container: spring on background, padding, transform */
+  .mob-nav .mob-tab:not(.mob-ctr) {
+    transition:
+      background 220ms cubic-bezier(0.26, 1.12, 0.54, 1),
+      color      180ms cubic-bezier(0.16, 1, 0.3, 1),
+      padding    240ms cubic-bezier(0.26, 1.12, 0.54, 1),
+      transform  180ms cubic-bezier(0.26, 1.12, 0.54, 1);
+  }
+
+  /* Active non-center: pill grows to anchored state */
+  .mob-nav .mob-tab.active:not(.mob-ctr) {
+    padding: 8px 14px;  /* was 8px 11px — wider pill for "selected" feel */
+  }
+
+  /* Active icon: subtle spring scale — feels anchored */
+  .mob-nav .mob-tab.active:not(.mob-ctr) .mchip {
+    transform: scale(1.06);
+    transition: transform 240ms cubic-bezier(0.26, 1.12, 0.54, 1);
+  }
+  /* Inactive icon: slightly receded */
+  .mob-nav .mob-tab:not(.active):not(.mob-ctr) .mchip {
+    transform: scale(0.97);
+    transition: transform 240ms cubic-bezier(0.26, 1.12, 0.54, 1);
+  }
+}
+
+/* ── Reduced motion: no transitions ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .fn-links a,
+  .fnl-lbl,
+  .fnl-icon svg,
+  .mob-nav .mob-tab,
+  .mob-nav .mob-tab .mob-tab-label,
+  .mob-nav .mob-tab .mchip {
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ═══ END PILL MORPH NAVIGATION ═══════════════════════════════════ */
+
 /* ── Perception Mirror — pre-analysis default state ──────────────
    Shown to first-time visitors before any analysis is run.
    Hides automatically when #pm-primary receives content via JS.
