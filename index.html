@@ -10670,6 +10670,39 @@ hr.section-rule {
 
 /* ═══ END REVIEW TRACKS SYSTEM ════════════════════════════════════ */
 
+/* ── Insight tab selector (Phase 28) ─────────────────────────── */
+.ip-selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.ip-tab {
+  padding: 7px 18px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-3);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 200ms var(--ease-out),
+              color 200ms var(--ease-out),
+              border-color 200ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+@media (pointer: coarse) { .ip-tab { cursor: default; } }
+.ip-tab:hover { color: var(--text-2); border-color: rgba(120,1,21,0.16); }
+.ip-tab.ips-active {
+  background: var(--crimson-2);
+  border-color: rgba(120,1,21,0.26);
+  color: var(--crimson);
+}
+.ip-example { display: none; }
+.ip-example.ips-active { display: block; }
+
 /* ── Perception Mirror — pre-analysis default state ──────────────
    Shown to first-time visitors before any analysis is run.
    Hides automatically when #pm-primary receives content via JS.
@@ -10946,9 +10979,9 @@ hr.section-rule {
   <p class="h-tagline">See How You Come Across.</p>
 
   <p class="h-promise">
-    ASPIRA reveals the gap between how you communicate your value<br>
-    and how it actually lands &mdash; for your career, freelance work,<br>
-    or business presence.
+    ASPIRA reads your career narrative, LinkedIn profile, freelance pitch,<br>
+    or business description &mdash; and reflects back how it lands to someone<br>
+    encountering it for the first time.
   </p>
 
   <div class="h-stats">
@@ -10976,7 +11009,7 @@ hr.section-rule {
 <section id="value">
   <div class="s-eye reveal">Professional Clarity</div>
   <h2 class="s-title reveal d1">What&rsquo;s Missing<br>Is <em>Clarity.</em></h2>
-  <p class="s-sub reveal d2">ASPIRA analyses your professional presence — career, freelance, or business — and reveals where the gap between intention and perception is quietly costing you opportunities.</p>
+  <p class="s-sub reveal d2">ASPIRA analyses your professional presence — career, freelance, or business — and reveals where the gap between how you communicate your value and how it actually lands is costing you the opportunities you&rsquo;ve earned.</p>
 
   <figure class="s-img s-img--career reveal d2" aria-hidden="true">
     <img src="Images/career_clarity_editorial.png" alt="" loading="lazy">
@@ -11018,17 +11051,17 @@ hr.section-rule {
     <div class="val-card reveal tilt3">
       <span class="val-icon">🔍</span>
       <div class="val-ttl">How You&rsquo;re Perceived</div>
-      <p class="val-desc">ASPIRA reads your career narrative, LinkedIn bio, freelance pitch, or business description — and reflects back how an outside reader is likely to understand it, not how it feels from within.</p>
+      <p class="val-desc">Most people communicate their value clearly to themselves. ASPIRA shows you how the same words read to someone who doesn&rsquo;t yet know your story — and what they are likely to conclude before the conversation even begins.</p>
     </div>
     <div class="val-card reveal d1 tilt3">
       <span class="val-icon">⚡</span>
       <div class="val-ttl">Where Clarity Breaks Down</div>
-      <p class="val-desc">See the specific points where your message loses precision — where what you intend to communicate and what actually lands begin to diverge.</p>
+      <p class="val-desc">There is almost always a specific point where a strong professional narrative starts to lose its signal. ASPIRA identifies it — the precise place where the message diverges from what the reader actually receives.</p>
     </div>
     <div class="val-card reveal d2 tilt3">
       <span class="val-icon">🧭</span>
       <div class="val-ttl">A Direction Forward</div>
-      <p class="val-desc">Receive specific next steps for your situation — whether refining a career summary, strengthening a freelance pitch, or making a business description easier to trust and remember.</p>
+      <p class="val-desc">Clarity creates options. Once you understand exactly what is landing and what is not, the next step stops being a guess. What ASPIRA shows you is specific to what you shared — not a list of generic improvements.</p>
     </div>
   </div>
 </section>
@@ -11107,27 +11140,27 @@ hr.section-rule {
     <div class="signal-item">
       <div class="signal-n">01</div>
       <div class="signal-name">Identity Signal</div>
-      <p class="signal-desc">How clearly you communicate who you are and what makes your experience distinct from others in the same space.</p>
+      <p class="signal-desc">How clearly your professional identity comes through to someone who doesn&rsquo;t yet know your story — and whether it creates a distinct impression or fades into the background.</p>
     </div>
     <div class="signal-item">
       <div class="signal-n">02</div>
       <div class="signal-name">Expression Signal</div>
-      <p class="signal-desc">How confidently your language carries the weight of what you actually do — and whether it creates trust or hesitation.</p>
+      <p class="signal-desc">Whether your language communicates at the level of your actual capability — or undersells it through vague claims, hedged phrasing, or misplaced emphasis.</p>
     </div>
     <div class="signal-item">
       <div class="signal-n">03</div>
       <div class="signal-name">Alignment Signal</div>
-      <p class="signal-desc">How well what you say matches what an outside reader is likely to understand — the gap between intent and reception.</p>
+      <p class="signal-desc">The distance between what you intend to communicate and what actually arrives. This is the most common gap — and the most invisible from the inside.</p>
     </div>
     <div class="signal-item">
       <div class="signal-n">04</div>
       <div class="signal-name">Presence Signal</div>
-      <p class="signal-desc">How visible and findable your value is to the right audience — and what may be reducing your reach before a decision is made.</p>
+      <p class="signal-desc">Whether the right people can find you, recognise you as relevant, and feel confident enough to take a next step — before you&rsquo;ve had a direct conversation with them.</p>
     </div>
     <div class="signal-item">
       <div class="signal-n">05</div>
       <div class="signal-name">Momentum Signal</div>
-      <p class="signal-desc">Whether your current direction is building clarity over time — or accumulating the kind of noise that gradually obscures your value.</p>
+      <p class="signal-desc">Whether what you are communicating is moving toward something coherent — or quietly drifting in a direction that no longer serves where you are actually going.</p>
     </div>
   </div>
 </section>
@@ -11139,15 +11172,53 @@ hr.section-rule {
   <p class="s-sub reveal d2">Insights are specific, honest, and grounded in what was actually shared — not generated from templates.</p>
 
   <div class="insight-preview reveal d3">
-    <div class="ip-eyebrow">Sample Insight &mdash; Career Clarity</div>
-    <div class="ip-card">
-      <div class="ip-signal">Identity Signal</div>
-      <p class="ip-body">&ldquo;Your expertise appears stronger internally than externally. The depth of experience is present, but the language used to describe it defaults to role titles rather than outcomes. Someone reading this quickly would understand what you have done — but not why it matters, or what it made possible.&rdquo;</p>
-      <div class="ip-footer">
-        <span class="ip-tag">Expression gap identified</span>
-        <span class="ip-tag">Reframing opportunity</span>
+
+    <!-- Context selector — shows examples across service areas -->
+    <div class="ip-selector" role="tablist" aria-label="Select insight example">
+      <button class="ip-tab ips-active" data-target="career" role="tab" aria-selected="true">Career</button>
+      <button class="ip-tab" data-target="freelance" role="tab" aria-selected="false">Freelance</button>
+      <button class="ip-tab" data-target="business" role="tab" aria-selected="false">Business</button>
+    </div>
+
+    <!-- Career example -->
+    <div class="ip-example ips-active" data-example="career">
+      <div class="ip-eyebrow">Sample Insight &mdash; Career Clarity</div>
+      <div class="ip-card">
+        <div class="ip-signal">Identity Signal</div>
+        <p class="ip-body">&ldquo;Your expertise appears stronger internally than externally. The depth of experience is present, but the language used to describe it defaults to role titles rather than outcomes. Someone reading this quickly would understand what you have done &mdash; but not why it matters, or what it made possible.&rdquo;</p>
+        <div class="ip-footer">
+          <span class="ip-tag">Expression gap identified</span>
+          <span class="ip-tag">Reframing opportunity</span>
+        </div>
       </div>
     </div>
+
+    <!-- Freelance example -->
+    <div class="ip-example" data-example="freelance">
+      <div class="ip-eyebrow">Sample Insight &mdash; Freelance Clarity</div>
+      <div class="ip-card">
+        <div class="ip-signal">Expression Signal</div>
+        <p class="ip-body">&ldquo;The quality of the work is present in the portfolio, but the service description speaks in features rather than outcomes. A potential client reading this would understand what is offered &mdash; but not what it reliably produces for them. The distance between demonstrated capability and communicated value is where this presence is currently losing clients.&rdquo;</p>
+        <div class="ip-footer">
+          <span class="ip-tag">Outcome framing gap</span>
+          <span class="ip-tag">Client trust signal weak</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business example -->
+    <div class="ip-example" data-example="business">
+      <div class="ip-eyebrow">Sample Insight &mdash; Business Clarity</div>
+      <div class="ip-card">
+        <div class="ip-signal">Alignment Signal</div>
+        <p class="ip-body">&ldquo;Your business description covers what you do and how long you have been doing it. It does not yet address who benefits most, or what specifically changes for them after engaging with you. A customer encountering this for the first time would know you exist &mdash; but not whether you are the right fit for their specific situation.&rdquo;</p>
+        <div class="ip-footer">
+          <span class="ip-tag">Audience signal unclear</span>
+          <span class="ip-tag">Differentiation gap</span>
+        </div>
+      </div>
+    </div>
+
     <p class="ip-note">Real insights name specific patterns. Not generalised observations.</p>
   </div>
 </section>
@@ -11214,7 +11285,7 @@ hr.section-rule {
 <section id="why-clarity">
   <div class="s-eye reveal">Recognition</div>
   <h2 class="s-title reveal d1">The moment something<br>feels <em>unclear.</em></h2>
-  <p class="s-sub reveal d2">ASPIRA is designed for moments like these.</p>
+  <p class="s-sub reveal d2">If any of these feel familiar &mdash; that is not a failure of effort. It is a clarity gap. That is exactly what ASPIRA is built to read.</p>
 
   <div class="recognition-grid reveal d3">
     <div class="recog-item">A career transition that&rsquo;s harder to explain than expected</div>
@@ -11234,7 +11305,7 @@ hr.section-rule {
 <section id="what-clarity-reveals">
   <div class="s-eye reveal">Discoveries</div>
   <h2 class="s-title reveal d1">What clarity<br>often <em>surfaces.</em></h2>
-  <p class="s-sub reveal d2">Most clarity work reveals something already present — but not yet visible from the inside.</p>
+  <p class="s-sub reveal d2">The most common discovery is not a missing skill or a character flaw. It is a strength that hasn&rsquo;t yet found a way to communicate itself clearly &mdash; and a gap that is much smaller than it feels from the inside.</p>
 
   <div class="reveals-grid">
     <div class="reveal-card reveal">
@@ -11291,6 +11362,10 @@ hr.section-rule {
     <div class="not-item">
       <div class="not-label">Does not generate generic motivation.</div>
       <p class="not-desc">What is offered is specific, honest, and sometimes uncomfortable. This is not a space for affirmations or optimistic vagueness.</p>
+    </div>
+    <div class="not-item">
+      <div class="not-label">Does not rewrite or suggest improvements.</div>
+      <p class="not-desc">ASPIRA reflects what is present &mdash; not what should replace it. The output is a read of what is currently communicating, structured across five signal dimensions. The work of improving remains yours. The clarity of understanding it more honestly is what is offered here.</p>
     </div>
   </div>
 
@@ -11408,7 +11483,7 @@ hr.section-rule {
   <!-- Default state: visible before analysis runs, hidden by :has() CSS once pm-primary has content -->
   <div class="pm-default" id="pm-default">
     <p class="pm-default-title">Your perception reflection.</p>
-    <p class="pm-default-sub">After you share your text, ASPIRA&rsquo;s read of how it lands &mdash; and where clarity may be missing &mdash; will appear here.</p>
+    <p class="pm-default-sub">After you submit your text, ASPIRA reflects back how it is being understood by someone encountering it for the first time &mdash; the patterns it communicates, the signals it sends, and where greater clarity would change what others take away.</p>
   </div>
 
   <p class="pm-primary" id="pm-primary"></p>
@@ -16305,6 +16380,36 @@ document.body.addEventListener('touchmove',function(e){
     });
   });
 })(); /* end initReviewTracks */
+</script>
+
+<script>
+/* ═══ INSIGHT TAB SELECTOR ══════════════════════════════════════════
+   Three-context example switcher in #sample-insight.
+   Career / Freelance / Business — shows one at a time.
+   ═══════════════════════════════════════════════════════════════════ */
+(function initInsightTabs() {
+  'use strict';
+  var tabs     = document.querySelectorAll('.ip-tab');
+  var examples = document.querySelectorAll('.ip-example');
+  if (!tabs.length || !examples.length) return;
+
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.dataset.target;
+
+      tabs.forEach(function(t) {
+        t.classList.remove('ips-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      examples.forEach(function(e) { e.classList.remove('ips-active'); });
+
+      tab.classList.add('ips-active');
+      tab.setAttribute('aria-selected', 'true');
+      var ex = document.querySelector('[data-example="' + target + '"]');
+      if (ex) ex.classList.add('ips-active');
+    });
+  });
+})(); /* end initInsightTabs */
 </script>
 
 </body>
